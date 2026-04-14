@@ -355,12 +355,29 @@ footer span { color: var(--accent); }
   </div>
 
   <button class="analyze-btn" id="analyzeBtn" onclick="analyze()" disabled>
-    <span class="btn-text">🔍 بدء تدقيق البطاقة</span>
+    <span class="btn-text">🔍 ابدأ الفحص مجاناً</span>
     <span class="loading-dots">
       <span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span>
-      جاري التحليل...
+      جاري تحليل البطاقة... قد يستغرق 20-30 ثانية
     </span>
   </button>
+
+  <!-- شريط التقدم -->
+  <div id="progressBar" style="display:none;margin-bottom:1.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+      <span id="progressText" style="font-size:.85rem;color:var(--accent);">🔍 جاري قراءة البطاقة...</span>
+      <span id="progressPercent" style="font-size:.85rem;color:var(--text2);">0%</span>
+    </div>
+    <div style="height:6px;background:var(--border);border-radius:100px;overflow:hidden;">
+      <div id="progressFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width .5s ease;"></div>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;">
+      <span id="step1" style="font-size:.75rem;padding:3px 10px;border-radius:100px;background:rgba(0,212,168,.08);border:1px solid rgba(0,212,168,.15);color:var(--text3);">📷 قراءة الصورة</span>
+      <span id="step2" style="font-size:.75rem;padding:3px 10px;border-radius:100px;background:rgba(0,212,168,.08);border:1px solid rgba(0,212,168,.15);color:var(--text3);">⚗️ فحص المضافات</span>
+      <span id="step3" style="font-size:.75rem;padding:3px 10px;border-radius:100px;background:rgba(0,212,168,.08);border:1px solid rgba(0,212,168,.15);color:var(--text3);">📋 تدقيق المواصفات</span>
+      <span id="step4" style="font-size:.75rem;padding:3px 10px;border-radius:100px;background:rgba(0,212,168,.08);border:1px solid rgba(0,212,168,.15);color:var(--text3);">📊 توليد التقرير</span>
+    </div>
+  </div>
 
   <div id="results">
     <div class="ai-summary">
@@ -824,7 +841,46 @@ zone.addEventListener('drop', e => {
   }
 });
 
-// ===== TABS =====
+// ===== PROGRESS BAR =====
+let progressInterval = null;
+function startProgress() {
+  const bar = document.getElementById('progressBar');
+  bar.style.display = 'block';
+  const steps = [
+    {id:'step1', text:'📷 جاري قراءة الصورة...', pct:15},
+    {id:'step2', text:'⚗️ جاري فحص المضافات...', pct:40},
+    {id:'step3', text:'📋 جاري تدقيق المواصفات الأردنية...', pct:70},
+    {id:'step4', text:'📊 جاري توليد التقرير...', pct:90}
+  ];
+  let i = 0;
+  progressInterval = setInterval(() => {
+    if (i < steps.length) {
+      document.getElementById('progressText').textContent = steps[i].text;
+      document.getElementById('progressPercent').textContent = steps[i].pct + '%';
+      document.getElementById('progressFill').style.width = steps[i].pct + '%';
+      // تفعيل الخطوة
+      document.getElementById(steps[i].id).style.color = 'var(--accent)';
+      document.getElementById(steps[i].id).style.borderColor = 'rgba(0,212,168,.4)';
+      i++;
+    }
+  }, 5000);
+}
+function stopProgress() {
+  clearInterval(progressInterval);
+  document.getElementById('progressText').textContent = '✅ اكتمل التحليل!';
+  document.getElementById('progressPercent').textContent = '100%';
+  document.getElementById('progressFill').style.width = '100%';
+  setTimeout(() => { document.getElementById('progressBar').style.display = 'none'; }, 1500);
+}
+function resetProgress() {
+  clearInterval(progressInterval);
+  document.getElementById('progressBar').style.display = 'none';
+  document.getElementById('progressFill').style.width = '0%';
+  ['step1','step2','step3','step4'].forEach(id => {
+    document.getElementById(id).style.color = 'var(--text3)';
+    document.getElementById(id).style.borderColor = 'rgba(0,212,168,.15)';
+  });
+}
 function showTab(tab, el) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -903,6 +959,7 @@ async function analyze() {
   const btn = document.getElementById('analyzeBtn');
   btn.classList.add('loading'); btn.disabled = true;
   document.getElementById('results').style.display = 'none';
+  startProgress();
 
   const productType = document.getElementById('productType').value;
   const origin = document.getElementById('origin').value;
@@ -1025,11 +1082,13 @@ ${allergensText}
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error('تعذّر تحليل الاستجابة');
     displayResults(JSON.parse(jsonMatch[0]), productType);
+    stopProgress();
 
   } catch (err) {
     let msg = err.message || 'خطأ';
     if(msg.includes('Failed to fetch')||msg.includes('CORS')) msg = 'خطأ شبكة — تأكد من المفتاح';
     showToast('❌ ' + msg); console.error(err);
+    resetProgress();
   } finally {
     btn.classList.remove('loading');
     btn.disabled = false;
