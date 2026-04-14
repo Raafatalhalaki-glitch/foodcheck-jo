@@ -898,7 +898,7 @@ function renderJSWarnings(productType) {
 
 // ===== MAIN ANALYZE =====
 async function analyze() {
-  if (!apiKey || uploadedImages.length === 0) return;
+  if (uploadedImages.length === 0) return;
   const btn = document.getElementById('analyzeBtn');
   btn.classList.add('loading'); btn.disabled = true;
   document.getElementById('results').style.display = 'none';
