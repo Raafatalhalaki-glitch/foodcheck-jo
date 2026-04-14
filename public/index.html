@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدقق بطاقة البيان الغذائية | FoodCheck Jordan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d47;
+  --accent: #00d4a8;
+  --accent2: #0099cc;
+  --danger: #ff4757;
+  --warn: #ffa502;
+  --success: #2ed573;
+  --text: #e8edf5;
+  --text2: #8899bb;
+  --text3: #4a5a7a;
+  --font: 'Tajawal', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* HEADER */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,14,26,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px;
+}
+.logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+.logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+.logo span { color: var(--text); font-weight: 300; }
+nav { display: flex; gap: 1.5rem; }
+nav a { color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: color .2s; }
+nav a:hover { color: var(--accent); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 5rem 2rem 2rem; position: relative; text-align: center;
+}
+.hero::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,212,168,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,212,168,0.08); border: 1px solid rgba(0,212,168,0.25);
+  padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; color: var(--accent); margin-bottom: 2rem;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p { font-size: 1.1rem; color: var(--text2); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
+.hero-stats { display: flex; gap: 2rem; justify-content: center; margin-bottom: 3rem; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat-num { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+.stat-label { font-size: 0.75rem; color: var(--text3); margin-top: 2px; }
+.scroll-cta {
+  display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #000; font-weight: 700; font-size: 0.95rem;
+  padding: 14px 28px; border-radius: 10px; cursor: pointer;
+  border: none; transition: all .25s; text-decoration: none;
+}
+.scroll-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,168,0.35); }
+
+/* MAIN TOOL */
+#tool { padding: 5rem 1rem; }
+.container { max-width: 960px; margin: 0 auto; }
+.section-title { text-align: center; margin-bottom: 3rem; }
+.section-title h2 { font-size: 2rem; font-weight: 800; margin-bottom: .5rem; }
+.section-title p { color: var(--text2); font-size: .95rem; }
+
+/* API KEY */
+.api-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.api-card label { font-size: 0.85rem; color: var(--text2); white-space: nowrap; }
+.api-input {
+  flex: 1; min-width: 260px; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px; color: var(--text);
+  font-family: var(--mono); font-size: 0.85rem; outline: none; transition: border-color .2s;
+}
+.api-input:focus { border-color: var(--accent); }
+.api-save {
+  background: var(--accent); color: #000; border: none;
+  padding: 10px 20px; border-radius: 8px; font-weight: 700;
+  cursor: pointer; font-size: 0.85rem; transition: all .2s; white-space: nowrap;
+}
+.api-save:hover { background: #00b890; }
+.api-status { font-size: 0.8rem; padding: 4px 12px; border-radius: 100px; }
+.api-status.ok { background: rgba(46,213,115,.15); color: var(--success); border: 1px solid rgba(46,213,115,.3); }
+.api-status.no { background: rgba(255,71,87,.1); color: var(--danger); border: 1px solid rgba(255,71,87,.2); }
+
+/* UPLOAD */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 20px; padding: 3rem 2rem;
+  text-align: center; cursor: pointer; transition: all .25s; position: relative;
+  background: var(--surface); margin-bottom: 1.5rem;
+}
+.upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(0,212,168,0.04); }
+.upload-zone.has-image { border-style: solid; border-color: var(--accent); }
+.upload-icon { font-size: 3rem; margin-bottom: 1rem; }
+.upload-text h3 { font-size: 1.1rem; margin-bottom: .4rem; }
+.upload-text p { color: var(--text2); font-size: .85rem; }
+.upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.preview-img { max-height: 320px; max-width: 100%; border-radius: 12px; object-fit: contain; display: none; }
+.preview-img.show { display: block; margin: 1rem auto 0; }
+
+/* SETTINGS */
+.settings-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.setting-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; }
+.setting-card label { font-size: 0.82rem; color: var(--text2); display: block; margin-bottom: .5rem; }
+.setting-select {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 12px; color: var(--text);
+  font-family: var(--font); font-size: 0.9rem; outline: none; transition: border-color .2s;
+}
+.setting-select:focus { border-color: var(--accent); }
+
+/* ANALYZE BTN */
+.analyze-btn {
+  width: 100%; padding: 1rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: #000; font-weight: 800; font-size: 1.05rem;
+  border: none; border-radius: 14px; cursor: pointer;
+  transition: all .25s; position: relative; overflow: hidden; margin-bottom: 2rem;
+}
+.analyze-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,212,168,.4); }
+.analyze-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.analyze-btn .loading-dots { display: none; }
+.analyze-btn.loading .btn-text { display: none; }
+.analyze-btn.loading .loading-dots { display: inline; }
+@keyframes dotBlink { 0%,20%{opacity:.2} 40%{opacity:1} 100%{opacity:.2} }
+.dot1{animation:dotBlink 1.4s infinite .0s}
+.dot2{animation:dotBlink 1.4s infinite .2s}
+.dot3{animation:dotBlink 1.4s infinite .4s}
+
+/* RESULTS */
+#results { display: none; }
+.results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: .5rem; }
+.results-header h3 { font-size: 1.3rem; font-weight: 700; }
+.overall-badge { padding: 6px 18px; border-radius: 100px; font-weight: 700; font-size: 0.9rem; }
+.badge-pass { background: rgba(46,213,115,.15); color: var(--success); border: 1px solid rgba(46,213,115,.3); }
+.badge-fail { background: rgba(255,71,87,.1); color: var(--danger); border: 1px solid rgba(255,71,87,.2); }
+.badge-warn { background: rgba(255,165,2,.1); color: var(--warn); border: 1px solid rgba(255,165,2,.2); }
+.score-bar-wrap { margin-bottom: 2rem; }
+.score-bar-track { height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
+.score-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text2); margin-top: 6px; }
+
+/* TABS */
+.tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.tab {
+  padding: 8px 18px; border-radius: 100px; border: 1px solid var(--border);
+  background: transparent; color: var(--text2); cursor: pointer;
+  font-family: var(--font); font-size: 0.85rem; transition: all .2s;
+}
+.tab.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,168,.08); }
+
+/* ISSUE CARDS */
+.issues-list { display: flex; flex-direction: column; gap: 1rem; }
+.issue-card {
+  background: var(--surface); border-radius: 14px;
+  border-right: 4px solid var(--border); overflow: hidden; transition: transform .15s;
+}
+.issue-card:hover { transform: translateX(-3px); }
+.issue-card.critical { border-right-color: var(--danger); }
+.issue-card.warning { border-right-color: var(--warn); }
+.issue-card.pass { border-right-color: var(--success); }
+.issue-header { display: flex; align-items: center; gap: 12px; padding: 1rem 1.2rem; cursor: pointer; }
+.issue-icon { font-size: 1.2rem; flex-shrink: 0; }
+.issue-meta { flex: 1; min-width: 0; }
+.issue-title { font-weight: 600; font-size: .95rem; }
+.issue-rule { font-size: 0.75rem; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
+.issue-severity { font-size: 0.72rem; padding: 3px 10px; border-radius: 100px; font-weight: 700; white-space: nowrap; }
+.sev-critical { background: rgba(255,71,87,.15); color: var(--danger); }
+.sev-warning  { background: rgba(255,165,2,.12); color: var(--warn); }
+.sev-pass     { background: rgba(46,213,115,.12); color: var(--success); }
+.issue-body { padding: 0 1.2rem 1rem; display: none; border-top: 1px solid var(--border); padding-top: 1rem; }
+.issue-body.open { display: block; }
+.issue-detail { font-size: 0.88rem; color: var(--text2); line-height: 1.7; }
+.issue-detail strong { color: var(--text); }
+
+/* ALLERGENS */
+.allergen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: .75rem; margin-top: 1rem; }
+.allergen-chip { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 500; }
+.allergen-chip.found { background: rgba(255,71,87,.12); border: 1px solid rgba(255,71,87,.3); color: #ff6b7a; }
+.allergen-chip.clear { background: rgba(46,213,115,.08); border: 1px solid rgba(46,213,115,.2); color: var(--success); }
+
+/* AI SUMMARY */
+.ai-summary {
+  background: linear-gradient(135deg, rgba(0,212,168,.06) 0%, rgba(0,153,204,.06) 100%);
+  border: 1px solid rgba(0,212,168,.2); border-radius: 16px; padding: 1.5rem;
+  margin-bottom: 1.5rem; position: relative; overflow: hidden;
+}
+.ai-summary::before {
+  content: 'AI'; position: absolute; top: 1rem; left: 1.5rem;
+  font-family: var(--mono); font-size: 0.7rem; color: var(--accent);
+  background: rgba(0,212,168,.12); padding: 2px 8px; border-radius: 4px;
+}
+.ai-summary-text { font-size: .95rem; line-height: 1.8; color: var(--text); padding-top: 1.8rem; }
+
+/* JS WARNINGS PANEL */
+.js-warnings-panel {
+  background: rgba(255,71,87,.04); border: 1px solid rgba(255,71,87,.2);
+  border-radius: 14px; padding: 1.2rem; margin-top: 1rem;
+}
+.js-warnings-panel h4 { font-size: .9rem; color: var(--danger); margin-bottom: .8rem; }
+.js-warning-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,71,87,.1);
+  font-size: .83rem; line-height: 1.6; color: var(--text2);
+}
+.js-warning-item:last-child { border-bottom: none; }
+.js-warning-item .w-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text3); font-size: .82rem; }
+footer span { color: var(--accent); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 12px 24px; border-radius: 100px; font-size: 0.9rem; z-index: 999;
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.8rem; }
+  .hero-stats { gap: 1rem; }
+  nav { display: none; }
+  .api-card { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    FoodCheck <span>Jordan</span>
+  </div>
+  <nav>
+    <a href="#tool">التدقيق</a>
+    <a href="#about">عن النظام</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">
+    <span>●</span> مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192
+  </div>
+  <h1>تدقيق بطاقة البيان الغذائي بدقة تشريعية</h1>
+  <p>ارفع صورة بطاقة البيان واحصل على تقرير مطابقة فوري حسب المواصفات الأردنية والكودكس الدولي</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">18+</div><div class="stat-label">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">قواعد عامة إلزامية</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">مادة حساسية</div></div>
+    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
+  </div>
+  <a href="#tool" class="scroll-cta">ابدأ التدقيق الآن ←</a>
+</section>
+
+<section id="tool">
+<div class="container">
+
+  <div class="section-title">
+    <h2>رفع وتدقيق بطاقة البيان</h2>
+    <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+  </div>
+
+  <!-- API key مخفي على السيرفر -->
+
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
+    <div class="upload-icon">📋</div>
+    <div class="upload-text">
+      <h3>اسحب صور بطاقة البيان هنا</h3>
+      <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
+    </div>
+  </div>
+  <!-- معرض الصور المرفوعة -->
+  <div id="imageGallery" style="display:none;margin-bottom:1.5rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+      <span style="font-size:.85rem;color:var(--text2);">الصور المرفوعة (<span id="imgCount">0</span>)</span>
+      <button onclick="clearImages()" style="background:rgba(255,71,87,.12);border:1px solid rgba(255,71,87,.3);color:var(--danger);padding:4px 12px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:.8rem;">حذف الكل</button>
+    </div>
+    <div id="thumbnails" style="display:flex;gap:.75rem;flex-wrap:wrap;"></div>
+  </div>
+
+  <div class="settings-grid">
+    <div class="setting-card">
+      <label>نوع المنتج</label>
+      <select class="setting-select" id="productType">
+        <option value="general">عام</option>
+        <option value="dairy">منتجات ألبان</option>
+        <option value="processed_cheese">جبن مطبوخ (JS 185)</option>
+        <option value="soft_cheese">أجبان طرية (JS 246)</option>
+        <option value="flavored_milk">حليب منكه (JS 805)</option>
+        <option value="dried_milk">حليب مجفف (JS 121)</option>
+        <option value="evaporated_milk">حليب مبخر مقشود (JS 1624)</option>
+        <option value="infant_formula">تركيبة حليب رضع (JS 472:2025)</option>
+        <option value="meat">لحوم ودواجن</option>
+        <option value="fish">منتجات بحرية</option>
+        <option value="bakery">مخبوزات</option>
+        <option value="biscuit">بسكويت (JS 6)</option>
+        <option value="noodles">نودلز سريعة التحضير (JS 1719)</option>
+        <option value="corn_chips">شيبس ذرة منفوشة (JS 608)</option>
+        <option value="chocolate">شوكولاتة (JS 8)</option>
+        <option value="candy">حلوى صلبة وطرية (JS 43)</option>
+        <option value="beverages">مشروبات</option>
+        <option value="energy_drink">مشروبات طاقة (JS 2381)</option>
+        <option value="juice">عصائر فاكهة (JS 1761)</option>
+        <option value="fruit_syrup">شراب فاكهة/سكواش (JS 994)</option>
+        <option value="flavored_drink">مشروبات منكهة (JS 77)</option>
+        <option value="supplements">مكملات غذائية</option>
+      </select>
+    </div>
+    <div class="setting-card">
+      <label>المنشأ</label>
+      <select class="setting-select" id="origin">
+        <option value="imported">مستورد</option>
+        <option value="local">محلي الصنع</option>
+      </select>
+    </div>
+    <div class="setting-card">
+      <label>مستوى التدقيق</label>
+      <select class="setting-select" id="strictness">
+        <option value="full">كامل (جميع القواعد)</option>
+        <option value="critical">الجسيمة فقط</option>
+        <option value="quick">فحص سريع</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="analyze-btn" id="analyzeBtn" onclick="analyze()" disabled>
+    <span class="btn-text">🔍 بدء تدقيق البطاقة</span>
+    <span class="loading-dots">
+      <span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span>
+      جاري التحليل...
+    </span>
+  </button>
+
+  <div id="results">
+    <div class="ai-summary">
+      <div class="ai-summary-text" id="aiSummary">جاري توليد التقرير...</div>
+    </div>
+
+    <div class="score-bar-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+        <span style="font-weight:700;font-size:1rem;">نسبة المطابقة</span>
+        <span id="scoreText" style="font-size:1.4rem;font-weight:800;color:var(--accent)">—</span>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" id="scoreBar" style="width:0%;background:var(--accent)"></div>
+      </div>
+      <div class="score-label">
+        <span id="passCount">—</span>
+        <span id="failCount">—</span>
+      </div>
+    </div>
+
+    <div class="results-header">
+      <h3>نتائج التدقيق التفصيلية</h3>
+      <span class="overall-badge" id="overallBadge">—</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('all',this)">الكل</button>
+      <button class="tab" onclick="showTab('critical',this)">مخالفات جسيمة</button>
+      <button class="tab" onclick="showTab('warning',this)">تنبيهات</button>
+      <button class="tab" onclick="showTab('pass',this)">مطابق</button>
+      <button class="tab" onclick="showTab('allergens',this)">مسببات الحساسية</button>
+      <button class="tab" onclick="showTab('nutrition',this)">🥗 الحقائق التغذوية</button>
+      <button class="tab" onclick="showTab('jswarnings',this)">⚠️ تحذيرات خاصة</button>
+    </div>
+
+    <div class="issues-list" id="issuesList"></div>
+
+    <div id="allergenPanel" style="display:none;">
+      <h4 style="margin-bottom:.5rem;font-size:1rem;">المواد المسببة للحساسية المكتشفة</h4>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">بناءً على تحليل مكونات البطاقة</p>
+      <div class="allergen-grid" id="allergenGrid"></div>
+    </div>
+
+    <div id="nutritionPanel" style="display:none;">
+      <h4 style="margin-bottom:.5rem;font-size:1rem;">📊 تحليل الحقائق التغذوية</h4>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">التحقق من اكتمال الجدول الغذائي حسب المواصفة الأردنية JS 1473:2022</p>
+      <div id="nutritionGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-bottom:1rem;"></div>
+      <div id="nutritionNote" style="font-size:.83rem;color:var(--text2);padding:1rem;background:var(--surface2);border-radius:10px;line-height:1.7;"></div>
+    </div>
+
+    <div id="jswarningsPanel" style="display:none;">
+      <h4 style="margin-bottom:.5rem;font-size:1rem;">⚠️ تحذيرات المواصفات الأردنية الخاصة</h4>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">مخالفات خاصة بنوع المنتج حسب المواصفات الأردنية JS</p>
+      <div id="jsWarningsList"></div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<section id="about" style="padding:4rem 1rem;border-top:1px solid var(--border);">
+<div class="container">
+  <div class="section-title">
+    <h2>كيف يعمل النظام؟</h2>
+    <p>طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
+      <h3 style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
+      <h3 style="margin-bottom:.5rem;">كودكس CXS 192</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:1rem;">🚨</div>
+      <h3 style="margin-bottom:.5rem;">10 قواعد عامة إلزامية</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">محليات صناعية، حلال، GMO، مصدر الحليب، أسبرتام، ترتيب المكونات وغيرها من الاشتراطات الأردنية العامة</p>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--text3);font-size:.78rem;margin-top:2rem;">
+    ⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة القانونية الرسمية. القرار النهائي يعود للجهات الرقابية المختصة.
+  </p>
+</div>
+</section>
+
+<footer>
+  <p>FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · المواصفات الأردنية JS · الكودكس CXS 192</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== RULES DATA (JS 9 + القواعد العامة الأردنية) =====
+const RULES = [
+  {"رقم القاعدة":"R001","رقم المادة":"نطاق التطبيق","الشرط":"إذا كان الغذاء معبأ مسبقاً ومطروحاً للتداول في الأردن","المتطلب":"يجب أن يحمل بطاقة بيان تحتوي جميع البيانات الإلزامية","درجة المخالفة":"جسيمة","الفئة":"عام"},
+  {"رقم القاعدة":"R002","رقم المادة":"التضليل","الشرط":"إذا تضمنت البطاقة معلومات أو صوراً أو ادعاءات مضللة","المتطلب":"يعتبر المنتج غير مطابق للتشريع","درجة المخالفة":"جسيمة","الفئة":"ادعاءات مضللة"},
+  {"رقم القاعدة":"R006","رقم المادة":"اسم الغذاء","الشرط":"إذا كان المنتج يحمل بطاقة بيان","المتطلب":"يجب ذكر الاسم الحقيقي للغذاء يعبر عن ماهية المنتج","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج"},
+  {"رقم القاعدة":"R010","رقم المادة":"قائمة المكونات","الشرط":"إذا كان المنتج يحتوي أكثر من مكون","المتطلب":"يجب إدراج قائمة بالمكونات","درجة المخالفة":"جسيمة","الفئة":"مكونات"},
+  {"رقم القاعدة":"R011","رقم المادة":"ترتيب المكونات","الشرط":"إذا وجدت قائمة مكونات","المتطلب":"يجب ترتيب المكونات تنازلياً حسب الوزن من الأعلى للأقل","درجة المخالفة":"جسيمة","الفئة":"مكونات"},
+  {"رقم القاعدة":"R013","رقم المادة":"مواد الحساسية","الشرط":"إذا احتوى المنتج على مواد مسببة للحساسية","المتطلب":"يجب التصريح عنها بوضوح في البطاقة","درجة المخالفة":"جسيمة","الفئة":"الحساسية"},
+  {"رقم القاعدة":"R016","رقم المادة":"المضافات الغذائية","الشرط":"إذا استخدمت مضافات غذائية","المتطلب":"يجب ذكر الفئة الوظيفية واسم المضاف أو رقمه","درجة المخالفة":"جسيمة","الفئة":"مضافات"},
+  {"رقم القاعدة":"R018","رقم المادة":"الكمية الصافية","الشرط":"إذا كان الغذاء صلباً","المتطلب":"يجب ذكر الوزن الصافي بوحدات النظام الدولي","درجة المخالفة":"جسيمة","الفئة":"الوزن"},
+  {"رقم القاعدة":"R019","رقم المادة":"الكمية للسوائل","الشرط":"إذا كان الغذاء سائلاً","المتطلب":"يجب ذكر الحجم الصافي","درجة المخالفة":"جسيمة","الفئة":"الوزن"},
+  {"رقم القاعدة":"R021","رقم المادة":"اسم وعنوان المنتج","الشرط":"إذا تم تسويق المنتج","المتطلب":"يجب ذكر اسم وعنوان المصنع أو المستورد","درجة المخالفة":"جسيمة","الفئة":"الصانع"},
+  {"رقم القاعدة":"R022","رقم المادة":"بلد المنشأ","الشرط":"إذا كان الغذاء معبأ مسبقاً","المتطلب":"يجب ذكر بلد المنشأ","درجة المخالفة":"جسيمة","الفئة":"المنشأ"},
+  {"رقم القاعدة":"R024","رقم المادة":"تاريخ الصلاحية","الشرط":"إذا لم يكن الغذاء من المنتجات المستثناة","المتطلب":"يجب ذكر تاريخ الصلاحية مطبوعاً غير قابل للإزالة — لا يجوز ملصق لاصق","درجة المخالفة":"جسيمة","الفئة":"التواريخ"},
+  {"رقم القاعدة":"R024B","رقم المادة":"صيغة التاريخ","الشرط":"حسب JS 288:2023","المتطلب":"صلاحية ≤3 أشهر: يوم+شهر+سنة. صلاحية >3 أشهر: شهر+سنة فقط. عبارة إلزامية قبله: يستخدم قبل / تاريخ انتهاء الصلاحية","درجة المخالفة":"متوسطة","الفئة":"التواريخ"},
+  {"رقم القاعدة":"R025","رقم المادة":"شروط التخزين","الشرط":"إذا كانت صلاحية المنتج تعتمد على ظروف التخزين","المتطلب":"يجب ذكر شروط التخزين","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
+  {"رقم القاعدة":"R025B","رقم المادة":"الاستخدام بعد الفتح","الشرط":"إذا تغيرت صلاحية المنتج بعد فتح العبوة","المتطلب":"يجب ذكر مدة الاستخدام بعد الفتح على البطاقة","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
+  {"رقم القاعدة":"R030","رقم المادة":"وضوح البطاقة","الشرط":"إذا كانت المعلومات الإلزامية موجودة","المتطلب":"يجب أن تكون واضحة ومقروءة وغير قابلة للإزالة","درجة المخالفة":"جسيمة","الفئة":"عام"},
+  {"رقم القاعدة":"R032","رقم المادة":"لغة البطاقة","الشرط":"إذا كان المنتج متداولاً في الأردن","المتطلب":"يجب أن تكون المعلومات باللغة العربية","درجة المخالفة":"جسيمة","الفئة":"اللغة"},
+  // القواعد العامة الأردنية الإلزامية
+  {"رقم القاعدة":"JO001","رقم المادة":"محليات صناعية","الشرط":"إذا احتوى المنتج على محليات صناعية بما فيها ستيفيا","المتطلب":"يجب ذكر نسبة المحلي الصناعي في المنتج","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  {"رقم القاعدة":"JO002","رقم المادة":"محليات كحولية كمحل سكر","الشرط":"إذا احتوى المنتج على محليات كحولية بكميات كبيرة كبديل سكر","المتطلب":"يجب ذكر عبارة: كثرة الاستخدام تسبب فعل ملين","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  {"رقم القاعدة":"JO003","رقم المادة":"كلمة حلال","الشرط":"إذا استخدم مصطلح حلال على المنتج","المتطلب":"يجب أن يكون المنتج مطابقاً لاشتراطات الحلال المعتمدة — بدون شهادة معتمدة = تضليل للمستهلك","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  {"رقم القاعدة":"JO004","رقم المادة":"منتجات الحليب — المصدر","الشرط":"على كل منتجات الحليب","المتطلب":"يجب ذكر مصدر الحليب (بقر، أغنام، خليط...) ونوعه (طازج أو مجفف)","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  {"رقم القاعدة":"JO005","رقم المادة":"الحليب المبستر","الشرط":"على كل المنتجات الحليبية المبسترة","المتطلب":"عبارة إلزامية: يحفظ مبرد في الثلاجة","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  {"رقم القاعدة":"JO006","رقم المادة":"الحليب المجفف","الشرط":"على كل منتجات الحليب المجفف","المتطلب":"عبارة إلزامية: لا يستعمل لتغذية الرضع","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  {"رقم القاعدة":"JO007","رقم المادة":"الأسبرتام","الشرط":"أي منتج يحتوي على الأسبرتام","المتطلب":"يجب ذكر: يحتوي على فينيل ألانين — غير مناسب لمرضى فينيل كيتونيوريا PKU","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  // الحقائق التغذوية JS 1473:2022
+  {"رقم القاعدة":"N001","رقم المادة":"جدول الحقائق التغذوية","الشرط":"لجميع الأغذية المعبأة","المتطلب":"يجب وجود جدول الحقائق التغذوية — مرجع: JS 1473:2022","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N002","رقم المادة":"الطاقة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر الطاقة بالكيلوكالوري والكيلوجول لكل 100غ أو حصة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N003","رقم المادة":"البروتين","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية البروتين بالجرام","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N004","رقم المادة":"الكربوهيدرات","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر إجمالي الكربوهيدرات المتاحة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N005","رقم المادة":"السكريات الكلية","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر مجموع السكريات الكلية","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N005B","رقم المادة":"السكر المضاف","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر السكر المضاف بشكل منفصل","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N006","رقم المادة":"الدهون الكلية","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر إجمالي الدهون","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N007","رقم المادة":"الدهون المشبعة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية الدهون المشبعة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N007B","رقم المادة":"الدهون المتحولة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر الدهون المتحولة — إلزامي حسب JS 1473:2022","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N008","رقم المادة":"الصوديوم","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية الصوديوم أو الملح","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N009","رقم المادة":"حجم الحصة","الشرط":"إذا ذكرت القيم لكل حصة","المتطلب":"يجب تحديد حجم الحصة وعدد الحصص في العبوة","درجة المخالفة":"متوسطة","الفئة":"الحقائق التغذوية"},
+  {"رقم القاعدة":"N010","رقم المادة":"الكوليسترول","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية الكوليسترول","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"}
+];
+
+// ===== مواصفات JS الخاصة بكل نوع منتج =====
+const JS_SPECIFIC_RULES = {
+  "processed_cheese": {
+    name: "الجبن المطبوخ JS 185",
+    warnings: [
+      {code:"JS185-1", text:"نسبة الجبن في المنتج المسمى بجبن معين (مثل شيدر مطبوخ) يجب أن تكون ≥ 75%"},
+      {code:"JS185-2", text:"المنتجات غير المعبأة بأغلفة معدنية: عبارة 'تحفظ مبرد' إلزامية على البطاقة"},
+      {code:"JS185-3", text:"اسم المنتج يجب أن يكون 'جبن مطبوخ' أو 'جبن مطبوخ قابل للدهن' — أي تسمية أخرى تحتاج شروط"},
+      {code:"JS185-4", text:"التوابل والخل المضافة يجب ذكرها إلى جانب اسم المنتج"}
+    ]
+  },
+  "soft_cheese": {
+    name: "الأجبان الطرية JS 246",
+    warnings: [
+      {code:"JS246-1", text:"الدسم يجب أن يكون من حليب فقط — وجود زيوت نباتية = مخالفة صريحة"},
+      {code:"JS246-2", text:"نسبة الملح يجب ألا تتجاوز 10% في المنتج النهائي"},
+      {code:"JS246-3", text:"يجب ذكر مصدر الحليب (بقر/أغنام) ونوعه (طازج/مجفف) على البطاقة"},
+      {code:"JS246-4", text:"يجب ذكر طريقة الحفظ: 'تحفظ مبردة' أو 'تحفظ في الثلاجة'"},
+      {code:"JS246-5", text:"للعبوات بوسط سائل: وزن المصفى يجب ألا يقل عن 60%"},
+      {code:"JS246-6", text:"يجب ذكر نوع الجبنة: طازجة أو منضجة"}
+    ]
+  },
+  "flavored_milk": {
+    name: "الحليب المنكه JS 805",
+    warnings: [
+      {code:"JS805-1", text:"يُمنع خلط حليب طازج مع حليب مسترجع في نفس المنتج"},
+      {code:"JS805-2", text:"يُمنع خلط حليب من حيوانات مختلفة (بقر + أغنام)"},
+      {code:"JS805-3", text:"يُمنع بسترة حليب مسترجع منكه"},
+      {code:"JS805-4", text:"يجب ذكر نوع المعاملة الحرارية: معقم / UHT / مبستر"},
+      {code:"JS805-5", text:"يجب ذكر نسبة الدسم الفعلية (بقر كامل الدسم ≥ 3%، أغنام ≥ 5.5%)"},
+      {code:"JS805-6", text:"الحليب المبستر المنكه: عبارة 'يحفظ مبرد في الثلاجة' إلزامية"}
+    ]
+  },
+  "dried_milk": {
+    name: "الحليب المجفف JS 121",
+    warnings: [
+      {code:"JS121-1", text:"الدسم يجب أن يكون من الحليب فقط — وجود زيوت نباتية = مخالفة صريحة"},
+      {code:"JS121-2", text:"يجب ذكر نسبة الدسم ونسبة البروتين على البطاقة"},
+      {code:"JS121-3", text:"إضافة فيتامين أ أو د يجب ذكره صراحةً على البطاقة"},
+      {code:"JS121-4", text:"قائمة المكونات يجب أن تكون مرتبة تنازلياً"},
+      {code:"JS121-5", text:"عبارة 'لا يستعمل لتغذية الرضع' إلزامية على كل منتجات الحليب المجفف"}
+    ]
+  },
+  "evaporated_milk": {
+    name: "الحليب المبخر المقشود JS 1624",
+    warnings: [
+      {code:"JS1624-1", text:"⚠️ الأخطر: عبارة 'هذا المنتج غير ملائم لتغذية الرضع' إلزامية — غيابها مخالفة جسيمة وخطيرة"},
+      {code:"JS1624-2", text:"يجب ذكر نوع الزيوت النباتية: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
+      {code:"JS1624-3", text:"يجب ذكر محتوى الدهون الكلي ومحتوى البروتين"},
+      {code:"JS1624-4", text:"إضافة فيتامينات يجب ذكر نسبها بالوحدات الدولية"}
+    ]
+  },
+  "infant_formula": {
+    name: "تركيبة حليب الرضع JS 472:2025",
+    warnings: [
+      {code:"JS472-1", text:"⚠️ الأخطر: غياب عبارة تفوق الرضاعة الطبيعية = مخالفة جسيمة"},
+      {code:"JS472-2", text:"وجود صور أطفال رضع أو أمهات على البطاقة = مخالفة صريحة"},
+      {code:"JS472-3", text:"غياب تعليمات التحضير بالصور = مخالفة إلزامية"},
+      {code:"JS472-4", text:"غياب الفئة العمرية عن اسم المنتج = مخالفة إلزامية"},
+      {code:"JS472-5", text:"غياب مصدر البروتين عن البطاقة = مخالفة إلزامية"},
+      {code:"JS472-6", text:"عبارة 'لا تستخدم هذه التركيبة إلا بمشورة الاختصاصي الصحي' إلزامية"},
+      {code:"JS472-7", text:"استخدام مواد محورة وراثياً بدون إفصاح = مخالفة إلزامية"}
+    ]
+  },
+  "biscuit": {
+    name: "البسكويت JS 6",
+    warnings: [
+      {code:"JS6-1", text:"'بسكويت بالزبدة': جميع الدهون يجب أن تكون من زبدة الحليب فقط — وجود زيوت نباتية = مخالفة"},
+      {code:"JS6-2", text:"وجود محلي صناعي بدون ذكر نسبته = مخالفة إلزامية"},
+      {code:"JS6-3", text:"تنبيه مستقبلي: الزيوت النباتية المهدرجة قد تُمنع — احتمال دهون متحولة"}
+    ]
+  },
+  "noodles": {
+    name: "نودلز سريعة التحضير JS 1719",
+    warnings: [
+      {code:"JS1719-1", text:"غياب إرشادات التحضير عن البطاقة = مخالفة إلزامية"},
+      {code:"JS1719-2", text:"وجود كلمة 'حلال' بدون شهادة حلال معتمدة = مخالفة تضليلية خطيرة"}
+    ]
+  },
+  "corn_chips": {
+    name: "شيبس الذرة المنفوشة JS 608",
+    warnings: [
+      {code:"JS608-1", text:"⚠️ يُمنع إضافة المحليات الصناعية في شيبس الذرة — وجودها = مخالفة صريحة"},
+      {code:"JS608-2", text:"اسم المنتج يجب أن يكون 'شيبس الذرة المنفوشة' أو 'شيبس الذرة المنفوشة المقرمشة'"},
+      {code:"JS608-3", text:"عند إضافة نكهة يجب ذكر اسمها صراحةً: 'نكهة الجبن' / 'البابريكا' إلخ"}
+    ]
+  },
+  "chocolate": {
+    name: "الشوكولاتة JS 8",
+    warnings: [
+      {code:"JS8-1", text:"شوكولاتة ببديل زبدة الكاكاو: عبارة 'ببديل زبدة الكاكاو' إلزامية على البطاقة"},
+      {code:"JS8-2", text:"شوكولاتة مغلِّفة: نسبة الشوكولاتة يجب أن تكون ≥ 60%"},
+      {code:"JS8-3", text:"شوكولاتة محشوة: الغلاف الخارجي يجب أن يكون ≥ 40% من المنتج النهائي"},
+      {code:"JS8-4", text:"الحشوة بمشروبات روحية يجب ذكرها بجانب اسم المنتج"},
+      {code:"JS8-5", text:"شوكولاتة بيضاء: زبدة الكاكاو يجب ≥ 20%"},
+      {code:"JS8-6", text:"يُمنع تخزين أو عرض الشوكولاتة في الثلاجة"},
+      {code:"JS8-7", text:"محليات صناعية يجب ذكر: الاسم + الكمية + الحد اليومي + التحذير"},
+      {code:"JS8-8", text:"يُمنع استخدام السكارين أو الدولسين أو السكلمايت في الشوكولاتة"}
+    ]
+  },
+  "candy": {
+    name: "الحلوى الصلبة والطرية JS 43",
+    warnings: [
+      {code:"JS43-1", text:"القطع الحلوى المغلفة منفردة: اسم المنتج إلزامي على كل غلاف صغير"},
+      {code:"JS43-2", text:"القطع الحلوى المغلفة منفردة: اسم المصنع إلزامي على كل غلاف صغير"},
+      {code:"JS43-3", text:"المارزيبان: عجينة اللوز يجب أن تكون مذكورة في قائمة المكونات"},
+      {code:"JS43-4", text:"النوجا: المكسرات أو الحبوب المحمصة المطحونة يجب ذكرها صراحةً في المكونات"}
+    ]
+  },
+  "energy_drink": {
+    name: "مشروبات الطاقة JS 2381:2023",
+    warnings: [
+      {code:"JS2381-1", text:"حد الكافيين: ≤ 320 مغ/لتر — أي كمية أعلى = مخالفة"},
+      {code:"JS2381-2", text:"عبارة إلزامية: 'لا ينصح به للأطفال'"},
+      {code:"JS2381-3", text:"عبارة إلزامية: 'لا ينصح به للحوامل أو المرضعات'"},
+      {code:"JS2381-4", text:"عبارة إلزامية: 'غير مناسب لمن لديهم حساسية للكافيين'"}
+    ]
+  },
+  "juice": {
+    name: "عصائر الفاكهة JS 1761:2021",
+    warnings: [
+      {code:"JS1761-1", text:"عصير فاكهة / عصير طبيعي: يُمنع إضافة أي سكر — وجوده = مخالفة"},
+      {code:"JS1761-2", text:"النكتار: نسبة الفاكهة يجب أن تكون حسب نوعها (غالباً 25-50%)"},
+      {code:"JS1761-3", text:"كتابة 'عصير طبيعي' وفيه سكر مضاف = تضليل صريح"}
+    ]
+  },
+  "fruit_syrup": {
+    name: "شراب الفاكهة والسكواش JS 994:2023",
+    warnings: [
+      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعي يجب أن تكون ≥ 10%"},
+      {code:"JS994-2", text:"شراب الفاكهة الطبيعي: يجب أن تكون الألوان والنكهات طبيعية فقط"},
+      {code:"JS994-3", text:"محليات صناعية يجب ذكرها على البطاقة"},
+      {code:"JS994-4", text:"نسبة العصير يجب ذكرها على البطاقة"},
+      {code:"JS994-5", text:"السكواش: معدل التخفيف إلزامي كتابةً أو رسماً"},
+      {code:"JS994-6", text:"نسبة الإيثانول يجب ألا تتجاوز 0.1%"}
+    ]
+  },
+  "flavored_drink": {
+    name: "المشروبات المنكهة JS 77:2017",
+    warnings: [
+      {code:"JS77-1", text:"نوع النكهة إلزامي ذكره — 'مشروب منكه' غير كافٍ — الصح: 'مشروب بنكهة الليمون'"}
+    ]
+  },
+  "supplements": {
+    name: "المكملات الغذائية",
+    warnings: [
+      {code:"SUP-1", text:"جرعة أي مغذٍ > الحد الأقصى الأردني (MAX) = خطر صحي — راجع جدول جرعات الغذاء والدواء 2017"},
+      {code:"SUP-2", text:"جرعة أي مغذٍ < 15% من الاحتياج اليومي = الجرعة غير فعّالة"},
+      {code:"SUP-3", text:"مطالبات صحية بدون إثبات علمي = مخالفة تضليلية"},
+      {code:"SUP-4", text:"مكمل للحوامل يحتوي فيتامين A > 3000 مكغ = خطر صحي جسيم"},
+      {code:"SUP-5", text:"مكمل يدّعي علاج أو وقاية من مرض = يحتاج إحالة لمديرية الدواء وليس الغذاء"},
+      {code:"SUP-6", text:"جرعة فيتامين أو معدن > 100% من الاحتياج اليومي الأردني = مخالفة إلزامية"}
+    ]
+  }
+};
+
+// ===== مدد الصلاحية JS 288:2023 =====
+const SHELF_LIFE_DATA = {
+  // اللحوم
+  "دواجن كاملة مبردة (دجاج، بط، أوز، حمام، رومي، نعام، أرانب)": {"عبوة مناسبة": "5 أيام من الذبح", "فاكيوم": "7 أيام من الذبح"},
+  "أعضاء داخلية دجاج مبردة": {"عبوة مناسبة": "3 أيام من الذبح", "فاكيوم": "7 أيام من الذبح"},
+  "لحوم مبردة - بقر، جاموس، جمال، ضأن، ماعز (ذبائح/قطع)": {"عبوة مناسبة": "14 يوم من الذبح"},
+  "لحوم مبردة - بقر، جاموس، جمال": {"فاكيوم/جو معدل": "120 يوم من الذبح"},
+  "لحوم مبردة - ضأن، ماعز": {"فاكيوم/جو معدل": "90 يوم من الذبح"},
+  "أعضاء داخلية مبردة من مواشٍ": {"عبوة مناسبة": "7 أيام من الذبح", "فاكيوم": "30 يوم من الذبح"},
+  "لحم البيرغر الطازج المبرد": {"عبوة مناسبة": "يومين"},
+  // الأسماك
+  "أسماك مبردة مدخنة على البارد": {"عبوة مناسبة": "7 أيام"},
+  "أسماك مبردة مدخنة على الساخن": {"عبوة مناسبة": "14 يوم"},
+  "أسماك مبردة مدخنة": {"فاكيوم": "90 يوم"},
+  "أسماك طازجة مبردة غير مزالة الأحشاء": {"عبوة مناسبة": "7 أيام من الصيد"},
+  "أسماك طازجة مبردة منظفة ومزالة الأحشاء": {"عبوة مناسبة": "9 أيام من الصيد"},
+  "أسماك طازجة مبردة": {"فاكيوم": "14 يوم من الصيد", "جو معدل": "21 يوم من الصيد"},
+  // الألبان
+  "اللبن الرائب أو اللبن المُطعَّم": {"عبوة مناسبة": "10 أيام"},
+  "اللبنة": {"عبوة مناسبة": "14 يوم"}
+};
+
+// ===== المستثنيات من تاريخ الصلاحية =====
+const SHELF_LIFE_EXEMPTIONS = [
+  "الفاكهة والخضروات الطازجة غير المقشورة أو المقطعة",
+  "النبيذ بأنواعه",
+  "المشروبات التي نسبة الكحول فيها ≥ 10% حجمي",
+  "المخبوزات والمعجنات التي تُستهلك خلال 24 ساعة",
+  "الخل المعبأ في عبوات زجاجية",
+  "ملح الطعام غير المدعم باليود",
+  "السكر الصلب",
+  "منتجات الحلوى والمثلجات للبيع المباشر",
+  "العلكة الخام",
+  "البقوليات الجافة غير المطبوخة (فاصولياء، حمص، فول، عدس...)",
+  "الخضر المجففة والأعشاب الطبية (يانسون، بابونج، قرنفل، زعفران...)",
+  "الشاي السائب",
+  "حبوب جافة غير معبأة (أرز، شعير، شوفان، ذرة...)",
+  "التوابل والبهارات الكاملة",
+  "جلوكوز سائل ومجفف"
+];
+
+// ===== ALLERGENS =====
+const ALLERGENS = [
+  {id:1,name:'الحليب ومنتجاته',en:'Milk',keywords:['milk','whey','casein','cheese','butter','cream','lactose','milk powder']},
+  {id:2,name:'البيض',en:'Eggs',keywords:['egg','egg white','egg yolk','albumin','ovalbumin']},
+  {id:3,name:'القمح والغلوتين',en:'Wheat',keywords:['wheat','wheat flour','semolina','durum','bulgur','gluten','spelt']},
+  {id:4,name:'الشعير',en:'Barley',keywords:['barley','malt','malt extract','malt syrup']},
+  {id:5,name:'الشوفان',en:'Oats',keywords:['oats','oat flour','oatmeal']},
+  {id:6,name:'الصويا',en:'Soy',keywords:['soy','soybean','soy lecithin','soy protein','tofu','soy sauce']},
+  {id:7,name:'الفول السوداني',en:'Peanuts',keywords:['peanut','groundnut','peanut butter','peanut oil']},
+  {id:8,name:'المكسرات',en:'Tree Nuts',keywords:['almond','hazelnut','walnut','cashew','pistachio','pecan','macadamia','praline','marzipan']},
+  {id:9,name:'الأسماك',en:'Fish',keywords:['fish','salmon','tuna','cod','sardine','anchovy','fish sauce','fish protein']},
+  {id:10,name:'القشريات',en:'Crustaceans',keywords:['shrimp','prawn','crab','lobster','krill']},
+  {id:11,name:'الرخويات',en:'Molluscs',keywords:['mussels','clams','oysters','scallops','squid','octopus']},
+  {id:12,name:'السمسم',en:'Sesame',keywords:['sesame','sesame seeds','sesame oil','tahini']},
+  {id:13,name:'الخردل',en:'Mustard',keywords:['mustard','mustard seeds','mustard powder']},
+  {id:14,name:'الكرفس',en:'Celery',keywords:['celery','celeriac','celery salt']},
+  {id:15,name:'الكبريتيت',en:'Sulphites',keywords:['sulphur dioxide','sodium sulphite','potassium metabisulphite','sulphite','sulfite']}
+];
+
+// ===== STATE =====
+let uploadedImages = [];
+let allResults = [];
+let currentTab = 'all';
+
+function checkReady() {
+  document.getElementById('analyzeBtn').disabled = !(uploadedImages.length > 0);
+}
+
+// ===== FILE UPLOAD (متعدد) =====
+function handleFiles(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+
+  const remaining = 5 - uploadedImages.length;
+  if (remaining <= 0) { showToast('الحد الأقصى 5 صور — احذف صورة أولاً'); return; }
+
+  const toProcess = files.slice(0, remaining);
+  if (files.length > remaining) showToast(`تم أخذ ${remaining} صور فقط — الحد الأقصى 5`);
+
+  toProcess.forEach(file => {
+    if (file.size > 10 * 1024 * 1024) { showToast(`${file.name}: الحجم أكبر من 10MB`); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_PX = 1600;
+        let w = img.width, h = img.height;
+        if (w > MAX_PX || h > MAX_PX) {
+          if (w > h) { h = Math.round(h * MAX_PX / w); w = MAX_PX; }
+          else { w = Math.round(w * MAX_PX / h); h = MAX_PX; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        let quality = 0.85;
+        let dataURL = canvas.toDataURL('image/jpeg', quality);
+        while (dataURL.length * 0.75 > 4 * 1024 * 1024 && quality > 0.3) {
+          quality -= 0.1;
+          dataURL = canvas.toDataURL('image/jpeg', quality);
+        }
+        uploadedImages.push({ base64: dataURL.split(',')[1], type: 'image/jpeg', name: file.name, src: dataURL });
+        renderGallery();
+        checkReady();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  // reset input لإتاحة رفع نفس الملف مرة ثانية
+  input.value = '';
+}
+
+function renderGallery() {
+  const gallery = document.getElementById('imageGallery');
+  const thumbs = document.getElementById('thumbnails');
+  const count = document.getElementById('imgCount');
+  if (!uploadedImages.length) { gallery.style.display = 'none'; return; }
+  gallery.style.display = 'block';
+  count.textContent = uploadedImages.length;
+  document.getElementById('uploadZone').classList.add('has-image');
+  document.querySelector('.upload-icon').textContent = '📎';
+  document.querySelector('.upload-text h3').textContent = `${uploadedImages.length} صورة مرفوعة — انقر لإضافة المزيد`;
+
+  thumbs.innerHTML = uploadedImages.map((img, i) => `
+    <div style="position:relative;flex-shrink:0;">
+      <img src="${img.src}" style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:2px solid var(--border);" />
+      <button onclick="removeImage(${i})"
+        style="position:absolute;top:-6px;left:-6px;width:20px;height:20px;border-radius:50%;
+        background:var(--danger);border:none;color:#fff;cursor:pointer;font-size:.7rem;
+        display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
+      <div style="font-size:.65rem;color:var(--text3);text-align:center;margin-top:3px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${img.name}</div>
+    </div>`).join('');
+}
+
+function removeImage(index) {
+  uploadedImages.splice(index, 1);
+  if (!uploadedImages.length) {
+    document.getElementById('uploadZone').classList.remove('has-image');
+    document.querySelector('.upload-icon').textContent = '📋';
+    document.querySelector('.upload-text h3').textContent = 'اسحب صور بطاقة البيان هنا';
+  }
+  renderGallery();
+  checkReady();
+}
+
+function clearImages() {
+  uploadedImages = [];
+  document.getElementById('uploadZone').classList.remove('has-image');
+  document.querySelector('.upload-icon').textContent = '📋';
+  document.querySelector('.upload-text h3').textContent = 'اسحب صور بطاقة البيان هنا';
+  renderGallery();
+  checkReady();
+}
+
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('drag');
+  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+  if (files.length) {
+    const dt = new DataTransfer();
+    files.forEach(f => dt.items.add(f));
+    document.getElementById('fileInput').files = dt.files;
+    handleFiles(document.getElementById('fileInput'));
+  }
+});
+
+// ===== TABS =====
+function showTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel'];
+  panels.forEach(p => document.getElementById(p).style.display = 'none');
+  document.getElementById('issuesList').style.display = 'none';
+
+  if (tab === 'allergens') document.getElementById('allergenPanel').style.display = 'block';
+  else if (tab === 'nutrition') document.getElementById('nutritionPanel').style.display = 'block';
+  else if (tab === 'jswarnings') document.getElementById('jswarningsPanel').style.display = 'block';
+  else {
+    document.getElementById('issuesList').style.display = 'block';
+    renderIssues(allResults, tab);
+  }
+}
+
+function toggleIssue(id) {
+  const body = document.getElementById('ib_' + id);
+  body.classList.toggle('open');
+}
+
+// ===== RENDER ISSUES =====
+function renderIssues(results, filter) {
+  const list = document.getElementById('issuesList');
+  const filtered = filter === 'all' ? results : results.filter(r => r.status === filter);
+  if (!filtered.length) { list.innerHTML = '<p style="color:var(--text3);text-align:center;padding:2rem;">لا توجد نتائج في هذه الفئة</p>'; return; }
+  list.innerHTML = filtered.map((r, i) => {
+    const icon = r.status === 'pass' ? '✅' : r.status === 'critical' ? '❌' : '⚠️';
+    const sevClass = r.status === 'pass' ? 'sev-pass' : r.status === 'critical' ? 'sev-critical' : 'sev-warning';
+    const sevText = r.status === 'pass' ? 'مطابق' : r.status === 'critical' ? 'جسيمة' : 'تنبيه';
+    return `
+    <div class="issue-card ${r.status}">
+      <div class="issue-header" onclick="toggleIssue('${i}')">
+        <span class="issue-icon">${icon}</span>
+        <div class="issue-meta">
+          <div class="issue-title">${r.rule}</div>
+          <div class="issue-rule">${r.code} · ${r.category}</div>
+        </div>
+        <span class="issue-severity ${sevClass}">${sevText}</span>
+      </div>
+      <div class="issue-body" id="ib_${i}">
+        <div class="issue-detail">
+          <strong>المتطلب:</strong> ${r.requirement}<br><br>
+          <strong>الملاحظة:</strong> ${r.note || 'لا توجد ملاحظات إضافية'}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== RENDER JS WARNINGS =====
+function renderJSWarnings(productType) {
+  const panel = document.getElementById('jsWarningsList');
+  const jsRules = JS_SPECIFIC_RULES[productType];
+  if (!jsRules) {
+    panel.innerHTML = '<p style="color:var(--text3);font-size:.85rem;padding:1rem;">لا توجد اشتراطات خاصة لهذا النوع من المنتجات في قاعدة البيانات — يُطبق التدقيق العام فقط.</p>';
+    return;
+  }
+  panel.innerHTML = `
+    <div style="font-size:.8rem;color:var(--accent);font-family:var(--mono);margin-bottom:1rem;">📌 ${jsRules.name}</div>
+    <div class="js-warnings-panel">
+      <h4>اشتراطات خاصة يجب فحصها يدوياً:</h4>
+      ${jsRules.warnings.map(w => `
+        <div class="js-warning-item">
+          <span class="w-icon">⚠️</span>
+          <span><strong style="color:var(--text3);font-family:var(--mono);font-size:.75rem;">${w.code}</strong> — ${w.text}</span>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+// ===== MAIN ANALYZE =====
+async function analyze() {
+  if (!apiKey || uploadedImages.length === 0) return;
+  const btn = document.getElementById('analyzeBtn');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('results').style.display = 'none';
+
+  const productType = document.getElementById('productType').value;
+  const origin = document.getElementById('origin').value;
+  const strictness = document.getElementById('strictness').value;
+
+  // بناء قواعد خاصة بنوع المنتج
+  const jsSpecific = JS_SPECIFIC_RULES[productType];
+  const jsRulesText = jsSpecific ?
+    `\n\nاشتراطات خاصة بنوع المنتج (${jsSpecific.name}):\n` +
+    jsSpecific.warnings.map(w => `- [${w.code}] ${w.text}`).join('\n') : '';
+
+  const rulesText = RULES.map(r =>
+    `[${r['رقم القاعدة']}] ${r['رقم المادة']} (${r['درجة المخالفة']}): ${r['المتطلب']}`
+  ).join('\n');
+
+  const allergensText = ALLERGENS.map(a =>
+    `${a.name}: ${a.keywords.join(', ')}`
+  ).join('\n');
+
+  const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفات الأردنية والكودكس الدولي.
+
+معلومات المنتج:
+- نوع المنتج: ${productType}
+- المنشأ: ${origin === 'imported' ? 'مستورد' : 'محلي'}
+- مستوى التدقيق: ${strictness}
+
+قواعد التدقيق العامة (JS 9 + القواعد الأردنية الإلزامية):
+${rulesText}
+${jsRulesText}
+
+مواد الحساسية للفحص:
+${allergensText}
+
+تعليمات مهمة:
+1. اقرأ صورة بطاقة البيان المرفقة بعناية تامة
+2. دقق على كل قاعدة من القواعد أعلاه
+3. افحص المكونات بحثاً عن مواد الحساسية
+4. افحص المضافات الغذائية المذكورة
+5. افحص جدول الحقائق التغذوية بدقة
+6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
+7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
+
+التنسيق المطلوب:
+{
+  "summary": "ملخص التدقيق باللغة العربية في جملتين أو ثلاث",
+  "overallStatus": "pass أو warning أو fail",
+  "score": رقم من 0 إلى 100,
+  "results": [
+    {
+      "code": "رقم القاعدة مثل R006",
+      "rule": "اسم القاعدة",
+      "category": "الفئة",
+      "requirement": "المتطلب",
+      "status": "pass أو critical أو warning",
+      "note": "ملاحظة محددة عما وجدته في البطاقة"
+    }
+  ],
+  "allergens": [
+    {
+      "name": "اسم مادة الحساسية بالعربية",
+      "found": true أو false,
+      "declared": true أو false,
+      "keyword": "الكلمة التي وجدتها"
+    }
+  ],
+  "additives": [
+    {
+      "name": "اسم المضاف",
+      "ins": "رقم INS إن وجد",
+      "declared": true,
+      "note": "ملاحظة"
+    }
+  ],
+  "nutrition": {
+    "hasTable": true أو false,
+    "per": "100g أو serving",
+    "servingSize": "حجم الحصة إن وجد",
+    "values": {
+      "energy": {"value": "القيمة", "unit": "kcal", "present": true},
+      "protein": {"value": "القيمة", "unit": "g", "present": true},
+      "carbs": {"value": "القيمة", "unit": "g", "present": true},
+      "sugars": {"value": "القيمة", "unit": "g", "present": true},
+      "addedSugars": {"value": "القيمة", "unit": "g", "present": true},
+      "fat": {"value": "القيمة", "unit": "g", "present": true},
+      "saturatedFat": {"value": "القيمة", "unit": "g", "present": true},
+      "transFat": {"value": "القيمة", "unit": "g", "present": true},
+      "cholesterol": {"value": "القيمة", "unit": "mg", "present": true},
+      "sodium": {"value": "القيمة", "unit": "mg", "present": true},
+      "fiber": {"value": "القيمة", "unit": "g", "present": false}
+    },
+    "nutritionNote": "ملاحظات عن مدى اكتمال الجدول وأي مشاكل فيه"
+  }
+}`;
+
+  try {
+    const requestBody = JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4000,
+      messages: [{ role: 'user', content: [
+        ...uploadedImages.map(img => ({
+          type: 'image',
+          source: { type: 'base64', media_type: img.type, data: img.base64 }
+        })),
+        { type: 'text', text: prompt }
+      ]}]
+    });
+    let response;
+    response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody
+    });
+    if (!response.ok) {
+      let m = 'خطأ في API';
+      try { const e = await response.json(); m = e.error?.message || m; } catch(e) {}
+      throw new Error(m);
+    }
+    const data = await response.json();
+    const text = data.content[0].text;
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('تعذّر تحليل الاستجابة');
+    displayResults(JSON.parse(jsonMatch[0]), productType);
+
+  } catch (err) {
+    let msg = err.message || 'خطأ';
+    if(msg.includes('Failed to fetch')||msg.includes('CORS')) msg = 'خطأ شبكة — تأكد من المفتاح';
+    showToast('❌ ' + msg); console.error(err);
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// ===== DISPLAY RESULTS =====
+function displayResults(data, productType) {
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  document.getElementById('aiSummary').textContent = data.summary || 'تم إكمال التدقيق';
+
+  const score = Math.round(data.score || 0);
+  document.getElementById('scoreText').textContent = score + '%';
+  setTimeout(() => {
+    document.getElementById('scoreBar').style.width = score + '%';
+    document.getElementById('scoreBar').style.background =
+      score >= 80 ? 'var(--success)' : score >= 60 ? 'var(--warn)' : 'var(--danger)';
+  }, 100);
+
+  const results = data.results || [];
+  const passN = results.filter(r => r.status === 'pass').length;
+  const failN = results.filter(r => r.status === 'critical').length;
+  const warnN = results.filter(r => r.status === 'warning').length;
+  document.getElementById('passCount').textContent = `✅ مطابق: ${passN}`;
+  document.getElementById('failCount').textContent = `❌ مخالفات: ${failN} · ⚠️ تنبيهات: ${warnN}`;
+
+  const badge = document.getElementById('overallBadge');
+  if (data.overallStatus === 'pass') { badge.textContent = '✅ مطابق'; badge.className = 'overall-badge badge-pass'; }
+  else if (data.overallStatus === 'fail') { badge.textContent = '❌ غير مطابق'; badge.className = 'overall-badge badge-fail'; }
+  else { badge.textContent = '⚠️ يحتاج مراجعة'; badge.className = 'overall-badge badge-warn'; }
+
+  allResults = results;
+  renderIssues(results, 'all');
+
+  // Allergens
+  const allergens = data.allergens || [];
+  const grid = document.getElementById('allergenGrid');
+  if (allergens.length) {
+    grid.innerHTML = allergens.map(a => `
+      <div class="allergen-chip ${a.found ? 'found' : 'clear'}">
+        <span>${a.found ? '⚠️' : '✅'}</span>
+        <span>${a.name}</span>
+      </div>`).join('');
+  } else {
+    grid.innerHTML = '<p style="color:var(--text3);font-size:.85rem;">لم يتم الكشف عن مواد حساسية</p>';
+  }
+
+  // Nutrition Panel — JS 1473:2022
+  const nutrition = data.nutrition || {};
+  const nGrid = document.getElementById('nutritionGrid');
+  const nNote = document.getElementById('nutritionNote');
+  if (nutrition.hasTable === false) {
+    nGrid.innerHTML = '<div style="grid-column:1/-1;color:var(--danger);font-weight:700;padding:1rem;background:rgba(255,71,87,.08);border-radius:10px;border:1px solid rgba(255,71,87,.2);">❌ لا يوجد جدول حقائق تغذوية — مخالفة جسيمة حسب JS 1473:2022</div>';
+  } else if (nutrition.values) {
+    const vmap = [
+      ['energy','🔥 الطاقة'],['protein','💪 البروتين'],['carbs','🌾 الكربوهيدرات'],
+      ['sugars','🍬 السكريات الكلية'],['addedSugars','➕ السكر المضاف'],
+      ['fat','🫙 الدهون'],['saturatedFat','⚠️ دهون مشبعة'],
+      ['transFat','🚨 دهون متحولة'],['cholesterol','💉 كوليسترول'],
+      ['sodium','🧂 الصوديوم'],['fiber','🌿 الألياف']
+    ];
+    nGrid.innerHTML = vmap.map(([k,lbl]) => {
+      const v = nutrition.values[k] || {};
+      const ok = v.present !== false;
+      const val = (v.value && v.value !== 'القيمة') ? v.value + ' ' + (v.unit||'') : '—';
+      const bg = ok ? 'rgba(46,213,115,.07)' : 'rgba(255,71,87,.07)';
+      const br = ok ? 'rgba(46,213,115,.25)' : 'rgba(255,71,87,.25)';
+      const cl = ok ? 'var(--success)' : 'var(--danger)';
+      return `<div style="background:${bg};border:1px solid ${br};border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:.73rem;color:var(--text2);margin-bottom:.3rem;">${lbl}</div>
+        <div style="font-size:1rem;font-weight:700;color:${cl};">${ok ? val : '❌ غائب'}</div>
+      </div>`;
+    }).join('');
+  }
+  nNote.innerHTML = (nutrition.servingSize ? '<strong>حجم الحصة:</strong> ' + nutrition.servingSize + '<br>' : '') +
+    (nutrition.nutritionNote || '') +
+    '<br><br><span style="color:var(--text3);font-size:.78rem;">📌 المرجع: JS 1473:2022 · القيمة المرجعية: 2000 كيلوكالوري</span>';
+
+  // JS Warnings Panel
+  renderJSWarnings(productType);
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

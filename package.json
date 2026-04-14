@@ -1,0 +1,15 @@
+{
+  "name": "foodcheck-jordan",
+  "version": "1.0.0",
+  "description": "مدقق بطاقة البيان الغذائية - FoodCheck Jordan",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
