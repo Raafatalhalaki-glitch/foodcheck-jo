@@ -279,10 +279,7 @@ footer span { color: var(--accent); }
     <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label">مادة حساسية</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
   </div>
-  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
-    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
-    <button onclick="loadDemo()" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:var(--text);font-weight:600;font-size:0.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;transition:all .25s;font-family:var(--font);">👉 جرب مثال جاهز</button>
-  </div>
+  <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
 </section>
 
 <section id="tool">
@@ -1117,36 +1114,7 @@ function displayResults(data, productType) {
   renderJSWarnings(productType);
 }
 
-// ===== DEMO =====
-function loadDemo() {
-  document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
-  showToast('📋 جاري تحميل مثال جاهز...');
-  // صورة demo بسيطة - مستطيل أبيض مع نص
-  const canvas = document.createElement('canvas');
-  canvas.width = 400; canvas.height = 300;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 400, 300);
-  ctx.fillStyle = '#000000';
-  ctx.font = 'bold 18px Arial';
-  ctx.fillText('بطاقة بيان تجريبية', 20, 40);
-  ctx.font = '14px Arial';
-  ctx.fillText('المكونات: دقيق قمح، سكر، زيت نباتي', 20, 80);
-  ctx.fillText('الوزن الصافي: 250 غرام', 20, 110);
-  ctx.fillText('تاريخ الإنتاج: 01/2025', 20, 140);
-  ctx.fillText('بلد المنشأ: الأردن', 20, 170);
-  ctx.fillText('المصنع: شركة تجريبية للصناعات الغذائية', 20, 200);
-  const dataURL = canvas.toDataURL('image/jpeg', 0.9);
-  uploadedImages.push({
-    base64: dataURL.split(',')[1],
-    type: 'image/jpeg',
-    name: 'demo-label.jpg',
-    src: dataURL
-  });
-  renderGallery();
-  checkReady();
-  setTimeout(() => showToast('✅ تم تحميل المثال — اضغط بدء الفحص'), 500);
-}
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
