@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -143,6 +143,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="mode-tabs">
     <button class="mode-tab active" onclick="setMode('additive')" id="modeA">🧪 بحث عن مضاف</button>
     <button class="mode-tab" onclick="setMode('food')" id="modeF">🥛 بحث عن غذاء</button>
+  <button class="mode-tab" onclick="setMode('batch')" id="modeB">📋 فحص متعدد</button>
   </div>
 
   <!-- ADDITIVE MODE -->
@@ -170,6 +171,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
           placeholder="مثال: 01.1.4 · حليب منكه · Flavoured milk · بسكويت · 07.1.2">
       </div>
       <button class="search-btn" onclick="searchFood()" id="searchFoodBtn">بحث في CXS 192</button>
+    </div>
+  </div>
+
+
+  <!-- BATCH MODE -->
+  <div id="panelBatch" style="display:none">
+    <div class="search-card">
+      <div class="search-title">📋 أدخل قائمة المضافات واسم المنتج — فحص فوري من قاعدة البيانات</div>
+      <div style="margin-bottom:.8rem;">
+        <label class="field-label">اسم المنتج أو فئته (مثال: سكاكر · 05.2 · بسكويت · حليب منكه)</label>
+        <input type="text" class="field-input" id="batchProduct" placeholder="سكاكر · candy · 05.2 · بسكويت ...">
+      </div>
+      <div>
+        <label class="field-label">أرقام المضافات — كل سطر مضاف (E-number أو INS أو اسم)</label>
+        <textarea id="batchInput" placeholder="E163&#10;E162&#10;E100&#10;E151&#10;أو&#10;163&#10;407&#10;Carrageenan" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;color:var(--text);font-family:var(--font);font-size:.9rem;outline:none;resize:vertical;min-height:140px;line-height:1.6;"></textarea>
+      </div>
+      <button class="search-btn" onclick="searchBatch()">فحص الكل من CXS 192</button>
     </div>
   </div>
 
@@ -220,8 +238,10 @@ function setMode(m) {
   currentMode = m;
   document.getElementById('modeA').classList.toggle('active', m === 'additive');
   document.getElementById('modeF').classList.toggle('active', m === 'food');
+  document.getElementById('modeB').classList.toggle('active', m === 'batch');
   document.getElementById('panelAdditive').style.display = m === 'additive' ? 'block' : 'none';
   document.getElementById('panelFood').style.display = m === 'food' ? 'block' : 'none';
+  document.getElementById('panelBatch').style.display = m === 'batch' ? 'block' : 'none';
   document.getElementById('resultPanel').className = 'result-panel';
 }
 
@@ -594,11 +614,160 @@ function renderFoodResult(r, rawInput) {
   panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+
+// ===== BATCH MODE =====
+function searchBatch() {
+  if (!ready) { alert('البيانات لم تُحمَّل بعد'); return; }
+  const productRaw = document.getElementById('batchProduct').value.trim();
+  const lines = document.getElementById('batchInput').value.trim().split('\n').map(l => l.trim()).filter(Boolean);
+  if (!lines.length) { alert('الرجاء إدخال المضافات'); return; }
+  if (!productRaw) { alert('الرجاء إدخال اسم المنتج أو فئته'); return; }
+
+  document.getElementById('spinner').classList.add('show');
+  document.getElementById('resultPanel').className = 'result-panel';
+
+  setTimeout(() => {
+    document.getElementById('spinner').classList.remove('show');
+    const catNo = resolveCatNo(productRaw);
+    const catName = CODEX.cat_names?.[catNo] || catNo;
+    const results = lines.map(line => checkSingleAdditive(line, catNo));
+    renderBatchResult(results, productRaw, catNo, catName);
+  }, 300);
+}
+
+function resolveENUM(raw) {
+  // تحويل E163 أو 163 أو e163 -> INS
+  raw = raw.trim().toUpperCase().replace(/^E/,'');
+  const num = raw.match(/^(\d{3,4})/)?.[1];
+  if (!num) return null;
+
+  // بحث مباشر
+  if (CODEX.table1[num] || CODEX.table3[num]) return num;
+  // بحث في e_to_ins
+  if (CODEX.e_to_ins?.[num]) return CODEX.e_to_ins[num];
+  // بحث بأي suffix مثل 100(i)
+  for (const ins of Object.keys({...CODEX.table1,...CODEX.table3})) {
+    if (ins.startsWith(num)) return ins;
+  }
+  return null;
+}
+
+function checkSingleAdditive(raw, catNo) {
+  const t1 = CODEX.table1, t2 = CODEX.table2, t3 = CODEX.table3, annex = new Set(CODEX.annex);
+
+  // حاول resolve الـ INS
+  let ins = resolveENUM(raw);
+  if (!ins) {
+    // بحث بالاسم
+    const up = raw.toUpperCase();
+    for (const [i,d] of Object.entries(t1)) {
+      if (d.name.toUpperCase().includes(up.substring(0,6))) { ins = i; break; }
+    }
+    if (!ins) for (const [i,d] of Object.entries(t3)) {
+      if (d.name.toUpperCase().includes(up.substring(0,6))) { ins = i; break; }
+    }
+  }
+
+  if (!ins) return { raw, ins: null, name: raw, verdict: 'unknown', detail: 'غير موجود في قاعدة البيانات' };
+
+  const name = t1[ins]?.name || t3[ins]?.name || 'INS ' + ins;
+
+  // تطبيق منطق CXS 192
+  // جدول 2
+  const searchCats = catNo ? [catNo, ...getParentCats(catNo)] : [];
+  let t2Match = null;
+  for (const cat of searchCats) {
+    if (t2[cat]) {
+      t2Match = t2[cat].find(a => {
+        const parts = a.ins.replace(/\s/g,'').split(/[;,]+/);
+        return parts.some(p => p === ins || p.startsWith(ins.split('(')[0]));
+      });
+      if (t2Match) break;
+    }
+  }
+
+  if (t2Match) {
+    return { raw, ins, name, verdict: 'permitted', source: 'جدول 2', max_level: t2Match.max_level, notes: t2Match.notes };
+  }
+
+  // Annex + جدول 3
+  const inAnnex = searchCats.some(c => annex.has(c));
+  if (!inAnnex && t3[ins]) {
+    return { raw, ins, name, verdict: 'permitted', source: 'جدول 3', max_level: 'GMP', notes: '' };
+  }
+
+  // جدول 1 فقط (كمعلومة)
+  if (t1[ins] && t1[ins].categories.length > 0) {
+    return { raw, ins, name, verdict: 'not_in_category', source: 'جدول 1', detail: `مسموح في ${t1[ins].categories.length} فئة أخرى — غير مسموح في ${catNo}` };
+  }
+
+  return { raw, ins, name, verdict: 'forbidden', source: '—', detail: 'غير مسموح في هذه الفئة' };
+}
+
+function renderBatchResult(results, productRaw, catNo, catName) {
+  const panel = document.getElementById('resultPanel');
+  const permitted = results.filter(r => r.verdict === 'permitted').length;
+  const forbidden = results.filter(r => r.verdict === 'forbidden' || r.verdict === 'not_in_category').length;
+  const unknown = results.filter(r => r.verdict === 'unknown').length;
+
+  const summaryColor = forbidden > 0 ? 'var(--danger)' : 'var(--success)';
+  const summaryIcon = forbidden > 0 ? '⚠️' : '✅';
+
+  panel.innerHTML = \`
+    <div class="verdict-banner \${forbidden > 0 ? 'partial' : 'permitted'}" style="margin-bottom:1rem;">
+      <div class="verdict-icon">\${summaryIcon}</div>
+      <div>
+        <div class="verdict-title \${forbidden > 0 ? 'partial' : 'permitted'}">
+          \${productRaw} \${catNo !== productRaw ? '· ' + catNo : ''}
+        </div>
+        <div class="verdict-sub">
+          \${results.length} مضاف · 
+          <span style="color:var(--success)">✅ \${permitted} مسموح</span> · 
+          <span style="color:var(--danger)">❌ \${forbidden} غير مسموح</span>
+          \${unknown > 0 ? \` · <span style="color:var(--warn)">⚠️ \${unknown} غير معروف</span>\` : ''}
+        </div>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+    <table class="cat-table">
+      <thead>
+        <tr>
+          <th>المضاف</th>
+          <th>الاسم</th>
+          <th>الحكم</th>
+          <th>المصدر</th>
+          <th>الحد الأقصى</th>
+        </tr>
+      </thead>
+      <tbody>
+        \${results.map(r => \`
+          <tr>
+            <td><strong>\${r.raw.toUpperCase()}</strong>\${r.ins && r.ins !== r.raw.replace(/^E/i,'') ? '<br><span style="font-size:.72rem;color:var(--text3);">INS '+r.ins+'</span>' : ''}</td>
+            <td>\${r.name}</td>
+            <td>\${
+              r.verdict === 'permitted' ? '<span style="color:var(--success);font-weight:700;">✅ مسموح</span>' :
+              r.verdict === 'forbidden' ? '<span style="color:var(--danger);font-weight:700;">❌ غير مسموح</span>' :
+              r.verdict === 'not_in_category' ? '<span style="color:var(--warn);font-weight:700;">⚠️ غير مسموح هنا</span>' :
+              '<span style="color:var(--text3);">❓ غير موجود</span>'
+            }</td>
+            <td style="font-size:.8rem;">\${r.source || '—'}</td>
+            <td>\${r.max_level ? renderLevel(r.max_level) : (r.detail ? '<span style="font-size:.75rem;color:var(--text3);">'+r.detail+'</span>' : '—')}</td>
+          </tr>
+        \`).join('')}
+      </tbody>
+    </table>
+    </div>
+  \`;
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 // Enter key
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
     if (currentMode === 'additive') searchAdditive();
-    else searchFood();
+    else if (currentMode === 'food') searchFood();
+    else if (currentMode === 'batch') searchBatch();
   }
 });
 </script>
