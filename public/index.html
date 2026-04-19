@@ -1081,6 +1081,7 @@ function renderIssues(results, filter) {
         <div class="issue-detail">
           <strong>المتطلب:</strong> ${r.requirement}<br><br>
           <strong>الملاحظة:</strong> ${r.note || 'لا توجد ملاحظات إضافية'}
+          ${r.solution && r.status !== 'pass' ? `<br><br><div style="background:rgba(0,212,168,.08);border:1px solid rgba(0,212,168,.2);border-radius:8px;padding:.6rem .8rem;margin-top:.4rem;"><strong style="color:var(--accent);">💡 الحل المقترح:</strong><br>${r.solution}</div>` : ''}
         </div>
       </div>
     </div>`;
@@ -1209,6 +1210,7 @@ ${allergensText}
 5. افحص جدول الحقائق التغذوية بدقة
 6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
 7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
+8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
 
 التنسيق المطلوب:
 {
@@ -1222,7 +1224,8 @@ ${allergensText}
       "category": "الفئة",
       "requirement": "المتطلب",
       "status": "pass أو critical أو warning",
-      "note": "ملاحظة محددة عما وجدته في البطاقة"
+      "note": "ملاحظة محددة عما وجدته في البطاقة",
+      "solution": "الحل العملي المقترح لتصحيح هذه المخالفة — كيف يصلحها صاحب المنتج؟ إذا كان pass اتركها فارغة"
     }
   ],
   "allergens": [
