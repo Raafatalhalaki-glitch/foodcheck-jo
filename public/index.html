@@ -75,8 +75,28 @@ nav a:hover { color: var(--accent); }
 }
 .scroll-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,168,0.35); }
 
-/* MAIN TOOL */
-#tool { padding: 5rem 1rem; }
+/* ===== ADDITIVE VERIFY PANEL ===== */
+.av-step { display:flex;align-items:flex-start;gap:.7rem;padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);margin-bottom:.5rem; }
+.av-step-num { width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0; }
+.av-step-num.pass { background:rgba(46,213,115,.2);color:var(--success); }
+.av-step-num.fail { background:rgba(255,71,87,.2);color:var(--danger); }
+.av-step-num.skip { background:rgba(74,90,122,.2);color:var(--text3); }
+.av-verdict { padding:1rem;border-radius:10px;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem; }
+.av-verdict.permitted { background:rgba(46,213,115,.08);border:1px solid rgba(46,213,115,.25); }
+.av-verdict.forbidden { background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.25); }
+.av-verdict.info { background:rgba(0,153,204,.08);border:1px solid rgba(0,153,204,.25); }
+.av-badge-green { background:rgba(46,213,115,.12);color:var(--success);padding:1px 7px;border-radius:4px;font-size:.78rem;font-weight:700; }
+.av-badge-red { background:rgba(255,71,87,.12);color:var(--danger);padding:1px 7px;border-radius:4px;font-size:.78rem;font-weight:700; }
+.av-badge-blue { background:rgba(0,153,204,.12);color:var(--accent2);padding:1px 7px;border-radius:4px;font-size:.78rem;font-weight:700; }
+.av-table { width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.8rem; }
+.av-table th { background:var(--surface2);padding:.5rem .7rem;text-align:right;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border); }
+.av-table td { padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:top; }
+.av-table tr:last-child td { border-bottom:none; }
+.additive-card { background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem;margin-bottom:.7rem; }
+.additive-card-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem; }
+.ac-note-btn { font-size:.75rem;color:var(--text3);cursor:pointer;text-decoration:underline dotted;background:none;border:none;font-family:var(--font); }
+.ac-note-expanded { font-size:.78rem;color:var(--text2);background:rgba(0,212,168,.05);border:1px solid rgba(0,212,168,.1);border-radius:6px;padding:.6rem;margin-top:.4rem;display:none;line-height:1.6; }
+@media(max-width:600px){ .additive-search-grid{ grid-template-columns:1fr!important; } }
 .container { max-width: 960px; margin: 0 auto; }
 .section-title { text-align: center; margin-bottom: 3rem; }
 .section-title h2 { font-size: 2rem; font-weight: 800; margin-bottom: .5rem; }
@@ -279,7 +299,10 @@ footer span { color: var(--accent); }
     <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label">مادة حساسية</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
   </div>
-  <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
+    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
+    <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
+  </div>
 </section>
 
 <section id="tool">
@@ -411,6 +434,8 @@ footer span { color: var(--accent); }
       <button class="tab" onclick="showTab('allergens',this)">مسببات الحساسية</button>
       <button class="tab" onclick="showTab('nutrition',this)">🥗 الحقائق التغذوية</button>
       <button class="tab" onclick="showTab('jswarnings',this)">⚠️ تحذيرات خاصة</button>
+      <button class="tab" onclick="showTab('halalcheck',this)">🚨 خنزير وكحول</button>
+      <button class="tab" onclick="showTab('additives_verify',this)">⚗️ تحقق المضافات CXS 192</button>
     </div>
 
     <div class="issues-list" id="issuesList"></div>
@@ -432,6 +457,56 @@ footer span { color: var(--accent); }
       <h4 style="margin-bottom:.5rem;font-size:1rem;">⚠️ تحذيرات المواصفات الأردنية الخاصة</h4>
       <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">مخالفات خاصة بنوع المنتج حسب المواصفات الأردنية JS</p>
       <div id="jsWarningsList"></div>
+    </div>
+
+    <div id="halalcheckPanel" style="display:none;">
+      <h4 style="margin-bottom:.5rem;font-size:1rem;">🚨 فحص الخنزير والكحول</h4>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">بناءً على تحليل المكونات المستخرجة من البطاقة</p>
+      <div id="halalCheckResults"></div>
+    </div>
+
+    <!-- ===== لوحة تحقق المضافات CXS 192 ===== -->
+    <div id="additivesVerifyPanel" style="display:none;">
+      <h4 style="margin-bottom:.3rem;font-size:1rem;">⚗️ التحقق من المضافات — CXS 192</h4>
+      <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">تسلسل القرار الثلاثي: جدول 1 ← جدول 2 ← جدول 3</p>
+
+      <!-- حالة تحميل البيانات -->
+      <div id="codexLoadStatus" style="font-size:.82rem;color:var(--text3);margin-bottom:1rem;padding:.5rem .8rem;background:var(--surface2);border-radius:8px;"></div>
+
+      <!-- البحث اليدوي -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1rem;">
+        <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.8rem;">🔍 تحقق يدوي من مضاف</div>
+
+        <!-- البحث بالاسم أو رقم INS -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;" class="additive-search-grid">
+          <div style="position:relative;">
+            <label style="font-size:.78rem;color:var(--text3);display:block;margin-bottom:.3rem;">اسم المضاف أو رقم INS</label>
+            <input type="text" id="manualAdditiveInput" placeholder="مثال: 950 أو Acesulfame أو كاراجينان"
+              style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;color:var(--text);font-family:var(--font);font-size:.88rem;outline:none;"
+              oninput="onManualAdditiveInput()" autocomplete="off">
+            <div id="manualAcList" style="position:absolute;top:100%;right:0;left:0;z-index:200;background:var(--surface);border:1px solid var(--accent);border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;display:none;"></div>
+          </div>
+
+          <!-- البحث بالفئة أو اسم المنتج -->
+          <div>
+            <label style="font-size:.78rem;color:var(--text3);display:block;margin-bottom:.3rem;">فئة المنتج أو اسمه</label>
+            <input type="text" id="manualCatInput" placeholder="مثال: 01.1.4 أو حليب منكه أو بسكويت"
+              style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;color:var(--text);font-family:var(--font);font-size:.88rem;outline:none;">
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
+          <button onclick="runManualCheck()" style="background:var(--accent);color:#000;border:none;padding:.55rem 1.3rem;border-radius:8px;font-family:var(--font);font-size:.88rem;font-weight:700;cursor:pointer;">تحقق ✓</button>
+          <button onclick="checkAllDetectedAdditives()" id="checkAllBtn" style="background:var(--surface);border:1px solid var(--border);color:var(--text2);padding:.55rem 1.3rem;border-radius:8px;font-family:var(--font);font-size:.88rem;cursor:pointer;display:none;">فحص كل المضافات المكتشفة</button>
+          <span style="font-size:.78rem;color:var(--text3);">— أو انتقل لنتائج الفحص التلقائي أدناه</span>
+        </div>
+      </div>
+
+      <!-- نتيجة البحث اليدوي -->
+      <div id="manualCheckResult" style="display:none;margin-bottom:1rem;"></div>
+
+      <!-- نتائج الفحص التلقائي من تحليل الصورة -->
+      <div id="autoAdditivesResult"></div>
     </div>
 
   </div>
@@ -713,6 +788,85 @@ const SHELF_LIFE_EXEMPTIONS = [
   "جلوكوز سائل ومجفف"
 ];
 
+// ===== قاعدة بيانات الخنزير والكحول =====
+const PORK_TERMS = {
+  // مستوى 1 — تنبيه أحمر: مصدره الخنزير مباشرة
+  critical: [
+    // مصطلحات إنجليزية مباشرة
+    'pig','swine','boar','hog','porcine','piglet','sus scrofa',
+    'lard','lard oil','pork','porc','porcin','porcus','porco','maiale',
+    'carne de cerdo','griskott','flask','porcino',
+    'bacon','ham','lardo','lardon','pancetta','porchetta','prosciutto',
+    'pork gelatin','pork fat','pork skin','pork rind',
+    'pepsin','trypsin','pancreatin',
+    'porcine gelatin','porcine collagen','porcine rennet',
+    // أرقام E خنزير مؤكدة
+    'E441','E542','E920',
+    // مصطلحات عربية
+    'خنزير','شحم الخنزير','دهن الخنزير','لحم الخنزير',
+    'جيلاتين الخنزير','كولاجين الخنزير','بيكون','هام','لحم مقدد'
+  ],
+  // مستوى 2 — تنبيه أصفر: تأكد أن مصدر هذا المكون حلال
+  warning: [
+    'gelatin','gelatine','glycerol','glycerin','glycerine',
+    'collagen','rennet','shortening',
+    'E422','E470','E471','E472','E472a','E472b','E472c','E472d','E472e','E472f',
+    'E473','E474','E475','E476','E477','E478','E479','E481','E482','E483',
+    'mono and diglycerides','monoglycerides','diglycerides',
+    'fatty acid esters','stearoyl','lactylate',
+    'natural flavors','natural flavour','natural flavor',
+    'animal fat','animal gelatin',
+    // عربي
+    'جيلاتين','جلسرين','جليسرول','كولاجين','دهون حيوانية',
+    'نكهات طبيعية','دهن نباتي أو حيواني'
+  ]
+};
+
+const ALCOHOL_TERMS = {
+  // مستوى 1 — تنبيه أحمر
+  critical: [
+    'wine','brandy','sherry','whisky','whiskey','rum','rhum','gin','vodka',
+    'beer','ethanol','ethyl alcohol','liquor','champagne','scotch','bourbon',
+    'port','perry','madeira','liquer','liqueur','absolut','sake','mirin',
+    'merisa','tequila','applejack','armagnac','cider','mead','kvass',
+    'pulque','toddy','soju','baijiu','arak','arrack','ouzo','absinthe',
+    'vermouth','bitters','distilled spirits','alcohol','alco\'ol','wijn',
+    'vin','vino','spirits','fermented alcohol','alcoholic',
+    // عربي
+    'كحول','كحول إيثيلي','إيثانول','نبيذ','بيرة','عرق','مسكر','خمر',
+    'مشروب كحولي','مشروب روحي'
+  ],
+  // مستوى 2 — تنبيه أصفر: يحتوي نسبة كحول من التخمير — تحقق
+  warning: [
+    'fermented','fermentation','kombucha','kefir',
+    // ملاحظة: خل النبيذ مسموح حسب المواصفة الأردنية — لا يُدرج هنا
+  ]
+};
+
+// دالة فحص الخنزير والكحول
+function checkPorkAndAlcohol(ingredientsText) {
+  if (!ingredientsText) return { pork: [], alcohol: [], warnings: [] };
+  const text = ingredientsText.toLowerCase();
+  const porkFound = [];
+  const alcoholFound = [];
+  const warnings = [];
+
+  PORK_TERMS.critical.forEach(term => {
+    if (text.includes(term.toLowerCase())) porkFound.push(term);
+  });
+  PORK_TERMS.warning.forEach(term => {
+    if (text.includes(term.toLowerCase())) warnings.push({type:'pork', term});
+  });
+  ALCOHOL_TERMS.critical.forEach(term => {
+    if (text.includes(term.toLowerCase())) alcoholFound.push(term);
+  });
+  ALCOHOL_TERMS.warning.forEach(term => {
+    if (text.includes(term.toLowerCase())) warnings.push({type:'alcohol', term});
+  });
+
+  return { pork: porkFound, alcohol: alcoholFound, warnings };
+}
+
 // ===== ALLERGENS =====
 const ALLERGENS = [
   {id:1,name:'الحليب ومنتجاته',en:'Milk',keywords:['milk','whey','casein','cheese','butter','cream','lactose','milk powder']},
@@ -885,13 +1039,14 @@ function showTab(tab, el) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel'];
+  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel'];
   panels.forEach(p => document.getElementById(p).style.display = 'none');
   document.getElementById('issuesList').style.display = 'none';
 
   if (tab === 'allergens') document.getElementById('allergenPanel').style.display = 'block';
   else if (tab === 'nutrition') document.getElementById('nutritionPanel').style.display = 'block';
   else if (tab === 'jswarnings') document.getElementById('jswarningsPanel').style.display = 'block';
+  else if (tab === 'halalcheck') document.getElementById('halalcheckPanel').style.display = 'block';
   else {
     document.getElementById('issuesList').style.display = 'block';
     renderIssues(allResults, tab);
@@ -932,7 +1087,60 @@ function renderIssues(results, filter) {
   }).join('');
 }
 
-// ===== RENDER JS WARNINGS =====
+// ===== HALAL CHECK =====
+function renderHalalCheck(ingredientsText) {
+  const panel = document.getElementById('halalCheckResults');
+  const result = checkPorkAndAlcohol(ingredientsText || '');
+
+  let html = '';
+
+  // خنزير مؤكد
+  if (result.pork.length > 0) {
+    html += `<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:.5rem;">❌ تحتوي على مكونات خنزير</div>
+      <div style="font-size:.83rem;color:var(--text2);">المصطلحات المكتشفة: <span style="color:var(--danger);font-family:var(--mono);">${result.pork.join(', ')}</span></div>
+    </div>`;
+  }
+
+  // كحول مؤكد
+  if (result.alcohol.length > 0) {
+    html += `<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+      <div style="font-weight:700;color:var(--danger);margin-bottom:.5rem;">❌ تحتوي على كحول أو مشروبات مسكرة</div>
+      <div style="font-size:.83rem;color:var(--text2);">المصطلحات المكتشفة: <span style="color:var(--danger);font-family:var(--mono);">${result.alcohol.join(', ')}</span></div>
+    </div>`;
+  }
+
+  // تحذيرات تحتاج تحقق
+  if (result.warnings.length > 0) {
+    const porkWarnings = result.warnings.filter(w => w.type === 'pork');
+    const alcoholWarnings = result.warnings.filter(w => w.type === 'alcohol');
+
+    if (porkWarnings.length > 0) {
+      html += `<div style="background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-weight:700;color:var(--warn);margin-bottom:.5rem;">⚠️ تأكد أن مصدر هذه المكونات حلال</div>
+        <div style="font-size:.83rem;color:var(--text2);">${porkWarnings.map(w => `<span style="font-family:var(--mono);background:rgba(255,165,2,.1);padding:2px 8px;border-radius:4px;margin:2px;display:inline-block;">${w.term}</span>`).join('')}</div>
+        <div style="font-size:.78rem;color:var(--text3);margin-top:.5rem;">هذه المكونات قد تكون من مصدر حيواني — تحقق من المورد أو وجود شهادة حلال</div>
+      </div>`;
+    }
+
+    if (alcoholWarnings.length > 0) {
+      html += `<div style="background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+        <div style="font-weight:700;color:var(--warn);margin-bottom:.5rem;">⚠️ يحتمل احتواء نسبة كحول من التخمير</div>
+        <div style="font-size:.83rem;color:var(--text2);">${alcoholWarnings.map(w => `<span style="font-family:var(--mono);background:rgba(255,165,2,.1);padding:2px 8px;border-radius:4px;margin:2px;display:inline-block;">${w.term}</span>`).join('')}</div>
+      </div>`;
+    }
+  }
+
+  // نظيف
+  if (result.pork.length === 0 && result.alcohol.length === 0 && result.warnings.length === 0) {
+    html = `<div style="background:rgba(46,213,115,.08);border:1px solid rgba(46,213,115,.3);border-radius:12px;padding:1rem;">
+      <div style="font-weight:700;color:var(--success);">✅ لم يُكتشف مكونات خنزير أو كحول</div>
+      <div style="font-size:.83rem;color:var(--text2);margin-top:.3rem;">بناءً على المكونات المستخرجة من البطاقة — للتأكد النهائي راجع شهادة الحلال</div>
+    </div>`;
+  }
+
+  panel.innerHTML = html;
+}
 function renderJSWarnings(productType) {
   const panel = document.getElementById('jsWarningsList');
   const jsRules = JS_SPECIFIC_RULES[productType];
@@ -1171,8 +1379,344 @@ function displayResults(data, productType) {
 
   // JS Warnings Panel
   renderJSWarnings(productType);
+
+  // Halal Check
+  const ingredientsText = data.results
+    ?.find(r => r.category === 'مكونات')?.note || data.summary || '';
+  renderHalalCheck(ingredientsText + ' ' + JSON.stringify(data.additives || []));
 }
 
+
+
+// ============================================================
+// ===== CODEX CXS 192 — نظام التحقق من المضافات =====
+// ============================================================
+
+let CODEX = null;
+let codexReady = false;
+let manualSelectedINS = null;
+let lastDetectedAdditives = []; // المضافات المستخرجة من آخر فحص
+let lastProductCatNo = null;
+
+// تحميل البيانات
+async function loadCodexData() {
+  const statusEl = document.getElementById('codexLoadStatus');
+  if (statusEl) statusEl.textContent = '⏳ جاري تحميل قاعدة بيانات CXS 192...';
+  try {
+    const r = await fetch('/codex_data.json');
+    if (!r.ok) throw new Error('file not found');
+    CODEX = await r.json();
+    codexReady = true;
+    if (statusEl) statusEl.innerHTML = '✅ قاعدة البيانات جاهزة · <span style="color:var(--text3)">' + Object.keys(CODEX.table1).length + ' مضاف · ' + Object.keys(CODEX.table2).length + ' فئة</span>';
+  } catch(e) {
+    if (statusEl) statusEl.textContent = '⚠️ ملف codex_data.json غير موجود على السيرفر — ضع الملف في نفس مجلد index.html';
+  }
+}
+loadCodexData();
+
+// ===== showTab — تحديث لإضافة لوحة المضافات =====
+const _origShowTab = showTab;
+showTab = function(tab, el) {
+  _origShowTab(tab, el);
+  const avp = document.getElementById('additivesVerifyPanel');
+  if (avp) avp.style.display = tab === 'additives_verify' ? 'block' : 'none';
+  // إضافة للبانلز array
+  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel','additivesVerifyPanel'];
+  panels.forEach(p => {
+    const el2 = document.getElementById(p);
+    if (el2 && p !== 'additivesVerifyPanel') {
+      if (tab === p.replace('Panel','')) el2.style.display = 'block';
+    }
+  });
+};
+
+// ===== Autocomplete المضاف =====
+function onManualAdditiveInput() {
+  const q = document.getElementById('manualAdditiveInput').value.trim().toUpperCase();
+  manualSelectedINS = null;
+  if (!CODEX || q.length < 2) { hideManualAC(); return; }
+  const results = [];
+  for (const [ins, data] of Object.entries(CODEX.table1)) {
+    if (ins.includes(q) || data.name.toUpperCase().includes(q)) {
+      results.push({ ins, name: data.name, func: data.functional_class });
+      if (results.length >= 12) break;
+    }
+  }
+  if (results.length < 12) {
+    for (const [ins, data] of Object.entries(CODEX.table3)) {
+      if (!CODEX.table1[ins] && (ins.includes(q) || data.name.toUpperCase().includes(q))) {
+        results.push({ ins, name: data.name, func: data.functional_class });
+        if (results.length >= 12) break;
+      }
+    }
+  }
+  const list = document.getElementById('manualAcList');
+  if (!results.length) { hideManualAC(); return; }
+  list.innerHTML = results.map(r =>
+    `<div onclick="selectManualAdditive('${r.ins}','${r.name.replace(/'/g,"\\'")}')"`+
+    ` style="padding:.5rem .9rem;cursor:pointer;border-bottom:1px solid var(--border);font-size:.85rem;">`+
+    `<span>${r.name}</span> <span style="background:rgba(0,212,168,.12);color:var(--accent);border-radius:3px;padding:0 5px;font-size:.75rem;">INS ${r.ins}</span>`+
+    `<div style="color:var(--text3);font-size:.75rem;">${r.func}</div></div>`
+  ).join('');
+  list.style.display = 'block';
+}
+function selectManualAdditive(ins, name) {
+  manualSelectedINS = ins;
+  document.getElementById('manualAdditiveInput').value = name + ' (INS ' + ins + ')';
+  hideManualAC();
+}
+function hideManualAC() { document.getElementById('manualAcList').style.display = 'none'; }
+document.addEventListener('click', e => { if (!e.target.closest('#manualAdditiveInput') && !e.target.closest('#manualAcList')) hideManualAC(); });
+
+// ===== استخراج INS من النص =====
+function resolveINS(inputVal) {
+  if (manualSelectedINS) return manualSelectedINS;
+  const val = inputVal.trim().toUpperCase();
+  const numMatch = val.match(/\b(\d{3,4})\b/);
+  if (numMatch && (CODEX.table1[numMatch[1]] || CODEX.table3[numMatch[1]])) return numMatch[1];
+  // بحث بالاسم
+  for (const [ins, data] of Object.entries(CODEX.table1)) {
+    if (data.name.toUpperCase().includes(val) || val.includes(data.name.toUpperCase().substring(0,5))) return ins;
+  }
+  for (const [ins, data] of Object.entries(CODEX.table3)) {
+    if (data.name.toUpperCase().includes(val)) return ins;
+  }
+  return null;
+}
+
+// ===== استخراج رقم الفئة من النص =====
+function resolveCatNo(inputVal) {
+  if (!inputVal || !inputVal.trim()) return null;
+  const val = inputVal.trim();
+  // رقم مباشر
+  if (/^\d{2}\.\d/.test(val)) return val;
+  // بحث بالاسم في فئات الجداول
+  const up = val.toUpperCase();
+  for (const [ins, data] of Object.entries(CODEX.table1)) {
+    for (const c of data.categories) {
+      if (c.cat_name && c.cat_name.toUpperCase().includes(up)) return c.cat_no;
+    }
+  }
+  // بحث بقائمة أنواع المنتجات الشائعة
+  const productCatMap = {
+    'حليب': '01.1', 'milk': '01.1', 'dairy': '01.0', 'ألبان': '01.0',
+    'جبن': '01.6', 'cheese': '01.6', 'زبدة': '02.2', 'butter': '02.2',
+    'عصير': '14.1.2', 'juice': '14.1.2', 'مشروب': '14.1', 'beverage': '14.1',
+    'بسكويت': '07.1', 'biscuit': '07.1', 'خبز': '07.1', 'bread': '07.1',
+    'شوكولاتة': '05.1', 'chocolate': '05.1', 'حلوى': '05.2', 'candy': '05.2',
+    'لحم': '08.0', 'meat': '08.0', 'دجاج': '08.2', 'chicken': '08.2',
+    'سمك': '09.0', 'fish': '09.0', 'مخلل': '04.2.2', 'pickle': '04.2.2',
+    'مربى': '04.1.2', 'jam': '04.1.2', 'زيت': '02.1', 'oil': '02.1',
+    'مكرونة': '06.4', 'pasta': '06.4', 'نشا': '06.4', 'starch': '06.3',
+    'مايونيز': '12.6', 'mayonnaise': '12.6', 'كاتشب': '12.2', 'ketchup': '12.2'
+  };
+  for (const [key, cat] of Object.entries(productCatMap)) {
+    if (up.includes(key.toUpperCase())) return cat;
+  }
+  return val; // أعد القيمة كما هي
+}
+
+// ===== منطق القرار الثلاثي =====
+function runCXS192Check(ins, catNo) {
+  if (!CODEX) return null;
+  const t1 = CODEX.table1, t2 = CODEX.table2, t3 = CODEX.table3, annex = CODEX.annex;
+  const additiveName = t1[ins]?.name || t3[ins]?.name || 'INS ' + ins;
+  const steps = [];
+  let verdict = 'forbidden', matchData = null;
+
+  // الجدول 1
+  let t1Match = null;
+  if (t1[ins]) {
+    const catParts = catNo ? catNo.split('.') : [];
+    const variants = catNo ? [catNo, catParts.slice(0,2).join('.'), catParts[0]].filter(Boolean) : [];
+    for (const cv of variants) {
+      t1Match = t1[ins].categories.find(c => c.cat_no === cv);
+      if (t1Match) break;
+    }
+  }
+
+  if (t1Match) {
+    steps.push({ n:1, s:'pass', t:'الجدول 1 — مسموح ✓', d:`الفئة ${t1Match.cat_no} · حد أقصى ${t1Match.max_level}${t1Match.notes?' · ملاحظات: '+t1Match.notes:''}` });
+    steps.push({ n:2, s:'skip', t:'الجدول 2', d:'القرار حُسم من الجدول 1' });
+    steps.push({ n:3, s:'skip', t:'الجدول 3', d:'' });
+    verdict = 'permitted'; matchData = { source:'T1', match:t1Match };
+  } else {
+    steps.push({ n:1, s:'fail', t:'الجدول 1 — غير موجود', d: t1[ins] ? `المضاف في الجدول 1 لكن ليس لهذه الفئة (${catNo}) · موجود في ${t1[ins].categories.length} فئة أخرى` : `المضاف INS ${ins} غير مدرج في الجدول 1` });
+
+    // الجدول 2
+    let t2Match = null;
+    if (catNo && t2[catNo]) {
+      t2Match = t2[catNo].find(a => a.ins.split(/[;,\s]+/).map(s=>s.trim()).includes(ins) || a.ins === ins);
+    }
+    if (t2Match) {
+      steps.push({ n:2, s:'pass', t:'الجدول 2 — مسموح ✓', d:`الفئة ${catNo} · حد أقصى ${t2Match.max_level}` });
+      steps.push({ n:3, s:'skip', t:'الجدول 3', d:'القرار حُسم من الجدول 2' });
+      verdict = 'permitted'; matchData = { source:'T2', match:t2Match };
+    } else {
+      steps.push({ n:2, s:'fail', t:'الجدول 2 — غير موجود', d: catNo && t2[catNo] ? `الفئة موجودة لكن المضاف غير مسموح فيها` : `الفئة ${catNo||'غير محددة'} غير مدرجة في الجدول 2` });
+
+      // الجدول 3
+      const inAnnex = catNo ? annex.includes(catNo) : false;
+      if (inAnnex) {
+        steps.push({ n:3, s:'fail', t:'الجدول 3 — مستثنى (Annex) ✗', d:`الفئة ${catNo} مستثناة — تخضع للجداول 1 و2 فقط` });
+      } else if (t3[ins]) {
+        steps.push({ n:3, s:'pass', t:'الجدول 3 — مسموح ✓', d:`مضاف عام مسموح${catNo ? ' والفئة '+catNo+' غير مستثناة' : ''}` });
+        verdict = 'permitted'; matchData = { source:'T3', match:t3[ins] };
+      } else {
+        steps.push({ n:3, s:'fail', t:'الجدول 3 — غير مدرج', d:'المضاف غير مدرج في أي جدول من جداول CXS 192' });
+      }
+    }
+  }
+
+  return { ins, additiveName, catNo, steps, verdict, matchData };
+}
+
+// ===== عرض النتيجة =====
+function renderVerifyResult(result, container) {
+  const { ins, additiveName, catNo, steps, verdict, matchData } = result;
+  const vCfg = {
+    permitted: { icon:'✅', label:'مسموح', cls:'permitted', col:'var(--success)' },
+    forbidden: { icon:'❌', label:'غير مسموح', cls:'forbidden', col:'var(--danger)' },
+    info:      { icon:'ℹ️', label:'معلومات', cls:'info', col:'var(--accent2)' }
+  }[verdict] || { icon:'❓', label:'غير محدد', cls:'info', col:'var(--text2)' };
+
+  const stepsHTML = steps.map(s => `
+    <div class="av-step">
+      <div class="av-step-num ${s.s}">${s.n}</div>
+      <div>
+        <div style="font-weight:700;font-size:.85rem;">${s.t}</div>
+        ${s.d ? `<div style="font-size:.8rem;color:var(--text2);margin-top:2px;">${s.d}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  let detailHTML = '';
+  if (matchData?.match) {
+    const m = matchData.match;
+    const notesHTML = m.notes && m.notes !== 'nan' ? renderNotesBadge(m.notes) : '—';
+    detailHTML = `<table class="av-table" style="margin-top:.5rem;">
+      <tr><th>الحد الأقصى</th><td>${m.max_level && m.max_level !== 'nan' ? '<span class="av-badge-green">'+m.max_level+'</span>' : '<span class="av-badge-blue">GMP</span>'}</td></tr>
+      ${m.functional_class ? `<tr><th>التصنيف الوظيفي</th><td>${m.functional_class}</td></tr>` : ''}
+      ${m.notes && m.notes !== 'nan' ? `<tr><th>ملاحظات</th><td>${notesHTML}</td></tr>` : ''}
+      ${m.specific_allowance ? `<tr><th>السماح المحدد</th><td style="font-size:.78rem;">${m.specific_allowance}</td></tr>` : ''}
+    </table>`;
+  }
+
+  container.innerHTML = `
+    <div class="av-verdict ${vCfg.cls}" style="margin-bottom:.8rem;">
+      <div style="font-size:1.8rem;">${vCfg.icon}</div>
+      <div>
+        <div style="font-weight:800;font-size:1rem;color:${vCfg.col};">${vCfg.label}</div>
+        <div style="font-size:.82rem;color:var(--text2);">${additiveName} (INS ${ins})${catNo ? ' في الفئة ' + catNo : ''}</div>
+      </div>
+    </div>
+    ${stepsHTML}
+    ${detailHTML}`;
+}
+
+function renderNotesBadge(notes) {
+  if (!notes || !CODEX?.notes) return notes;
+  const nums = notes.match(/\d+/g) || [];
+  const id = 'nc_' + Math.random().toString(36).substr(2,5);
+  const texts = nums.map(n => CODEX.notes[n] ? `<strong>${n}:</strong> ${CODEX.notes[n]}` : null).filter(Boolean);
+  if (!texts.length) return notes;
+  return `<button class="ac-note-btn" onclick="document.getElementById('${id}').style.display=document.getElementById('${id}').style.display==='none'?'block':'none'">${notes} ℹ️</button>
+    <div class="ac-note-expanded" id="${id}">${texts.join('<br>')}</div>`;
+}
+
+// ===== تشغيل الفحص اليدوي =====
+function runManualCheck() {
+  if (!codexReady) { alert('البيانات لم تُحمَّل بعد — تأكد أن ملف codex_data.json موجود على السيرفر'); return; }
+  const additiveVal = document.getElementById('manualAdditiveInput').value;
+  const catVal = document.getElementById('manualCatInput').value;
+  const ins = resolveINS(additiveVal);
+  if (!ins) { alert('لم يُعثر على هذا المضاف في قاعدة البيانات — جرب الرقم INS مباشرة'); return; }
+  const catNo = resolveCatNo(catVal);
+  const result = runCXS192Check(ins, catNo);
+  const container = document.getElementById('manualCheckResult');
+  container.style.display = 'block';
+  renderVerifyResult(result, container);
+}
+
+// ===== فحص كل المضافات المكتشفة من الصورة =====
+function checkAllDetectedAdditives() {
+  if (!codexReady || !lastDetectedAdditives.length) return;
+  const autoEl = document.getElementById('autoAdditivesResult');
+  autoEl.innerHTML = `<div style="font-weight:700;margin-bottom:.8rem;color:var(--text2);">نتائج فحص المضافات المكتشفة (${lastDetectedAdditives.length} مضاف)</div>`;
+
+  lastDetectedAdditives.forEach(add => {
+    const name = (add.name || '').toUpperCase();
+    const insRaw = (add.ins || '').replace(/E/i,'').trim();
+    let ins = null;
+    // resolve INS
+    if (insRaw && (CODEX.table1[insRaw] || CODEX.table3[insRaw])) ins = insRaw;
+    else {
+      for (const [i, d] of Object.entries(CODEX.table1)) {
+        if (d.name.toUpperCase().includes(name.substring(0,5)) && name.length > 4) { ins = i; break; }
+      }
+    }
+    const catNo = lastProductCatNo;
+    const card = document.createElement('div');
+    card.className = 'additive-card';
+    if (!ins) {
+      card.innerHTML = `<div class="additive-card-header">
+        <span style="font-weight:700;">${add.name || 'غير معروف'}</span>
+        <span class="av-badge-red">⚠️ غير موجود في قاعدة البيانات</span></div>
+        <div style="font-size:.78rem;color:var(--text3);">${add.ins ? 'INS المُعلن: ' + add.ins : 'لا يوجد رقم INS'}</div>`;
+    } else {
+      const result = runCXS192Check(ins, catNo);
+      const stepsHTML = result.steps.map(s =>
+        `<div style="display:flex;gap:.5rem;align-items:center;font-size:.78rem;margin-top:.3rem;">
+          <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;background:${s.s==='pass'?'rgba(46,213,115,.2)':s.s==='fail'?'rgba(255,71,87,.2)':'rgba(74,90,122,.2)'};color:${s.s==='pass'?'var(--success)':s.s==='fail'?'var(--danger)':'var(--text3)'};">${s.n}</span>
+          <span style="color:${s.s==='skip'?'var(--text3)':'var(--text2)'};">${s.t}</span>
+        </div>`).join('');
+      const vc = result.verdict === 'permitted' ? 'av-badge-green' : 'av-badge-red';
+      const vl = result.verdict === 'permitted' ? '✅ مسموح' : '❌ غير مسموح';
+      card.innerHTML = `<div class="additive-card-header">
+        <span style="font-weight:700;">${result.additiveName}</span>
+        <span class="${vc}">${vl}</span></div>
+        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${catNo ? ' · الفئة ' + catNo : ''}</div>
+        ${stepsHTML}`;
+    }
+    autoEl.appendChild(card);
+  });
+}
+
+// ===== تكامل مع نتائج الفحص الرئيسية =====
+// يُستدعى من displayResults بعد نجاح التحليل
+const _origDisplayResults = displayResults;
+displayResults = function(data, productType) {
+  _origDisplayResults(data, productType);
+  // حفظ المضافات المكتشفة
+  lastDetectedAdditives = data.additives || [];
+  // تخمين رقم الفئة من نوع المنتج
+  const catMap = {
+    dairy:'01.0', processed_cheese:'01.6.2', soft_cheese:'01.6.1',
+    flavored_milk:'01.1.4', dried_milk:'01.5.1', evaporated_milk:'01.3',
+    meat:'08.0', fish:'09.0', bakery:'07.1', biscuit:'07.1.2',
+    noodles:'06.4.3', corn_chips:'15.1', chocolate:'05.1', candy:'05.2',
+    beverages:'14.1', energy_drink:'14.1.4', juice:'14.1.2.1',
+    fruit_syrup:'14.1.4', flavored_drink:'14.1.4', supplements:'13.6'
+  };
+  lastProductCatNo = catMap[productType] || null;
+  // تحديث زر فحص الكل
+  const btn = document.getElementById('checkAllBtn');
+  if (btn && lastDetectedAdditives.length > 0) {
+    btn.style.display = 'inline-block';
+    btn.textContent = `فحص كل المضافات (${lastDetectedAdditives.length})`;
+  }
+  // عرض ملخص في تبويب المضافات
+  const autoEl = document.getElementById('autoAdditivesResult');
+  if (autoEl && lastDetectedAdditives.length > 0) {
+    autoEl.innerHTML = `<div style="background:rgba(0,212,168,.06);border:1px solid rgba(0,212,168,.15);border-radius:10px;padding:.9rem;font-size:.85rem;">
+      <strong>🔍 المضافات المكتشفة من الصورة (${lastDetectedAdditives.length}):</strong><br>
+      <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">
+        ${lastDetectedAdditives.map(a => `<span style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.78rem;">${a.name}${a.ins?' ('+a.ins+')':''}</span>`).join('')}
+      </div>
+      <div style="margin-top:.7rem;color:var(--text3);font-size:.78rem;">اضغط "فحص كل المضافات" أعلاه لفحصها جميعاً بتسلسل القرار الثلاثي</div>
+    </div>`;
+  }
+};
+// ============================================================
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -1182,11 +1726,3 @@ function showToast(msg) {
 </script>
 </body>
 </html>
-
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "wc5pypyjbt");
-</script>
