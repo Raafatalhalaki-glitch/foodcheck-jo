@@ -1,12 +1,13 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+
 app.use(express.json({ limit: '50mb' }));
-app.use((req, res, next) => {
-  if (req.path.endsWith('.json')) res.setHeader('Content-Type', 'application/json');
-  next();
-});
+
+// خدمة الملفات الثابتة من مجلد public
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Rate limiting
 const requests = {};
 app.use((req, res, next) => {
   if (req.path !== '/api/analyze') return next();
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
   requests[ip].push(now);
   next();
 });
+
+// API endpoint
 app.post('/api/analyze', async (req, res) => {
   try {
     const apiKey = process.env.CLAUDE_API_KEY;
@@ -39,8 +42,15 @@ app.post('/api/analyze', async (req, res) => {
     res.status(500).json({ error: 'خطأ في السيرفر: ' + err.message });
   }
 });
+
+// فقط الصفحات HTML ترجع index.html — الملفات الأخرى لا تُعاد توجيهها
 app.get('*', (req, res) => {
+  // إذا الطلب لملف موجود (json, html, css, js) لا تتدخل
+  if (req.path.includes('.')) {
+    return res.status(404).send('Not found');
+  }
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`FoodCheck running on port ${PORT}`));
