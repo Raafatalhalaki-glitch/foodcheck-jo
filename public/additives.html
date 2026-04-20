@@ -211,7 +211,7 @@ let currentMode = 'additive';
 
 async function loadData() {
   try {
-    const r = await fetch('codex_data.json');
+    const r = await fetch('/codex_data.json');
     if (!r.ok) throw new Error();
     CODEX = await r.json();
     ready = true;
