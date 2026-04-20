@@ -1,4 +1,4 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -211,7 +211,7 @@ let currentMode = 'additive';
 
 async function loadData() {
   try {
-    const r = await fetch('codex_data.json');
+    const r = await fetch('/codex_data.json');
     if (!r.ok) throw new Error();
     CODEX = await r.json();
     ready = true;
