@@ -211,7 +211,7 @@ let currentMode = 'additive';
 
 async function loadData() {
   try {
-    const r = await fetch('/codex_data.json');
+    const r = await fetch('codex_data.json');
     if (!r.ok) throw new Error();
     CODEX = await r.json();
     ready = true;
@@ -249,11 +249,13 @@ function setMode(m) {
 function onAdditiveInput() {
   selectedINS = null;
   if (!CODEX) return;
-  const q = document.getElementById('additiveInput').value.trim().toUpperCase();
+  let raw = document.getElementById('additiveInput').value.trim().toUpperCase();
+  const q = raw.replace(/^E[-\s]?/, '');  // إزالة E prefix للبحث
   if (q.length < 2) { hideAC(); return; }
 
   const res = [];
   for (const [ins, d] of Object.entries(CODEX.table1)) {
+    if (ins === 'nan') continue;
     if (ins.startsWith(q) || d.name.toUpperCase().includes(q)) {
       res.push({ ins, name: d.name, func: d.functional_class, src: 'T1' });
       if (res.length >= 12) break;
@@ -261,6 +263,7 @@ function onAdditiveInput() {
   }
   if (res.length < 12) {
     for (const [ins, d] of Object.entries(CODEX.table3)) {
+      if (ins === 'nan') continue;
       if (!CODEX.table1[ins] && (ins.startsWith(q) || d.name.toUpperCase().includes(q))) {
         res.push({ ins, name: d.name, func: d.functional_class, src: 'T3' });
         if (res.length >= 12) break;
@@ -300,18 +303,33 @@ function getParentCats(catNo) {
 
 function resolveINS() {
   if (selectedINS) return selectedINS;
-  const val = document.getElementById('additiveInput').value.trim().toUpperCase();
-  const numMatch = val.match(/\b(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)\b/);
+  let raw = document.getElementById('additiveInput').value.trim().toUpperCase();
+
+  // إزالة E- أو E prefix إذا وجد
+  const stripped = raw.replace(/^E[-\s]?/, '');
+
+  // بحث رقمي: exact أولاً
+  const numMatch = stripped.match(/^(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)/i);
   if (numMatch) {
     const n = numMatch[1];
+    // exact
     if (CODEX.table1[n] || CODEX.table3[n]) return n;
+    // prefix match (مثل 202 → 203، أو 100 → 100(i))
+    const all = { ...CODEX.table1, ...CODEX.table3 };
+    for (const ins of Object.keys(all)) {
+      if (ins !== 'nan' && ins.startsWith(n.substring(0, 3))) return ins;
+    }
   }
-  // بحث بالاسم
-  for (const [ins, d] of Object.entries(CODEX.table1)) {
-    if (d.name.toUpperCase().includes(val.substring(0, Math.min(val.length, 8)))) return ins;
-  }
-  for (const [ins, d] of Object.entries(CODEX.table3)) {
-    if (d.name.toUpperCase().includes(val.substring(0, Math.min(val.length, 8)))) return ins;
+
+  // بحث بالاسم (إنجليزي)
+  const q = stripped.substring(0, Math.min(stripped.length, 10));
+  if (q.length >= 3) {
+    for (const [ins, d] of Object.entries(CODEX.table1)) {
+      if (ins !== 'nan' && d.name.toUpperCase().includes(q)) return ins;
+    }
+    for (const [ins, d] of Object.entries(CODEX.table3)) {
+      if (ins !== 'nan' && d.name.toUpperCase().includes(q)) return ins;
+    }
   }
   return null;
 }
@@ -636,18 +654,18 @@ function searchBatch() {
 }
 
 function resolveENUM(raw) {
-  // تحويل E163 أو 163 أو e163 -> INS
-  raw = raw.trim().toUpperCase().replace(/^E/,'');
-  const num = raw.match(/^(\d{3,4})/)?.[1];
+  // تحويل E163 أو E-163 أو 163 -> INS
+  const stripped = raw.trim().toUpperCase().replace(/^E[-\s]?/, '');
+  const num = stripped.match(/^(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)/i)?.[1];
   if (!num) return null;
 
-  // بحث مباشر
+  // exact match
   if (CODEX.table1[num] || CODEX.table3[num]) return num;
-  // بحث في e_to_ins
-  if (CODEX.e_to_ins?.[num]) return CODEX.e_to_ins[num];
-  // بحث بأي suffix مثل 100(i)
-  for (const ins of Object.keys({...CODEX.table1,...CODEX.table3})) {
-    if (ins.startsWith(num)) return ins;
+
+  // prefix match (3 أرقام)
+  const all = { ...CODEX.table1, ...CODEX.table3 };
+  for (const ins of Object.keys(all)) {
+    if (ins !== 'nan' && ins.startsWith(num.substring(0, 3))) return ins;
   }
   return null;
 }
