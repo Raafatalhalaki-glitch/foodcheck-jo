@@ -232,21 +232,16 @@ function onAdditiveInput() {
   const q = document.getElementById('additiveInput').value.trim().toUpperCase();
   if (q.length < 2) { hideAC(); return; }
 
-  // إزالة E prefix للبحث الرقمي
-  const qClean = q.replace(/^E[-\s]?/, '');
-
   const res = [];
   for (const [ins, d] of Object.entries(CODEX.table1)) {
-    if (ins === 'nan') continue;
-    if (ins.startsWith(qClean) || ins.startsWith(q) || d.name.toUpperCase().includes(qClean)) {
+    if (ins.startsWith(q) || d.name.toUpperCase().includes(q)) {
       res.push({ ins, name: d.name, func: d.functional_class, src: 'T1' });
       if (res.length >= 12) break;
     }
   }
   if (res.length < 12) {
     for (const [ins, d] of Object.entries(CODEX.table3)) {
-      if (ins === 'nan') continue;
-      if (!CODEX.table1[ins] && (ins.startsWith(qClean) || ins.startsWith(q) || d.name.toUpperCase().includes(qClean))) {
+      if (!CODEX.table1[ins] && (ins.startsWith(q) || d.name.toUpperCase().includes(q))) {
         res.push({ ins, name: d.name, func: d.functional_class, src: 'T3' });
         if (res.length >= 12) break;
       }
@@ -286,28 +281,17 @@ function getParentCats(catNo) {
 function resolveINS() {
   if (selectedINS) return selectedINS;
   const val = document.getElementById('additiveInput').value.trim().toUpperCase();
-  // إزالة E prefix
-  const stripped = val.replace(/^E[-\s]?/, '');
-  const numMatch = stripped.match(/^(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)/);
+  const numMatch = val.match(/\b(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)\b/);
   if (numMatch) {
     const n = numMatch[1];
-    // exact match
     if (CODEX.table1[n] || CODEX.table3[n]) return n;
-    // prefix match (لو كتب 202 ويوجد 203)
-    const all = { ...CODEX.table1, ...CODEX.table3 };
-    for (const ins of Object.keys(all)) {
-      if (ins !== 'nan' && ins.startsWith(n.substring(0, 3))) return ins;
-    }
   }
   // بحث بالاسم
-  const q = stripped.substring(0, Math.min(stripped.length, 10));
-  if (q.length >= 3) {
-    for (const [ins, d] of Object.entries(CODEX.table1)) {
-      if (ins !== 'nan' && d.name.toUpperCase().includes(q)) return ins;
-    }
-    for (const [ins, d] of Object.entries(CODEX.table3)) {
-      if (ins !== 'nan' && d.name.toUpperCase().includes(q)) return ins;
-    }
+  for (const [ins, d] of Object.entries(CODEX.table1)) {
+    if (d.name.toUpperCase().includes(val.substring(0, Math.min(val.length, 8)))) return ins;
+  }
+  for (const [ins, d] of Object.entries(CODEX.table3)) {
+    if (d.name.toUpperCase().includes(val.substring(0, Math.min(val.length, 8)))) return ins;
   }
   return null;
 }
