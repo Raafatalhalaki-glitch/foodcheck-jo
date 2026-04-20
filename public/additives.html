@@ -14,25 +14,17 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
-
-/* HEADER */
 .header{background:var(--surface);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
 .logo{font-size:1.15rem;font-weight:800;color:var(--accent);}
 .logo span{color:var(--text);font-weight:300;}
 .back-btn{color:var(--text2);text-decoration:none;font-size:.85rem;border:1px solid var(--border);padding:.4rem .9rem;border-radius:8px;transition:all .2s;}
 .back-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-/* MAIN */
 .main{max-width:980px;margin:0 auto;padding:2rem 1rem;}
-
-/* MODE TABS */
-.mode-tabs{display:flex;gap:.5rem;background:var(--surface2);padding:4px;border-radius:12px;margin-bottom:1.5rem;width:fit-content;}
-.mode-tab{padding:.55rem 1.4rem;border-radius:9px;border:none;cursor:pointer;font-family:var(--font);font-size:.9rem;font-weight:600;background:transparent;color:var(--text2);transition:all .2s;}
+.mode-tabs{display:flex;gap:.5rem;background:var(--surface2);padding:4px;border-radius:12px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.mode-tab{padding:.55rem 1.2rem;border-radius:9px;border:none;cursor:pointer;font-family:var(--font);font-size:.88rem;font-weight:600;background:transparent;color:var(--text2);transition:all .2s;}
 .mode-tab.active{background:var(--accent);color:#000;}
-
-/* SEARCH CARD */
 .search-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;}
-.search-title{font-size:.95rem;font-weight:700;color:var(--text2);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.search-title{font-size:.95rem;font-weight:700;color:var(--text2);margin-bottom:1rem;}
 .field-label{font-size:.8rem;color:var(--text3);margin-bottom:.3rem;display:block;}
 .field-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;color:var(--text);font-family:var(--font);font-size:.9rem;outline:none;transition:border .2s;}
 .field-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,168,.1);}
@@ -42,20 +34,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .ac-item{padding:.55rem 1rem;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s;}
 .ac-item:hover{background:rgba(0,212,168,.07);}
 .ac-item-name{font-size:.88rem;font-weight:600;}
-.ac-item-ins{background:rgba(0,212,168,.12);color:var(--accent);border-radius:3px;padding:0 6px;font-size:.75rem;margin-right:.4rem;}
+.ac-item-ins{background:rgba(0,212,168,.12);color:var(--accent);border-radius:3px;padding:0 6px;font-size:.75rem;margin-left:.4rem;}
 .ac-item-func{color:var(--text3);font-size:.76rem;margin-top:2px;}
 .search-btn{background:var(--accent);color:#000;border:none;padding:.7rem 2rem;border-radius:9px;font-family:var(--font);font-size:.92rem;font-weight:700;cursor:pointer;margin-top:1rem;transition:all .2s;}
 .search-btn:hover{background:#00bfa0;transform:translateY(-1px);}
-.search-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
-
-/* DATA STATUS */
 .data-status{font-size:.78rem;margin-bottom:1rem;padding:.5rem .9rem;border-radius:8px;background:var(--surface2);color:var(--text3);}
-
-/* RESULT PANELS */
 .result-panel{display:none;}
 .result-panel.show{display:block;}
-
-/* VERDICT BANNER */
 .verdict-banner{display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;border-radius:12px;margin-bottom:1.2rem;}
 .verdict-banner.permitted{background:rgba(46,213,115,.08);border:1px solid rgba(46,213,115,.25);}
 .verdict-banner.forbidden{background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.25);}
@@ -66,12 +51,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .verdict-title.forbidden{color:var(--danger);}
 .verdict-title.partial{color:var(--warn);}
 .verdict-sub{font-size:.82rem;color:var(--text2);margin-top:3px;}
-
-/* SECTION HEADER */
 .sec-header{display:flex;align-items:center;gap:.5rem;font-size:.88rem;font-weight:700;color:var(--text2);margin:1.2rem 0 .7rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
 .sec-count{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1px 8px;font-size:.75rem;color:var(--text3);}
-
-/* CAT TABLE */
 .cat-table{width:100%;border-collapse:collapse;font-size:.82rem;}
 .cat-table th{background:var(--surface2);padding:.55rem .8rem;text-align:right;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border);}
 .cat-table td{padding:.55rem .8rem;border-bottom:1px solid var(--border);vertical-align:top;}
@@ -83,36 +64,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .note-btn{background:none;border:none;color:var(--text3);font-size:.75rem;cursor:pointer;font-family:var(--font);text-decoration:underline dotted;}
 .note-btn:hover{color:var(--accent);}
 .note-expanded{background:rgba(0,212,168,.05);border:1px solid rgba(0,212,168,.12);border-radius:6px;padding:.6rem .8rem;margin-top:.4rem;font-size:.78rem;color:var(--text2);line-height:1.6;display:none;}
-
-/* T3 SECTION */
 .t3-box{background:rgba(46,213,115,.05);border:1px solid rgba(46,213,115,.15);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem;}
 .t3-box-title{font-weight:700;font-size:.9rem;color:var(--success);margin-bottom:.4rem;}
 .t3-box-sub{font-size:.8rem;color:var(--text2);line-height:1.5;}
-
-/* ANNEX BOX */
 .annex-box{background:rgba(255,71,87,.05);border:1px solid rgba(255,71,87,.15);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem;}
 .annex-box-title{font-weight:700;font-size:.9rem;color:var(--danger);margin-bottom:.4rem;}
 .annex-cats{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;}
 .annex-chip{background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.2);color:var(--danger);border-radius:5px;padding:1px 8px;font-size:.75rem;}
-
-/* ADDITIVE CHIPS for T3 list */
 .t3-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem;margin-top:.7rem;}
 .t3-chip{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:.5rem .7rem;font-size:.78rem;}
 .t3-chip-name{font-weight:600;color:var(--text);}
 .t3-chip-func{color:var(--text3);font-size:.72rem;margin-top:2px;}
-
-/* SPINNER */
 .spinner-wrap{display:none;align-items:center;gap:.8rem;padding:1.5rem;color:var(--text2);}
 .spinner-wrap.show{display:flex;}
 .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-/* STATS */
 .stats-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.5rem;}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.7rem 1.1rem;flex:1;min-width:120px;}
 .stat-num{font-size:1.5rem;font-weight:800;color:var(--accent);}
 .stat-lbl{font-size:.75rem;color:var(--text2);margin-top:1px;}
-
+textarea.field-input{resize:vertical;min-height:130px;line-height:1.6;}
 @media(max-width:600px){
   .header{padding:.8rem 1rem;}
   .main{padding:1rem .8rem;}
@@ -133,16 +104,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="data-status" id="dataStatus">⏳ جاري تحميل قاعدة بيانات CXS 192...</div>
 
   <div class="stats-row" id="statsRow" style="display:none">
-    <div class="stat-card"><div class="stat-num" id="s1">—</div><div class="stat-lbl">مضاف في الجدول 1</div></div>
-    <div class="stat-card"><div class="stat-num" id="s2">—</div><div class="stat-lbl">فئة في الجدول 2</div></div>
-    <div class="stat-card"><div class="stat-num" id="s3">—</div><div class="stat-lbl">مضاف في الجدول 3</div></div>
+    <div class="stat-card"><div class="stat-num" id="s1">—</div><div class="stat-lbl">مضاف — الجدول 1</div></div>
+    <div class="stat-card"><div class="stat-num" id="s2">—</div><div class="stat-lbl">فئة — الجدول 2</div></div>
+    <div class="stat-card"><div class="stat-num" id="s3">—</div><div class="stat-lbl">مضاف عام — الجدول 3</div></div>
     <div class="stat-card"><div class="stat-num" id="s4">—</div><div class="stat-lbl">فئة مستثناة (Annex)</div></div>
   </div>
 
-  <!-- MODE -->
   <div class="mode-tabs">
     <button class="mode-tab active" onclick="setMode('additive')" id="modeA">🧪 بحث عن مضاف</button>
     <button class="mode-tab" onclick="setMode('food')" id="modeF">🥛 بحث عن غذاء</button>
+    <button class="mode-tab" onclick="setMode('batch')" id="modeB">📋 فحص متعدد</button>
   </div>
 
   <!-- ADDITIVE MODE -->
@@ -150,13 +121,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div class="search-card">
       <div class="search-title">🧪 أدخل اسم المضاف أو رقم INS — سيعرض كل الفئات المسموح فيها</div>
       <div class="ac-wrap">
-        <label class="field-label">اسم المضاف أو رقم INS</label>
+        <label class="field-label">اسم المضاف أو رقم INS أو E-number</label>
         <input type="text" class="field-input" id="additiveInput"
-          placeholder="مثال: 202 · Sorbates · كاراجينان · Carrageenan"
+          placeholder="مثال: 414 · E471 · Carrageenan · كاراجينان · Sorbates"
           oninput="onAdditiveInput()" autocomplete="off">
         <div class="ac-list" id="acList"></div>
       </div>
-      <button class="search-btn" onclick="searchAdditive()" id="searchAdditiveBtn">بحث في CXS 192</button>
+      <button class="search-btn" onclick="searchAdditive()">بحث في CXS 192</button>
     </div>
   </div>
 
@@ -167,50 +138,208 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div>
         <label class="field-label">رقم الفئة أو اسم المنتج</label>
         <input type="text" class="field-input" id="foodInput"
-          placeholder="مثال: 01.1.4 · حليب منكه · Flavoured milk · بسكويت · 07.1.2">
+          placeholder="مثال: 01.1.4 · حليب منكه · بسكويت · شوكولاتة · 07.1.2">
       </div>
-      <button class="search-btn" onclick="searchFood()" id="searchFoodBtn">بحث في CXS 192</button>
+      <button class="search-btn" onclick="searchFood()">بحث في CXS 192</button>
     </div>
   </div>
 
-  <!-- SPINNER -->
+  <!-- BATCH MODE -->
+  <div id="panelBatch" style="display:none">
+    <div class="search-card">
+      <div class="search-title">📋 فحص قائمة مضافات لمنتج معين — مسموح أم لا؟</div>
+      <div style="margin-bottom:.8rem;">
+        <label class="field-label">اسم المنتج أو فئته</label>
+        <input type="text" class="field-input" id="batchProduct" placeholder="مثال: سكاكر · بسكويت · حليب منكه · 05.2">
+      </div>
+      <div>
+        <label class="field-label">أرقام المضافات — كل سطر مضاف (E-number أو INS أو اسم)</label>
+        <textarea class="field-input" id="batchInput" placeholder="E163&#10;E471&#10;407&#10;Carrageenan&#10;أو أي رقم INS"></textarea>
+      </div>
+      <button class="search-btn" onclick="searchBatch()">فحص الكل من CXS 192</button>
+    </div>
+  </div>
+
   <div class="spinner-wrap" id="spinner">
     <div class="spinner"></div>
     <span>جاري البحث في CXS 192...</span>
   </div>
 
-  <!-- RESULTS -->
   <div class="result-panel" id="resultPanel"></div>
 
 </div>
 
 <script>
-// ===== DATA =====
 let CODEX = null;
 let ready = false;
 let selectedINS = null;
 let currentMode = 'additive';
 
+// ===== ترجمة الفئات الوظيفية =====
+const FUNC_AR = {
+  'Acidity regulator': 'منظم حموضة',
+  'Anticaking agent': 'مانع تكتل',
+  'Antifoaming agent': 'مانع رغوة',
+  'Antioxidant': 'مضاد أكسدة',
+  'Bleaching agent': 'عامل تبييض',
+  'Bulking agent': 'عامل تحجيم',
+  'Carrier': 'ناقل',
+  'Colour': 'صبغة',
+  'Color': 'صبغة',
+  'Colour retention agent': 'ثابت لون',
+  'Emulsifier': 'مستحلب',
+  'Emulsifying salt': 'ملح استحلاب',
+  'Firming agent': 'عامل تصليب',
+  'Flavour enhancer': 'معزز نكهة',
+  'Flavor enhancer': 'معزز نكهة',
+  'Flour treatment agent': 'معالج دقيق',
+  'Foaming agent': 'عامل رغوة',
+  'Gelling agent': 'عامل تجليد',
+  'Glazing agent': 'عامل تلميع',
+  'Humectant': 'موثب رطوبة',
+  'Modified starch': 'نشا معدّل',
+  'Preservative': 'حافظ',
+  'Propellant': 'دافع',
+  'Raising agent': 'مخمّر',
+  'Sequestrant': 'عازل معدني',
+  'Stabilizer': 'مثبّت',
+  'Sweetener': 'محلّي',
+  'Thickener': 'مكثّف',
+  'Packaging gas': 'غاز تغليف',
+  'Enzyme': 'إنزيم',
+};
+
+function translateFunc(en) {
+  if (!en) return '—';
+  let ar = en;
+  for (const [k, v] of Object.entries(FUNC_AR)) {
+    ar = ar.replace(new RegExp(k, 'gi'), v);
+  }
+  return ar;
+}
+
+// ===== ترجمة أسماء المضافات الشائعة =====
+const ADDITIVE_AR = {
+  'ACETIC ACID': 'حمض الخليك',
+  'ACESULFAME POTASSIUM': 'أسيسولفام بوتاسيوم',
+  'AGAR': 'أجار',
+  'ALGINIC ACID': 'حمض الألجينيك',
+  'ALLURA RED AC': 'أحمر أليورا',
+  'AMARANTH': 'أمارانث',
+  'AMMONIUM ALGINATE': 'ألجينات أمونيوم',
+  'ANNATTO EXTRACTS': 'مستخلص أناتو',
+  'ASCORBIC ACID': 'حمض الأسكوربيك (فيتامين ج)',
+  'ASPARTAME': 'أسبرتام',
+  'AZORUBINE': 'أزوروبين',
+  'BEESWAX': 'شمع النحل',
+  'BENZOATES': 'بنزوات',
+  'BENZOIC ACID': 'حمض البنزويك',
+  'BETA-CAROTENE': 'بيتا كاروتين',
+  'BRILLIANT BLUE FCF': 'أزرق برليان',
+  'CALCIUM ALGINATE': 'ألجينات كالسيوم',
+  'CALCIUM CARBONATE': 'كربونات كالسيوم',
+  'CALCIUM CHLORIDE': 'كلوريد كالسيوم',
+  'CALCIUM SILICATE': 'سيليكات كالسيوم',
+  'CALCIUM SORBATE': 'سوربات كالسيوم',
+  'CARRAGEENAN': 'كاراجينان',
+  'CARMINE': 'قرمزي (كارمين)',
+  'CARAMEL': 'كراميل',
+  'CAROB BEAN GUM': 'صمغ الخروب',
+  'CITRIC ACID': 'حمض الستريك (الليموني)',
+  'CURCUMIN': 'كركمين',
+  'ERYTHROSINE': 'إيريثروسين',
+  'GELATIN': 'جيلاتين',
+  'GLUCOSE': 'جلوكوز',
+  'GLYCEROL': 'جليسيرول',
+  'GREEN S': 'أخضر S',
+  'GUM ARABIC': 'صمغ عربي',
+  'INDIGOTINE': 'إنديجوتين',
+  'IRON OXIDES': 'أكاسيد الحديد',
+  'LACTIC ACID': 'حمض اللاكتيك',
+  'LECITHIN': 'ليسيتين',
+  'MAGNESIUM CARBONATE': 'كربونات المغنيسيوم',
+  'MALIC ACID': 'حمض الماليك',
+  'MALTITOL': 'مالتيتول',
+  'MANNITOL': 'مانيتول',
+  'MONOSODIUM GLUTAMATE': 'غلوتامات الصوديوم (MSG)',
+  'NATAMYCIN': 'ناتاميسين',
+  'NISIN': 'نيسين',
+  'NITRATES': 'نترات',
+  'NITRITES': 'نتريت',
+  'PAPRIKA': 'فلفل حلو (بابريكا)',
+  'PECTIN': 'بكتين',
+  'PHOSPHATES': 'فوسفات',
+  'POLYSORBATES': 'بوليسوربات',
+  'POTASSIUM ALGINATE': 'ألجينات بوتاسيوم',
+  'POTASSIUM BENZOATE': 'بنزوات بوتاسيوم',
+  'POTASSIUM SORBATE': 'سوربات بوتاسيوم',
+  'PROPIONIC ACID': 'حمض البروبيونيك',
+  'PROPYLENE GLYCOL': 'بروبيلين جليكول',
+  'RIBOFLAVIN': 'ريبوفلافين (B2)',
+  'SACCHARIN': 'سكارين',
+  'SILICON DIOXIDE': 'ثاني أكسيد السيليكون',
+  'SODIUM ALGINATE': 'ألجينات صوديوم',
+  'SODIUM BENZOATE': 'بنزوات صوديوم',
+  'SODIUM CARBONATE': 'كربونات الصوديوم',
+  'SODIUM CARBOXYMETHYL CELLULOSE': 'كربوكسي ميثيل سيلولوز الصوديوم',
+  'SODIUM CHLORIDE': 'كلوريد الصوديوم (ملح)',
+  'SODIUM CITRATE': 'سترات الصوديوم',
+  'SODIUM ERYTHORBATE': 'إيريثوربات الصوديوم',
+  'SODIUM GLUTAMATE': 'غلوتامات الصوديوم',
+  'SODIUM NITRATE': 'نترات الصوديوم',
+  'SODIUM NITRITE': 'نتريت الصوديوم',
+  'SODIUM PROPIONATE': 'بروبيونات الصوديوم',
+  'SODIUM SORBATE': 'سوربات الصوديوم',
+  'SORBATES': 'سوربات',
+  'SORBIC ACID': 'حمض السوربيك',
+  'SORBITOL': 'سوربيتول',
+  'STARCH': 'نشا',
+  'STEVIOL GLYCOSIDES': 'ستيفيول غليكوزيد (ستيفيا)',
+  'SUCRALOSE': 'سكرالوز',
+  'SULPHITES': 'كبريتيت',
+  'SULFITES': 'كبريتيت',
+  'SULPHUR DIOXIDE': 'ثاني أكسيد الكبريت',
+  'SUNSET YELLOW FCF': 'أصفر الغروب',
+  'TALC': 'تلك',
+  'TARTARIC ACID': 'حمض الطرطريك',
+  'TARTRAZINE': 'تارتازين',
+  'THAUMATIN': 'ثوماتين',
+  'TOCOPHEROLS': 'توكوفيرول (فيتامين E)',
+  'TRAGACANTH': 'صمغ الطراغنت',
+  'TURMERIC': 'كركم',
+  'XANTHAN GUM': 'صمغ الزانثان',
+  'XYLITOL': 'إكسيليتول',
+};
+
+function translateName(en) {
+  if (!en) return '—';
+  const up = en.toUpperCase();
+  for (const [k, v] of Object.entries(ADDITIVE_AR)) {
+    if (up.includes(k)) return v + ' — ' + en;
+  }
+  return en;
+}
+
+// ===== LOAD DATA =====
 async function loadData() {
   try {
     const r = await fetch('/codex_data.json');
     if (!r.ok) throw new Error();
     CODEX = await r.json();
     ready = true;
+    const t1n = Object.keys(CODEX.table1).filter(k => k !== 'nan').length;
+    const t3n = Object.keys(CODEX.table3).filter(k => k !== 'nan').length;
     document.getElementById('dataStatus').innerHTML =
       '✅ قاعدة بيانات CXS 192 جاهزة · <span style="color:var(--text2)">' +
-      Object.keys(CODEX.table1).length + ' مضاف · ' +
-      Object.keys(CODEX.table2).length + ' فئة · ' +
-      Object.keys(CODEX.table3).length + ' مضاف عام · ' +
-      CODEX.annex.length + ' فئة مستثناة</span>';
+      t1n + ' مضاف · ' + Object.keys(CODEX.table2).length + ' فئة · ' +
+      t3n + ' مضاف عام · ' + CODEX.annex.length + ' فئة مستثناة</span>';
     document.getElementById('statsRow').style.display = 'flex';
-    document.getElementById('s1').textContent = Object.keys(CODEX.table1).length;
+    document.getElementById('s1').textContent = t1n;
     document.getElementById('s2').textContent = Object.keys(CODEX.table2).length;
-    document.getElementById('s3').textContent = Object.keys(CODEX.table3).length;
+    document.getElementById('s3').textContent = t3n;
     document.getElementById('s4').textContent = CODEX.annex.length;
   } catch(e) {
-    document.getElementById('dataStatus').textContent =
-      '⚠️ ملف codex_data.json غير موجود — ضعه في نفس مجلد الصفحة';
+    document.getElementById('dataStatus').textContent = '⚠️ تعذّر تحميل قاعدة البيانات — تحقق من الاتصال';
   }
 }
 loadData();
@@ -218,10 +347,10 @@ loadData();
 // ===== MODE =====
 function setMode(m) {
   currentMode = m;
-  document.getElementById('modeA').classList.toggle('active', m === 'additive');
-  document.getElementById('modeF').classList.toggle('active', m === 'food');
-  document.getElementById('panelAdditive').style.display = m === 'additive' ? 'block' : 'none';
-  document.getElementById('panelFood').style.display = m === 'food' ? 'block' : 'none';
+  ['additive','food','batch'].forEach(x => {
+    document.getElementById('mode' + (x==='additive'?'A':x==='food'?'F':'B')).classList.toggle('active', m===x);
+    document.getElementById('panel' + x.charAt(0).toUpperCase() + x.slice(1)).style.display = m===x ? 'block' : 'none';
+  });
   document.getElementById('resultPanel').className = 'result-panel';
 }
 
@@ -229,11 +358,13 @@ function setMode(m) {
 function onAdditiveInput() {
   selectedINS = null;
   if (!CODEX) return;
-  const q = document.getElementById('additiveInput').value.trim().toUpperCase();
+  const raw = document.getElementById('additiveInput').value.trim().toUpperCase();
+  const q = raw.replace(/^E[-\s]?/, '');
   if (q.length < 2) { hideAC(); return; }
 
   const res = [];
   for (const [ins, d] of Object.entries(CODEX.table1)) {
+    if (ins === 'nan') continue;
     if (ins.startsWith(q) || d.name.toUpperCase().includes(q)) {
       res.push({ ins, name: d.name, func: d.functional_class, src: 'T1' });
       if (res.length >= 12) break;
@@ -241,6 +372,7 @@ function onAdditiveInput() {
   }
   if (res.length < 12) {
     for (const [ins, d] of Object.entries(CODEX.table3)) {
+      if (ins === 'nan') continue;
       if (!CODEX.table1[ins] && (ins.startsWith(q) || d.name.toUpperCase().includes(q))) {
         res.push({ ins, name: d.name, func: d.functional_class, src: 'T3' });
         if (res.length >= 12) break;
@@ -253,10 +385,11 @@ function onAdditiveInput() {
   list.innerHTML = res.map(r =>
     `<div class="ac-item" onclick="selectAdditive('${r.ins}','${r.name.replace(/'/g,"\\'")}')">
       <div class="ac-item-name">
-        <span class="ac-item-ins">INS ${r.ins}</span>${r.name}
-        ${r.src === 'T3' ? '<span style="font-size:.7rem;color:var(--warn);margin-right:.3rem;">جدول 3</span>' : ''}
+        <span class="ac-item-ins">INS ${r.ins}</span>
+        ${translateName(r.name)}
+        ${r.src==='T3'?'<span style="font-size:.7rem;color:var(--warn);margin-right:.3rem;">جدول 3</span>':''}
       </div>
-      <div class="ac-item-func">${r.func}</div>
+      <div class="ac-item-func">${translateFunc(r.func)}</div>
     </div>`
   ).join('');
   list.style.display = 'block';
@@ -264,34 +397,52 @@ function onAdditiveInput() {
 
 function selectAdditive(ins, name) {
   selectedINS = ins;
-  document.getElementById('additiveInput').value = name + '  (INS ' + ins + ')';
+  document.getElementById('additiveInput').value = translateName(name) + '  (INS ' + ins + ')';
   hideAC();
 }
 function hideAC() { document.getElementById('acList').style.display = 'none'; }
-document.addEventListener('click', e => {
-  if (!e.target.closest('.ac-wrap')) hideAC();
-});
+document.addEventListener('click', e => { if (!e.target.closest('.ac-wrap')) hideAC(); });
 
 // ===== HELPERS =====
 function getParentCats(catNo) {
   const parts = catNo.split('.');
-  return parts.slice(0, -1).map((_, i) => parts.slice(0, i + 1).join('.'));
+  return parts.slice(0,-1).map((_,i) => parts.slice(0,i+1).join('.'));
 }
 
 function resolveINS() {
   if (selectedINS) return selectedINS;
   const val = document.getElementById('additiveInput').value.trim().toUpperCase();
-  const numMatch = val.match(/\b(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)\b/);
-  if (numMatch) {
-    const n = numMatch[1];
+  const stripped = val.replace(/^E[-\s]?/, '');
+  const m = stripped.match(/^(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)/);
+  if (m) {
+    const n = m[1];
     if (CODEX.table1[n] || CODEX.table3[n]) return n;
+    const all = {...CODEX.table1,...CODEX.table3};
+    for (const ins of Object.keys(all)) {
+      if (ins !== 'nan' && ins.startsWith(n.substring(0,3))) return ins;
+    }
   }
-  // بحث بالاسم
-  for (const [ins, d] of Object.entries(CODEX.table1)) {
-    if (d.name.toUpperCase().includes(val.substring(0, Math.min(val.length, 8)))) return ins;
+  const q = stripped.substring(0, Math.min(stripped.length, 10));
+  if (q.length >= 3) {
+    for (const [ins,d] of Object.entries(CODEX.table1)) {
+      if (ins !== 'nan' && d.name.toUpperCase().includes(q)) return ins;
+    }
+    for (const [ins,d] of Object.entries(CODEX.table3)) {
+      if (ins !== 'nan' && d.name.toUpperCase().includes(q)) return ins;
+    }
   }
-  for (const [ins, d] of Object.entries(CODEX.table3)) {
-    if (d.name.toUpperCase().includes(val.substring(0, Math.min(val.length, 8)))) return ins;
+  return null;
+}
+
+function resolveENUM(raw) {
+  const stripped = raw.trim().toUpperCase().replace(/^E[-\s]?/,'');
+  const m = stripped.match(/^(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)/i);
+  if (!m) return null;
+  const num = m[1];
+  if (CODEX.table1[num] || CODEX.table3[num]) return num;
+  const all = {...CODEX.table1,...CODEX.table3};
+  for (const ins of Object.keys(all)) {
+    if (ins !== 'nan' && ins.startsWith(num.substring(0,3))) return ins;
   }
   return null;
 }
@@ -300,7 +451,6 @@ function resolveCatNo(val) {
   if (!val) return null;
   val = val.trim();
   if (/^\d{2}\.\d/.test(val)) return val;
-  // جدول التحويل
   const map = {
     'حليب منكه':'01.1.4','flavoured milk':'01.1.4','flavored milk':'01.1.4',
     'حليب سائل':'01.1.1','fluid milk':'01.1.1',
@@ -313,20 +463,17 @@ function resolveCatNo(val) {
     'زيت':'02.1.2','oil':'02.1.2','vegetable oil':'02.1.2',
     'آيس كريم':'03.0','ice cream':'03.0',
     'مربى':'04.1.2.4','jam':'04.1.2.4',
-    'خضار مخللة':'04.2.2.3','pickled vegetables':'04.2.2.3',
-    'مخلل':'04.2.2.3','pickle':'04.2.2.3',
+    'مخلل':'04.2.2.3','pickle':'04.2.2.3','pickled':'04.2.2.3',
     'شوكولاتة':'05.1.3','chocolate':'05.1.3',
-    'حلوى':'05.2','candy':'05.2','confectionery':'05.2',
+    'حلوى':'05.2','candy':'05.2','confectionery':'05.2','سكاكر':'05.2',
     'خبز':'07.1.1','bread':'07.1.1',
     'بسكويت':'07.1.2','biscuit':'07.1.2','cookie':'07.1.2',
     'كيك':'07.2.1','cake':'07.2.1',
     'مكرونة':'06.4.3','pasta':'06.4.3','noodles':'06.4.3',
-    'لحم':'08.2','meat':'08.2','processed meat':'08.2',
-    'دجاج':'08.2','chicken':'08.2',
+    'لحم':'08.2','meat':'08.2',
     'سمك':'09.2','fish':'09.2','seafood':'09.2',
     'عصير':'14.1.2.1','juice':'14.1.2.1',
     'مشروب':'14.1.4','beverage':'14.1.4','drink':'14.1.4',
-    'مشروب طاقة':'14.1.4','energy drink':'14.1.4',
     'قهوة':'14.1.5.3','coffee':'14.1.5.3',
     'ملح':'12.1.1','salt':'12.1.1',
     'مايونيز':'12.6.1','mayonnaise':'12.6.1',
@@ -334,23 +481,23 @@ function resolveCatNo(val) {
     'شيبس':'15.1','chips':'15.1','snacks':'15.1',
   };
   const up = val.toLowerCase();
-  for (const [k, v] of Object.entries(map)) {
+  for (const [k,v] of Object.entries(map)) {
     if (up.includes(k.toLowerCase())) return v;
   }
   return val;
 }
 
 function renderLevel(lvl) {
-  if (!lvl || lvl === 'nan' || lvl === '') return '<span class="gmp-badge">GMP</span>';
-  if (lvl.toUpperCase() === 'GMP') return '<span class="gmp-badge">GMP</span>';
+  if (!lvl || lvl==='nan' || lvl==='') return '<span class="gmp-badge">GMP</span>';
+  if (lvl.toUpperCase()==='GMP') return '<span class="gmp-badge">GMP</span>';
   return `<span class="level-badge">${lvl}</span>`;
 }
 
 function renderNotes(notesStr) {
-  if (!notesStr || notesStr === 'nan' || notesStr === '') return '—';
+  if (!notesStr || notesStr==='nan' || notesStr==='') return '—';
   const nums = notesStr.match(/\d+/g);
   if (!nums || !CODEX.notes) return notesStr;
-  const id = 'n' + Math.random().toString(36).substr(2, 6);
+  const id = 'n'+Math.random().toString(36).substr(2,6);
   const texts = nums.map(n => CODEX.notes[n] ? `<strong>${n}:</strong> ${CODEX.notes[n]}` : null).filter(Boolean);
   if (!texts.length) return notesStr;
   return `<button class="note-btn" onclick="toggleNote('${id}')">${notesStr} ℹ️</button>
@@ -359,113 +506,95 @@ function renderNotes(notesStr) {
 
 function toggleNote(id) {
   const el = document.getElementById(id);
-  if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  if (el) el.style.display = el.style.display==='block'?'none':'block';
 }
 
 // ===== SEARCH ADDITIVE =====
 function searchAdditive() {
   if (!ready) { alert('البيانات لم تُحمَّل بعد'); return; }
   const ins = resolveINS();
-  if (!ins) { alert('المضاف غير موجود في قاعدة البيانات — جرب رقم INS مباشرةً'); return; }
-
+  if (!ins) { alert('المضاف غير موجود — جرب رقم INS مباشرةً مثل: 407 أو E471'); return; }
   document.getElementById('spinner').classList.add('show');
   document.getElementById('resultPanel').className = 'result-panel';
-
   setTimeout(() => {
     document.getElementById('spinner').classList.remove('show');
-    const result = queryAdditive(ins);
-    renderAdditiveResult(result);
+    renderAdditiveResult(queryAdditive(ins));
   }, 300);
 }
 
 function queryAdditive(ins) {
-  const t1 = CODEX.table1, t3 = CODEX.table3, annex = new Set(CODEX.annex);
+  const t1=CODEX.table1, t3=CODEX.table3, annex=new Set(CODEX.annex);
   return {
     ins,
-    name: t1[ins]?.name || t3[ins]?.name || 'INS ' + ins,
+    name: t1[ins]?.name || t3[ins]?.name || 'INS '+ins,
     functional_class: t1[ins]?.functional_class || t3[ins]?.functional_class || '',
     t1_cats: t1[ins]?.categories || [],
     in_t3: !!t3[ins],
-    t3_data: t3[ins] || null,
+    t3_data: t3[ins]||null,
     annex_excluded: [...annex].sort()
   };
 }
 
 function renderAdditiveResult(r) {
   const panel = document.getElementById('resultPanel');
-
-  // Verdict
+  const nameAr = translateName(r.name);
   let verdict, verdictTitle, verdictSub;
   if (r.in_t3) {
-    verdict = 'permitted';
-    verdictTitle = '✅ مسموح بشكل عام (جدول 3)';
-    verdictSub = `${r.name} (INS ${r.ins}) مسموح في جميع الفئات الغذائية، باستثناء الفئات المدرجة في Annex to Table 3`;
-  } else if (r.t1_cats.length > 0) {
-    verdict = 'partial';
-    verdictTitle = '⚠️ مسموح في فئات محددة فقط (جدول 1)';
-    verdictSub = `${r.name} (INS ${r.ins}) غير موجود في جدول 3 — الإذن محدود بالفئات أدناه`;
+    verdict='permitted';
+    verdictTitle='✅ مسموح بشكل عام (جدول 3)';
+    verdictSub=`${nameAr} (INS ${r.ins}) مسموح في جميع الفئات الغذائية، ما عدا الفئات المستثناة في Annex`;
+  } else if (r.t1_cats.length>0) {
+    verdict='partial';
+    verdictTitle='⚠️ مسموح في فئات محددة فقط (جدول 1)';
+    verdictSub=`${nameAr} (INS ${r.ins}) الإذن محدود بالفئات أدناه فقط`;
   } else {
-    verdict = 'forbidden';
-    verdictTitle = '❌ غير مدرج في CXS 192';
-    verdictSub = `${r.name} (INS ${r.ins}) غير موجود في الجدول 1 أو الجدول 3`;
+    verdict='forbidden';
+    verdictTitle='❌ غير مدرج في CXS 192';
+    verdictSub=`${nameAr} (INS ${r.ins}) غير موجود في الجدول 1 أو الجدول 3`;
   }
 
-  // T3 Box
   const t3HTML = r.in_t3 ? `
     <div class="t3-box">
       <div class="t3-box-title">📗 الجدول 3 — مضاف عام مسموح</div>
       <div class="t3-box-sub">
-        التصنيف الوظيفي: <strong>${r.t3_data.functional_class}</strong><br>
-        ${r.t3_data.specific_allowance ? 'السماح المحدد: ' + r.t3_data.specific_allowance + '<br>' : ''}
+        الفئة الوظيفية: <strong>${translateFunc(r.t3_data.functional_class)}</strong><br>
         <strong>الحكم:</strong> مسموح في جميع الفئات الغذائية ما عدا الفئات المستثناة في Annex to Table 3
       </div>
     </div>
     <div class="annex-box">
-      <div class="annex-box-title">🚫 الفئات المستثناة من جدول 3 (Annex) — ${r.annex_excluded.length} فئة</div>
-      <div style="font-size:.8rem;color:var(--text2);">هذه الفئات تخضع للجداول 1 و2 فقط — لا يطبَّق عليها جدول 3</div>
-      <div class="annex-cats">${r.annex_excluded.map(c =>
-        `<span class="annex-chip" title="${CODEX.cat_names?.[c]||''}">${c}</span>`
-      ).join('')}</div>
+      <div class="annex-box-title">🚫 الفئات المستثناة — ${r.annex_excluded.length} فئة</div>
+      <div style="font-size:.8rem;color:var(--text2);margin-bottom:.5rem;">هذه الفئات تخضع للجداول 1 و2 فقط</div>
+      <div class="annex-cats">${r.annex_excluded.map(c=>`<span class="annex-chip">${c}</span>`).join('')}</div>
     </div>` : '';
 
-  // T1 Table
-  const t1HTML = r.t1_cats.length > 0 ? `
+  const t1HTML = r.t1_cats.length>0 ? `
     <div class="sec-header">📘 الجدول 1 — الفئات المسموح فيها <span class="sec-count">${r.t1_cats.length} فئة</span></div>
     <div style="overflow-x:auto;">
     <table class="cat-table">
       <thead><tr><th>رقم الفئة</th><th>اسم الفئة</th><th>الحد الأقصى</th><th>ملاحظات</th></tr></thead>
-      <tbody>
-        ${r.t1_cats.map(c => `
-          <tr>
-            <td><strong>${c.cat_no}</strong></td>
-            <td>${c.cat_name || CODEX.cat_names?.[c.cat_no] || '—'}</td>
-            <td>${renderLevel(c.max_level)}</td>
-            <td>${renderNotes(c.notes)}</td>
-          </tr>`).join('')}
+      <tbody>${r.t1_cats.map(c=>`
+        <tr>
+          <td><strong>${c.cat_no}</strong></td>
+          <td>${c.cat_name||CODEX.cat_names?.[c.cat_no]||'—'}</td>
+          <td>${renderLevel(c.max_level)}</td>
+          <td>${renderNotes(c.notes)}</td>
+        </tr>`).join('')}
       </tbody>
-    </table>
-    </div>` : '';
+    </table></div>` : '';
 
   panel.innerHTML = `
     <div class="verdict-banner ${verdict}">
-      <div class="verdict-icon">${verdict === 'permitted' ? '✅' : verdict === 'partial' ? '⚠️' : '❌'}</div>
+      <div class="verdict-icon">${verdict==='permitted'?'✅':verdict==='partial'?'⚠️':'❌'}</div>
       <div>
         <div class="verdict-title ${verdict}">${verdictTitle}</div>
         <div class="verdict-sub">${verdictSub}</div>
-        ${r.functional_class ? `<div style="font-size:.78rem;color:var(--text3);margin-top:3px;">التصنيف الوظيفي: ${r.functional_class}</div>` : ''}
+        ${r.functional_class?`<div style="font-size:.78rem;color:var(--text3);margin-top:3px;">الفئة الوظيفية: ${translateFunc(r.functional_class)}</div>`:''}
       </div>
     </div>
-    ${t3HTML}
-    ${t1HTML}
-    ${!r.in_t3 && r.t1_cats.length === 0 ? `
-      <div style="text-align:center;padding:2rem;color:var(--text2);">
-        <div style="font-size:2rem;margin-bottom:.5rem;">🔍</div>
-        <div>هذا المضاف غير مدرج في CXS 192</div>
-        <div style="font-size:.8rem;color:var(--text3);margin-top:.4rem;">تحقق من رقم INS أو اسم المضاف</div>
-      </div>` : ''}
-  `;
+    ${t3HTML}${t1HTML}
+    ${!r.in_t3&&r.t1_cats.length===0?`<div style="text-align:center;padding:2rem;color:var(--text2);"><div style="font-size:2rem;margin-bottom:.5rem;">🔍</div><div>هذا المضاف غير مدرج في CXS 192</div><div style="font-size:.8rem;color:var(--text3);margin-top:.4rem;">تحقق من رقم INS</div></div>`:''}`;
   panel.classList.add('show');
-  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 // ===== SEARCH FOOD =====
@@ -474,131 +603,182 @@ function searchFood() {
   const raw = document.getElementById('foodInput').value.trim();
   if (!raw) { alert('الرجاء إدخال رقم الفئة أو اسم المنتج'); return; }
   const catNo = resolveCatNo(raw);
-
   document.getElementById('spinner').classList.add('show');
-  document.getElementById('resultPanel').className = 'result-panel';
-
-  setTimeout(() => {
+  document.getElementById('resultPanel').className='result-panel';
+  setTimeout(()=>{
     document.getElementById('spinner').classList.remove('show');
-    const result = queryFood(catNo, raw);
-    renderFoodResult(result, raw);
-  }, 300);
+    renderFoodResult(queryFood(catNo,raw),raw);
+  },300);
 }
 
-function queryFood(catNo, rawInput) {
-  const t2 = CODEX.table2, t3 = CODEX.table3, annex = new Set(CODEX.annex);
-
-  // جدول 2: الفئة + الفئات الأب
-  const searchCats = [catNo, ...getParentCats(catNo)];
-  const seen = new Set();
-  const permitted = [];
-
+function queryFood(catNo,rawInput) {
+  const t2=CODEX.table2, t3=CODEX.table3, annex=new Set(CODEX.annex);
+  const searchCats=[catNo,...getParentCats(catNo)];
+  const seen=new Set(), permitted=[];
   for (const cat of searchCats) {
-    if (t2[cat]) {
-      for (const add of t2[cat]) {
-        if (!seen.has(add.ins)) {
-          seen.add(add.ins);
-          permitted.push({ ...add, source_cat: cat, inherited: cat !== catNo });
-        }
-      }
+    if (t2[cat]) for (const add of t2[cat]) {
+      if (!seen.has(add.ins)) { seen.add(add.ins); permitted.push({...add,source_cat:cat,inherited:cat!==catNo}); }
     }
   }
-
-  // Annex: هل الفئة أو أي أب مستثنى؟
-  let inAnnex = false, annexMatch = null;
-  for (const c of [catNo, ...getParentCats(catNo)]) {
-    if (annex.has(c)) { inAnnex = true; annexMatch = c; break; }
+  let inAnnex=false, annexMatch=null;
+  for (const c of [catNo,...getParentCats(catNo)]) {
+    if (annex.has(c)) { inAnnex=true; annexMatch=c; break; }
   }
-
-  // جدول 3
-  const t3Additives = inAnnex ? [] : Object.entries(t3).map(([ins, d]) => ({ ins, ...d }));
-
-  return { catNo, rawInput, permitted, inAnnex, annexMatch, t3Additives };
+  const t3Additives=inAnnex?[]:Object.entries(t3).filter(([ins])=>ins!=='nan').map(([ins,d])=>({ins,...d}));
+  return {catNo,rawInput,permitted,inAnnex,annexMatch,t3Additives};
 }
 
-function renderFoodResult(r, rawInput) {
-  const panel = document.getElementById('resultPanel');
-  const catName = CODEX.cat_names?.[r.catNo] || r.catNo;
-
-  // Annex Info
-  const annexHTML = r.inAnnex ? `
+function renderFoodResult(r,rawInput) {
+  const panel=document.getElementById('resultPanel');
+  const catName=CODEX.cat_names?.[r.catNo]||r.catNo;
+  const annexHTML=r.inAnnex?`
     <div class="annex-box">
-      <div class="annex-box-title">🚫 هذه الفئة مدرجة في Annex to Table 3</div>
-      <div style="font-size:.8rem;color:var(--text2);">
-        الفئة <strong>${r.annexMatch}</strong> مستثناة من جدول 3 — تُطبَّق فقط المضافات في الجدول 2 أدناه
-      </div>
-    </div>` : `
+      <div class="annex-box-title">🚫 هذه الفئة مستثناة من جدول 3</div>
+      <div style="font-size:.8rem;color:var(--text2);">الفئة <strong>${r.annexMatch}</strong> — تُطبَّق فقط مضافات الجدول 2</div>
+    </div>`:`
     <div class="t3-box">
-      <div class="t3-box-title">📗 جدول 3 — ${r.t3Additives.length} مضاف عام إضافي مسموح</div>
-      <div class="t3-box-sub">هذه الفئة غير مستثناة من جدول 3، لذا تُضاف إليها كل مضافات الجدول 3 بالإضافة لمضافات الجدول 2</div>
+      <div class="t3-box-title">📗 جدول 3 — ${r.t3Additives.length} مضاف عام مسموح إضافي</div>
+      <div class="t3-box-sub">هذه الفئة غير مستثناة — تُضاف مضافات الجدول 3 إلى الجدول 2</div>
     </div>`;
 
-  // T2 Table
-  const inherited = r.permitted.filter(a => a.inherited);
-  const direct = r.permitted.filter(a => !a.inherited);
-
-  const t2HTML = r.permitted.length > 0 ? `
-    <div class="sec-header">
-      📘 جدول 2 — المضافات المسموحة <span class="sec-count">${r.permitted.length} مضاف</span>
-      ${inherited.length > 0 ? `<span class="inherited-badge">منها ${inherited.length} مورثة من فئة أب</span>` : ''}
+  const inherited=r.permitted.filter(a=>a.inherited);
+  const t2HTML=r.permitted.length>0?`
+    <div class="sec-header">📘 جدول 2 — المضافات المسموحة <span class="sec-count">${r.permitted.length} مضاف</span>
+      ${inherited.length>0?`<span class="inherited-badge">منها ${inherited.length} مورثة</span>`:''}
     </div>
-    <div style="overflow-x:auto;">
-    <table class="cat-table">
-      <thead><tr><th>رقم INS</th><th>اسم المضاف</th><th>الحد الأقصى</th><th>الفئة المصدر</th><th>ملاحظات</th></tr></thead>
-      <tbody>
-        ${r.permitted.map(a => `
-          <tr>
-            <td><strong>INS ${a.ins}</strong></td>
-            <td>${a.name}</td>
-            <td>${renderLevel(a.max_level)}</td>
-            <td>${a.source_cat}${a.inherited ? ' <span class="inherited-badge">مورثة</span>' : ''}</td>
-            <td>${renderNotes(a.notes)}</td>
-          </tr>`).join('')}
+    <div style="overflow-x:auto;"><table class="cat-table">
+      <thead><tr><th>INS</th><th>الاسم</th><th>الحد الأقصى</th><th>الفئة المصدر</th><th>ملاحظات</th></tr></thead>
+      <tbody>${r.permitted.map(a=>`
+        <tr>
+          <td><strong>INS ${a.ins}</strong></td>
+          <td>${translateName(a.name)}</td>
+          <td>${renderLevel(a.max_level)}</td>
+          <td>${a.source_cat}${a.inherited?` <span class="inherited-badge">مورثة</span>`:''}</td>
+          <td>${renderNotes(a.notes)}</td>
+        </tr>`).join('')}
       </tbody>
-    </table>
-    </div>` : `<div style="color:var(--text2);padding:1rem;font-size:.85rem;">لا توجد مضافات في جدول 2 لهذه الفئة</div>`;
+    </table></div>`:`<div style="color:var(--text2);padding:1rem;font-size:.85rem;">لا توجد مضافات في جدول 2 لهذه الفئة</div>`;
 
-  // T3 Mini Grid (عرض 20 فقط)
-  const t3HTML = !r.inAnnex && r.t3Additives.length > 0 ? `
-    <div class="sec-header">📗 جدول 3 — عينة من المضافات العامة <span class="sec-count">${r.t3Additives.length} مضاف</span></div>
+  const t3HTML=!r.inAnnex&&r.t3Additives.length>0?`
+    <div class="sec-header">📗 جدول 3 — عينة <span class="sec-count">${r.t3Additives.length} مضاف</span></div>
     <div class="t3-grid">
-      ${r.t3Additives.slice(0, 24).map(a => `
+      ${r.t3Additives.slice(0,24).map(a=>`
         <div class="t3-chip">
-          <div class="t3-chip-name">INS ${a.ins} · ${a.name.length > 22 ? a.name.substr(0,22)+'…' : a.name}</div>
-          <div class="t3-chip-func">${a.functional_class}</div>
+          <div class="t3-chip-name">INS ${a.ins} · ${translateName(a.name).substring(0,25)}…</div>
+          <div class="t3-chip-func">${translateFunc(a.functional_class)}</div>
         </div>`).join('')}
-      ${r.t3Additives.length > 24 ? `<div class="t3-chip" style="display:flex;align-items:center;justify-content:center;color:var(--text3);">+${r.t3Additives.length - 24} آخر</div>` : ''}
-    </div>` : '';
+      ${r.t3Additives.length>24?`<div class="t3-chip" style="display:flex;align-items:center;justify-content:center;color:var(--text3);">+${r.t3Additives.length-24} آخر</div>`:''}
+    </div>`:'';
 
-  const totalPermitted = r.permitted.length + r.t3Additives.length;
-
-  panel.innerHTML = `
-    <div class="verdict-banner ${r.inAnnex ? 'partial' : 'permitted'}">
-      <div class="verdict-icon">${r.inAnnex ? '📋' : '✅'}</div>
+  panel.innerHTML=`
+    <div class="verdict-banner ${r.inAnnex?'partial':'permitted'}">
+      <div class="verdict-icon">${r.inAnnex?'📋':'✅'}</div>
       <div>
-        <div class="verdict-title ${r.inAnnex ? 'partial' : 'permitted'}">
-          ${catName} (${r.catNo})
-        </div>
-        <div class="verdict-sub">
-          إجمالي المضافات المسموحة: <strong>${totalPermitted}</strong>
-          (${r.permitted.length} من جدول 2${r.inAnnex ? ' فقط' : ' + ' + r.t3Additives.length + ' من جدول 3'})
-          ${rawInput !== r.catNo ? ` · تم تحديد الفئة: <strong>${r.catNo}</strong>` : ''}
+        <div class="verdict-title ${r.inAnnex?'partial':'permitted'}">${catName} (${r.catNo})</div>
+        <div class="verdict-sub">إجمالي المسموح: <strong>${r.permitted.length+r.t3Additives.length}</strong>
+          (${r.permitted.length} جدول 2${r.inAnnex?' فقط':' + '+r.t3Additives.length+' جدول 3'})
+          ${rawInput!==r.catNo?` · الفئة: <strong>${r.catNo}</strong>`:''}
         </div>
       </div>
     </div>
-    ${annexHTML}
-    ${t2HTML}
-    ${t3HTML}
-  `;
+    ${annexHTML}${t2HTML}${t3HTML}`;
   panel.classList.add('show');
-  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// Enter key
+// ===== BATCH MODE =====
+function searchBatch() {
+  if (!ready) { alert('البيانات لم تُحمَّل بعد'); return; }
+  const productRaw = document.getElementById('batchProduct').value.trim();
+  const lines = document.getElementById('batchInput').value.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  if (!lines.length) { alert('الرجاء إدخال المضافات'); return; }
+  if (!productRaw) { alert('الرجاء إدخال اسم المنتج'); return; }
+  document.getElementById('spinner').classList.add('show');
+  document.getElementById('resultPanel').className='result-panel';
+  setTimeout(()=>{
+    document.getElementById('spinner').classList.remove('show');
+    const catNo=resolveCatNo(productRaw);
+    const catName=CODEX.cat_names?.[catNo]||catNo;
+    const results=lines.map(line=>checkSingleAdditive(line,catNo));
+    renderBatchResult(results,productRaw,catNo,catName);
+  },300);
+}
+
+function checkSingleAdditive(raw,catNo) {
+  const t1=CODEX.table1, t2=CODEX.table2, t3=CODEX.table3, annex=new Set(CODEX.annex);
+  let ins=resolveENUM(raw);
+  if (!ins) {
+    const up=raw.toUpperCase();
+    for (const [i,d] of Object.entries(t1)) {
+      if (i!=='nan' && d.name.toUpperCase().includes(up.substring(0,6))) { ins=i; break; }
+    }
+    if (!ins) for (const [i,d] of Object.entries(t3)) {
+      if (i!=='nan' && d.name.toUpperCase().includes(up.substring(0,6))) { ins=i; break; }
+    }
+  }
+  if (!ins) return {raw,ins:null,name:raw,verdict:'unknown',detail:'غير موجود في قاعدة البيانات'};
+  const name=t1[ins]?.name||t3[ins]?.name||'INS '+ins;
+  const searchCats=catNo?[catNo,...getParentCats(catNo)]:[];
+  let t2Match=null;
+  for (const cat of searchCats) {
+    if (t2[cat]) {
+      t2Match=t2[cat].find(a=>{
+        const parts=a.ins.replace(/\s/g,'').split(/[;,]+/);
+        return parts.some(p=>p===ins||p.startsWith(ins.split('(')[0]));
+      });
+      if (t2Match) break;
+    }
+  }
+  if (t2Match) return {raw,ins,name,verdict:'permitted',source:'جدول 2',max_level:t2Match.max_level,notes:t2Match.notes};
+  const inAnnex=searchCats.some(c=>annex.has(c));
+  if (!inAnnex&&t3[ins]) return {raw,ins,name,verdict:'permitted',source:'جدول 3',max_level:'GMP',notes:''};
+  if (t1[ins]&&t1[ins].categories.length>0)
+    return {raw,ins,name,verdict:'not_in_category',source:'جدول 1',detail:`مسموح في ${t1[ins].categories.length} فئة أخرى — غير مسموح في ${catNo}`};
+  return {raw,ins,name,verdict:'forbidden',source:'—',detail:'غير مسموح في هذه الفئة'};
+}
+
+function renderBatchResult(results,productRaw,catNo,catName) {
+  const panel=document.getElementById('resultPanel');
+  const permitted=results.filter(r=>r.verdict==='permitted').length;
+  const forbidden=results.filter(r=>r.verdict==='forbidden'||r.verdict==='not_in_category').length;
+  const unknown=results.filter(r=>r.verdict==='unknown').length;
+
+  panel.innerHTML=`
+    <div class="verdict-banner ${forbidden>0?'partial':'permitted'}" style="margin-bottom:1rem;">
+      <div class="verdict-icon">${forbidden>0?'⚠️':'✅'}</div>
+      <div>
+        <div class="verdict-title ${forbidden>0?'partial':'permitted'}">${productRaw}${catNo!==productRaw?' · '+catNo:''}</div>
+        <div class="verdict-sub">${results.length} مضاف ·
+          <span style="color:var(--success)">✅ ${permitted} مسموح</span> ·
+          <span style="color:var(--danger)">❌ ${forbidden} غير مسموح</span>
+          ${unknown>0?` · <span style="color:var(--warn)">❓ ${unknown} غير معروف</span>`:''}
+        </div>
+      </div>
+    </div>
+    <div style="overflow-x:auto;"><table class="cat-table">
+      <thead><tr><th>المضاف</th><th>الاسم</th><th>الحكم</th><th>المصدر</th><th>الحد الأقصى</th></tr></thead>
+      <tbody>${results.map(r=>`
+        <tr>
+          <td><strong>${r.raw.toUpperCase()}</strong>${r.ins?`<br><span style="font-size:.72rem;color:var(--text3);">INS ${r.ins}</span>`:''}</td>
+          <td style="font-size:.8rem;">${translateName(r.name)}</td>
+          <td>${r.verdict==='permitted'?'<span style="color:var(--success);font-weight:700;">✅ مسموح</span>':
+              r.verdict==='forbidden'?'<span style="color:var(--danger);font-weight:700;">❌ غير مسموح</span>':
+              r.verdict==='not_in_category'?'<span style="color:var(--warn);font-weight:700;">⚠️ غير مسموح هنا</span>':
+              '<span style="color:var(--text3);">❓ غير موجود</span>'}</td>
+          <td style="font-size:.8rem;">${r.source||'—'}</td>
+          <td>${r.max_level?renderLevel(r.max_level):r.detail?`<span style="font-size:.75rem;color:var(--text3);">${r.detail}</span>`:'—'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    if (currentMode === 'additive') searchAdditive();
-    else searchFood();
+  if (e.key==='Enter' && e.target.tagName!=='TEXTAREA') {
+    if (currentMode==='additive') searchAdditive();
+    else if (currentMode==='food') searchFood();
+    else if (currentMode==='batch') searchBatch();
   }
 });
 </script>
