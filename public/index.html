@@ -376,15 +376,19 @@ footer span { color: var(--accent); }
       </select>
     </div>
     <div class="setting-card" style="grid-column:1/-1;">
-      <label>مدة الصلاحية (اختياري — لتحديد صيغة التاريخ المطلوبة)</label>
-      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
-        <select class="setting-select" id="shelfLifeInput" style="flex:1;min-width:200px;">
-          <option value="">غير محدد — Claude يقرر من الصورة</option>
-          <option value="exempt">منتج مستثنى من تاريخ الصلاحية (ملح، سكر، خل، خضار طازجة...)</option>
-          <option value="le3m">مدة الصلاحية ≤ 3 أشهر — يجب: يوم+شهر+سنة</option>
-          <option value="gt3m">مدة الصلاحية > 3 أشهر — يجب: شهر+سنة فقط</option>
-        </select>
-        <span style="font-size:.75rem;color:var(--text3);max-width:280px;">إذا اخترت "غير محدد" — لن يُعتبر غياب تاريخ الصلاحية من الصورة مخالفةً تلقائية</span>
+      <label>مدة الصلاحية (اختياري — يساعد في تحديد صيغة التاريخ المطلوبة)</label>
+      <div style="display:flex;gap:.75rem;align-items:flex-start;flex-wrap:wrap;">
+        <div style="display:flex;flex-direction:column;gap:.5rem;flex:1;min-width:220px;">
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <input type="checkbox" id="shelfExempt" onchange="toggleShelfInput()" style="width:16px;height:16px;accent-color:var(--accent);">
+            <label for="shelfExempt" style="font-size:.85rem;color:var(--text2);cursor:pointer;">منتج مستثنى من تاريخ الصلاحية (ملح، سكر، خل، خضار طازجة...)</label>
+          </div>
+          <div id="shelfDurationWrap" style="display:flex;align-items:center;gap:.5rem;">
+            <input type="text" id="shelfLifeInput" class="setting-select" placeholder="مثال: 6 أشهر · 18 month · 2 سنة — اتركه فارغاً إذا غير معروف"
+              style="flex:1;font-family:var(--font);font-size:.85rem;">
+          </div>
+        </div>
+        <span style="font-size:.75rem;color:var(--text3);max-width:260px;padding-top:.3rem;">إذا تُرك فارغاً — غياب تاريخ الصلاحية يُعطى تنبيه لا مخالفة</span>
       </div>
     </div>
   </div>
@@ -1174,6 +1178,13 @@ function renderJSWarnings(productType) {
     </div>`;
 }
 
+function toggleShelfInput() {
+  const exempt = document.getElementById('shelfExempt').checked;
+  document.getElementById('shelfDurationWrap').style.opacity = exempt ? '0.3' : '1';
+  document.getElementById('shelfLifeInput').disabled = exempt;
+  if (exempt) document.getElementById('shelfLifeInput').value = '';
+}
+
 // ===== MAIN ANALYZE =====
 async function analyze() {
   if (uploadedImages.length === 0) return;
@@ -1185,7 +1196,8 @@ async function analyze() {
   const productType = document.getElementById('productType').value;
   const origin = document.getElementById('origin').value;
   const strictness = document.getElementById('strictness').value;
-  const shelfLifeInput = document.getElementById('shelfLifeInput').value;
+  const shelfExempt = document.getElementById('shelfExempt').checked;
+  const shelfLifeInput = document.getElementById('shelfLifeInput').value.trim();
 
   // بناء قواعد خاصة بنوع المنتج
   const jsSpecific = JS_SPECIFIC_RULES[productType];
@@ -1203,14 +1215,24 @@ async function analyze() {
 
   // بناء تعليمة الصلاحية حسب اختيار المستخدم
   let shelfLifeNote = '';
-  if (shelfLifeInput === 'exempt') {
-    shelfLifeNote = `\n9. تاريخ الصلاحية — استثناء: المستخدم أكد أن هذا المنتج مستثنى من اشتراط تاريخ الصلاحية (مثل ملح، سكر، خل، خضار طازجة...). أعطِ R024 و R024B حكم "pass" مع ملاحظة "منتج مستثنى من تاريخ الصلاحية".`;
-  } else if (shelfLifeInput === 'le3m') {
-    shelfLifeNote = `\n9. تاريخ الصلاحية — المستخدم أفاد أن مدة الصلاحية ≤ 3 أشهر: تحقق أن الصيغة تحتوي يوم+شهر+سنة كاملة.`;
-  } else if (shelfLifeInput === 'gt3m') {
-    shelfLifeNote = `\n9. تاريخ الصلاحية — المستخدم أفاد أن مدة الصلاحية > 3 أشهر: تحقق أن الصيغة تحتوي شهر+سنة فقط (بدون يوم).`;
+  if (shelfExempt) {
+    shelfLifeNote = `\n9. تاريخ الصلاحية — استثناء مؤكد: المستخدم أكد أن هذا المنتج مستثنى من اشتراط تاريخ الصلاحية. أعطِ R024 و R024B حكم "pass" مع ملاحظة "منتج مستثنى من تاريخ الصلاحية".`;
+  } else if (shelfLifeInput) {
+    // حدد إذا ≤3 أشهر أو >3
+    const months = shelfLifeInput.match(/(\d+)\s*(شهر|month|أشهر|months)/i);
+    const years = shelfLifeInput.match(/(\d+)\s*(سنة|year|سنوات|years)/i);
+    let totalMonths = 0;
+    if (months) totalMonths = parseInt(months[1]);
+    if (years) totalMonths = parseInt(years[1]) * 12;
+    if (totalMonths > 0 && totalMonths <= 3) {
+      shelfLifeNote = `\n9. تاريخ الصلاحية — المستخدم أفاد أن مدة الصلاحية ${shelfLifeInput} (≤ 3 أشهر): تحقق أن الصيغة يوم+شهر+سنة كاملة، وأن العبارة قبله "يستخدم قبل" أو "تاريخ انتهاء الصلاحية".`;
+    } else if (totalMonths > 3) {
+      shelfLifeNote = `\n9. تاريخ الصلاحية — المستخدم أفاد أن مدة الصلاحية ${shelfLifeInput} (> 3 أشهر): تحقق أن الصيغة شهر+سنة فقط (بدون يوم)، وأن العبارة قبله "يستخدم قبل" أو "تاريخ انتهاء الصلاحية".`;
+    } else {
+      shelfLifeNote = `\n9. تاريخ الصلاحية — المستخدم أفاد أن مدة الصلاحية هي: ${shelfLifeInput}. تحقق من وجود تاريخ الصلاحية وصيغته المناسبة.`;
+    }
   } else {
-    shelfLifeNote = `\n9. تاريخ الصلاحية — المستخدم لم يحدد مدة الصلاحية: إذا لم يظهر تاريخ صلاحية في الصورة ولم تستطع تحديد ما إذا كان المنتج مستثنى، أعطِ R024 حكم "warning" (لا "critical") مع ملاحظة "لم يتضح تاريخ الصلاحية من الصورة — يُنصح بالتحقق يدوياً".`;
+    shelfLifeNote = `\n9. تاريخ الصلاحية — لم يحدد المستخدم مدة الصلاحية: إذا لم يظهر تاريخ صلاحية واضح في الصورة، أعطِ R024 حكم "warning" لا "critical"، مع ملاحظة "لم يتضح تاريخ الصلاحية من الصورة — تحقق يدوياً". لا تعتبره مخالفة تلقائية.`;
   }
 
   const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفات الأردنية والكودكس الدولي.
@@ -1235,7 +1257,10 @@ ${allergensText}
 5. افحص جدول الحقائق التغذوية بدقة
 6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
 7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
-8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"${shelfLifeNote}
+8. استثناء إلزامي — المنتج ذو المكون الواحد: إذا كان اسم المنتج أو محتواه يدل على مكون واحد فقط (أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة، حبوب جافة، خضار مجففة، فاكهة مجففة، عسل، زيت نباتي خالص، ماء...) — سواء كان ذلك واضحاً من اسم المنتج أو من قائمة المكونات — فإن التالي لا يُعتبر مخالفة بل pass تلقائي:
+   - غياب قائمة المكونات (R010، R011) → pass مع ملاحظة "منتج مكون واحد — مستثنى"
+   - غياب جدول الحقائق التغذوية (N001، R016) → pass مع ملاحظة "منتج مكون واحد — مستثنى"
+   - ملاحظة مهمة: اسم المنتج مثل "أرز تايجر" أو "Rice Tiger" أو "أرز بسمتي" — كلها منتج مكون واحد، والاسم التجاري لا يغير هذا الحكم${shelfLifeNote}
 10. أرقام المضافات (E-numbers وأرقام INS): إذا ذُكر رقم مضاف مثل E414 أو INS 415 أو 471 في قائمة المكونات — لا تعتبره مخالفةً مباشرة. أعطِه حكم "warning" مع ملاحظة "ذُكر رقم المضاف — تحقق يدوياً من مطابقة INS [الرقم] للفئة الغذائية في CXS 192". المخالفة الحقيقية هي فقط إذا كان المضاف محظوراً في هذه الفئة بموجب CXS 192.
 11. المكملات الغذائية — جدول الفيتامينات الأردني: إذا كان نوع المنتج مكمل غذائي، تحقق من الجرعات اليومية مقارنةً بالقيم المرجعية الأردنية التالية (RDA الأردن):
     فيتامين A: 800 مكغ RE / اليوم | فيتامين D: 5 مكغ (200 IU) / اليوم | فيتامين E: 10 mg α-TE / اليوم | فيتامين K: 65 مكغ / اليوم | فيتامين C: 60 mg / اليوم | فيتامين B1 (ثيامين): 1.2 mg / اليوم | فيتامين B2 (ريبوفلافين): 1.3 mg / اليوم | نياسين B3: 15 mg NE / اليوم | B6: 1.5 mg / اليوم | حمض الفوليك B9: 200 مكغ / اليوم (للحوامل: 400 مكغ) | B12: 2 مكغ / اليوم | البيوتين: 30 مكغ / اليوم | حمض البانتوثينيك: 5 mg / اليوم | الكالسيوم: 800 mg / اليوم | الفوسفور: 800 mg / اليوم | المغنيسيوم: 300 mg / اليوم | الحديد: 14 mg / اليوم | الزنك: 15 mg / اليوم | السيلينيوم: 55 مكغ / اليوم | اليود: 150 مكغ / اليوم | النحاس: 1.5 mg / اليوم | المنغنيز: 2.5 mg / اليوم | الكروم: 50 مكغ / اليوم | الموليبدينوم: 75 مكغ / اليوم. إذا تجاوزت الجرعة اليومية المذكورة 100% من RDA لأي عنصر → حكم "warning". إذا تجاوزت 3000 مكغ لفيتامين A في مكمل للحوامل → حكم "critical".
