@@ -264,6 +264,18 @@ footer span { color: var(--accent); }
 }
 .toast.show { opacity: 1; }
 
+
+/* LANGUAGE TOGGLE */
+.lang-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text2); padding: 5px 14px; border-radius: 100px;
+  cursor: pointer; font-size: .82rem; font-weight: 700;
+  transition: all .2s; font-family: var(--font); letter-spacing: .5px;
+}
+.lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+/* RTL/LTR transition */
+body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
+
 /* RESPONSIVE */
 @media (max-width: 600px) {
   .hero h1 { font-size: 1.8rem; }
@@ -281,26 +293,27 @@ footer span { color: var(--accent); }
     FoodCheck <span>Jordan</span>
   </div>
   <nav>
-    <a href="#tool">التدقيق</a>
-    <a href="#about">عن النظام</a>
+    <a href="#tool" data-ar="التدقيق" data-en="Verify">التدقيق</a>
+    <a href="#about" data-ar="عن النظام" data-en="About">عن النظام</a>
   </nav>
+  <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
 </header>
 
 <section class="hero">
   <div class="hero-badge">
-    <span>●</span> مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192
+    <span>●</span> <span data-ar="مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192" data-en="AI-Powered · Jordanian Standards JS · Codex CXS 192">مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192</span>
   </div>
-  <h1>هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
-  <p>افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
-  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
+  <h1 data-ar="هل بطاقة بيانك جاهزة للطرح في السوق؟" data-en="Is Your Food Label Ready for Market?">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
+  <p data-ar="افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission" data-en="Verify ingredients and additives in seconds against Jordanian Standards and Codex Alimentarius Commission">افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
+  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;" data-ar="تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق" data-en="Avoid shipment rejection due to labeling errors — get a clear report: Compliant · Needs Update · Non-Compliant">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label">مواصفة أردنية JS</div></div>
-    <div class="stat"><div class="stat-num">✔ 10</div><div class="stat-label">قواعد إلزامية</div></div>
-    <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label">مادة حساسية</div></div>
-    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
+    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label" data-ar="مواصفة أردنية JS" data-en="Jordanian JS Standards">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 10</div><div class="stat-label" data-ar="قواعد إلزامية" data-en="Mandatory Rules">قواعد إلزامية</div></div>
+    <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label" data-ar="مادة حساسية" data-en="Allergens">مادة حساسية</div></div>
+    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" data-ar="الكودكس الدولي" data-en="Int'l Codex">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
+    <a href="#tool" class="scroll-cta" data-ar="ابدأ الفحص مجاناً ←" data-en="Start Free Check →">ابدأ الفحص مجاناً ←</a>
     <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
   </div>
 </section>
@@ -309,8 +322,8 @@ footer span { color: var(--accent); }
 <div class="container">
 
   <div class="section-title">
-    <h2>رفع وتدقيق بطاقة البيان</h2>
-    <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+    <h2 data-ar="رفع وتدقيق بطاقة البيان" data-en="Upload & Verify Food Label">رفع وتدقيق بطاقة البيان</h2>
+    <p data-ar="ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً" data-en="Upload a clear label photo — AI will read and verify it automatically">ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
   </div>
 
   <!-- API key مخفي على السيرفر -->
@@ -319,8 +332,8 @@ footer span { color: var(--accent); }
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
-      <h3>اسحب صور بطاقة البيان هنا</h3>
-      <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
+      <h3 id="uploadTitle" data-ar="اسحب صور بطاقة البيان هنا" data-en="Drag Food Label Photos Here">اسحب صور بطاقة البيان هنا</h3>
+      <p data-ar="أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة" data-en="Or click to browse · JPG, PNG, WEBP · Up to 5 images · 10MB each">أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
     </div>
   </div>
   <!-- معرض الصور المرفوعة -->
@@ -378,7 +391,7 @@ footer span { color: var(--accent); }
   </div>
 
   <button class="analyze-btn" id="analyzeBtn" onclick="analyze()" disabled>
-    <span class="btn-text">🔍 ابدأ الفحص مجاناً</span>
+    <span class="btn-text" data-ar="🔍 ابدأ الفحص مجاناً" data-en="🔍 Start Free Verification">🔍 ابدأ الفحص مجاناً</span>
     <span class="loading-dots">
       <span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span>
       جاري تحليل البطاقة... قد يستغرق 20-30 ثانية
@@ -516,8 +529,8 @@ footer span { color: var(--accent); }
 <section id="about" style="padding:4rem 1rem;border-top:1px solid var(--border);">
 <div class="container">
   <div class="section-title">
-    <h2>كيف يعمل النظام؟</h2>
-    <p>طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
+    <h2 data-ar="كيف يعمل النظام؟" data-en="How It Works">كيف يعمل النظام؟</h2>
+    <p data-ar="طبقات متعددة من التدقيق مدمجة في أداة واحدة" data-en="Multiple verification layers in one powerful tool">طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
@@ -543,7 +556,27 @@ footer span { color: var(--accent); }
 </section>
 
 <footer>
-  <p>FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · المواصفات الأردنية JS · الكودكس CXS 192</p>
+  <div style="max-width:960px;margin:0 auto;">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;margin-bottom:1.5rem;">
+      <div style="text-align:center;">
+        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+          <a href="https://wa.me/962776195235" target="_blank"
+            style="display:flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600;border:1px solid rgba(0,212,168,.3);padding:6px 14px;border-radius:100px;transition:all .2s;"
+            onmouseover="this.style.background='rgba(0,212,168,.08)'" onmouseout="this.style.background='transparent'">
+            💬 WhatsApp
+          </a>
+          <a href="mailto:info@tpc-foodcheck.com" target="_blank"
+            style="display:flex;align-items:center;gap:6px;color:var(--accent2);text-decoration:none;font-size:.85rem;font-weight:600;border:1px solid rgba(0,153,204,.3);padding:6px 14px;border-radius:100px;transition:all .2s;"
+            onmouseover="this.style.background='rgba(0,153,204,.08)'" onmouseout="this.style.background='transparent'">
+            ✉️ info@tpc-foodcheck.com
+          </a>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.78rem;">FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · المواصفات الأردنية JS · الكودكس CXS 192</p>
+    <p style="font-size:.72rem;margin-top:.3rem;color:var(--text3);" data-ar="⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة الرسمية" data-en="⚠️ This tool is a verification aid and does not replace official regulatory consultation">⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة الرسمية</p>
+  </div>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -1039,7 +1072,7 @@ function showTab(tab, el) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel','additivesVerifyPanel'];
+  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel'];
   panels.forEach(p => document.getElementById(p).style.display = 'none');
   document.getElementById('issuesList').style.display = 'none';
 
@@ -1047,7 +1080,6 @@ function showTab(tab, el) {
   else if (tab === 'nutrition') document.getElementById('nutritionPanel').style.display = 'block';
   else if (tab === 'jswarnings') document.getElementById('jswarningsPanel').style.display = 'block';
   else if (tab === 'halalcheck') document.getElementById('halalcheckPanel').style.display = 'block';
-  else if (tab === 'additives_verify') document.getElementById('additivesVerifyPanel').style.display = 'block';
   else {
     document.getElementById('issuesList').style.display = 'block';
     renderIssues(allResults, tab);
@@ -1388,37 +1420,6 @@ function displayResults(data, productType) {
   const ingredientsText = data.results
     ?.find(r => r.category === 'مكونات')?.note || data.summary || '';
   renderHalalCheck(ingredientsText + ' ' + JSON.stringify(data.additives || []));
-
-  // ===== تكامل CXS 192 =====
-  lastDetectedAdditives = data.additives || [];
-  const catMap = {
-    dairy:'01.0', processed_cheese:'01.6.2', soft_cheese:'01.6.1',
-    flavored_milk:'01.1.4', dried_milk:'01.5.1', evaporated_milk:'01.3',
-    meat:'08.0', fish:'09.0', bakery:'07.1', biscuit:'07.1.2',
-    noodles:'06.4.3', corn_chips:'15.1', chocolate:'05.1', candy:'05.2',
-    beverages:'14.1', energy_drink:'14.1.4', juice:'14.1.2.1',
-    fruit_syrup:'14.1.4', flavored_drink:'14.1.4', supplements:'13.6'
-  };
-  lastProductCatNo = catMap[productType] || null;
-  // تحديث زر فحص الكل
-  const checkAllBtnEl = document.getElementById('checkAllBtn');
-  if (checkAllBtnEl && lastDetectedAdditives.length > 0) {
-    checkAllBtnEl.style.display = 'inline-block';
-    checkAllBtnEl.textContent = 'فحص كل المضافات (' + lastDetectedAdditives.length + ')';
-  }
-  // عرض ملخص في تبويب المضافات
-  const autoEl = document.getElementById('autoAdditivesResult');
-  if (autoEl) {
-    if (lastDetectedAdditives.length > 0) {
-      autoEl.innerHTML = '<div style="background:rgba(0,212,168,.06);border:1px solid rgba(0,212,168,.15);border-radius:10px;padding:.9rem;font-size:.85rem;">' +
-        '<strong>🔍 المضافات المكتشفة من الصورة (' + lastDetectedAdditives.length + '):</strong><br>' +
-        '<div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">' +
-        lastDetectedAdditives.map(a => '<span style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.78rem;">' + (a.name||'') + (a.ins?' ('+a.ins+')':'') + '</span>').join('') +
-        '</div><div style="margin-top:.7rem;color:var(--text3);font-size:.78rem;">اضغط "فحص كل المضافات" للتحقق من CXS 192</div></div>';
-    } else {
-      autoEl.innerHTML = '<div style="color:var(--text3);font-size:.85rem;padding:1rem;">لم يتم اكتشاف مضافات في هذا المنتج</div>';
-    }
-  }
 }
 
 
@@ -1449,7 +1450,21 @@ async function loadCodexData() {
 }
 loadCodexData();
 
-// showTab override removed - handled in main showTab
+// ===== showTab — تحديث لإضافة لوحة المضافات =====
+const _origShowTab = showTab;
+showTab = function(tab, el) {
+  _origShowTab(tab, el);
+  const avp = document.getElementById('additivesVerifyPanel');
+  if (avp) avp.style.display = tab === 'additives_verify' ? 'block' : 'none';
+  // إضافة للبانلز array
+  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel','additivesVerifyPanel'];
+  panels.forEach(p => {
+    const el2 = document.getElementById(p);
+    if (el2 && p !== 'additivesVerifyPanel') {
+      if (tab === p.replace('Panel','')) el2.style.display = 'block';
+    }
+  });
+};
 
 // ===== Autocomplete المضاف =====
 function onManualAdditiveInput() {
@@ -1702,8 +1717,97 @@ function checkAllDetectedAdditives() {
   });
 }
 
-// ===== تكامل CXS 192 مدمج في displayResults أعلاه =====
+// ===== تكامل مع نتائج الفحص الرئيسية =====
+// يُستدعى من displayResults بعد نجاح التحليل
+const _origDisplayResults = displayResults;
+displayResults = function(data, productType) {
+  _origDisplayResults(data, productType);
+  // حفظ المضافات المكتشفة
+  lastDetectedAdditives = data.additives || [];
+  // تخمين رقم الفئة من نوع المنتج
+  const catMap = {
+    dairy:'01.0', processed_cheese:'01.6.2', soft_cheese:'01.6.1',
+    flavored_milk:'01.1.4', dried_milk:'01.5.1', evaporated_milk:'01.3',
+    meat:'08.0', fish:'09.0', bakery:'07.1', biscuit:'07.1.2',
+    noodles:'06.4.3', corn_chips:'15.1', chocolate:'05.1', candy:'05.2',
+    beverages:'14.1', energy_drink:'14.1.4', juice:'14.1.2.1',
+    fruit_syrup:'14.1.4', flavored_drink:'14.1.4', supplements:'13.6'
+  };
+  lastProductCatNo = catMap[productType] || null;
+  // تحديث زر فحص الكل
+  const btn = document.getElementById('checkAllBtn');
+  if (btn && lastDetectedAdditives.length > 0) {
+    btn.style.display = 'inline-block';
+    btn.textContent = `فحص كل المضافات (${lastDetectedAdditives.length})`;
+  }
+  // عرض ملخص في تبويب المضافات
+  const autoEl = document.getElementById('autoAdditivesResult');
+  if (autoEl && lastDetectedAdditives.length > 0) {
+    autoEl.innerHTML = `<div style="background:rgba(0,212,168,.06);border:1px solid rgba(0,212,168,.15);border-radius:10px;padding:.9rem;font-size:.85rem;">
+      <strong>🔍 المضافات المكتشفة من الصورة (${lastDetectedAdditives.length}):</strong><br>
+      <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">
+        ${lastDetectedAdditives.map(a => `<span style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.78rem;">${a.name}${a.ins?' ('+a.ins+')':''}</span>`).join('')}
+      </div>
+      <div style="margin-top:.7rem;color:var(--text3);font-size:.78rem;">اضغط "فحص كل المضافات" أعلاه لفحصها جميعاً بتسلسل القرار الثلاثي</div>
+    </div>`;
+  }
+};
 // ============================================================
+
+
+// ===== LANGUAGE TOGGLE =====
+let currentLang = 'ar';
+
+function toggleLang() {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  applyLang();
+}
+
+function applyLang() {
+  const isEn = currentLang === 'en';
+  
+  // html dir + lang
+  document.documentElement.lang = isEn ? 'en' : 'ar';
+  document.documentElement.dir = isEn ? 'ltr' : 'rtl';
+  
+  // زر اللغة
+  document.getElementById('langBtn').textContent = isEn ? 'عربي' : 'EN';
+  
+  // كل العناصر ذات data-ar/data-en
+  document.querySelectorAll('[data-ar]').forEach(el => {
+    const txt = isEn ? el.getAttribute('data-en') : el.getAttribute('data-ar');
+    if (txt) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = txt;
+      } else {
+        el.textContent = txt;
+      }
+    }
+  });
+  
+  // title الصفحة
+  document.title = isEn 
+    ? 'Food Label Verifier | FoodCheck Jordan'
+    : 'مدقق بطاقة البيان الغذائية | FoodCheck Jordan';
+
+  // issue cards severity text
+  document.querySelectorAll('.issue-severity').forEach(el => {
+    if (el.classList.contains('sev-critical')) el.textContent = isEn ? 'Non-Compliant' : 'غير مطابق';
+    if (el.classList.contains('sev-warning'))  el.textContent = isEn ? 'Warning' : 'تنبيه';
+    if (el.classList.contains('sev-pass'))     el.textContent = isEn ? 'Compliant' : 'مطابق';
+  });
+
+  // score labels
+  const passEl = document.getElementById('passCount');
+  const failEl = document.getElementById('failCount');
+  if (passEl && passEl.textContent.includes(':')) {
+    const pn = passEl.textContent.match(/\d+/)?.[0] || '0';
+    const fn = failEl.textContent.match(/\d+/)?.[0] || '0';
+    const wn = failEl.textContent.match(/\d+/g)?.[1] || '0';
+    passEl.textContent = isEn ? `✅ Compliant: ${pn}` : `✅ مطابق: ${pn}`;
+    failEl.textContent = isEn ? `❌ Non-Compliant: ${fn} · ⚠️ Warnings: ${wn}` : `❌ غير مطابق: ${fn} · ⚠️ تنبيه: ${wn}`;
+  }
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
