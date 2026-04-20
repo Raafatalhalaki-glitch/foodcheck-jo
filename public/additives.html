@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محرك بحث CXS 192 | FoodCheck Jordan</title>
+<title id="pageTitle">محرك بحث CXS 192 | FoodCheck Jordan</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -84,6 +84,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .stat-num{font-size:1.5rem;font-weight:800;color:var(--accent);}
 .stat-lbl{font-size:.75rem;color:var(--text2);margin-top:1px;}
 textarea.field-input{resize:vertical;min-height:130px;line-height:1.6;}
+
+.lang-btn { background:var(--surface2);border:1px solid var(--border);color:var(--text2);
+  padding:5px 14px;border-radius:100px;cursor:pointer;font-size:.82rem;font-weight:700;
+  transition:all .2s;font-family:var(--font); }
+.lang-btn:hover { border-color:var(--accent);color:var(--accent); }
+
 @media(max-width:600px){
   .header{padding:.8rem 1rem;}
   .main{padding:1rem .8rem;}
@@ -96,73 +102,73 @@ textarea.field-input{resize:vertical;min-height:130px;line-height:1.6;}
 
 <div class="header">
   <div class="logo">FoodCheck <span>Jordan</span> · <span style="color:var(--accent);font-weight:700;">CXS 192</span></div>
-  <a href="/" class="back-btn">← الرئيسية</a>
+  <div style="display:flex;align-items:center;gap:.7rem;"><button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button><a href="/" class="back-btn" data-ar="← الرئيسية" data-en="← Home">← الرئيسية</a></div>
 </div>
 
 <div class="main">
 
-  <div class="data-status" id="dataStatus">⏳ جاري تحميل قاعدة بيانات CXS 192...</div>
+  <div class="data-status" id="dataStatus" data-ar="⏳ جاري تحميل قاعدة بيانات CXS 192..." data-en="⏳ Loading CXS 192 database...">⏳ جاري تحميل قاعدة بيانات CXS 192...</div>
 
   <div class="stats-row" id="statsRow" style="display:none">
-    <div class="stat-card"><div class="stat-num" id="s1">—</div><div class="stat-lbl">مضاف — الجدول 1</div></div>
-    <div class="stat-card"><div class="stat-num" id="s2">—</div><div class="stat-lbl">فئة — الجدول 2</div></div>
-    <div class="stat-card"><div class="stat-num" id="s3">—</div><div class="stat-lbl">مضاف عام — الجدول 3</div></div>
-    <div class="stat-card"><div class="stat-num" id="s4">—</div><div class="stat-lbl">فئة مستثناة (Annex)</div></div>
+    <div class="stat-card"><div class="stat-num" id="s1">—</div><div class="stat-lbl" data-ar="مضاف — الجدول 1" data-en="Additive — Table 1">مضاف — الجدول 1</div></div>
+    <div class="stat-card"><div class="stat-num" id="s2">—</div><div class="stat-lbl" data-ar="فئة — الجدول 2" data-en="Category — Table 2">فئة — الجدول 2</div></div>
+    <div class="stat-card"><div class="stat-num" id="s3">—</div><div class="stat-lbl" data-ar="مضاف عام — الجدول 3" data-en="General Additive — Table 3">مضاف عام — الجدول 3</div></div>
+    <div class="stat-card"><div class="stat-num" id="s4">—</div><div class="stat-lbl" data-ar="فئة مستثناة (Annex)" data-en="Excluded Category (Annex)">فئة مستثناة (Annex)</div></div>
   </div>
 
   <div class="mode-tabs">
-    <button class="mode-tab active" onclick="setMode('additive')" id="modeA">🧪 بحث عن مضاف</button>
-    <button class="mode-tab" onclick="setMode('food')" id="modeF">🥛 بحث عن غذاء</button>
-    <button class="mode-tab" onclick="setMode('batch')" id="modeB">📋 فحص متعدد</button>
+    <button class="mode-tab active" onclick="setMode('additive')" id="modeA" data-ar="🧪 بحث عن مضاف" data-en="🧪 Search Additive">🧪 بحث عن مضاف</button>
+    <button class="mode-tab" onclick="setMode('food')" id="modeF" data-ar="🥛 بحث عن غذاء" data-en="🥛 Search Food">🥛 بحث عن غذاء</button>
+    <button class="mode-tab" onclick="setMode('batch')" id="modeB" data-ar="📋 فحص متعدد" data-en="📋 Batch Check">📋 فحص متعدد</button>
   </div>
 
   <!-- ADDITIVE MODE -->
   <div id="panelAdditive">
     <div class="search-card">
-      <div class="search-title">🧪 أدخل اسم المضاف أو رقم INS — سيعرض كل الفئات المسموح فيها</div>
+      <div class="search-title" data-ar="🧪 أدخل اسم المضاف أو رقم INS — سيعرض كل الفئات المسموح فيها" data-en="🧪 Enter additive name or INS number — shows all permitted food categories">🧪 أدخل اسم المضاف أو رقم INS — سيعرض كل الفئات المسموح فيها</div>
       <div class="ac-wrap">
-        <label class="field-label">اسم المضاف أو رقم INS أو E-number</label>
+        <label class="field-label" data-ar="اسم المضاف أو رقم INS أو E-number" data-en="Additive name, INS number or E-number">اسم المضاف أو رقم INS أو E-number</label>
         <input type="text" class="field-input" id="additiveInput"
           placeholder="مثال: 414 · E471 · Carrageenan · كاراجينان · Sorbates"
           oninput="onAdditiveInput()" autocomplete="off">
         <div class="ac-list" id="acList"></div>
       </div>
-      <button class="search-btn" onclick="searchAdditive()">بحث في CXS 192</button>
+      <button class="search-btn" onclick="searchAdditive()" data-ar="بحث في CXS 192" data-en="Search CXS 192">بحث في CXS 192</button>
     </div>
   </div>
 
   <!-- FOOD MODE -->
   <div id="panelFood" style="display:none">
     <div class="search-card">
-      <div class="search-title">🥛 أدخل رقم الفئة أو اسم المنتج — سيعرض كل المضافات المسموحة</div>
+      <div class="search-title" data-ar="🥛 أدخل رقم الفئة أو اسم المنتج — سيعرض كل المضافات المسموحة" data-en="🥛 Enter category number or product name — shows all permitted additives">🥛 أدخل رقم الفئة أو اسم المنتج — سيعرض كل المضافات المسموحة</div>
       <div>
         <label class="field-label">رقم الفئة أو اسم المنتج</label>
         <input type="text" class="field-input" id="foodInput"
           placeholder="مثال: 01.1.4 · حليب منكه · بسكويت · شوكولاتة · 07.1.2">
       </div>
-      <button class="search-btn" onclick="searchFood()">بحث في CXS 192</button>
+      <button class="search-btn" onclick="searchFood()" data-ar="بحث في CXS 192" data-en="Search CXS 192">بحث في CXS 192</button>
     </div>
   </div>
 
   <!-- BATCH MODE -->
   <div id="panelBatch" style="display:none">
     <div class="search-card">
-      <div class="search-title">📋 فحص قائمة مضافات لمنتج معين — مسموح أم لا؟</div>
+      <div class="search-title" data-ar="📋 فحص قائمة مضافات لمنتج معين — مسموح أم لا؟" data-en="📋 Check a list of additives for a specific product — permitted or not?">📋 فحص قائمة مضافات لمنتج معين — مسموح أم لا؟</div>
       <div style="margin-bottom:.8rem;">
-        <label class="field-label">اسم المنتج أو فئته</label>
+        <label class="field-label" data-ar="اسم المنتج أو فئته" data-en="Product name or category">اسم المنتج أو فئته</label>
         <input type="text" class="field-input" id="batchProduct" placeholder="مثال: سكاكر · بسكويت · حليب منكه · 05.2">
       </div>
       <div>
-        <label class="field-label">أرقام المضافات — كل سطر مضاف (E-number أو INS أو اسم)</label>
+        <label class="field-label" data-ar="أرقام المضافات — كل سطر مضاف (E-number أو INS أو اسم)" data-en="Additive numbers — one per line (E-number, INS or name)">أرقام المضافات — كل سطر مضاف (E-number أو INS أو اسم)</label>
         <textarea class="field-input" id="batchInput" placeholder="E163&#10;E471&#10;407&#10;Carrageenan&#10;أو أي رقم INS"></textarea>
       </div>
-      <button class="search-btn" onclick="searchBatch()">فحص الكل من CXS 192</button>
+      <button class="search-btn" onclick="searchBatch()" data-ar="فحص الكل من CXS 192" data-en="Check All in CXS 192">فحص الكل من CXS 192</button>
     </div>
   </div>
 
   <div class="spinner-wrap" id="spinner">
     <div class="spinner"></div>
-    <span>جاري البحث في CXS 192...</span>
+    <span data-ar="جاري البحث في CXS 192..." data-en="Searching CXS 192...">جاري البحث في CXS 192...</span>
   </div>
 
   <div class="result-panel" id="resultPanel"></div>
@@ -571,7 +577,7 @@ function renderAdditiveResult(r) {
     <div class="sec-header">📘 الجدول 1 — الفئات المسموح فيها <span class="sec-count">${r.t1_cats.length} فئة</span></div>
     <div style="overflow-x:auto;">
     <table class="cat-table">
-      <thead><tr><th>رقم الفئة</th><th>اسم الفئة</th><th>الحد الأقصى</th><th>ملاحظات</th></tr></thead>
+      <thead><tr><th data-ar="رقم الفئة" data-en="Category No.">رقم الفئة</th><th data-ar="اسم الفئة" data-en="Category Name">اسم الفئة</th><th data-ar="الحد الأقصى" data-en="Max Level">الحد الأقصى</th><th data-ar="ملاحظات" data-en="Notes">ملاحظات</th></tr></thead>
       <tbody>${r.t1_cats.map(c=>`
         <tr>
           <td><strong>${c.cat_no}</strong></td>
@@ -647,7 +653,7 @@ function renderFoodResult(r,rawInput) {
       ${inherited.length>0?`<span class="inherited-badge">منها ${inherited.length} مورثة</span>`:''}
     </div>
     <div style="overflow-x:auto;"><table class="cat-table">
-      <thead><tr><th>INS</th><th>الاسم</th><th>الحد الأقصى</th><th>الفئة المصدر</th><th>ملاحظات</th></tr></thead>
+      <thead><tr><th data-ar="INS" data-en="INS">INS</th><th data-ar="الاسم" data-en="Name">الاسم</th><th data-ar="الحد الأقصى" data-en="Max Level">الحد الأقصى</th><th data-ar="الفئة المصدر" data-en="Source Category">الفئة المصدر</th><th data-ar="ملاحظات" data-en="Notes">ملاحظات</th></tr></thead>
       <tbody>${r.permitted.map(a=>`
         <tr>
           <td><strong>INS ${a.ins}</strong></td>
@@ -756,7 +762,7 @@ function renderBatchResult(results,productRaw,catNo,catName) {
       </div>
     </div>
     <div style="overflow-x:auto;"><table class="cat-table">
-      <thead><tr><th>المضاف</th><th>الاسم</th><th>الحكم</th><th>المصدر</th><th>الحد الأقصى</th></tr></thead>
+      <thead><tr><th data-ar="المضاف" data-en="Additive">المضاف</th><th data-ar="الاسم" data-en="Name">الاسم</th><th data-ar="الحكم" data-en="Decision">الحكم</th><th data-ar="المصدر" data-en="Source">المصدر</th><th data-ar="الحد الأقصى" data-en="Max Level">الحد الأقصى</th></tr></thead>
       <tbody>${results.map(r=>`
         <tr>
           <td><strong>${r.raw.toUpperCase()}</strong>${r.ins?`<br><span style="font-size:.72rem;color:var(--text3);">INS ${r.ins}</span>`:''}</td>
@@ -772,6 +778,43 @@ function renderBatchResult(results,productRaw,catNo,catName) {
     </table></div>`;
   panel.classList.add('show');
   panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+
+// ===== LANGUAGE TOGGLE =====
+let currentLang = 'ar';
+
+function toggleLang() {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  applyLang();
+}
+
+function applyLang() {
+  const isEn = currentLang === 'en';
+  document.documentElement.lang = isEn ? 'en' : 'ar';
+  document.documentElement.dir = isEn ? 'ltr' : 'rtl';
+  document.getElementById('langBtn').textContent = isEn ? 'عربي' : 'EN';
+  document.title = isEn ? 'Additives Search Engine CXS 192 | FoodCheck Jordan' : 'محرك بحث CXS 192 | FoodCheck Jordan';
+
+  document.querySelectorAll('[data-ar]').forEach(el => {
+    const txt = isEn ? el.getAttribute('data-en') : el.getAttribute('data-ar');
+    if (!txt) return;
+    if (el.tagName === 'INPUT') el.placeholder = txt;
+    else if (el.tagName === 'TEXTAREA') el.placeholder = txt;
+    else el.textContent = txt;
+  });
+
+  // تحديث الـ dataStatus لو تغير
+  if (CODEX && codexReady) {
+    const t1n = Object.keys(CODEX.table1).filter(k=>k!=='nan').length;
+    const t3n = Object.keys(CODEX.table3).filter(k=>k!=='nan').length;
+    const statusEl = document.getElementById('dataStatus');
+    if (statusEl) statusEl.innerHTML = (isEn ? '✅ CXS 192 Database Ready · ' : '✅ قاعدة بيانات CXS 192 جاهزة · ') +
+      '<span style="color:var(--text2)">' + t1n + (isEn ? ' additives · ' : ' مضاف · ') +
+      Object.keys(CODEX.table2).length + (isEn ? ' categories · ' : ' فئة · ') +
+      t3n + (isEn ? ' general additives · ' : ' مضاف عام · ') +
+      CODEX.annex.length + (isEn ? ' excluded</span>' : ' فئة مستثناة</span>');
+  }
 }
 
 document.addEventListener('keydown', e => {
