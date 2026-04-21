@@ -440,15 +440,36 @@ function resolveINS() {
   return null;
 }
 
+function normalizeINS(code) {
+  if (!code) return null;
+  let c = String(code).trim().toUpperCase();
+  c = c.replace(/^E[-\s]?/, '');
+  c = c.replace(/\([ivxIVX]+\)/g, '').trim();
+  return c || null;
+}
+
 function resolveENUM(raw) {
+  if (!raw) return null;
   const stripped = raw.trim().toUpperCase().replace(/^E[-\s]?/,'');
-  const m = stripped.match(/^(\d{3,4}[a-zA-Z]?(?:\([ivx]+\))?)/i);
+  const m = stripped.match(/^(\d{3,4})/);
   if (!m) return null;
-  const num = m[1];
-  if (CODEX.table1[num] || CODEX.table3[num]) return num;
-  const all = {...CODEX.table1,...CODEX.table3};
+  const numOnly = m[1];
+
+  // 1) استخدام e_to_ins مباشرة
+  if (CODEX.e_to_ins) {
+    const mapped = CODEX.e_to_ins[numOnly];
+    if (mapped) {
+      const mappedNorm = normalizeINS(mapped);
+      if (CODEX.table1[mappedNorm] || CODEX.table3[mappedNorm]) return mappedNorm;
+      if (CODEX.table1[mapped] || CODEX.table3[mapped]) return mapped;
+    }
+  }
+  // 2) بحث مباشر بعد normalization
+  if (CODEX.table1[numOnly] || CODEX.table3[numOnly]) return numOnly;
+  // 3) بحث بـ startsWith كـ fallback
+  const all = {...CODEX.table1, ...CODEX.table3};
   for (const ins of Object.keys(all)) {
-    if (ins !== 'nan' && ins.startsWith(num.substring(0,3))) return ins;
+    if (ins !== 'nan' && normalizeINS(ins) === numOnly) return ins;
   }
   return null;
 }
@@ -730,7 +751,7 @@ function checkSingleAdditive(raw,catNo) {
     if (t2[cat]) {
       t2Match=t2[cat].find(a=>{
         const parts=a.ins.replace(/\s/g,'').split(/[;,]+/);
-        return parts.some(p=>p===ins||p.startsWith(ins.split('(')[0]));
+        return parts.some(p=>normalizeINS(p)===ins || p===ins || normalizeINS(p)===normalizeINS(ins));
       });
       if (t2Match) break;
     }
