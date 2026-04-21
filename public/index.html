@@ -1816,7 +1816,14 @@ function resolveINSFull(rawInput) {
   }
   // 2) بحث مباشر بعد normalization
   if (CODEX.table1[numOnly] || CODEX.table3[numOnly]) return numOnly;
-  // 3) بحث بالاسم
+  // 3) fallback — ابحث عن أول مفتاح يبدأ بنفس الرقم (يحل 160 → 160a(ii))
+  for (const ins of Object.keys(CODEX.table1)) {
+    if (ins !== 'nan' && normalizeINS(ins) === numOnly) return ins;
+  }
+  for (const ins of Object.keys(CODEX.table3)) {
+    if (ins !== 'nan' && normalizeINS(ins) === numOnly) return ins;
+  }
+  // 4) بحث بالاسم
   const up = raw.toUpperCase();
   for (const [ins, d] of Object.entries(CODEX.table1)) {
     if (d.name.toUpperCase().includes(up.substring(0,6)) && up.length > 4) return ins;
