@@ -371,6 +371,17 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
         <option value="fruit_syrup" data-ar="شراب فاكهة/سكواش (JS 994)" data-en="Fruit Syrup/Squash (JS 994)">شراب فاكهة/سكواش (JS 994)</option>
         <option value="flavored_drink" data-ar="مشروبات منكهة (JS 77)" data-en="Flavoured Drinks (JS 77)">مشروبات منكهة (JS 77)</option>
         <option value="supplements" data-ar="مكملات غذائية" data-en="Food Supplements">مكملات غذائية</option>
+        <option value="margarine" data-ar="سمن نباتي / شورتننج (JS 40)" data-en="Margarine / Shortening (JS 40)">سمن نباتي / شورتننج (JS 40)</option>
+        <option value="fruit_syrup_994" data-ar="شراب فاكهة (JS 994)" data-en="Fruit Syrup (JS 994)">شراب فاكهة (JS 994)</option>
+        <option value="potato_chips" data-ar="شيبس البطاطا (JS 505)" data-en="Potato Chips (JS 505)">شيبس البطاطا (JS 505)</option>
+        <option value="snacks_393" data-ar="وجبات خفيفة مقرمشة (JS 393)" data-en="Crunchy Snacks (JS 393)">وجبات خفيفة مقرمشة (JS 393)</option>
+        <option value="edible_oil_1791" data-ar="زيوت نباتية (JS 1791)" data-en="Edible Oils (JS 1791)">زيوت نباتية (JS 1791)</option>
+        <option value="dairy_product_1626" data-ar="منتجات ألبان معاد تركيبها (JS 1626)" data-en="Recombined Dairy (JS 1626)">منتجات ألبان معاد تركيبها (JS 1626)</option>
+        <option value="luncheon_79" data-ar="لحم لنشون معلب (JS 79)" data-en="Canned Luncheon (JS 79)">لحم لنشون معلب (JS 79)</option>
+        <option value="canned_meat_816" data-ar="لحوم معلبة (JS 816)" data-en="Canned Meat (JS 816)">لحوم معلبة (JS 816)</option>
+        <option value="ice_cream_44" data-ar="مثلجات غذائية (JS 44)" data-en="Ice Cream (JS 44)">مثلجات غذائية (JS 44)</option>
+        <option value="ketchup_355" data-ar="كاتشب بندورة (JS 355)" data-en="Tomato Ketchup (JS 355)">كاتشب بندورة (JS 355)</option>
+        <option value="mayonnaise_938" data-ar="مايونيز (JS 938)" data-en="Mayonnaise (JS 938)">مايونيز (JS 938)</option>
       </select>
     </div>
     <div class="setting-card">
@@ -776,6 +787,107 @@ const JS_SPECIFIC_RULES = {
       {code:"SUP-4", text:"مكمل للحوامل يحتوي فيتامين A > 3000 مكغ = خطر صحي جسيم"},
       {code:"SUP-5", text:"مكمل يدّعي علاج أو وقاية من مرض = يحتاج إحالة لمديرية الدواء وليس الغذاء"},
       {code:"SUP-6", text:"جرعة فيتامين أو معدن > 100% من الاحتياج اليومي الأردني = مخالفة إلزامية"}
+    ]
+  },
+  "margarine": {
+    name: "السمن النباتي والشورتننج JS 40:2003",
+    warnings: [
+      {code:"JS40-1", text:"السمن النباتي: يجب أن يكون منتجاً شبه صلباً مكوناً أساساً من Glycerides من مصادر نباتية فقط"},
+      {code:"JS40-2", text:"الشورتننج: يُسمح ببعض الدهون الحيوانية أو البحرية — يجب التصريح بها صراحةً على البطاقة"},
+      {code:"JS40-3", text:"يجب ذكر نوع الزيوت النباتية: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
+      {code:"JS40-4", text:"إضافة فيتامين A أو D: يجب ذكر الكمية بالوحدات الدولية على البطاقة"},
+      {code:"JS40-5", text:"الشورتننج: اللون المميز يجب أن يكون أبيض — أي لون آخر يستوجب توضيحاً"}
+    ]
+  },
+  "fruit_syrup_994": {
+    name: "شراب الفاكهة JS 994:2023",
+    warnings: [
+      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعية لا يجوز أن تقل عن 10% — وإلا يُسمى 'شراب منكَّه' وليس شراب فاكهة"},
+      {code:"JS994-2", text:"إذا كانت نسبة العصير < 10% يجب تغيير الاسم إلى 'شراب منكَّه' — استخدام اسم 'شراب فاكهة' خطأ قانوني"},
+      {code:"JS994-3", text:"يجب ذكر نسبة الفاكهة أو العصير على البطاقة بشكل واضح"},
+      {code:"JS994-4", text:"المحليات الصناعية المضافة: يجب ذكر اسمها ونسبتها في قائمة المكونات"}
+    ]
+  },
+  "potato_chips": {
+    name: "شيبس البطاطا JS 505:2002",
+    warnings: [
+      {code:"JS505-1", text:"المادة الخام: بطاطا طازجة أو مسحوق بطاطا — يجب توثيق المصدر وذكره في المكونات"},
+      {code:"JS505-2", text:"المنتج يجب أن يكون خالياً تماماً من مادة السولانين (البطاطا الخضراء أو المشوّهة)"},
+      {code:"JS505-3", text:"نسبة العيوب لا يجوز أن تتجاوز 6% وزناً"},
+      {code:"JS505-4", text:"نوع الزيت المستخدم في القلي يجب ذكره في المكونات"}
+    ]
+  },
+  "snacks_393": {
+    name: "الوجبات الخفيفة المقرمشة JS 393",
+    warnings: [
+      {code:"JS393-1", text:"يجب ذكر نوع الحبوب أو المواد الخام الأساسية المستخدمة في التصنيع"},
+      {code:"JS393-2", text:"النكهات المستخدمة يجب أن تكون مذكورة في قائمة المكونات بأسمائها"},
+      {code:"JS393-3", text:"المحليات الصناعية عند استخدامها: يجب ذكر اسمها ونسبتها صراحةً"},
+      {code:"JS393-4", text:"تاريخ الإنتاج وانتهاء الصلاحية إلزاميان — ذكر أحدهما فقط غير كافٍ"}
+    ]
+  },
+  "edible_oil_1791": {
+    name: "الزيوت النباتية القابلة للأكل JS 1791",
+    warnings: [
+      {code:"JS1791-1", text:"يمنع خلط الزيوت ببعضها في المنتج النهائي — يجب أن يكون نقياً 100% من نوع واحد"},
+      {code:"JS1791-2", text:"الرطوبة والمواد المتطايرة لا يجوز أن تتجاوز 0.2% — يجب ذكر ذلك في المواصفات"},
+      {code:"JS1791-3", text:"يجب ذكر اسم الزيت بدقة: زيت زيتون / زيت نخيل / زيت عباد الشمس إلخ"},
+      {code:"JS1791-4", text:"الزيت المضاف إليه فيتامينات: يجب ذكر نوع الفيتامين وكميته"}
+    ]
+  },
+  "dairy_product_1626": {
+    name: "منتجات الألبان المعاد تركيبها JS 1626",
+    warnings: [
+      {code:"JS1626-1", text:"يجب التصريح بوضوح على البطاقة بأن المنتج 'معاد تركيبه' أو 'من حليب مجفف'"},
+      {code:"JS1626-2", text:"نسبة الدهون ونسبة البروتين يجب ذكرهما صراحةً في الجدول الغذائي"},
+      {code:"JS1626-3", text:"المضافات المستخدمة في إعادة التركيب يجب ذكرها في قائمة المكونات"},
+      {code:"JS1626-4", text:"الفيتامينات المضافة: يجب ذكر نوع كل فيتامين وكميته بالوحدات الدولية"}
+    ]
+  },
+  "luncheon_79": {
+    name: "لحم اللنشون المعلب JS 79:2009",
+    warnings: [
+      {code:"JS79-1", text:"اسم المنتج يجب أن يتضمن كلمة 'لنشون' متبوعة بنوع اللحم: لنشون بقري / دجاج / غنم"},
+      {code:"JS79-2", text:"وجود دهن أو لحم خنزير يجب التصريح به بوضوح باللغة العربية في مكان بارز"},
+      {code:"JS79-3", text:"نسبة اللحم الصافي يجب أن تكون مذكورة ومطابقة للمواصفة"},
+      {code:"JS79-4", text:"المواد الحافظة المستخدمة يجب ذكرها بأسمائها وأرقام INS في المكونات"}
+    ]
+  },
+  "canned_meat_816": {
+    name: "اللحوم المعلبة JS 816",
+    warnings: [
+      {code:"JS816-1", text:"اسم المنتج يجب أن يحدد نوع اللحم بدقة: بقري / دجاج / خروف / مخلوط"},
+      {code:"JS816-2", text:"نسبة اللحم الحقيقية في المنتج النهائي يجب أن تكون مذكورة ومطابقة"},
+      {code:"JS816-3", text:"المضافات الحافظة والألوان يجب ذكرها مع أرقام INS في المكونات"},
+      {code:"JS816-4", text:"وجود مواد حشو أو بروتينات نباتية يجب التصريح بها صراحةً"}
+    ]
+  },
+  "ice_cream_44": {
+    name: "المثلجات الغذائية JS 44:2022",
+    warnings: [
+      {code:"JS44-1", text:"الحليب والبيض المستخدم يجب أن يكون مبستراً أو معالجاً حرارياً بما يعادله"},
+      {code:"JS44-2", text:"نسبة البيض في المثلجات لا يجوز أن تتجاوز 1.4%"},
+      {code:"JS44-3", text:"المثلجات بالفواكه: نسبة الفاكهة يجب أن تكون ≥ 15%"},
+      {code:"JS44-4", text:"المثلجات اللبنية: الدسم يجب أن يكون من حليب فقط — وجود زيوت نباتية بديلة = مخالفة"},
+      {code:"JS44-5", text:"درجة حرارة التخزين يجب أن تكون مذكورة على البطاقة ≤ −18°س"}
+    ]
+  },
+  "ketchup_355": {
+    name: "كاتشب البندورة JS 355:2021",
+    warnings: [
+      {code:"JS355-1", text:"المنتج يجب أن يحتوي على ما لا يقل عن 25% بندورة طازجة أو ما يعادلها من المركز"},
+      {code:"JS355-2", text:"يُمنع إضافة ألوان صناعية — الألوان الطبيعية مسموحة مع التصريح"},
+      {code:"JS355-3", text:"يجب ذكر نسبة الصلبة الذائبة (Brix) على البطاقة"},
+      {code:"JS355-4", text:"المحليات المضافة يجب ذكرها مع نسبتها في المكونات"}
+    ]
+  },
+  "mayonnaise_938": {
+    name: "المايونيز JS 938:2012",
+    warnings: [
+      {code:"JS938-1", text:"نسبة الزيت النباتي في المايونيز يجب أن تكون ≥ 65% وزناً"},
+      {code:"JS938-2", text:"يجب ذكر نوع الزيت المستخدم في المكونات"},
+      {code:"JS938-3", text:"مصدر البيض أو بدائله يجب التصريح به في المكونات"},
+      {code:"JS938-4", text:"المنتج الذي يحتوي < 65% زيت يُسمى 'صلصة مايونيز' وليس مايونيز — فرق جوهري"}
     ]
   }
 };
@@ -1244,6 +1356,7 @@ ${allergensText}
 6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
 7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
 8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
+9. تعليمة المضافات الإلزامية: في حقل "ins" اكتب دائماً الرقم الرقمي فقط بدون E — قاموس الأسماء الشائعة: فيتامين ج = 300، بيتا كاروتين = 160، صمغ عربي = 414، ليسيثين = 322، حمض ستريك = 330، بيكربونات صوديوم = 500، كاراجينان = 407، بكتين = 440، جيلاتين = 441، سوربات بوتاسيوم = 202، بنزوات صوديوم = 211، ستيفيا = 960، أسبرتام = 951، حمض الطرطريك = 334، حمض الخليك = 260، كلوريد كالسيوم = 509، صمغ الغوار = 412، صمغ الخروب = 410، كاراميل = 150، كوشينيل = 120، كركمين = 100، نيتريت صوديوم = 250، ثاني أكسيد الكبريت = 220. إذا لم تعرف الرقم اتركه فارغاً ولا تخترع رقماً.
 
 التنسيق المطلوب:
 {
@@ -1271,10 +1384,10 @@ ${allergensText}
   ],
   "additives": [
     {
-      "name": "اسم المضاف",
-      "ins": "رقم INS إن وجد",
+      "name": "الاسم العلمي الإنجليزي للمضاف كما هو في Codex مثل ASCORBIC ACID أو BETA-CAROTENE",
+      "ins": "رقم INS الرقمي فقط بدون حرف E — مثال: 300 وليس E300، 160 وليس E160a — إذا كان الاسم على البطاقة فيتامين ج فاكتب 300، بيتا كاروتين فاكتب 160، صمغ عربي فاكتب 414، ليسيثين فاكتب 322، حمض الستريك فاكتب 330، بيكربونات الصوديوم فاكتب 500",
       "declared": true,
-      "note": "ملاحظة"
+      "note": "اكتب هنا الاسم كما ظهر على البطاقة فعلاً"
     }
   ],
   "nutrition": {
@@ -1582,7 +1695,10 @@ function runCXS192Check(ins, catNo) {
     // الجدول 2
     let t2Match = null;
     if (catNo && t2[catNo]) {
-      t2Match = t2[catNo].find(a => a.ins.split(/[;,\s]+/).map(s=>s.trim()).includes(ins) || a.ins === ins);
+      t2Match = t2[catNo].find(a => {
+        const parts = a.ins.replace(/\s/g,'').split(/[;,]+/);
+        return parts.some(p => normalizeINS(p) === ins || p === ins || normalizeINS(p) === normalizeINS(ins));
+      });
     }
     if (t2Match) {
       steps.push({ n:2, s:'pass', t:'الجدول 2 — مسموح ✓', d:`الفئة ${catNo} · حد أقصى ${t2Match.max_level}` });
@@ -1673,24 +1789,91 @@ function runManualCheck() {
   renderVerifyResult(result, container);
 }
 
+// ===== normalization رقم INS — يحل E322 و160a وكل sub-codes =====
+function normalizeINS(code) {
+  if (!code) return null;
+  let c = String(code).trim().toUpperCase();
+  c = c.replace(/^E[-\s]?/, '');           // إزالة E في البداية
+  c = c.replace(/\([ivxIVX]+\)/g, '');     // إزالة (i)(ii)(iii)
+  c = c.replace(/[a-zA-Z]+$/, '');         // إزالة حروف في النهاية مثل 160a → 160
+  return c.trim() || null;
+}
+
+function resolveINSFull(rawInput) {
+  if (!rawInput || !CODEX) return null;
+  const raw = String(rawInput).trim();
+  const numOnly = normalizeINS(raw);
+  if (!numOnly) return null;
+
+  // 1) جدول e_to_ins مباشرة
+  if (CODEX.e_to_ins) {
+    const mapped = CODEX.e_to_ins[numOnly];
+    if (mapped) {
+      const mn = normalizeINS(mapped);
+      if (CODEX.table1[mn] || CODEX.table3[mn]) return mn;
+      if (CODEX.table1[mapped] || CODEX.table3[mapped]) return mapped;
+    }
+  }
+  // 2) بحث مباشر بعد normalization
+  if (CODEX.table1[numOnly] || CODEX.table3[numOnly]) return numOnly;
+  // 3) بحث بالاسم
+  const up = raw.toUpperCase();
+  for (const [ins, d] of Object.entries(CODEX.table1)) {
+    if (d.name.toUpperCase().includes(up.substring(0,6)) && up.length > 4) return ins;
+  }
+  for (const [ins, d] of Object.entries(CODEX.table3)) {
+    if (d.name.toUpperCase().includes(up.substring(0,6)) && up.length > 4) return ins;
+  }
+  return null;
+}
+
 // ===== فحص كل المضافات المكتشفة من الصورة =====
 function checkAllDetectedAdditives() {
   if (!codexReady || !lastDetectedAdditives.length) return;
   const autoEl = document.getElementById('autoAdditivesResult');
-  autoEl.innerHTML = `<div style="font-weight:700;margin-bottom:.8rem;color:var(--text2);">نتائج فحص المضافات المكتشفة (${lastDetectedAdditives.length} مضاف)</div>`;
+  const catNo = lastProductCatNo;
+  const results = [];
 
   lastDetectedAdditives.forEach(add => {
-    const name = (add.name || '').toUpperCase();
-    const insRaw = (add.ins || '').replace(/E/i,'').trim();
-    let ins = null;
-    // resolve INS
-    if (insRaw && (CODEX.table1[insRaw] || CODEX.table3[insRaw])) ins = insRaw;
-    else {
-      for (const [i, d] of Object.entries(CODEX.table1)) {
-        if (d.name.toUpperCase().includes(name.substring(0,5)) && name.length > 4) { ins = i; break; }
-      }
+    const insRaw = (add.ins || '').trim();
+    const nameRaw = (add.name || '').trim();
+    const ins = resolveINSFull(insRaw) || resolveINSFull(nameRaw);
+
+    if (!ins) {
+      results.push({ add, ins: null, verdict: 'unknown' });
+    } else {
+      const result = runCXS192Check(ins, catNo);
+      results.push({ add, ins, result, verdict: result.verdict });
     }
-    const catNo = lastProductCatNo;
+  });
+
+  // ===== ملخص سريع =====
+  const permitted = results.filter(r => r.verdict === 'permitted').length;
+  const forbidden = results.filter(r => r.verdict === 'forbidden').length;
+  const unknown   = results.filter(r => r.verdict === 'unknown').length;
+  const total = results.length;
+
+  let sc = 'rgba(46,213,115,.08)', sb = 'rgba(46,213,115,.25)', si = '✅';
+  let st = `تم فحص ${total} مضافة — جميعها مسموحة`;
+  if (forbidden > 0) {
+    sc='rgba(255,71,87,.08)'; sb='rgba(255,71,87,.25)'; si='❌';
+    st=`تم فحص ${total} مضافة — ${permitted} مسموحة · ${forbidden} غير مسموحة${unknown?' · '+unknown+' تحتاج مراجعة':''}`;
+  } else if (unknown > 0) {
+    sc='rgba(255,165,2,.08)'; sb='rgba(255,165,2,.25)'; si='⚠️';
+    st=`تم فحص ${total} مضافة — ${permitted} مسموحة · ${unknown} تحتاج مراجعة`;
+  }
+
+  autoEl.innerHTML = `
+    <div style="background:${sc};border:1px solid ${sb};border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem;">
+      <span style="font-size:1.6rem;">${si}</span>
+      <div>
+        <div style="font-weight:800;font-size:.95rem;">${st}</div>
+        ${catNo?`<div style="font-size:.78rem;color:var(--text2);margin-top:2px;">الفئة: ${catNo} · CXS 192</div>`:''}
+      </div>
+    </div>
+    <div style="font-weight:700;margin-bottom:.8rem;color:var(--text2);font-size:.85rem;">تفاصيل المضافات:</div>`;
+
+  results.forEach(({ add, ins, result, verdict }) => {
     const card = document.createElement('div');
     card.className = 'additive-card';
     if (!ins) {
@@ -1699,18 +1882,19 @@ function checkAllDetectedAdditives() {
         <span class="av-badge-red">⚠️ غير موجود في قاعدة البيانات</span></div>
         <div style="font-size:.78rem;color:var(--text3);">${add.ins ? 'INS المُعلن: ' + add.ins : 'لا يوجد رقم INS'}</div>`;
     } else {
-      const result = runCXS192Check(ins, catNo);
       const stepsHTML = result.steps.map(s =>
         `<div style="display:flex;gap:.5rem;align-items:center;font-size:.78rem;margin-top:.3rem;">
-          <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;background:${s.s==='pass'?'rgba(46,213,115,.2)':s.s==='fail'?'rgba(255,71,87,.2)':'rgba(74,90,122,.2)'};color:${s.s==='pass'?'var(--success)':s.s==='fail'?'var(--danger)':'var(--text3)'};">${s.n}</span>
+          <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;
+          background:${s.s==='pass'?'rgba(46,213,115,.2)':s.s==='fail'?'rgba(255,71,87,.2)':'rgba(74,90,122,.2)'};
+          color:${s.s==='pass'?'var(--success)':s.s==='fail'?'var(--danger)':'var(--text3)'};">${s.n}</span>
           <span style="color:${s.s==='skip'?'var(--text3)':'var(--text2)'};">${s.t}</span>
         </div>`).join('');
-      const vc = result.verdict === 'permitted' ? 'av-badge-green' : 'av-badge-red';
-      const vl = result.verdict === 'permitted' ? '✅ مسموح' : '❌ غير مسموح';
+      const vc = verdict === 'permitted' ? 'av-badge-green' : 'av-badge-red';
+      const vl = verdict === 'permitted' ? '✅ مسموح' : '❌ غير مسموح';
       card.innerHTML = `<div class="additive-card-header">
         <span style="font-weight:700;">${result.additiveName}</span>
         <span class="${vc}">${vl}</span></div>
-        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${catNo ? ' · الفئة ' + catNo : ''}</div>
+        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${add.ins&&add.ins!==ins?` (مُعلن: ${add.ins})`:''}${catNo?' · '+catNo:''}</div>
         ${stepsHTML}`;
     }
     autoEl.appendChild(card);
