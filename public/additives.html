@@ -326,24 +326,23 @@ function translateName(en) {
   return en;
 }
 
-// ===== LOAD DATA =====
+// ===== LOAD DATA — Backend API =====
 async function loadData() {
   try {
-    const r = await fetch('/api/codex');
+    const r = await fetch('/api/stats');
     if (!r.ok) throw new Error();
-    CODEX = await r.json();
+    const stats = await r.json();
+    CODEX = { _backend: true, _stats: stats };
     ready = true;
-    const t1n = Object.keys(CODEX.table1).filter(k => k !== 'nan').length;
-    const t3n = Object.keys(CODEX.table3).filter(k => k !== 'nan').length;
     document.getElementById('dataStatus').innerHTML =
       '✅ قاعدة بيانات CXS 192 جاهزة · <span style="color:var(--text2)">' +
-      t1n + ' مضاف · ' + Object.keys(CODEX.table2).length + ' فئة · ' +
-      t3n + ' مضاف عام · ' + CODEX.annex.length + ' فئة مستثناة</span>';
+      stats.table1 + ' مضاف · ' + stats.table2 + ' فئة · ' +
+      stats.table3 + ' مضاف عام · ' + stats.annex + ' فئة مستثناة</span>';
     document.getElementById('statsRow').style.display = 'flex';
-    document.getElementById('s1').textContent = t1n;
-    document.getElementById('s2').textContent = Object.keys(CODEX.table2).length;
-    document.getElementById('s3').textContent = t3n;
-    document.getElementById('s4').textContent = CODEX.annex.length;
+    document.getElementById('s1').textContent = stats.table1;
+    document.getElementById('s2').textContent = stats.table2;
+    document.getElementById('s3').textContent = stats.table3;
+    document.getElementById('s4').textContent = stats.annex;
   } catch(e) {
     document.getElementById('dataStatus').textContent = '⚠️ تعذّر تحميل قاعدة البيانات — تحقق من الاتصال';
   }
@@ -361,44 +360,26 @@ function setMode(m) {
 }
 
 // ===== AUTOCOMPLETE =====
-function onAdditiveInput() {
+async function onAdditiveInput() {
   selectedINS = null;
-  if (!CODEX) return;
-  const raw = document.getElementById('additiveInput').value.trim().toUpperCase();
-  const q = raw.replace(/^E[-\s]?/, '');
-  if (q.length < 2) { hideAC(); return; }
-
-  const res = [];
-  for (const [ins, d] of Object.entries(CODEX.table1)) {
-    if (ins === 'nan') continue;
-    if (ins.startsWith(q) || d.name.toUpperCase().includes(q)) {
-      res.push({ ins, name: d.name, func: d.functional_class, src: 'T1' });
-      if (res.length >= 12) break;
-    }
-  }
-  if (res.length < 12) {
-    for (const [ins, d] of Object.entries(CODEX.table3)) {
-      if (ins === 'nan') continue;
-      if (!CODEX.table1[ins] && (ins.startsWith(q) || d.name.toUpperCase().includes(q))) {
-        res.push({ ins, name: d.name, func: d.functional_class, src: 'T3' });
-        if (res.length >= 12) break;
-      }
-    }
-  }
-
-  const list = document.getElementById('acList');
-  if (!res.length) { hideAC(); return; }
-  list.innerHTML = res.map(r =>
-    `<div class="ac-item" onclick="selectAdditive('${r.ins}','${r.name.replace(/'/g,"\\'")}')">
-      <div class="ac-item-name">
-        <span class="ac-item-ins">INS ${r.ins}</span>
-        ${translateName(r.name)}
-        ${r.src==='T3'?'<span style="font-size:.7rem;color:var(--warn);margin-right:.3rem;">جدول 3</span>':''}
-      </div>
-      <div class="ac-item-func">${translateFunc(r.func)}</div>
-    </div>`
-  ).join('');
-  list.style.display = 'block';
+  const raw = document.getElementById('additiveInput').value.trim();
+  if (raw.length < 2) { hideAC(); return; }
+  try {
+    const r = await fetch('/api/search?q=' + encodeURIComponent(raw));
+    const res = await r.json();
+    const list = document.getElementById('acList');
+    if (!res.length) { hideAC(); return; }
+    list.innerHTML = res.map(r =>
+      `<div class="ac-item" onclick="selectAdditive('${r.ins}','${r.name.replace(/'/g,"\\'")}')">
+        <div class="ac-item-name">
+          <span class="ac-item-ins">INS ${r.ins}</span>
+          ${translateName(r.name)}
+        </div>
+        <div class="ac-item-func">${translateFunc(r.func)}</div>
+      </div>`
+    ).join('');
+    list.style.display = 'block';
+  } catch(e) { hideAC(); }
 }
 
 function selectAdditive(ins, name) {
@@ -536,30 +517,31 @@ function toggleNote(id) {
   if (el) el.style.display = el.style.display==='block'?'none':'block';
 }
 
-// ===== SEARCH ADDITIVE =====
-function searchAdditive() {
+// ===== SEARCH ADDITIVE — Backend API =====
+async function searchAdditive() {
   if (!ready) { alert('البيانات لم تُحمَّل بعد'); return; }
-  const ins = resolveINS();
-  if (!ins) { alert('المضاف غير موجود — جرب رقم INS مباشرةً مثل: 407 أو E471'); return; }
+  const insVal = selectedINS || document.getElementById('additiveInput').value.trim();
+  if (!insVal) { alert('المضاف غير موجود — جرب رقم INS مباشرةً مثل: 407 أو E471'); return; }
   document.getElementById('spinner').classList.add('show');
   document.getElementById('resultPanel').className = 'result-panel';
-  setTimeout(() => {
+  try {
+    const r = await fetch('/api/additive/' + encodeURIComponent(insVal));
+    const data = await r.json();
     document.getElementById('spinner').classList.remove('show');
-    renderAdditiveResult(queryAdditive(ins));
-  }, 300);
-}
-
-function queryAdditive(ins) {
-  const t1=CODEX.table1, t3=CODEX.table3, annex=new Set(CODEX.annex);
-  return {
-    ins,
-    name: t1[ins]?.name || t3[ins]?.name || 'INS '+ins,
-    functional_class: t1[ins]?.functional_class || t3[ins]?.functional_class || '',
-    t1_cats: t1[ins]?.categories || [],
-    in_t3: !!t3[ins],
-    t3_data: t3[ins]||null,
-    annex_excluded: [...annex].sort()
-  };
+    if (!data.found) { alert('المضاف غير موجود في قاعدة البيانات'); return; }
+    renderAdditiveResult({
+      ins: data.ins,
+      name: data.t1?.name || data.t3?.name || 'INS ' + data.ins,
+      functional_class: data.t1?.functional_class || data.t3?.functional_class || '',
+      t1_cats: data.t1?.categories || [],
+      in_t3: !!data.t3,
+      t3_data: data.t3 || null,
+      annex_excluded: []
+    });
+  } catch(e) {
+    document.getElementById('spinner').classList.remove('show');
+    alert('خطأ في الاتصال بالسيرفر');
+  }
 }
 
 function renderAdditiveResult(r) {
@@ -624,35 +606,23 @@ function renderAdditiveResult(r) {
   panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ===== SEARCH FOOD =====
-function searchFood() {
+// ===== SEARCH FOOD — Backend API =====
+async function searchFood() {
   if (!ready) { alert('البيانات لم تُحمَّل بعد'); return; }
   const raw = document.getElementById('foodInput').value.trim();
   if (!raw) { alert('الرجاء إدخال رقم الفئة أو اسم المنتج'); return; }
   const catNo = resolveCatNo(raw);
   document.getElementById('spinner').classList.add('show');
   document.getElementById('resultPanel').className='result-panel';
-  setTimeout(()=>{
+  try {
+    const r = await fetch('/api/food-category?cat=' + encodeURIComponent(catNo));
+    const data = await r.json();
     document.getElementById('spinner').classList.remove('show');
-    renderFoodResult(queryFood(catNo,raw),raw);
-  },300);
-}
-
-function queryFood(catNo,rawInput) {
-  const t2=CODEX.table2, t3=CODEX.table3, annex=new Set(CODEX.annex);
-  const searchCats=[catNo,...getParentCats(catNo)];
-  const seen=new Set(), permitted=[];
-  for (const cat of searchCats) {
-    if (t2[cat]) for (const add of t2[cat]) {
-      if (!seen.has(add.ins)) { seen.add(add.ins); permitted.push({...add,source_cat:cat,inherited:cat!==catNo}); }
-    }
+    renderFoodResult(data, raw);
+  } catch(e) {
+    document.getElementById('spinner').classList.remove('show');
+    alert('خطأ في الاتصال بالسيرفر');
   }
-  let inAnnex=false, annexMatch=null;
-  for (const c of [catNo,...getParentCats(catNo)]) {
-    if (annex.has(c)) { inAnnex=true; annexMatch=c; break; }
-  }
-  const t3Additives=inAnnex?[]:Object.entries(t3).filter(([ins])=>ins!=='nan').map(([ins,d])=>({ins,...d}));
-  return {catNo,rawInput,permitted,inAnnex,annexMatch,t3Additives};
 }
 
 function renderFoodResult(r,rawInput) {
@@ -713,8 +683,8 @@ function renderFoodResult(r,rawInput) {
   panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ===== BATCH MODE =====
-function searchBatch() {
+// ===== BATCH MODE — Backend API =====
+async function searchBatch() {
   if (!ready) { alert('البيانات لم تُحمَّل بعد'); return; }
   const productRaw = document.getElementById('batchProduct').value.trim();
   const lines = document.getElementById('batchInput').value.trim().split('\n').map(l=>l.trim()).filter(Boolean);
@@ -722,46 +692,31 @@ function searchBatch() {
   if (!productRaw) { alert('الرجاء إدخال اسم المنتج'); return; }
   document.getElementById('spinner').classList.add('show');
   document.getElementById('resultPanel').className='result-panel';
-  setTimeout(()=>{
-    document.getElementById('spinner').classList.remove('show');
-    const catNo=resolveCatNo(productRaw);
-    const catName=CODEX.cat_names?.[catNo]||catNo;
-    const results=lines.map(line=>checkSingleAdditive(line,catNo));
-    renderBatchResult(results,productRaw,catNo,catName);
-  },300);
-}
 
-function checkSingleAdditive(raw,catNo) {
-  const t1=CODEX.table1, t2=CODEX.table2, t3=CODEX.table3, annex=new Set(CODEX.annex);
-  let ins=resolveENUM(raw);
-  if (!ins) {
-    const up=raw.toUpperCase();
-    for (const [i,d] of Object.entries(t1)) {
-      if (i!=='nan' && d.name.toUpperCase().includes(up.substring(0,6))) { ins=i; break; }
+  const catNo = resolveCatNo(productRaw);
+
+  // فحص كل مضاف عبر API
+  const results = await Promise.all(lines.map(async line => {
+    try {
+      const params = new URLSearchParams({ ins: line });
+      if (catNo) params.append('cat', catNo);
+      const r = await fetch('/api/check?' + params.toString());
+      const data = await r.json();
+      if (!data.found) return { raw:line, ins:null, name:line, verdict:'unknown', detail:'غير موجود في قاعدة البيانات' };
+      return {
+        raw: line, ins: data.ins, name: data.additiveName,
+        verdict: data.verdict,
+        source: data.matchData?.source==='T1'?'جدول 1':data.matchData?.source==='T2'?'جدول 2':data.matchData?.source==='T3'?'جدول 3':'—',
+        max_level: data.matchData?.match?.max_level || '',
+        detail: data.verdict==='forbidden' ? 'غير مسموح في هذه الفئة' : ''
+      };
+    } catch(e) {
+      return { raw:line, ins:null, name:line, verdict:'unknown', detail:'خطأ في الاتصال' };
     }
-    if (!ins) for (const [i,d] of Object.entries(t3)) {
-      if (i!=='nan' && d.name.toUpperCase().includes(up.substring(0,6))) { ins=i; break; }
-    }
-  }
-  if (!ins) return {raw,ins:null,name:raw,verdict:'unknown',detail:'غير موجود في قاعدة البيانات'};
-  const name=t1[ins]?.name||t3[ins]?.name||'INS '+ins;
-  const searchCats=catNo?[catNo,...getParentCats(catNo)]:[];
-  let t2Match=null;
-  for (const cat of searchCats) {
-    if (t2[cat]) {
-      t2Match=t2[cat].find(a=>{
-        const parts=a.ins.replace(/\s/g,'').split(/[;,]+/);
-        return parts.some(p=>normalizeINS(p)===ins || p===ins || normalizeINS(p)===normalizeINS(ins));
-      });
-      if (t2Match) break;
-    }
-  }
-  if (t2Match) return {raw,ins,name,verdict:'permitted',source:'جدول 2',max_level:t2Match.max_level,notes:t2Match.notes};
-  const inAnnex=searchCats.some(c=>annex.has(c));
-  if (!inAnnex&&t3[ins]) return {raw,ins,name,verdict:'permitted',source:'جدول 3',max_level:'GMP',notes:''};
-  if (t1[ins]&&t1[ins].categories.length>0)
-    return {raw,ins,name,verdict:'not_in_category',source:'جدول 1',detail:`مسموح في ${t1[ins].categories.length} فئة أخرى — غير مسموح في ${catNo}`};
-  return {raw,ins,name,verdict:'forbidden',source:'—',detail:'غير مسموح في هذه الفئة'};
+  }));
+
+  document.getElementById('spinner').classList.remove('show');
+  renderBatchResult(results, productRaw, catNo, catNo);
 }
 
 function renderBatchResult(results,productRaw,catNo,catName) {
