@@ -1319,102 +1319,42 @@ async function analyze() {
   const origin = document.getElementById('origin').value;
   const strictness = document.getElementById('strictness').value;
 
-  // بناء قواعد خاصة بنوع المنتج
+  // بناء قواعد خاصة بنوع المنتج فقط (بدون كل الجداول)
   const jsSpecific = JS_SPECIFIC_RULES[productType];
   const jsRulesText = jsSpecific ?
-    `\n\nاشتراطات خاصة بنوع المنتج (${jsSpecific.name}):\n` +
-    jsSpecific.warnings.map(w => `- [${w.code}] ${w.text}`).join('\n') : '';
+    `\nاشتراطات خاصة (${jsSpecific.name}):\n` +
+    jsSpecific.warnings.map(w => `[${w.code}] ${w.text}`).join('\n') : '';
 
+  // أرسل أرقام القواعد فقط بدلاً من النص الكامل
   const rulesText = RULES.map(r =>
-    `[${r['رقم القاعدة']}] ${r['رقم المادة']} (${r['درجة المخالفة']}): ${r['المتطلب']}`
+    `${r['رقم القاعدة']}|${r['رقم المادة']}|${r['درجة المخالفة']}|${r['المتطلب']}`
   ).join('\n');
 
-  const allergensText = ALLERGENS.map(a =>
-    `${a.name}: ${a.keywords.join(', ')}`
-  ).join('\n');
+  // مواد الحساسية — أسماء فقط بدون keywords
+  const allergensText = ALLERGENS.map(a => a.name).join('، ');
 
-  const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفات الأردنية والكودكس الدولي.
+  const prompt = `أنت خبير تدقيق بطاقات البيان الغذائية — الأردن وCodex.
 
-معلومات المنتج:
-- نوع المنتج: ${productType}
-- المنشأ: ${origin === 'imported' ? 'مستورد' : 'محلي'}
-- مستوى التدقيق: ${strictness}
+المنتج: ${productType} | ${origin === 'imported' ? 'مستورد' : 'محلي'} | تدقيق: ${strictness}
 
-قواعد التدقيق العامة (JS 9 + القواعد الأردنية الإلزامية):
+قواعد JS 9 (رقم|مادة|درجة|متطلب):
 ${rulesText}
 ${jsRulesText}
 
-مواد الحساسية للفحص:
-${allergensText}
+مواد الحساسية: ${allergensText}
 
-تعليمات مهمة:
-1. اقرأ صورة بطاقة البيان المرفقة بعناية تامة
-2. دقق على كل قاعدة من القواعد أعلاه
-3. افحص المكونات بحثاً عن مواد الحساسية
-4. افحص المضافات الغذائية المذكورة
-5. افحص جدول الحقائق التغذوية بدقة
-6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
-7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
-8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
-9. تعليمة المضافات الإلزامية: في حقل "ins" اكتب دائماً الرقم الرقمي فقط بدون E — قاموس الأسماء الشائعة: فيتامين ج = 300، بيتا كاروتين = 160، صمغ عربي = 414، ليسيثين = 322، حمض ستريك = 330، بيكربونات صوديوم = 500، كاراجينان = 407، بكتين = 440، جيلاتين = 441، سوربات بوتاسيوم = 202، بنزوات صوديوم = 211، ستيفيا = 960، أسبرتام = 951، حمض الطرطريك = 334، حمض الخليك = 260، كلوريد كالسيوم = 509، صمغ الغوار = 412، صمغ الخروب = 410، كاراميل = 150، كوشينيل = 120، كركمين = 100، نيتريت صوديوم = 250، ثاني أكسيد الكبريت = 220. إذا لم تعرف الرقم اتركه فارغاً ولا تخترع رقماً.
+تعليمات:
+1. اقرأ البطاقة بدقة واستند فقط لما هو مكتوب
+2. منتج مكون واحد (أرز/سكر/ملح/دقيق/شاي/توابل): R010,R011,R016 والتغذية = pass تلقائياً
+3. حقل ins للمضافات: أرقام فقط بدون E — فيتامين ج=300، بيتا كاروتين=160، صمغ عربي=414، ليسيثين=322، ستريك=330، بيكربونات=500، كاراجينان=407، بكتين=440، سوربات=202، بنزوات=211، ستيفيا=960، أسبرتام=951، غوار=412، خروب=410
+4. JSON فقط بدون أي نص إضافي
 
-التنسيق المطلوب:
-{
-  "summary": "ملخص التدقيق باللغة العربية في جملتين أو ثلاث",
-  "overallStatus": "pass أو warning أو fail",
-  "score": رقم من 0 إلى 100,
-  "results": [
-    {
-      "code": "رقم القاعدة مثل R006",
-      "rule": "اسم القاعدة",
-      "category": "الفئة",
-      "requirement": "المتطلب",
-      "status": "pass أو critical أو warning",
-      "note": "ملاحظة محددة عما وجدته في البطاقة",
-      "solution": "الحل العملي المقترح لتصحيح هذه المخالفة — كيف يصلحها صاحب المنتج؟ إذا كان pass اتركها فارغة"
-    }
-  ],
-  "allergens": [
-    {
-      "name": "اسم مادة الحساسية بالعربية",
-      "found": true أو false,
-      "declared": true أو false,
-      "keyword": "الكلمة التي وجدتها"
-    }
-  ],
-  "additives": [
-    {
-      "name": "الاسم العلمي الإنجليزي للمضاف كما هو في Codex مثل ASCORBIC ACID أو BETA-CAROTENE",
-      "ins": "رقم INS الرقمي فقط بدون حرف E — مثال: 300 وليس E300، 160 وليس E160a — إذا كان الاسم على البطاقة فيتامين ج فاكتب 300، بيتا كاروتين فاكتب 160، صمغ عربي فاكتب 414، ليسيثين فاكتب 322، حمض الستريك فاكتب 330، بيكربونات الصوديوم فاكتب 500",
-      "declared": true,
-      "note": "اكتب هنا الاسم كما ظهر على البطاقة فعلاً"
-    }
-  ],
-  "nutrition": {
-    "hasTable": true أو false,
-    "per": "100g أو serving",
-    "servingSize": "حجم الحصة إن وجد",
-    "values": {
-      "energy": {"value": "القيمة", "unit": "kcal", "present": true},
-      "protein": {"value": "القيمة", "unit": "g", "present": true},
-      "carbs": {"value": "القيمة", "unit": "g", "present": true},
-      "sugars": {"value": "القيمة", "unit": "g", "present": true},
-      "addedSugars": {"value": "القيمة", "unit": "g", "present": true},
-      "fat": {"value": "القيمة", "unit": "g", "present": true},
-      "saturatedFat": {"value": "القيمة", "unit": "g", "present": true},
-      "transFat": {"value": "القيمة", "unit": "g", "present": true},
-      "cholesterol": {"value": "القيمة", "unit": "mg", "present": true},
-      "sodium": {"value": "القيمة", "unit": "mg", "present": true},
-      "fiber": {"value": "القيمة", "unit": "g", "present": false}
-    },
-    "nutritionNote": "ملاحظات عن مدى اكتمال الجدول وأي مشاكل فيه"
-  }
-}`;
+{"summary":"...","overallStatus":"pass|warning|fail","score":0-100,"results":[{"code":"R001","rule":"...","category":"...","requirement":"...","status":"pass|critical|warning","note":"...","solution":"..."}],"allergens":[{"name":"...","found":true/false,"declared":true/false,"keyword":"..."}],"additives":[{"name":"ENGLISH_NAME","ins":"300","declared":true,"note":"كما على البطاقة"}],"nutrition":{"hasTable":true/false,"per":"100g|serving","servingSize":"...","values":{"energy":{"value":"...","unit":"kcal","present":true},"protein":{"value":"...","unit":"g","present":true},"carbs":{"value":"...","unit":"g","present":true},"sugars":{"value":"...","unit":"g","present":true},"addedSugars":{"value":"...","unit":"g","present":true},"fat":{"value":"...","unit":"g","present":true},"saturatedFat":{"value":"...","unit":"g","present":true},"transFat":{"value":"...","unit":"g","present":true},"cholesterol":{"value":"...","unit":"mg","present":true},"sodium":{"value":"...","unit":"mg","present":true},"fiber":{"value":"...","unit":"g","present":false}},"nutritionNote":"..."}}`;
 
   try {
     const requestBody = JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 4000,
+      max_tokens: 2500,
       messages: [{ role: 'user', content: [
         ...uploadedImages.map(img => ({
           type: 'image',
