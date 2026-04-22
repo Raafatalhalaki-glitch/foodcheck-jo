@@ -313,7 +313,7 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" data-ar="الكودكس الدولي" data-en="Int'l Codex">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta" data-ar="ابدأ الفحص مجاناً ←" data-en="Start Free Check ->">ابدأ الفحص مجاناً ←</a>
+    <a href="#tool" class="scroll-cta" data-ar="ابدأ الفحص مجاناً ←" data-en="Start Free Check →">ابدأ الفحص مجاناً ←</a>
     <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;" data-ar="⚗️ محرك بحث المضافات CXS 192" data-en="⚗️ Additives Search Engine CXS 192">⚗️ محرك بحث المضافات CXS 192</a>
   </div>
 </section>
@@ -607,11 +607,12 @@ const RULES = [
   {"رقم القاعدة":"R021","رقم المادة":"اسم وعنوان المنتج","الشرط":"إذا تم تسويق المنتج","المتطلب":"يجب ذكر اسم وعنوان المصنع أو المستورد","درجة المخالفة":"جسيمة","الفئة":"الصانع"},
   {"رقم القاعدة":"R022","رقم المادة":"بلد المنشأ","الشرط":"إذا كان الغذاء معبأ مسبقاً","المتطلب":"يجب ذكر بلد المنشأ","درجة المخالفة":"جسيمة","الفئة":"المنشأ"},
   {"رقم القاعدة":"R024","رقم المادة":"تاريخ الصلاحية","الشرط":"إذا لم يكن الغذاء من المنتجات المستثناة","المتطلب":"يجب ذكر تاريخ الصلاحية مطبوعاً غير قابل للإزالة — لا يجوز ملصق لاصق","درجة المخالفة":"جسيمة","الفئة":"التواريخ"},
-  {"رقم القاعدة":"R024B","رقم المادة":"صيغة التاريخ","الشرط":"حسب JS 288:2023","المتطلب":"صلاحية <= 3 أشهر: يوم+شهر+سنة. صلاحية >3 أشهر: شهر+سنة فقط. عبارة إلزامية قبله: يستخدم قبل / تاريخ انتهاء الصلاحية","درجة المخالفة":"متوسطة","الفئة":"التواريخ"},
+  {"رقم القاعدة":"R024B","رقم المادة":"صيغة التاريخ","الشرط":"حسب JS 288:2023","المتطلب":"صلاحية ≤3 أشهر: يوم+شهر+سنة. صلاحية >3 أشهر: شهر+سنة فقط. عبارة إلزامية قبله: يستخدم قبل / تاريخ انتهاء الصلاحية","درجة المخالفة":"متوسطة","الفئة":"التواريخ"},
   {"رقم القاعدة":"R025","رقم المادة":"شروط التخزين","الشرط":"إذا كانت صلاحية المنتج تعتمد على ظروف التخزين","المتطلب":"يجب ذكر شروط التخزين","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
   {"رقم القاعدة":"R025B","رقم المادة":"الاستخدام بعد الفتح","الشرط":"إذا تغيرت صلاحية المنتج بعد فتح العبوة","المتطلب":"يجب ذكر مدة الاستخدام بعد الفتح على البطاقة","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
   {"رقم القاعدة":"R030","رقم المادة":"وضوح البطاقة","الشرط":"إذا كانت المعلومات الإلزامية موجودة","المتطلب":"يجب أن تكون واضحة ومقروءة وغير قابلة للإزالة","درجة المخالفة":"جسيمة","الفئة":"عام"},
   {"رقم القاعدة":"R032","رقم المادة":"لغة البطاقة","الشرط":"إذا كان المنتج متداولاً في الأردن","المتطلب":"يجب أن تكون المعلومات باللغة العربية","درجة المخالفة":"جسيمة","الفئة":"اللغة"},
+  // القواعد العامة الأردنية الإلزامية
   {"رقم القاعدة":"JO001","رقم المادة":"محليات صناعية","الشرط":"إذا احتوى المنتج على محليات صناعية بما فيها ستيفيا","المتطلب":"يجب ذكر نسبة المحلي الصناعي في المنتج","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
   {"رقم القاعدة":"JO002","رقم المادة":"محليات كحولية كمحل سكر","الشرط":"إذا احتوى المنتج على محليات كحولية بكميات كبيرة كبديل سكر","المتطلب":"يجب ذكر عبارة: كثرة الاستخدام تسبب فعل ملين","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
   {"رقم القاعدة":"JO003","رقم المادة":"كلمة حلال","الشرط":"إذا استخدم مصطلح حلال على المنتج","المتطلب":"يجب أن يكون المنتج مطابقاً لاشتراطات الحلال المعتمدة — بدون شهادة معتمدة = تضليل للمستهلك","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
@@ -619,6 +620,7 @@ const RULES = [
   {"رقم القاعدة":"JO005","رقم المادة":"الحليب المبستر","الشرط":"على كل المنتجات الحليبية المبسترة","المتطلب":"عبارة إلزامية: يحفظ مبرد في الثلاجة","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
   {"رقم القاعدة":"JO006","رقم المادة":"الحليب المجفف","الشرط":"على كل منتجات الحليب المجفف","المتطلب":"عبارة إلزامية: لا يستعمل لتغذية الرضع","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
   {"رقم القاعدة":"JO007","رقم المادة":"الأسبرتام","الشرط":"أي منتج يحتوي على الأسبرتام","المتطلب":"يجب ذكر: يحتوي على فينيل ألانين — غير مناسب لمرضى فينيل كيتونيوريا PKU","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
+  // الحقائق التغذوية JS 1473:2022
   {"رقم القاعدة":"N001","رقم المادة":"جدول الحقائق التغذوية","الشرط":"لجميع الأغذية المعبأة","المتطلب":"يجب وجود جدول الحقائق التغذوية — مرجع: JS 1473:2022","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
   {"رقم القاعدة":"N002","رقم المادة":"الطاقة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر الطاقة بالكيلوكالوري والكيلوجول لكل 100غ أو حصة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
   {"رقم القاعدة":"N003","رقم المادة":"البروتين","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية البروتين بالجرام","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
@@ -638,9 +640,9 @@ const JS_SPECIFIC_RULES = {
   "processed_cheese": {
     name: "الجبن المطبوخ JS 185",
     warnings: [
-      {code:"JS185-1", text:"نسبة الجبن في المنتج المسمى بجبن معين (مثل شيدر مطبوخ) يجب أن تكون >=  75%"},
-      {code:"JS185-2", text:"المنتجات غير المعبأة بأغلفة معدنية: عبارة تحفظ مبرد إلزامية على البطاقة"},
-      {code:"JS185-3", text:"اسم المنتج يجب أن يكون جبن مطبوخ أو جبن مطبوخ قابل للدهن — أي تسمية أخرى تحتاج شروط"},
+      {code:"JS185-1", text:"نسبة الجبن في المنتج المسمى بجبن معين (مثل شيدر مطبوخ) يجب أن تكون ≥ 75%"},
+      {code:"JS185-2", text:"المنتجات غير المعبأة بأغلفة معدنية: عبارة 'تحفظ مبرد' إلزامية على البطاقة"},
+      {code:"JS185-3", text:"اسم المنتج يجب أن يكون 'جبن مطبوخ' أو 'جبن مطبوخ قابل للدهن' — أي تسمية أخرى تحتاج شروط"},
       {code:"JS185-4", text:"التوابل والخل المضافة يجب ذكرها إلى جانب اسم المنتج"}
     ]
   },
@@ -650,7 +652,7 @@ const JS_SPECIFIC_RULES = {
       {code:"JS246-1", text:"الدسم يجب أن يكون من حليب فقط — وجود زيوت نباتية = مخالفة صريحة"},
       {code:"JS246-2", text:"نسبة الملح يجب ألا تتجاوز 10% في المنتج النهائي"},
       {code:"JS246-3", text:"يجب ذكر مصدر الحليب (بقر/أغنام) ونوعه (طازج/مجفف) على البطاقة"},
-      {code:"JS246-4", text:"يجب ذكر طريقة الحفظ: تحفظ مبردة أو تحفظ في الثلاجة"},
+      {code:"JS246-4", text:"يجب ذكر طريقة الحفظ: 'تحفظ مبردة' أو 'تحفظ في الثلاجة'"},
       {code:"JS246-5", text:"للعبوات بوسط سائل: وزن المصفى يجب ألا يقل عن 60%"},
       {code:"JS246-6", text:"يجب ذكر نوع الجبنة: طازجة أو منضجة"}
     ]
@@ -662,8 +664,8 @@ const JS_SPECIFIC_RULES = {
       {code:"JS805-2", text:"يُمنع خلط حليب من حيوانات مختلفة (بقر + أغنام)"},
       {code:"JS805-3", text:"يُمنع بسترة حليب مسترجع منكه"},
       {code:"JS805-4", text:"يجب ذكر نوع المعاملة الحرارية: معقم / UHT / مبستر"},
-      {code:"JS805-5", text:"يجب ذكر نسبة الدسم الفعلية (بقر كامل الدسم >=  3%، أغنام >=  5.5%)"},
-      {code:"JS805-6", text:"الحليب المبستر المنكه: عبارة يحفظ مبرد في الثلاجة إلزامية"}
+      {code:"JS805-5", text:"يجب ذكر نسبة الدسم الفعلية (بقر كامل الدسم ≥ 3%، أغنام ≥ 5.5%)"},
+      {code:"JS805-6", text:"الحليب المبستر المنكه: عبارة 'يحفظ مبرد في الثلاجة' إلزامية"}
     ]
   },
   "dried_milk": {
@@ -673,13 +675,13 @@ const JS_SPECIFIC_RULES = {
       {code:"JS121-2", text:"يجب ذكر نسبة الدسم ونسبة البروتين على البطاقة"},
       {code:"JS121-3", text:"إضافة فيتامين أ أو د يجب ذكره صراحةً على البطاقة"},
       {code:"JS121-4", text:"قائمة المكونات يجب أن تكون مرتبة تنازلياً"},
-      {code:"JS121-5", text:"عبارة لا يستعمل لتغذية الرضع إلزامية على كل منتجات الحليب المجفف"}
+      {code:"JS121-5", text:"عبارة 'لا يستعمل لتغذية الرضع' إلزامية على كل منتجات الحليب المجفف"}
     ]
   },
   "evaporated_milk": {
     name: "الحليب المبخر المقشود JS 1624",
     warnings: [
-      {code:"JS1624-1", text:"⚠️ الأخطر: عبارة هذا المنتج غير ملائم لتغذية الرضع إلزامية — غيابها مخالفة جسيمة وخطيرة"},
+      {code:"JS1624-1", text:"⚠️ الأخطر: عبارة 'هذا المنتج غير ملائم لتغذية الرضع' إلزامية — غيابها مخالفة جسيمة وخطيرة"},
       {code:"JS1624-2", text:"يجب ذكر نوع الزيوت النباتية: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
       {code:"JS1624-3", text:"يجب ذكر محتوى الدهون الكلي ومحتوى البروتين"},
       {code:"JS1624-4", text:"إضافة فيتامينات يجب ذكر نسبها بالوحدات الدولية"}
@@ -693,14 +695,14 @@ const JS_SPECIFIC_RULES = {
       {code:"JS472-3", text:"غياب تعليمات التحضير بالصور = مخالفة إلزامية"},
       {code:"JS472-4", text:"غياب الفئة العمرية عن اسم المنتج = مخالفة إلزامية"},
       {code:"JS472-5", text:"غياب مصدر البروتين عن البطاقة = مخالفة إلزامية"},
-      {code:"JS472-6", text:"عبارة لا تستخدم هذه التركيبة إلا بمشورة الاختصاصي الصحي إلزامية"},
+      {code:"JS472-6", text:"عبارة 'لا تستخدم هذه التركيبة إلا بمشورة الاختصاصي الصحي' إلزامية"},
       {code:"JS472-7", text:"استخدام مواد محورة وراثياً بدون إفصاح = مخالفة إلزامية"}
     ]
   },
   "biscuit": {
     name: "البسكويت JS 6",
     warnings: [
-      {code:"JS6-1", text:"بسكويت بالزبدة: جميع الدهون يجب أن تكون من زبدة الحليب فقط — وجود زيوت نباتية = مخالفة"},
+      {code:"JS6-1", text:"'بسكويت بالزبدة': جميع الدهون يجب أن تكون من زبدة الحليب فقط — وجود زيوت نباتية = مخالفة"},
       {code:"JS6-2", text:"وجود محلي صناعي بدون ذكر نسبته = مخالفة إلزامية"},
       {code:"JS6-3", text:"تنبيه مستقبلي: الزيوت النباتية المهدرجة قد تُمنع — احتمال دهون متحولة"}
     ]
@@ -709,25 +711,25 @@ const JS_SPECIFIC_RULES = {
     name: "نودلز سريعة التحضير JS 1719",
     warnings: [
       {code:"JS1719-1", text:"غياب إرشادات التحضير عن البطاقة = مخالفة إلزامية"},
-      {code:"JS1719-2", text:"وجود كلمة حلال بدون شهادة حلال معتمدة = مخالفة تضليلية خطيرة"}
+      {code:"JS1719-2", text:"وجود كلمة 'حلال' بدون شهادة حلال معتمدة = مخالفة تضليلية خطيرة"}
     ]
   },
   "corn_chips": {
     name: "شيبس الذرة المنفوشة JS 608",
     warnings: [
       {code:"JS608-1", text:"⚠️ يُمنع إضافة المحليات الصناعية في شيبس الذرة — وجودها = مخالفة صريحة"},
-      {code:"JS608-2", text:"اسم المنتج يجب أن يكون شيبس الذرة المنفوشة أو شيبس الذرة المنفوشة المقرمشة"},
-      {code:"JS608-3", text:"عند إضافة نكهة يجب ذكر اسمها صراحةً: نكهة الجبن / البابريكا إلخ"}
+      {code:"JS608-2", text:"اسم المنتج يجب أن يكون 'شيبس الذرة المنفوشة' أو 'شيبس الذرة المنفوشة المقرمشة'"},
+      {code:"JS608-3", text:"عند إضافة نكهة يجب ذكر اسمها صراحةً: 'نكهة الجبن' / 'البابريكا' إلخ"}
     ]
   },
   "chocolate": {
     name: "الشوكولاتة JS 8",
     warnings: [
-      {code:"JS8-1", text:"شوكولاتة ببديل زبدة الكاكاو: عبارة ببديل زبدة الكاكاو إلزامية على البطاقة"},
-      {code:"JS8-2", text:"شوكولاتة مغلِّفة: نسبة الشوكولاتة يجب أن تكون >=  60%"},
-      {code:"JS8-3", text:"شوكولاتة محشوة: الغلاف الخارجي يجب أن يكون >=  40% من المنتج النهائي"},
+      {code:"JS8-1", text:"شوكولاتة ببديل زبدة الكاكاو: عبارة 'ببديل زبدة الكاكاو' إلزامية على البطاقة"},
+      {code:"JS8-2", text:"شوكولاتة مغلِّفة: نسبة الشوكولاتة يجب أن تكون ≥ 60%"},
+      {code:"JS8-3", text:"شوكولاتة محشوة: الغلاف الخارجي يجب أن يكون ≥ 40% من المنتج النهائي"},
       {code:"JS8-4", text:"الحشوة بمشروبات روحية يجب ذكرها بجانب اسم المنتج"},
-      {code:"JS8-5", text:"شوكولاتة بيضاء: زبدة الكاكاو يجب >=  20%"},
+      {code:"JS8-5", text:"شوكولاتة بيضاء: زبدة الكاكاو يجب ≥ 20%"},
       {code:"JS8-6", text:"يُمنع تخزين أو عرض الشوكولاتة في الثلاجة"},
       {code:"JS8-7", text:"محليات صناعية يجب ذكر: الاسم + الكمية + الحد اليومي + التحذير"},
       {code:"JS8-8", text:"يُمنع استخدام السكارين أو الدولسين أو السكلمايت في الشوكولاتة"}
@@ -745,10 +747,10 @@ const JS_SPECIFIC_RULES = {
   "energy_drink": {
     name: "مشروبات الطاقة JS 2381:2023",
     warnings: [
-      {code:"JS2381-1", text:"حد الكافيين: <=  320 مغ/لتر — أي كمية أعلى = مخالفة"},
-      {code:"JS2381-2", text:"عبارة إلزامية: لا ينصح به للأطفال"},
-      {code:"JS2381-3", text:"عبارة إلزامية: لا ينصح به للحوامل أو المرضعات"},
-      {code:"JS2381-4", text:"عبارة إلزامية: غير مناسب لمن لديهم حساسية للكافيين"}
+      {code:"JS2381-1", text:"حد الكافيين: ≤ 320 مغ/لتر — أي كمية أعلى = مخالفة"},
+      {code:"JS2381-2", text:"عبارة إلزامية: 'لا ينصح به للأطفال'"},
+      {code:"JS2381-3", text:"عبارة إلزامية: 'لا ينصح به للحوامل أو المرضعات'"},
+      {code:"JS2381-4", text:"عبارة إلزامية: 'غير مناسب لمن لديهم حساسية للكافيين'"}
     ]
   },
   "juice": {
@@ -756,13 +758,13 @@ const JS_SPECIFIC_RULES = {
     warnings: [
       {code:"JS1761-1", text:"عصير فاكهة / عصير طبيعي: يُمنع إضافة أي سكر — وجوده = مخالفة"},
       {code:"JS1761-2", text:"النكتار: نسبة الفاكهة يجب أن تكون حسب نوعها (غالباً 25-50%)"},
-      {code:"JS1761-3", text:"كتابة عصير طبيعي وفيه سكر مضاف = تضليل صريح"}
+      {code:"JS1761-3", text:"كتابة 'عصير طبيعي' وفيه سكر مضاف = تضليل صريح"}
     ]
   },
   "fruit_syrup": {
     name: "شراب الفاكهة والسكواش JS 994:2023",
     warnings: [
-      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعي يجب أن تكون >=  10%"},
+      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعي يجب أن تكون ≥ 10%"},
       {code:"JS994-2", text:"شراب الفاكهة الطبيعي: يجب أن تكون الألوان والنكهات طبيعية فقط"},
       {code:"JS994-3", text:"محليات صناعية يجب ذكرها على البطاقة"},
       {code:"JS994-4", text:"نسبة العصير يجب ذكرها على البطاقة"},
@@ -773,7 +775,7 @@ const JS_SPECIFIC_RULES = {
   "flavored_drink": {
     name: "المشروبات المنكهة JS 77:2017",
     warnings: [
-      {code:"JS77-1", text:"نوع النكهة إلزامي ذكره — مشروب منكه غير كافٍ — الصح: مشروب بنكهة الليمون"}
+      {code:"JS77-1", text:"نوع النكهة إلزامي ذكره — 'مشروب منكه' غير كافٍ — الصح: 'مشروب بنكهة الليمون'"}
     ]
   },
   "supplements": {
@@ -800,8 +802,8 @@ const JS_SPECIFIC_RULES = {
   "fruit_syrup_994": {
     name: "شراب الفاكهة JS 994:2023",
     warnings: [
-      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعية لا يجوز أن تقل عن 10% — وإلا يُسمى شراب منكه وليس شراب فاكهة"},
-      {code:"JS994-2", text:"إذا كانت نسبة العصير < 10% يجب تغيير الاسم إلى شراب منكه — استخدام اسم شراب فاكهة خطأ قانوني"},
+      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعية لا يجوز أن تقل عن 10% — وإلا يُسمى 'شراب منكَّه' وليس شراب فاكهة"},
+      {code:"JS994-2", text:"إذا كانت نسبة العصير < 10% يجب تغيير الاسم إلى 'شراب منكَّه' — استخدام اسم 'شراب فاكهة' خطأ قانوني"},
       {code:"JS994-3", text:"يجب ذكر نسبة الفاكهة أو العصير على البطاقة بشكل واضح"},
       {code:"JS994-4", text:"المحليات الصناعية المضافة: يجب ذكر اسمها ونسبتها في قائمة المكونات"}
     ]
@@ -836,7 +838,7 @@ const JS_SPECIFIC_RULES = {
   "dairy_product_1626": {
     name: "منتجات الألبان المعاد تركيبها JS 1626",
     warnings: [
-      {code:"JS1626-1", text:"يجب التصريح بوضوح على البطاقة بأن المنتج معاد تركيبه أو من حليب مجفف"},
+      {code:"JS1626-1", text:"يجب التصريح بوضوح على البطاقة بأن المنتج 'معاد تركيبه' أو 'من حليب مجفف'"},
       {code:"JS1626-2", text:"نسبة الدهون ونسبة البروتين يجب ذكرهما صراحةً في الجدول الغذائي"},
       {code:"JS1626-3", text:"المضافات المستخدمة في إعادة التركيب يجب ذكرها في قائمة المكونات"},
       {code:"JS1626-4", text:"الفيتامينات المضافة: يجب ذكر نوع كل فيتامين وكميته بالوحدات الدولية"}
@@ -845,7 +847,7 @@ const JS_SPECIFIC_RULES = {
   "luncheon_79": {
     name: "لحم اللنشون المعلب JS 79:2009",
     warnings: [
-      {code:"JS79-1", text:"اسم المنتج يجب أن يتضمن كلمة لنشون متبوعة بنوع اللحم: لنشون بقري / دجاج / غنم"},
+      {code:"JS79-1", text:"اسم المنتج يجب أن يتضمن كلمة 'لنشون' متبوعة بنوع اللحم: لنشون بقري / دجاج / غنم"},
       {code:"JS79-2", text:"وجود دهن أو لحم خنزير يجب التصريح به بوضوح باللغة العربية في مكان بارز"},
       {code:"JS79-3", text:"نسبة اللحم الصافي يجب أن تكون مذكورة ومطابقة للمواصفة"},
       {code:"JS79-4", text:"المواد الحافظة المستخدمة يجب ذكرها بأسمائها وأرقام INS في المكونات"}
@@ -865,9 +867,9 @@ const JS_SPECIFIC_RULES = {
     warnings: [
       {code:"JS44-1", text:"الحليب والبيض المستخدم يجب أن يكون مبستراً أو معالجاً حرارياً بما يعادله"},
       {code:"JS44-2", text:"نسبة البيض في المثلجات لا يجوز أن تتجاوز 1.4%"},
-      {code:"JS44-3", text:"المثلجات بالفواكه: نسبة الفاكهة يجب أن تكون >=  15%"},
+      {code:"JS44-3", text:"المثلجات بالفواكه: نسبة الفاكهة يجب أن تكون ≥ 15%"},
       {code:"JS44-4", text:"المثلجات اللبنية: الدسم يجب أن يكون من حليب فقط — وجود زيوت نباتية بديلة = مخالفة"},
-      {code:"JS44-5", text:"درجة حرارة التخزين يجب أن تكون مذكورة على البطاقة <=  -18 درجة س"}
+      {code:"JS44-5", text:"درجة حرارة التخزين يجب أن تكون مذكورة على البطاقة ≤ −18°س"}
     ]
   },
   "ketchup_355": {
@@ -882,16 +884,17 @@ const JS_SPECIFIC_RULES = {
   "mayonnaise_938": {
     name: "المايونيز JS 938:2012",
     warnings: [
-      {code:"JS938-1", text:"نسبة الزيت النباتي في المايونيز يجب أن تكون >=  65% وزناً"},
+      {code:"JS938-1", text:"نسبة الزيت النباتي في المايونيز يجب أن تكون ≥ 65% وزناً"},
       {code:"JS938-2", text:"يجب ذكر نوع الزيت المستخدم في المكونات"},
       {code:"JS938-3", text:"مصدر البيض أو بدائله يجب التصريح به في المكونات"},
-      {code:"JS938-4", text:"المنتج الذي يحتوي < 65% زيت يُسمى صلصة مايونيز وليس مايونيز — فرق جوهري"}
+      {code:"JS938-4", text:"المنتج الذي يحتوي < 65% زيت يُسمى 'صلصة مايونيز' وليس مايونيز — فرق جوهري"}
     ]
   }
 };
 
 // ===== مدد الصلاحية JS 288:2023 =====
 const SHELF_LIFE_DATA = {
+  // اللحوم
   "دواجن كاملة مبردة (دجاج، بط، أوز، حمام، رومي، نعام، أرانب)": {"عبوة مناسبة": "5 أيام من الذبح", "فاكيوم": "7 أيام من الذبح"},
   "أعضاء داخلية دجاج مبردة": {"عبوة مناسبة": "3 أيام من الذبح", "فاكيوم": "7 أيام من الذبح"},
   "لحوم مبردة - بقر، جاموس، جمال، ضأن، ماعز (ذبائح/قطع)": {"عبوة مناسبة": "14 يوم من الذبح"},
@@ -899,12 +902,14 @@ const SHELF_LIFE_DATA = {
   "لحوم مبردة - ضأن، ماعز": {"فاكيوم/جو معدل": "90 يوم من الذبح"},
   "أعضاء داخلية مبردة من مواشٍ": {"عبوة مناسبة": "7 أيام من الذبح", "فاكيوم": "30 يوم من الذبح"},
   "لحم البيرغر الطازج المبرد": {"عبوة مناسبة": "يومين"},
+  // الأسماك
   "أسماك مبردة مدخنة على البارد": {"عبوة مناسبة": "7 أيام"},
   "أسماك مبردة مدخنة على الساخن": {"عبوة مناسبة": "14 يوم"},
   "أسماك مبردة مدخنة": {"فاكيوم": "90 يوم"},
   "أسماك طازجة مبردة غير مزالة الأحشاء": {"عبوة مناسبة": "7 أيام من الصيد"},
   "أسماك طازجة مبردة منظفة ومزالة الأحشاء": {"عبوة مناسبة": "9 أيام من الصيد"},
   "أسماك طازجة مبردة": {"فاكيوم": "14 يوم من الصيد", "جو معدل": "21 يوم من الصيد"},
+  // الألبان
   "اللبن الرائب أو اللبن المُطعَّم": {"عبوة مناسبة": "10 أيام"},
   "اللبنة": {"عبوة مناسبة": "14 يوم"}
 };
@@ -913,7 +918,7 @@ const SHELF_LIFE_DATA = {
 const SHELF_LIFE_EXEMPTIONS = [
   "الفاكهة والخضروات الطازجة غير المقشورة أو المقطعة",
   "النبيذ بأنواعه",
-  "المشروبات التي نسبة الكحول فيها >=  10% حجمي",
+  "المشروبات التي نسبة الكحول فيها ≥ 10% حجمي",
   "المخبوزات والمعجنات التي تُستهلك خلال 24 ساعة",
   "الخل المعبأ في عبوات زجاجية",
   "ملح الطعام غير المدعم باليود",
@@ -930,7 +935,9 @@ const SHELF_LIFE_EXEMPTIONS = [
 
 // ===== قاعدة بيانات الخنزير والكحول =====
 const PORK_TERMS = {
+  // مستوى 1 — تنبيه أحمر: مصدره الخنزير مباشرة
   critical: [
+    // مصطلحات إنجليزية مباشرة
     'pig','swine','boar','hog','porcine','piglet','sus scrofa',
     'lard','lard oil','pork','porc','porcin','porcus','porco','maiale',
     'carne de cerdo','griskott','flask','porcino',
@@ -938,10 +945,13 @@ const PORK_TERMS = {
     'pork gelatin','pork fat','pork skin','pork rind',
     'pepsin','trypsin','pancreatin',
     'porcine gelatin','porcine collagen','porcine rennet',
+    // أرقام E خنزير مؤكدة
     'E441','E542','E920',
+    // مصطلحات عربية
     'خنزير','شحم الخنزير','دهن الخنزير','لحم الخنزير',
     'جيلاتين الخنزير','كولاجين الخنزير','بيكون','هام','لحم مقدد'
   ],
+  // مستوى 2 — تنبيه أصفر: تأكد أن مصدر هذا المكون حلال
   warning: [
     'gelatin','gelatine','glycerol','glycerin','glycerine',
     'collagen','rennet','shortening',
@@ -951,12 +961,14 @@ const PORK_TERMS = {
     'fatty acid esters','stearoyl','lactylate',
     'natural flavors','natural flavour','natural flavor',
     'animal fat','animal gelatin',
+    // عربي
     'جيلاتين','جلسرين','جليسرول','كولاجين','دهون حيوانية',
     'نكهات طبيعية','دهن نباتي أو حيواني'
   ]
 };
 
 const ALCOHOL_TERMS = {
+  // مستوى 1 — تنبيه أحمر
   critical: [
     'wine','brandy','sherry','whisky','whiskey','rum','rhum','gin','vodka',
     'beer','ethanol','ethyl alcohol','liquor','champagne','scotch','bourbon',
@@ -965,11 +977,14 @@ const ALCOHOL_TERMS = {
     'pulque','toddy','soju','baijiu','arak','arrack','ouzo','absinthe',
     'vermouth','bitters','distilled spirits','alcohol','alco\'ol','wijn',
     'vin','vino','spirits','fermented alcohol','alcoholic',
+    // عربي
     'كحول','كحول إيثيلي','إيثانول','نبيذ','بيرة','عرق','مسكر','خمر',
     'مشروب كحولي','مشروب روحي'
   ],
+  // مستوى 2 — تنبيه أصفر: يحتوي نسبة كحول من التخمير — تحقق
   warning: [
     'fermented','fermentation','kombucha','kefir',
+    // ملاحظة: خل النبيذ مسموح حسب المواصفة الأردنية — لا يُدرج هنا
   ]
 };
 
@@ -1304,42 +1319,102 @@ async function analyze() {
   const origin = document.getElementById('origin').value;
   const strictness = document.getElementById('strictness').value;
 
-  // بناء قواعد خاصة بنوع المنتج فقط (بدون كل الجداول)
+  // بناء قواعد خاصة بنوع المنتج
   const jsSpecific = JS_SPECIFIC_RULES[productType];
   const jsRulesText = jsSpecific ?
-    `\nاشتراطات خاصة (${jsSpecific.name}):\n` +
-    jsSpecific.warnings.map(w => `[${w.code}] ${w.text}`).join('\n') : '';
+    `\n\nاشتراطات خاصة بنوع المنتج (${jsSpecific.name}):\n` +
+    jsSpecific.warnings.map(w => `- [${w.code}] ${w.text}`).join('\n') : '';
 
-  // أرسل أرقام القواعد فقط بدلاً من النص الكامل
   const rulesText = RULES.map(r =>
-    `${r['رقم القاعدة']}|${r['رقم المادة']}|${r['درجة المخالفة']}|${r['المتطلب']}`
+    `[${r['رقم القاعدة']}] ${r['رقم المادة']} (${r['درجة المخالفة']}): ${r['المتطلب']}`
   ).join('\n');
 
-  // مواد الحساسية — أسماء فقط بدون keywords
-  const allergensText = ALLERGENS.map(a => a.name).join('، ');
+  const allergensText = ALLERGENS.map(a =>
+    `${a.name}: ${a.keywords.join(', ')}`
+  ).join('\n');
 
-  const prompt = `أنت خبير تدقيق بطاقات البيان الغذائية — الأردن وCodex.
+  const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفات الأردنية والكودكس الدولي.
 
-المنتج: ${productType} | ${origin === 'imported' ? 'مستورد' : 'محلي'} | تدقيق: ${strictness}
+معلومات المنتج:
+- نوع المنتج: ${productType}
+- المنشأ: ${origin === 'imported' ? 'مستورد' : 'محلي'}
+- مستوى التدقيق: ${strictness}
 
-قواعد JS 9 (رقم|مادة|درجة|متطلب):
+قواعد التدقيق العامة (JS 9 + القواعد الأردنية الإلزامية):
 ${rulesText}
 ${jsRulesText}
 
-مواد الحساسية: ${allergensText}
+مواد الحساسية للفحص:
+${allergensText}
 
-تعليمات:
-1. اقرأ البطاقة بدقة واستند فقط لما هو مكتوب
-2. منتج مكون واحد — تعريفه: أرز، سكر، ملح، دقيق، شاي، قهوة، بقوليات، حبوب، توابل مفردة، عسل، زيت نقي. إذا كان المنتج من هذه الفئة: أعطِ R010,R011,R016 وجميع بنود التغذية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى بموجب JS 9". لا تعتبر غياب المكونات أو الجدول الغذائي مخالفة أبداً.
-3. حقل ins للمضافات: أرقام فقط بدون E — فيتامين ج=300، بيتا كاروتين=160، صمغ عربي=414، ليسيثين=322، ستريك=330، بيكربونات=500، كاراجينان=407، بكتين=440، سوربات=202، بنزوات=211، ستيفيا=960، أسبرتام=951، غوار=412، خروب=410
-4. JSON فقط بدون أي نص إضافي
+تعليمات مهمة:
+1. اقرأ صورة بطاقة البيان المرفقة بعناية تامة
+2. دقق على كل قاعدة من القواعد أعلاه
+3. افحص المكونات بحثاً عن مواد الحساسية
+4. افحص المضافات الغذائية المذكورة
+5. افحص جدول الحقائق التغذوية بدقة
+6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
+7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
+8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
+9. تعليمة المضافات الإلزامية: في حقل "ins" اكتب دائماً الرقم الرقمي فقط بدون E — قاموس الأسماء الشائعة: فيتامين ج = 300، بيتا كاروتين = 160، صمغ عربي = 414، ليسيثين = 322، حمض ستريك = 330، بيكربونات صوديوم = 500، كاراجينان = 407، بكتين = 440، جيلاتين = 441، سوربات بوتاسيوم = 202، بنزوات صوديوم = 211، ستيفيا = 960، أسبرتام = 951، حمض الطرطريك = 334، حمض الخليك = 260، كلوريد كالسيوم = 509، صمغ الغوار = 412، صمغ الخروب = 410، كاراميل = 150، كوشينيل = 120، كركمين = 100، نيتريت صوديوم = 250، ثاني أكسيد الكبريت = 220. إذا لم تعرف الرقم اتركه فارغاً ولا تخترع رقماً.
 
-{"summary":"...","overallStatus":"pass|warning|fail","score":0-100,"results":[{"code":"R001","rule":"...","category":"...","requirement":"...","status":"pass|critical|warning","note":"...","solution":"..."}],"allergens":[{"name":"...","found":true/false,"declared":true/false,"keyword":"..."}],"additives":[{"name":"ENGLISH_NAME","ins":"300","declared":true,"note":"كما على البطاقة"}],"nutrition":{"hasTable":true/false,"per":"100g|serving","servingSize":"...","values":{"energy":{"value":"...","unit":"kcal","present":true},"protein":{"value":"...","unit":"g","present":true},"carbs":{"value":"...","unit":"g","present":true},"sugars":{"value":"...","unit":"g","present":true},"addedSugars":{"value":"...","unit":"g","present":true},"fat":{"value":"...","unit":"g","present":true},"saturatedFat":{"value":"...","unit":"g","present":true},"transFat":{"value":"...","unit":"g","present":true},"cholesterol":{"value":"...","unit":"mg","present":true},"sodium":{"value":"...","unit":"mg","present":true},"fiber":{"value":"...","unit":"g","present":false}},"nutritionNote":"..."}}`;
+التنسيق المطلوب:
+{
+  "summary": "ملخص التدقيق باللغة العربية في جملتين أو ثلاث",
+  "overallStatus": "pass أو warning أو fail",
+  "score": رقم من 0 إلى 100,
+  "results": [
+    {
+      "code": "رقم القاعدة مثل R006",
+      "rule": "اسم القاعدة",
+      "category": "الفئة",
+      "requirement": "المتطلب",
+      "status": "pass أو critical أو warning",
+      "note": "ملاحظة محددة عما وجدته في البطاقة",
+      "solution": "الحل العملي المقترح لتصحيح هذه المخالفة — كيف يصلحها صاحب المنتج؟ إذا كان pass اتركها فارغة"
+    }
+  ],
+  "allergens": [
+    {
+      "name": "اسم مادة الحساسية بالعربية",
+      "found": true أو false,
+      "declared": true أو false,
+      "keyword": "الكلمة التي وجدتها"
+    }
+  ],
+  "additives": [
+    {
+      "name": "الاسم العلمي الإنجليزي للمضاف كما هو في Codex مثل ASCORBIC ACID أو BETA-CAROTENE",
+      "ins": "رقم INS الرقمي فقط بدون حرف E — مثال: 300 وليس E300، 160 وليس E160a — إذا كان الاسم على البطاقة فيتامين ج فاكتب 300، بيتا كاروتين فاكتب 160، صمغ عربي فاكتب 414، ليسيثين فاكتب 322، حمض الستريك فاكتب 330، بيكربونات الصوديوم فاكتب 500",
+      "declared": true,
+      "note": "اكتب هنا الاسم كما ظهر على البطاقة فعلاً"
+    }
+  ],
+  "nutrition": {
+    "hasTable": true أو false,
+    "per": "100g أو serving",
+    "servingSize": "حجم الحصة إن وجد",
+    "values": {
+      "energy": {"value": "القيمة", "unit": "kcal", "present": true},
+      "protein": {"value": "القيمة", "unit": "g", "present": true},
+      "carbs": {"value": "القيمة", "unit": "g", "present": true},
+      "sugars": {"value": "القيمة", "unit": "g", "present": true},
+      "addedSugars": {"value": "القيمة", "unit": "g", "present": true},
+      "fat": {"value": "القيمة", "unit": "g", "present": true},
+      "saturatedFat": {"value": "القيمة", "unit": "g", "present": true},
+      "transFat": {"value": "القيمة", "unit": "g", "present": true},
+      "cholesterol": {"value": "القيمة", "unit": "mg", "present": true},
+      "sodium": {"value": "القيمة", "unit": "mg", "present": true},
+      "fiber": {"value": "القيمة", "unit": "g", "present": false}
+    },
+    "nutritionNote": "ملاحظات عن مدى اكتمال الجدول وأي مشاكل فيه"
+  }
+}`;
 
   try {
     const requestBody = JSON.stringify({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 2500,
+      max_tokens: 4000,
       messages: [{ role: 'user', content: [
         ...uploadedImages.map(img => ({
           type: 'image',
@@ -1472,20 +1547,18 @@ let manualSelectedINS = null;
 let lastDetectedAdditives = []; // المضافات المستخرجة من آخر فحص
 let lastProductCatNo = null;
 
-// تحميل البيانات — Backend API بدل JSON كامل
+// تحميل البيانات
 async function loadCodexData() {
   const statusEl = document.getElementById('codexLoadStatus');
   if (statusEl) statusEl.textContent = '⏳ جاري تحميل قاعدة بيانات CXS 192...';
   try {
-    const r = await fetch('/api/stats');
-    if (!r.ok) throw new Error('API not available');
-    const stats = await r.json();
-    // CODEX يبقى null — البيانات على السيرفر
-    CODEX = { _backend: true, _stats: stats };
+    const r = await fetch('/api/codex');
+    if (!r.ok) throw new Error('file not found');
+    CODEX = await r.json();
     codexReady = true;
-    if (statusEl) statusEl.innerHTML = '✅ قاعدة البيانات جاهزة · <span style="color:var(--text3)">' + stats.table1 + ' مضاف · ' + stats.table2 + ' فئة · ' + stats.table3 + ' مضاف عام · ' + stats.annex + ' فئة مستثناة</span>';
+    if (statusEl) statusEl.innerHTML = '✅ قاعدة البيانات جاهزة · <span style="color:var(--text3)">' + Object.keys(CODEX.table1).length + ' مضاف · ' + Object.keys(CODEX.table2).length + ' فئة</span>';
   } catch(e) {
-    if (statusEl) statusEl.textContent = '⚠️ تعذّر الاتصال بالسيرفر';
+    if (statusEl) statusEl.textContent = '⚠️ ملف codex_data.json غير موجود على السيرفر — ضع الملف في نفس مجلد index.html';
   }
 }
 loadCodexData();
@@ -1507,23 +1580,34 @@ showTab = function(tab, el) {
 };
 
 // ===== Autocomplete المضاف =====
-async function onManualAdditiveInput() {
-  const q = document.getElementById('manualAdditiveInput').value.trim();
+function onManualAdditiveInput() {
+  const q = document.getElementById('manualAdditiveInput').value.trim().toUpperCase();
   manualSelectedINS = null;
-  if (q.length < 2) { hideManualAC(); return; }
-  try {
-    const r = await fetch('/api/search?q=' + encodeURIComponent(q));
-    const results = await r.json();
-    const list = document.getElementById('manualAcList');
-    if (!results.length) { hideManualAC(); return; }
-    list.innerHTML = results.map(r =>
-      `<div onclick="selectManualAdditive('${r.ins}','${r.name.replace(/'/g,"\\'")}')"`+
-      ` style="padding:.5rem .9rem;cursor:pointer;border-bottom:1px solid var(--border);font-size:.85rem;">`+
-      `<span>${r.name}</span> <span style="background:rgba(0,212,168,.12);color:var(--accent);border-radius:3px;padding:0 5px;font-size:.75rem;">INS ${r.ins}</span>`+
-      `<div style="color:var(--text3);font-size:.75rem;">${r.func}</div></div>`
-    ).join('');
-    list.style.display = 'block';
-  } catch(e) { hideManualAC(); }
+  if (!CODEX || q.length < 2) { hideManualAC(); return; }
+  const results = [];
+  for (const [ins, data] of Object.entries(CODEX.table1)) {
+    if (ins.includes(q) || data.name.toUpperCase().includes(q)) {
+      results.push({ ins, name: data.name, func: data.functional_class });
+      if (results.length >= 12) break;
+    }
+  }
+  if (results.length < 12) {
+    for (const [ins, data] of Object.entries(CODEX.table3)) {
+      if (!CODEX.table1[ins] && (ins.includes(q) || data.name.toUpperCase().includes(q))) {
+        results.push({ ins, name: data.name, func: data.functional_class });
+        if (results.length >= 12) break;
+      }
+    }
+  }
+  const list = document.getElementById('manualAcList');
+  if (!results.length) { hideManualAC(); return; }
+  list.innerHTML = results.map(r =>
+    `<div onclick="selectManualAdditive('${r.ins}','${r.name.replace(/'/g,"\\'")}')"`+
+    ` style="padding:.5rem .9rem;cursor:pointer;border-bottom:1px solid var(--border);font-size:.85rem;">`+
+    `<span>${r.name}</span> <span style="background:rgba(0,212,168,.12);color:var(--accent);border-radius:3px;padding:0 5px;font-size:.75rem;">INS ${r.ins}</span>`+
+    `<div style="color:var(--text3);font-size:.75rem;">${r.func}</div></div>`
+  ).join('');
+  list.style.display = 'block';
 }
 function selectManualAdditive(ins, name) {
   manualSelectedINS = ins;
@@ -1581,18 +1665,62 @@ function resolveCatNo(inputVal) {
   return val; // أعد القيمة كما هي
 }
 
-// ===== منطق القرار الثلاثي — Backend API =====
-async function runCXS192Check(ins, catNo) {
-  const params = new URLSearchParams({ ins });
-  if (catNo) params.append('cat', catNo);
-  const r = await fetch('/api/check?' + params.toString());
-  return await r.json();
-}
+// ===== منطق القرار الثلاثي =====
+function runCXS192Check(ins, catNo) {
+  if (!CODEX) return null;
+  const t1 = CODEX.table1, t2 = CODEX.table2, t3 = CODEX.table3, annex = CODEX.annex;
+  const additiveName = t1[ins]?.name || t3[ins]?.name || 'INS ' + ins;
+  const steps = [];
+  let verdict = 'forbidden', matchData = null;
 
-// wrapper متزامن للاستخدام القديم
-function runCXS192CheckSync(ins, catNo) {
-  // يُستخدم فقط حين لا يمكن async — يرجع promise
-  return runCXS192Check(ins, catNo);
+  // الجدول 1
+  let t1Match = null;
+  if (t1[ins]) {
+    const catParts = catNo ? catNo.split('.') : [];
+    const variants = catNo ? [catNo, catParts.slice(0,2).join('.'), catParts[0]].filter(Boolean) : [];
+    for (const cv of variants) {
+      t1Match = t1[ins].categories.find(c => c.cat_no === cv);
+      if (t1Match) break;
+    }
+  }
+
+  if (t1Match) {
+    steps.push({ n:1, s:'pass', t:'الجدول 1 — مسموح ✓', d:`الفئة ${t1Match.cat_no} · حد أقصى ${t1Match.max_level}${t1Match.notes?' · ملاحظات: '+t1Match.notes:''}` });
+    steps.push({ n:2, s:'skip', t:'الجدول 2', d:'القرار حُسم من الجدول 1' });
+    steps.push({ n:3, s:'skip', t:'الجدول 3', d:'' });
+    verdict = 'permitted'; matchData = { source:'T1', match:t1Match };
+  } else {
+    steps.push({ n:1, s:'fail', t:'الجدول 1 — غير موجود', d: t1[ins] ? `المضاف في الجدول 1 لكن ليس لهذه الفئة (${catNo}) · موجود في ${t1[ins].categories.length} فئة أخرى` : `المضاف INS ${ins} غير مدرج في الجدول 1` });
+
+    // الجدول 2
+    let t2Match = null;
+    if (catNo && t2[catNo]) {
+      t2Match = t2[catNo].find(a => {
+        const parts = a.ins.replace(/\s/g,'').split(/[;,]+/);
+        return parts.some(p => normalizeINS(p) === ins || p === ins || normalizeINS(p) === normalizeINS(ins));
+      });
+    }
+    if (t2Match) {
+      steps.push({ n:2, s:'pass', t:'الجدول 2 — مسموح ✓', d:`الفئة ${catNo} · حد أقصى ${t2Match.max_level}` });
+      steps.push({ n:3, s:'skip', t:'الجدول 3', d:'القرار حُسم من الجدول 2' });
+      verdict = 'permitted'; matchData = { source:'T2', match:t2Match };
+    } else {
+      steps.push({ n:2, s:'fail', t:'الجدول 2 — غير موجود', d: catNo && t2[catNo] ? `الفئة موجودة لكن المضاف غير مسموح فيها` : `الفئة ${catNo||'غير محددة'} غير مدرجة في الجدول 2` });
+
+      // الجدول 3
+      const inAnnex = catNo ? annex.includes(catNo) : false;
+      if (inAnnex) {
+        steps.push({ n:3, s:'fail', t:'الجدول 3 — مستثنى (Annex) ✗', d:`الفئة ${catNo} مستثناة — تخضع للجداول 1 و2 فقط` });
+      } else if (t3[ins]) {
+        steps.push({ n:3, s:'pass', t:'الجدول 3 — مسموح ✓', d:`مضاف عام مسموح${catNo ? ' والفئة '+catNo+' غير مستثناة' : ''}` });
+        verdict = 'permitted'; matchData = { source:'T3', match:t3[ins] };
+      } else {
+        steps.push({ n:3, s:'fail', t:'الجدول 3 — غير مدرج', d:'المضاف غير مدرج في أي جدول من جداول CXS 192' });
+      }
+    }
+  }
+
+  return { ins, additiveName, catNo, steps, verdict, matchData };
 }
 
 // ===== عرض النتيجة =====
@@ -1648,17 +1776,16 @@ function renderNotesBadge(notes) {
 }
 
 // ===== تشغيل الفحص اليدوي =====
-async function runManualCheck() {
-  if (!codexReady) { alert('البيانات لم تُحمَّل بعد'); return; }
+function runManualCheck() {
+  if (!codexReady) { alert('البيانات لم تُحمَّل بعد — تأكد أن ملف codex_data.json موجود على السيرفر'); return; }
   const additiveVal = document.getElementById('manualAdditiveInput').value;
   const catVal = document.getElementById('manualCatInput').value;
-  const ins = manualSelectedINS || normalizeINS(additiveVal.match(/\d{3,4}/)?.[0] || '');
-  if (!ins) { alert('لم يُعثر على هذا المضاف — جرب الرقم INS مباشرة'); return; }
+  const ins = resolveINS(additiveVal);
+  if (!ins) { alert('لم يُعثر على هذا المضاف في قاعدة البيانات — جرب الرقم INS مباشرة'); return; }
   const catNo = resolveCatNo(catVal);
+  const result = runCXS192Check(ins, catNo);
   const container = document.getElementById('manualCheckResult');
   container.style.display = 'block';
-  container.innerHTML = '<div style="color:var(--text2);font-size:.85rem;">⏳ جاري الفحص...</div>';
-  const result = await runCXS192Check(ins, catNo);
   renderVerifyResult(result, container);
 }
 
@@ -1668,7 +1795,7 @@ function normalizeINS(code) {
   let c = String(code).trim().toUpperCase();
   c = c.replace(/^E[-\s]?/, '');           // إزالة E في البداية
   c = c.replace(/\([ivxIVX]+\)/g, '');     // إزالة (i)(ii)(iii)
-  c = c.replace(/[a-zA-Z]+$/, '');         // إزالة حروف في النهاية مثل 160a -> 160
+  c = c.replace(/[a-zA-Z]+$/, '');         // إزالة حروف في النهاية مثل 160a → 160
   return c.trim() || null;
 }
 
@@ -1701,32 +1828,26 @@ function resolveINSFull(rawInput) {
 }
 
 // ===== فحص كل المضافات المكتشفة من الصورة =====
-async function checkAllDetectedAdditives() {
+function checkAllDetectedAdditives() {
   if (!codexReady || !lastDetectedAdditives.length) return;
   const autoEl = document.getElementById('autoAdditivesResult');
   const catNo = lastProductCatNo;
+  const results = [];
 
-  autoEl.innerHTML = '<div style="color:var(--text2);font-size:.85rem;padding:.5rem;">⏳ جاري فحص المضافات...</div>';
-
-  // فحص كل المضافات عبر API
-  const results = await Promise.all(lastDetectedAdditives.map(async add => {
+  lastDetectedAdditives.forEach(add => {
     const insRaw = (add.ins || '').trim();
     const nameRaw = (add.name || '').trim();
-    const insToCheck = insRaw || nameRaw;
-    if (!insToCheck) return { add, ins: null, verdict: 'unknown' };
-    try {
-      const params = new URLSearchParams({ ins: insToCheck });
-      if (catNo) params.append('cat', catNo);
-      const r = await fetch('/api/check?' + params.toString());
-      const result = await r.json();
-      if (!result.found) return { add, ins: null, verdict: 'unknown' };
-      return { add, ins: result.ins, result, verdict: result.verdict };
-    } catch(e) {
-      return { add, ins: null, verdict: 'unknown' };
-    }
-  }));
+    const ins = resolveINSFull(insRaw) || resolveINSFull(nameRaw);
 
-  // ملخص سريع
+    if (!ins) {
+      results.push({ add, ins: null, verdict: 'unknown' });
+    } else {
+      const result = runCXS192Check(ins, catNo);
+      results.push({ add, ins, result, verdict: result.verdict });
+    }
+  });
+
+  // ===== ملخص سريع =====
   const permitted = results.filter(r => r.verdict === 'permitted').length;
   const forbidden = results.filter(r => r.verdict === 'forbidden').length;
   const unknown   = results.filter(r => r.verdict === 'unknown').length;
@@ -1755,13 +1876,13 @@ async function checkAllDetectedAdditives() {
   results.forEach(({ add, ins, result, verdict }) => {
     const card = document.createElement('div');
     card.className = 'additive-card';
-    if (!ins || !result) {
+    if (!ins) {
       card.innerHTML = `<div class="additive-card-header">
         <span style="font-weight:700;">${add.name || 'غير معروف'}</span>
         <span class="av-badge-red">⚠️ غير موجود في قاعدة البيانات</span></div>
         <div style="font-size:.78rem;color:var(--text3);">${add.ins ? 'INS المُعلن: ' + add.ins : 'لا يوجد رقم INS'}</div>`;
     } else {
-      const stepsHTML = (result.steps||[]).map(s =>
+      const stepsHTML = result.steps.map(s =>
         `<div style="display:flex;gap:.5rem;align-items:center;font-size:.78rem;margin-top:.3rem;">
           <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;
           background:${s.s==='pass'?'rgba(46,213,115,.2)':s.s==='fail'?'rgba(255,71,87,.2)':'rgba(74,90,122,.2)'};
@@ -1773,7 +1894,7 @@ async function checkAllDetectedAdditives() {
       card.innerHTML = `<div class="additive-card-header">
         <span style="font-weight:700;">${result.additiveName}</span>
         <span class="${vc}">${vl}</span></div>
-        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${catNo?' · '+catNo:''}</div>
+        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${add.ins&&add.ins!==ins?` (مُعلن: ${add.ins})`:''}${catNo?' · '+catNo:''}</div>
         ${stepsHTML}`;
     }
     autoEl.appendChild(card);
