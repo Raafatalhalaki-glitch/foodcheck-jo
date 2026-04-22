@@ -12,7 +12,19 @@ app.get('/additives.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'additives.html'));
 });
 
+// ── حماية codex_data.json من الوصول المباشر ──
 app.get('/codex_data.json', (req, res) => {
+  res.status(403).json({ error: 'Forbidden' });
+});
+
+// ── API داخلي آمن للبيانات — يُستخدم من الكود فقط ──
+app.get('/api/codex', (req, res) => {
+  const ref = req.headers['referer'] || '';
+  const host = req.headers['host'] || '';
+  // السماح فقط من نفس الموقع
+  if (!ref.includes(host) && !ref.includes('tpc-foodcheck.com') && !ref.includes('localhost')) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
   res.sendFile(path.join(__dirname, 'public', 'codex_data.json'));
 });
 
@@ -52,13 +64,11 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-// ── Catch-all: فقط المسارات بدون امتداد تذهب لـ index.html ──
+// ── Catch-all ──
 app.get('*', (req, res) => {
-  // ملفات ذات امتداد → 404 (لأنها كان يجب أن تُخدَم من static)
   if (path.extname(req.path)) {
     return res.status(404).send('Not found');
   }
-  // مسارات SPA → index.html
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
