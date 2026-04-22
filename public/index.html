@@ -1552,7 +1552,7 @@ async function loadCodexData() {
   const statusEl = document.getElementById('codexLoadStatus');
   if (statusEl) statusEl.textContent = '⏳ جاري تحميل قاعدة بيانات CXS 192...';
   try {
-    const r = await fetch('/codex_data.json');
+    const r = await fetch('/api/codex');
     if (!r.ok) throw new Error('file not found');
     CODEX = await r.json();
     codexReady = true;
