@@ -4,19 +4,20 @@ const app = express();
 
 app.use(express.json({ limit: '50mb' }));
 
-// ── Static files من مجلد public ──
+// ملفات ثابتة من public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── Routes صريحة للملفات الحساسة ──
+// Route صريح لصفحة المضافات
 app.get('/additives.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'additives.html'));
 });
 
+// Route صريح لملف البيانات
 app.get('/codex_data.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'codex_data.json'));
 });
 
-// ── Rate limiting ──
+// Rate limiting
 const requests = {};
 app.use((req, res, next) => {
   if (req.path !== '/api/analyze') return next();
@@ -31,7 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ── API endpoint ──
+// API
 app.post('/api/analyze', async (req, res) => {
   try {
     const apiKey = process.env.CLAUDE_API_KEY;
@@ -52,13 +53,8 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-// ── Catch-all: فقط المسارات بدون امتداد تذهب لـ index.html ──
+// الصفحة الرئيسية فقط
 app.get('*', (req, res) => {
-  // ملفات ذات امتداد → 404 (لأنها كان يجب أن تُخدَم من static)
-  if (path.extname(req.path)) {
-    return res.status(404).send('Not found');
-  }
-  // مسارات SPA → index.html
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
