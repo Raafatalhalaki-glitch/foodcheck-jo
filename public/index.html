@@ -264,18 +264,6 @@ footer span { color: var(--accent); }
 }
 .toast.show { opacity: 1; }
 
-
-/* LANGUAGE TOGGLE */
-.lang-btn {
-  background: var(--surface2); border: 1px solid var(--border);
-  color: var(--text2); padding: 5px 14px; border-radius: 100px;
-  cursor: pointer; font-size: .82rem; font-weight: 700;
-  transition: all .2s; font-family: var(--font); letter-spacing: .5px;
-}
-.lang-btn:hover { border-color: var(--accent); color: var(--accent); }
-/* RTL/LTR transition */
-body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
-
 /* RESPONSIVE */
 @media (max-width: 600px) {
   .hero h1 { font-size: 1.8rem; }
@@ -293,28 +281,27 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
     FoodCheck <span>Jordan</span>
   </div>
   <nav>
-    <a href="#tool" data-ar="التدقيق" data-en="Verify">التدقيق</a>
-    <a href="#about" data-ar="عن النظام" data-en="About">عن النظام</a>
+    <a href="#tool">التدقيق</a>
+    <a href="#about">عن النظام</a>
   </nav>
-  <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
 </header>
 
 <section class="hero">
   <div class="hero-badge">
-    <span>●</span> <span data-ar="مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192" data-en="AI-Powered · Jordanian Standards JS · Codex CXS 192">مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192</span>
+    <span>●</span> مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192
   </div>
-  <h1 data-ar="هل بطاقة بيانك جاهزة للطرح في السوق؟" data-en="Is Your Food Label Ready for Market?">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
-  <p data-ar="افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission" data-en="Verify ingredients and additives in seconds against Jordanian Standards and Codex Alimentarius Commission">افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
-  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;" data-ar="تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق" data-en="Avoid shipment rejection due to labeling errors — get a clear report: Compliant · Needs Update · Non-Compliant">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
+  <h1>هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
+  <p>افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
+  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label" data-ar="مواصفة أردنية JS" data-en="Jordanian JS Standards">مواصفة أردنية JS</div></div>
-    <div class="stat"><div class="stat-num">✔ 10</div><div class="stat-label" data-ar="قواعد إلزامية" data-en="Mandatory Rules">قواعد إلزامية</div></div>
-    <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label" data-ar="مادة حساسية" data-en="Allergens">مادة حساسية</div></div>
-    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" data-ar="الكودكس الدولي" data-en="Int'l Codex">الكودكس الدولي</div></div>
+    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 10</div><div class="stat-label">قواعد إلزامية</div></div>
+    <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label">مادة حساسية</div></div>
+    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta" data-ar="ابدأ الفحص مجاناً ←" data-en="Start Free Check →">ابدأ الفحص مجاناً ←</a>
-    <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;" data-ar="⚗️ محرك بحث المضافات CXS 192" data-en="⚗️ Additives Search Engine CXS 192">⚗️ محرك بحث المضافات CXS 192</a>
+    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
+    <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
   </div>
 </section>
 
@@ -322,8 +309,8 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
 <div class="container">
 
   <div class="section-title">
-    <h2 data-ar="رفع وتدقيق بطاقة البيان" data-en="Upload & Verify Food Label">رفع وتدقيق بطاقة البيان</h2>
-    <p data-ar="ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً" data-en="Upload a clear label photo — AI will read and verify it automatically">ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+    <h2>رفع وتدقيق بطاقة البيان</h2>
+    <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
   </div>
 
   <!-- API key مخفي على السيرفر -->
@@ -332,8 +319,8 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
-      <h3 id="uploadTitle" data-ar="اسحب صور بطاقة البيان هنا" data-en="Drag Food Label Photos Here">اسحب صور بطاقة البيان هنا</h3>
-      <p data-ar="أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة" data-en="Or click to browse · JPG, PNG, WEBP · Up to 5 images · 10MB each">أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
+      <h3>اسحب صور بطاقة البيان هنا</h3>
+      <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
     </div>
   </div>
   <!-- معرض الصور المرفوعة -->
@@ -347,62 +334,51 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
 
   <div class="settings-grid">
     <div class="setting-card">
-      <label data-ar="نوع المنتج" data-en="Product Type">نوع المنتج</label>
+      <label>نوع المنتج</label>
       <select class="setting-select" id="productType">
-        <option value="general" data-ar="عام" data-en="General">عام</option>
-        <option value="dairy" data-ar="منتجات ألبان" data-en="Dairy Products">منتجات ألبان</option>
-        <option value="processed_cheese" data-ar="جبن مطبوخ (JS 185)" data-en="Processed Cheese (JS 185)">جبن مطبوخ (JS 185)</option>
-        <option value="soft_cheese" data-ar="أجبان طرية (JS 246)" data-en="Soft Cheese (JS 246)">أجبان طرية (JS 246)</option>
-        <option value="flavored_milk" data-ar="حليب منكه (JS 805)" data-en="Flavoured Milk (JS 805)">حليب منكه (JS 805)</option>
-        <option value="dried_milk" data-ar="حليب مجفف (JS 121)" data-en="Dried Milk (JS 121)">حليب مجفف (JS 121)</option>
-        <option value="evaporated_milk" data-ar="حليب مبخر مقشود (JS 1624)" data-en="Evaporated Skimmed Milk (JS 1624)">حليب مبخر مقشود (JS 1624)</option>
-        <option value="infant_formula" data-ar="تركيبة حليب رضع (JS 472:2025)" data-en="Infant Formula (JS 472:2025)">تركيبة حليب رضع (JS 472:2025)</option>
-        <option value="meat" data-ar="لحوم ودواجن" data-en="Meat & Poultry">لحوم ودواجن</option>
-        <option value="fish" data-ar="منتجات بحرية" data-en="Seafood">منتجات بحرية</option>
-        <option value="bakery" data-ar="مخبوزات" data-en="Bakery">مخبوزات</option>
-        <option value="biscuit" data-ar="بسكويت (JS 6)" data-en="Biscuits (JS 6)">بسكويت (JS 6)</option>
-        <option value="noodles" data-ar="نودلز سريعة التحضير (JS 1719)" data-en="Instant Noodles (JS 1719)">نودلز سريعة التحضير (JS 1719)</option>
-        <option value="corn_chips" data-ar="شيبس ذرة منفوشة (JS 608)" data-en="Puffed Corn Chips (JS 608)">شيبس ذرة منفوشة (JS 608)</option>
-        <option value="chocolate" data-ar="شوكولاتة (JS 8)" data-en="Chocolate (JS 8)">شوكولاتة (JS 8)</option>
-        <option value="candy" data-ar="حلوى صلبة وطرية (JS 43)" data-en="Hard & Soft Candy (JS 43)">حلوى صلبة وطرية (JS 43)</option>
-        <option value="beverages" data-ar="مشروبات" data-en="Beverages">مشروبات</option>
-        <option value="energy_drink" data-ar="مشروبات طاقة (JS 2381)" data-en="Energy Drinks (JS 2381)">مشروبات طاقة (JS 2381)</option>
-        <option value="juice" data-ar="عصائر فاكهة (JS 1761)" data-en="Fruit Juices (JS 1761)">عصائر فاكهة (JS 1761)</option>
-        <option value="fruit_syrup" data-ar="شراب فاكهة/سكواش (JS 994)" data-en="Fruit Syrup/Squash (JS 994)">شراب فاكهة/سكواش (JS 994)</option>
-        <option value="flavored_drink" data-ar="مشروبات منكهة (JS 77)" data-en="Flavoured Drinks (JS 77)">مشروبات منكهة (JS 77)</option>
-        <option value="supplements" data-ar="مكملات غذائية" data-en="Food Supplements">مكملات غذائية</option>
-        <option value="margarine" data-ar="سمن نباتي / شورتننج (JS 40)" data-en="Margarine / Shortening (JS 40)">سمن نباتي / شورتننج (JS 40)</option>
-        <option value="fruit_syrup_994" data-ar="شراب فاكهة (JS 994)" data-en="Fruit Syrup (JS 994)">شراب فاكهة (JS 994)</option>
-        <option value="potato_chips" data-ar="شيبس البطاطا (JS 505)" data-en="Potato Chips (JS 505)">شيبس البطاطا (JS 505)</option>
-        <option value="snacks_393" data-ar="وجبات خفيفة مقرمشة (JS 393)" data-en="Crunchy Snacks (JS 393)">وجبات خفيفة مقرمشة (JS 393)</option>
-        <option value="edible_oil_1791" data-ar="زيوت نباتية (JS 1791)" data-en="Edible Oils (JS 1791)">زيوت نباتية (JS 1791)</option>
-        <option value="dairy_product_1626" data-ar="منتجات ألبان معاد تركيبها (JS 1626)" data-en="Recombined Dairy (JS 1626)">منتجات ألبان معاد تركيبها (JS 1626)</option>
-        <option value="luncheon_79" data-ar="لحم لنشون معلب (JS 79)" data-en="Canned Luncheon (JS 79)">لحم لنشون معلب (JS 79)</option>
-        <option value="canned_meat_816" data-ar="لحوم معلبة (JS 816)" data-en="Canned Meat (JS 816)">لحوم معلبة (JS 816)</option>
-        <option value="ice_cream_44" data-ar="مثلجات غذائية (JS 44)" data-en="Ice Cream (JS 44)">مثلجات غذائية (JS 44)</option>
-        <option value="ketchup_355" data-ar="كاتشب بندورة (JS 355)" data-en="Tomato Ketchup (JS 355)">كاتشب بندورة (JS 355)</option>
-        <option value="mayonnaise_938" data-ar="مايونيز (JS 938)" data-en="Mayonnaise (JS 938)">مايونيز (JS 938)</option>
+        <option value="general">عام</option>
+        <option value="dairy">منتجات ألبان</option>
+        <option value="processed_cheese">جبن مطبوخ (JS 185)</option>
+        <option value="soft_cheese">أجبان طرية (JS 246)</option>
+        <option value="flavored_milk">حليب منكه (JS 805)</option>
+        <option value="dried_milk">حليب مجفف (JS 121)</option>
+        <option value="evaporated_milk">حليب مبخر مقشود (JS 1624)</option>
+        <option value="infant_formula">تركيبة حليب رضع (JS 472:2025)</option>
+        <option value="meat">لحوم ودواجن</option>
+        <option value="fish">منتجات بحرية</option>
+        <option value="bakery">مخبوزات</option>
+        <option value="biscuit">بسكويت (JS 6)</option>
+        <option value="noodles">نودلز سريعة التحضير (JS 1719)</option>
+        <option value="corn_chips">شيبس ذرة منفوشة (JS 608)</option>
+        <option value="chocolate">شوكولاتة (JS 8)</option>
+        <option value="candy">حلوى صلبة وطرية (JS 43)</option>
+        <option value="beverages">مشروبات</option>
+        <option value="energy_drink">مشروبات طاقة (JS 2381)</option>
+        <option value="juice">عصائر فاكهة (JS 1761)</option>
+        <option value="fruit_syrup">شراب فاكهة/سكواش (JS 994)</option>
+        <option value="flavored_drink">مشروبات منكهة (JS 77)</option>
+        <option value="supplements">مكملات غذائية</option>
       </select>
     </div>
     <div class="setting-card">
-      <label data-ar="المنشأ" data-en="Origin">المنشأ</label>
+      <label>المنشأ</label>
       <select class="setting-select" id="origin">
-        <option value="imported" data-ar="مستورد" data-en="Imported">مستورد</option>
-        <option value="local" data-ar="محلي الصنع" data-en="Locally Made">محلي الصنع</option>
+        <option value="imported">مستورد</option>
+        <option value="local">محلي الصنع</option>
       </select>
     </div>
     <div class="setting-card">
-      <label data-ar="مستوى التدقيق" data-en="Verification Level">مستوى التدقيق</label>
+      <label>مستوى التدقيق</label>
       <select class="setting-select" id="strictness">
-        <option value="full" data-ar="كامل (جميع القواعد)" data-en="Full (All Rules)">كامل (جميع القواعد)</option>
-        <option value="critical" data-ar="الجسيمة فقط" data-en="Non-Compliant Only">الجسيمة فقط</option>
-        <option value="quick" data-ar="فحص سريع" data-en="Quick Check">فحص سريع</option>
+        <option value="full">كامل (جميع القواعد)</option>
+        <option value="critical">الجسيمة فقط</option>
+        <option value="quick">فحص سريع</option>
       </select>
     </div>
   </div>
 
   <button class="analyze-btn" id="analyzeBtn" onclick="analyze()" disabled>
-    <span class="btn-text" data-ar="🔍 ابدأ الفحص مجاناً" data-en="🔍 Start Free Verification">🔍 ابدأ الفحص مجاناً</span>
+    <span class="btn-text">🔍 ابدأ الفحص مجاناً</span>
     <span class="loading-dots">
       <span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span>
       جاري تحليل البطاقة... قد يستغرق 20-30 ثانية
@@ -433,7 +409,7 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
 
     <div class="score-bar-wrap">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
-        <span style="font-weight:700;font-size:1rem;" data-ar="نسبة المطابقة" data-en="Compliance Score">نسبة المطابقة</span>
+        <span style="font-weight:700;font-size:1rem;">نسبة المطابقة</span>
         <span id="scoreText" style="font-size:1.4rem;font-weight:800;color:var(--accent)">—</span>
       </div>
       <div class="score-bar-track">
@@ -446,20 +422,20 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
     </div>
 
     <div class="results-header">
-      <h3 data-ar="نتائج التدقيق التفصيلية" data-en="Detailed Verification Results">نتائج التدقيق التفصيلية</h3>
+      <h3>نتائج التدقيق التفصيلية</h3>
       <span class="overall-badge" id="overallBadge">—</span>
     </div>
 
     <div class="tabs">
-      <button class="tab active" onclick="showTab('all',this)" data-ar="الكل" data-en="All">الكل</button>
-      <button class="tab" onclick="showTab('critical',this)" data-ar="مخالفات جسيمة" data-en="Non-Compliant">مخالفات جسيمة</button>
-      <button class="tab" onclick="showTab('warning',this)" data-ar="تنبيهات" data-en="Warnings">تنبيهات</button>
-      <button class="tab" onclick="showTab('pass',this)" data-ar="مطابق" data-en="Compliant">مطابق</button>
-      <button class="tab" onclick="showTab('allergens',this)" data-ar="مسببات الحساسية" data-en="Allergens">مسببات الحساسية</button>
-      <button class="tab" onclick="showTab('nutrition',this)" data-ar="🥗 الحقائق التغذوية" data-en="🥗 Nutrition Facts">🥗 الحقائق التغذوية</button>
-      <button class="tab" onclick="showTab('jswarnings',this)" data-ar="⚠️ تحذيرات خاصة" data-en="⚠️ Special Warnings">⚠️ تحذيرات خاصة</button>
-      <button class="tab" onclick="showTab('halalcheck',this)" data-ar="🚨 خنزير وكحول" data-en="🚨 Pork & Alcohol">🚨 خنزير وكحول</button>
-      <button class="tab" onclick="showTab('additives_verify',this)" data-ar="⚗️ تحقق المضافات CXS 192" data-en="⚗️ Additives CXS 192">⚗️ تحقق المضافات CXS 192</button>
+      <button class="tab active" onclick="showTab('all',this)">الكل</button>
+      <button class="tab" onclick="showTab('critical',this)">مخالفات جسيمة</button>
+      <button class="tab" onclick="showTab('warning',this)">تنبيهات</button>
+      <button class="tab" onclick="showTab('pass',this)">مطابق</button>
+      <button class="tab" onclick="showTab('allergens',this)">مسببات الحساسية</button>
+      <button class="tab" onclick="showTab('nutrition',this)">🥗 الحقائق التغذوية</button>
+      <button class="tab" onclick="showTab('jswarnings',this)">⚠️ تحذيرات خاصة</button>
+      <button class="tab" onclick="showTab('halalcheck',this)">🚨 خنزير وكحول</button>
+      <button class="tab" onclick="showTab('additives_verify',this)">⚗️ تحقق المضافات CXS 192</button>
     </div>
 
     <div class="issues-list" id="issuesList"></div>
@@ -540,54 +516,34 @@ body.en { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
 <section id="about" style="padding:4rem 1rem;border-top:1px solid var(--border);">
 <div class="container">
   <div class="section-title">
-    <h2 data-ar="كيف يعمل النظام؟" data-en="How It Works">كيف يعمل النظام؟</h2>
-    <p data-ar="طبقات متعددة من التدقيق مدمجة في أداة واحدة" data-en="Multiple verification layers in one powerful tool">طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
+    <h2>كيف يعمل النظام؟</h2>
+    <p>طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
-      <h3 style="margin-bottom:.5rem;" data-ar="المواصفات الأردنية JS" data-en="Jordanian Standards JS">المواصفات الأردنية JS</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;" data-ar="تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية" data-en="Verifying 18+ Jordanian JS standards covering dairy, meat, beverages, bakery, chocolate, candy, infant formula, and supplements">تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
+      <h3 style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
-      <h3 style="margin-bottom:.5rem;" data-ar="كودكس CXS 192" data-en="Codex CXS 192">كودكس CXS 192</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;" data-ar="التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح" data-en="Verifying food additives against the three international tables — Table 1, Table 2, Table 3 with the correct decision sequence">التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح</p>
+      <h3 style="margin-bottom:.5rem;">كودكس CXS 192</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">🚨</div>
-      <h3 style="margin-bottom:.5rem;" data-ar="10 قواعد عامة إلزامية" data-en="10 Mandatory General Rules">10 قواعد عامة إلزامية</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;" data-ar="محليات صناعية، حلال، GMO، مصدر الحليب، أسبرتام، ترتيب المكونات وغيرها من الاشتراطات الأردنية العامة" data-en="Artificial sweeteners, Halal, GMO, milk source, aspartame, ingredient order, and other Jordanian general requirements">محليات صناعية، حلال، GMO، مصدر الحليب، أسبرتام، ترتيب المكونات وغيرها من الاشتراطات الأردنية العامة</p>
+      <h3 style="margin-bottom:.5rem;">10 قواعد عامة إلزامية</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">محليات صناعية، حلال، GMO، مصدر الحليب، أسبرتام، ترتيب المكونات وغيرها من الاشتراطات الأردنية العامة</p>
     </div>
   </div>
   <p style="text-align:center;color:var(--text3);font-size:.78rem;margin-top:2rem;">
-    <span data-ar="⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة القانونية الرسمية. القرار النهائي يعود للجهات الرقابية المختصة." data-en="⚠️ This system is a verification aid and does not replace official legal consultation. The final decision rests with the competent regulatory authorities.">⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة القانونية الرسمية. القرار النهائي يعود للجهات الرقابية المختصة.</span>
+    ⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة القانونية الرسمية. القرار النهائي يعود للجهات الرقابية المختصة.
   </p>
 </div>
 </section>
 
 <footer>
-  <div style="max-width:960px;margin:0 auto;">
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;margin-bottom:1.5rem;">
-      <div style="text-align:center;">
-        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
-          <a href="https://wa.me/962776195235" target="_blank"
-            style="display:flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600;border:1px solid rgba(0,212,168,.3);padding:6px 14px;border-radius:100px;transition:all .2s;"
-            onmouseover="this.style.background='rgba(0,212,168,.08)'" onmouseout="this.style.background='transparent'">
-            💬 WhatsApp
-          </a>
-          <a href="mailto:info@tpc-foodcheck.com" target="_blank"
-            style="display:flex;align-items:center;gap:6px;color:var(--accent2);text-decoration:none;font-size:.85rem;font-weight:600;border:1px solid rgba(0,153,204,.3);padding:6px 14px;border-radius:100px;transition:all .2s;"
-            onmouseover="this.style.background='rgba(0,153,204,.08)'" onmouseout="this.style.background='transparent'">
-            ✉️ info@tpc-foodcheck.com
-          </a>
-        </div>
-      </div>
-    </div>
-    <p style="font-size:.78rem;">FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · المواصفات الأردنية JS · الكودكس CXS 192</p>
-    <p style="font-size:.72rem;margin-top:.3rem;color:var(--text3);" data-ar="⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة الرسمية" data-en="⚠️ This tool is a verification aid and does not replace official regulatory consultation">⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة الرسمية</p>
-  </div>
+  <p>FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · المواصفات الأردنية JS · الكودكس CXS 192</p>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -606,7 +562,7 @@ const RULES = [
   {"رقم القاعدة":"R019","رقم المادة":"الكمية للسوائل","الشرط":"إذا كان الغذاء سائلاً","المتطلب":"يجب ذكر الحجم الصافي","درجة المخالفة":"جسيمة","الفئة":"الوزن"},
   {"رقم القاعدة":"R021","رقم المادة":"اسم وعنوان المنتج","الشرط":"إذا تم تسويق المنتج","المتطلب":"يجب ذكر اسم وعنوان المصنع أو المستورد","درجة المخالفة":"جسيمة","الفئة":"الصانع"},
   {"رقم القاعدة":"R022","رقم المادة":"بلد المنشأ","الشرط":"إذا كان الغذاء معبأ مسبقاً","المتطلب":"يجب ذكر بلد المنشأ","درجة المخالفة":"جسيمة","الفئة":"المنشأ"},
-  {"رقم القاعدة":"R024","رقم المادة":"تاريخ الصلاحية","الشرط":"إذا لم يكن الغذاء من المنتجات المستثناة","المتطلب":"يجب ذكر تاريخ الصلاحية مطبوعاً غير قابل للإزالة — لا يجوز ملصق لاصق","درجة المخالفة":"جسيمة","الفئة":"التواريخ"},
+  {"رقم القاعدة":"R024","رقم المادة":"تاريخ الصلاحية","الشرط":"إذا لم يكن الغذاء من المنتجات المستثناة","المتطلب":"يجب ذكر تاريخ الصلاحية مطبوعاً غير قابل للإزالة — لا يجوز ملصق لاصق. ملاحظة: إذا لم يظهر التاريخ في الصورة فقد يكون مطبوعاً في مكان آخر من العبوة — أعطِ تنبيهاً لا مخالفة جسيمة","درجة المخالفة":"تنبيه","الفئة":"التواريخ"},
   {"رقم القاعدة":"R024B","رقم المادة":"صيغة التاريخ","الشرط":"حسب JS 288:2023","المتطلب":"صلاحية ≤3 أشهر: يوم+شهر+سنة. صلاحية >3 أشهر: شهر+سنة فقط. عبارة إلزامية قبله: يستخدم قبل / تاريخ انتهاء الصلاحية","درجة المخالفة":"متوسطة","الفئة":"التواريخ"},
   {"رقم القاعدة":"R025","رقم المادة":"شروط التخزين","الشرط":"إذا كانت صلاحية المنتج تعتمد على ظروف التخزين","المتطلب":"يجب ذكر شروط التخزين","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
   {"رقم القاعدة":"R025B","رقم المادة":"الاستخدام بعد الفتح","الشرط":"إذا تغيرت صلاحية المنتج بعد فتح العبوة","المتطلب":"يجب ذكر مدة الاستخدام بعد الفتح على البطاقة","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
@@ -787,107 +743,6 @@ const JS_SPECIFIC_RULES = {
       {code:"SUP-4", text:"مكمل للحوامل يحتوي فيتامين A > 3000 مكغ = خطر صحي جسيم"},
       {code:"SUP-5", text:"مكمل يدّعي علاج أو وقاية من مرض = يحتاج إحالة لمديرية الدواء وليس الغذاء"},
       {code:"SUP-6", text:"جرعة فيتامين أو معدن > 100% من الاحتياج اليومي الأردني = مخالفة إلزامية"}
-    ]
-  },
-  "margarine": {
-    name: "السمن النباتي والشورتننج JS 40:2003",
-    warnings: [
-      {code:"JS40-1", text:"السمن النباتي: يجب أن يكون منتجاً شبه صلباً مكوناً أساساً من Glycerides من مصادر نباتية فقط"},
-      {code:"JS40-2", text:"الشورتننج: يُسمح ببعض الدهون الحيوانية أو البحرية — يجب التصريح بها صراحةً على البطاقة"},
-      {code:"JS40-3", text:"يجب ذكر نوع الزيوت النباتية: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
-      {code:"JS40-4", text:"إضافة فيتامين A أو D: يجب ذكر الكمية بالوحدات الدولية على البطاقة"},
-      {code:"JS40-5", text:"الشورتننج: اللون المميز يجب أن يكون أبيض — أي لون آخر يستوجب توضيحاً"}
-    ]
-  },
-  "fruit_syrup_994": {
-    name: "شراب الفاكهة JS 994:2023",
-    warnings: [
-      {code:"JS994-1", text:"نسبة عصير الفاكهة الطبيعية لا يجوز أن تقل عن 10% — وإلا يُسمى 'شراب منكَّه' وليس شراب فاكهة"},
-      {code:"JS994-2", text:"إذا كانت نسبة العصير < 10% يجب تغيير الاسم إلى 'شراب منكَّه' — استخدام اسم 'شراب فاكهة' خطأ قانوني"},
-      {code:"JS994-3", text:"يجب ذكر نسبة الفاكهة أو العصير على البطاقة بشكل واضح"},
-      {code:"JS994-4", text:"المحليات الصناعية المضافة: يجب ذكر اسمها ونسبتها في قائمة المكونات"}
-    ]
-  },
-  "potato_chips": {
-    name: "شيبس البطاطا JS 505:2002",
-    warnings: [
-      {code:"JS505-1", text:"المادة الخام: بطاطا طازجة أو مسحوق بطاطا — يجب توثيق المصدر وذكره في المكونات"},
-      {code:"JS505-2", text:"المنتج يجب أن يكون خالياً تماماً من مادة السولانين (البطاطا الخضراء أو المشوّهة)"},
-      {code:"JS505-3", text:"نسبة العيوب لا يجوز أن تتجاوز 6% وزناً"},
-      {code:"JS505-4", text:"نوع الزيت المستخدم في القلي يجب ذكره في المكونات"}
-    ]
-  },
-  "snacks_393": {
-    name: "الوجبات الخفيفة المقرمشة JS 393",
-    warnings: [
-      {code:"JS393-1", text:"يجب ذكر نوع الحبوب أو المواد الخام الأساسية المستخدمة في التصنيع"},
-      {code:"JS393-2", text:"النكهات المستخدمة يجب أن تكون مذكورة في قائمة المكونات بأسمائها"},
-      {code:"JS393-3", text:"المحليات الصناعية عند استخدامها: يجب ذكر اسمها ونسبتها صراحةً"},
-      {code:"JS393-4", text:"تاريخ الإنتاج وانتهاء الصلاحية إلزاميان — ذكر أحدهما فقط غير كافٍ"}
-    ]
-  },
-  "edible_oil_1791": {
-    name: "الزيوت النباتية القابلة للأكل JS 1791",
-    warnings: [
-      {code:"JS1791-1", text:"يمنع خلط الزيوت ببعضها في المنتج النهائي — يجب أن يكون نقياً 100% من نوع واحد"},
-      {code:"JS1791-2", text:"الرطوبة والمواد المتطايرة لا يجوز أن تتجاوز 0.2% — يجب ذكر ذلك في المواصفات"},
-      {code:"JS1791-3", text:"يجب ذكر اسم الزيت بدقة: زيت زيتون / زيت نخيل / زيت عباد الشمس إلخ"},
-      {code:"JS1791-4", text:"الزيت المضاف إليه فيتامينات: يجب ذكر نوع الفيتامين وكميته"}
-    ]
-  },
-  "dairy_product_1626": {
-    name: "منتجات الألبان المعاد تركيبها JS 1626",
-    warnings: [
-      {code:"JS1626-1", text:"يجب التصريح بوضوح على البطاقة بأن المنتج 'معاد تركيبه' أو 'من حليب مجفف'"},
-      {code:"JS1626-2", text:"نسبة الدهون ونسبة البروتين يجب ذكرهما صراحةً في الجدول الغذائي"},
-      {code:"JS1626-3", text:"المضافات المستخدمة في إعادة التركيب يجب ذكرها في قائمة المكونات"},
-      {code:"JS1626-4", text:"الفيتامينات المضافة: يجب ذكر نوع كل فيتامين وكميته بالوحدات الدولية"}
-    ]
-  },
-  "luncheon_79": {
-    name: "لحم اللنشون المعلب JS 79:2009",
-    warnings: [
-      {code:"JS79-1", text:"اسم المنتج يجب أن يتضمن كلمة 'لنشون' متبوعة بنوع اللحم: لنشون بقري / دجاج / غنم"},
-      {code:"JS79-2", text:"وجود دهن أو لحم خنزير يجب التصريح به بوضوح باللغة العربية في مكان بارز"},
-      {code:"JS79-3", text:"نسبة اللحم الصافي يجب أن تكون مذكورة ومطابقة للمواصفة"},
-      {code:"JS79-4", text:"المواد الحافظة المستخدمة يجب ذكرها بأسمائها وأرقام INS في المكونات"}
-    ]
-  },
-  "canned_meat_816": {
-    name: "اللحوم المعلبة JS 816",
-    warnings: [
-      {code:"JS816-1", text:"اسم المنتج يجب أن يحدد نوع اللحم بدقة: بقري / دجاج / خروف / مخلوط"},
-      {code:"JS816-2", text:"نسبة اللحم الحقيقية في المنتج النهائي يجب أن تكون مذكورة ومطابقة"},
-      {code:"JS816-3", text:"المضافات الحافظة والألوان يجب ذكرها مع أرقام INS في المكونات"},
-      {code:"JS816-4", text:"وجود مواد حشو أو بروتينات نباتية يجب التصريح بها صراحةً"}
-    ]
-  },
-  "ice_cream_44": {
-    name: "المثلجات الغذائية JS 44:2022",
-    warnings: [
-      {code:"JS44-1", text:"الحليب والبيض المستخدم يجب أن يكون مبستراً أو معالجاً حرارياً بما يعادله"},
-      {code:"JS44-2", text:"نسبة البيض في المثلجات لا يجوز أن تتجاوز 1.4%"},
-      {code:"JS44-3", text:"المثلجات بالفواكه: نسبة الفاكهة يجب أن تكون ≥ 15%"},
-      {code:"JS44-4", text:"المثلجات اللبنية: الدسم يجب أن يكون من حليب فقط — وجود زيوت نباتية بديلة = مخالفة"},
-      {code:"JS44-5", text:"درجة حرارة التخزين يجب أن تكون مذكورة على البطاقة ≤ −18°س"}
-    ]
-  },
-  "ketchup_355": {
-    name: "كاتشب البندورة JS 355:2021",
-    warnings: [
-      {code:"JS355-1", text:"المنتج يجب أن يحتوي على ما لا يقل عن 25% بندورة طازجة أو ما يعادلها من المركز"},
-      {code:"JS355-2", text:"يُمنع إضافة ألوان صناعية — الألوان الطبيعية مسموحة مع التصريح"},
-      {code:"JS355-3", text:"يجب ذكر نسبة الصلبة الذائبة (Brix) على البطاقة"},
-      {code:"JS355-4", text:"المحليات المضافة يجب ذكرها مع نسبتها في المكونات"}
-    ]
-  },
-  "mayonnaise_938": {
-    name: "المايونيز JS 938:2012",
-    warnings: [
-      {code:"JS938-1", text:"نسبة الزيت النباتي في المايونيز يجب أن تكون ≥ 65% وزناً"},
-      {code:"JS938-2", text:"يجب ذكر نوع الزيت المستخدم في المكونات"},
-      {code:"JS938-3", text:"مصدر البيض أو بدائله يجب التصريح به في المكونات"},
-      {code:"JS938-4", text:"المنتج الذي يحتوي < 65% زيت يُسمى 'صلصة مايونيز' وليس مايونيز — فرق جوهري"}
     ]
   }
 };
@@ -1356,7 +1211,8 @@ ${allergensText}
 6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
 7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
 8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
-9. تعليمة المضافات الإلزامية: في حقل "ins" اكتب دائماً الرقم الرقمي فقط بدون E — قاموس الأسماء الشائعة: فيتامين ج = 300، بيتا كاروتين = 160، صمغ عربي = 414، ليسيثين = 322، حمض ستريك = 330، بيكربونات صوديوم = 500، كاراجينان = 407، بكتين = 440، جيلاتين = 441، سوربات بوتاسيوم = 202، بنزوات صوديوم = 211، ستيفيا = 960، أسبرتام = 951، حمض الطرطريك = 334، حمض الخليك = 260، كلوريد كالسيوم = 509، صمغ الغوار = 412، صمغ الخروب = 410، كاراميل = 150، كوشينيل = 120، كركمين = 100، نيتريت صوديوم = 250، ثاني أكسيد الكبريت = 220. إذا لم تعرف الرقم اتركه فارغاً ولا تخترع رقماً.
+9. أرقام المضافات E-numbers: إذا ذُكر رقم المضاف فقط (مثل E414, E471) دون ذكر الاسم الوظيفي — أعطِ تنبيهاً لا مخالفة جسيمة. المخالفة الجسيمة فقط إذا غاب المضاف كلياً أو كان الرقم غير معترف به
+10. تاريخ الصلاحية: إذا لم يظهر في الصورة لا تحكم بمخالفة جسيمة — أعطِ تنبيهاً فقط لأنه قد يكون مطبوعاً في مكان آخر من العبوة غير ظاهر في الصورة: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
 
 التنسيق المطلوب:
 {
@@ -1384,10 +1240,10 @@ ${allergensText}
   ],
   "additives": [
     {
-      "name": "الاسم العلمي الإنجليزي للمضاف كما هو في Codex مثل ASCORBIC ACID أو BETA-CAROTENE",
-      "ins": "رقم INS الرقمي فقط بدون حرف E — مثال: 300 وليس E300، 160 وليس E160a — إذا كان الاسم على البطاقة فيتامين ج فاكتب 300، بيتا كاروتين فاكتب 160، صمغ عربي فاكتب 414، ليسيثين فاكتب 322، حمض الستريك فاكتب 330، بيكربونات الصوديوم فاكتب 500",
+      "name": "اسم المضاف",
+      "ins": "رقم INS إن وجد",
       "declared": true,
-      "note": "اكتب هنا الاسم كما ظهر على البطاقة فعلاً"
+      "note": "ملاحظة"
     }
   ],
   "nutrition": {
@@ -1695,10 +1551,7 @@ function runCXS192Check(ins, catNo) {
     // الجدول 2
     let t2Match = null;
     if (catNo && t2[catNo]) {
-      t2Match = t2[catNo].find(a => {
-        const parts = a.ins.replace(/\s/g,'').split(/[;,]+/);
-        return parts.some(p => normalizeINS(p) === ins || p === ins || normalizeINS(p) === normalizeINS(ins));
-      });
+      t2Match = t2[catNo].find(a => a.ins.split(/[;,\s]+/).map(s=>s.trim()).includes(ins) || a.ins === ins);
     }
     if (t2Match) {
       steps.push({ n:2, s:'pass', t:'الجدول 2 — مسموح ✓', d:`الفئة ${catNo} · حد أقصى ${t2Match.max_level}` });
@@ -1789,98 +1642,24 @@ function runManualCheck() {
   renderVerifyResult(result, container);
 }
 
-// ===== normalization رقم INS — يحل E322 و160a وكل sub-codes =====
-function normalizeINS(code) {
-  if (!code) return null;
-  let c = String(code).trim().toUpperCase();
-  c = c.replace(/^E[-\s]?/, '');           // إزالة E في البداية
-  c = c.replace(/\([ivxIVX]+\)/g, '');     // إزالة (i)(ii)(iii)
-  c = c.replace(/[a-zA-Z]+$/, '');         // إزالة حروف في النهاية مثل 160a → 160
-  return c.trim() || null;
-}
-
-function resolveINSFull(rawInput) {
-  if (!rawInput || !CODEX) return null;
-  const raw = String(rawInput).trim();
-  const numOnly = normalizeINS(raw);
-  if (!numOnly) return null;
-
-  // 1) جدول e_to_ins مباشرة
-  if (CODEX.e_to_ins) {
-    const mapped = CODEX.e_to_ins[numOnly];
-    if (mapped) {
-      const mn = normalizeINS(mapped);
-      if (CODEX.table1[mn] || CODEX.table3[mn]) return mn;
-      if (CODEX.table1[mapped] || CODEX.table3[mapped]) return mapped;
-    }
-  }
-  // 2) بحث مباشر بعد normalization
-  if (CODEX.table1[numOnly] || CODEX.table3[numOnly]) return numOnly;
-  // 3) fallback — ابحث عن أول مفتاح يبدأ بنفس الرقم (يحل 160 → 160a(ii))
-  for (const ins of Object.keys(CODEX.table1)) {
-    if (ins !== 'nan' && normalizeINS(ins) === numOnly) return ins;
-  }
-  for (const ins of Object.keys(CODEX.table3)) {
-    if (ins !== 'nan' && normalizeINS(ins) === numOnly) return ins;
-  }
-  // 4) بحث بالاسم
-  const up = raw.toUpperCase();
-  for (const [ins, d] of Object.entries(CODEX.table1)) {
-    if (d.name.toUpperCase().includes(up.substring(0,6)) && up.length > 4) return ins;
-  }
-  for (const [ins, d] of Object.entries(CODEX.table3)) {
-    if (d.name.toUpperCase().includes(up.substring(0,6)) && up.length > 4) return ins;
-  }
-  return null;
-}
-
 // ===== فحص كل المضافات المكتشفة من الصورة =====
 function checkAllDetectedAdditives() {
   if (!codexReady || !lastDetectedAdditives.length) return;
   const autoEl = document.getElementById('autoAdditivesResult');
-  const catNo = lastProductCatNo;
-  const results = [];
+  autoEl.innerHTML = `<div style="font-weight:700;margin-bottom:.8rem;color:var(--text2);">نتائج فحص المضافات المكتشفة (${lastDetectedAdditives.length} مضاف)</div>`;
 
   lastDetectedAdditives.forEach(add => {
-    const insRaw = (add.ins || '').trim();
-    const nameRaw = (add.name || '').trim();
-    const ins = resolveINSFull(insRaw) || resolveINSFull(nameRaw);
-
-    if (!ins) {
-      results.push({ add, ins: null, verdict: 'unknown' });
-    } else {
-      const result = runCXS192Check(ins, catNo);
-      results.push({ add, ins, result, verdict: result.verdict });
+    const name = (add.name || '').toUpperCase();
+    const insRaw = (add.ins || '').replace(/E/i,'').trim();
+    let ins = null;
+    // resolve INS
+    if (insRaw && (CODEX.table1[insRaw] || CODEX.table3[insRaw])) ins = insRaw;
+    else {
+      for (const [i, d] of Object.entries(CODEX.table1)) {
+        if (d.name.toUpperCase().includes(name.substring(0,5)) && name.length > 4) { ins = i; break; }
+      }
     }
-  });
-
-  // ===== ملخص سريع =====
-  const permitted = results.filter(r => r.verdict === 'permitted').length;
-  const forbidden = results.filter(r => r.verdict === 'forbidden').length;
-  const unknown   = results.filter(r => r.verdict === 'unknown').length;
-  const total = results.length;
-
-  let sc = 'rgba(46,213,115,.08)', sb = 'rgba(46,213,115,.25)', si = '✅';
-  let st = `تم فحص ${total} مضافة — جميعها مسموحة`;
-  if (forbidden > 0) {
-    sc='rgba(255,71,87,.08)'; sb='rgba(255,71,87,.25)'; si='❌';
-    st=`تم فحص ${total} مضافة — ${permitted} مسموحة · ${forbidden} غير مسموحة${unknown?' · '+unknown+' تحتاج مراجعة':''}`;
-  } else if (unknown > 0) {
-    sc='rgba(255,165,2,.08)'; sb='rgba(255,165,2,.25)'; si='⚠️';
-    st=`تم فحص ${total} مضافة — ${permitted} مسموحة · ${unknown} تحتاج مراجعة`;
-  }
-
-  autoEl.innerHTML = `
-    <div style="background:${sc};border:1px solid ${sb};border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem;">
-      <span style="font-size:1.6rem;">${si}</span>
-      <div>
-        <div style="font-weight:800;font-size:.95rem;">${st}</div>
-        ${catNo?`<div style="font-size:.78rem;color:var(--text2);margin-top:2px;">الفئة: ${catNo} · CXS 192</div>`:''}
-      </div>
-    </div>
-    <div style="font-weight:700;margin-bottom:.8rem;color:var(--text2);font-size:.85rem;">تفاصيل المضافات:</div>`;
-
-  results.forEach(({ add, ins, result, verdict }) => {
+    const catNo = lastProductCatNo;
     const card = document.createElement('div');
     card.className = 'additive-card';
     if (!ins) {
@@ -1889,19 +1668,18 @@ function checkAllDetectedAdditives() {
         <span class="av-badge-red">⚠️ غير موجود في قاعدة البيانات</span></div>
         <div style="font-size:.78rem;color:var(--text3);">${add.ins ? 'INS المُعلن: ' + add.ins : 'لا يوجد رقم INS'}</div>`;
     } else {
+      const result = runCXS192Check(ins, catNo);
       const stepsHTML = result.steps.map(s =>
         `<div style="display:flex;gap:.5rem;align-items:center;font-size:.78rem;margin-top:.3rem;">
-          <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;
-          background:${s.s==='pass'?'rgba(46,213,115,.2)':s.s==='fail'?'rgba(255,71,87,.2)':'rgba(74,90,122,.2)'};
-          color:${s.s==='pass'?'var(--success)':s.s==='fail'?'var(--danger)':'var(--text3)'};">${s.n}</span>
+          <span style="width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;background:${s.s==='pass'?'rgba(46,213,115,.2)':s.s==='fail'?'rgba(255,71,87,.2)':'rgba(74,90,122,.2)'};color:${s.s==='pass'?'var(--success)':s.s==='fail'?'var(--danger)':'var(--text3)'};">${s.n}</span>
           <span style="color:${s.s==='skip'?'var(--text3)':'var(--text2)'};">${s.t}</span>
         </div>`).join('');
-      const vc = verdict === 'permitted' ? 'av-badge-green' : 'av-badge-red';
-      const vl = verdict === 'permitted' ? '✅ مسموح' : '❌ غير مسموح';
+      const vc = result.verdict === 'permitted' ? 'av-badge-green' : 'av-badge-red';
+      const vl = result.verdict === 'permitted' ? '✅ مسموح' : '❌ غير مسموح';
       card.innerHTML = `<div class="additive-card-header">
         <span style="font-weight:700;">${result.additiveName}</span>
         <span class="${vc}">${vl}</span></div>
-        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${add.ins&&add.ins!==ins?` (مُعلن: ${add.ins})`:''}${catNo?' · '+catNo:''}</div>
+        <div style="font-size:.75rem;color:var(--text3);margin-bottom:.4rem;">INS ${ins}${catNo ? ' · الفئة ' + catNo : ''}</div>
         ${stepsHTML}`;
     }
     autoEl.appendChild(card);
@@ -1944,66 +1722,6 @@ displayResults = function(data, productType) {
   }
 };
 // ============================================================
-
-
-// ===== LANGUAGE TOGGLE =====
-let currentLang = 'ar';
-
-function toggleLang() {
-  currentLang = currentLang === 'ar' ? 'en' : 'ar';
-  applyLang();
-}
-
-function applyLang() {
-  const isEn = currentLang === 'en';
-  
-  // html dir + lang
-  document.documentElement.lang = isEn ? 'en' : 'ar';
-  document.documentElement.dir = isEn ? 'ltr' : 'rtl';
-  
-  // زر اللغة
-  document.getElementById('langBtn').textContent = isEn ? 'عربي' : 'EN';
-  
-  // كل العناصر ذات data-ar/data-en
-  document.querySelectorAll('[data-ar]').forEach(el => {
-    const txt = isEn ? el.getAttribute('data-en') : el.getAttribute('data-ar');
-    if (txt) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = txt;
-      } else {
-        el.textContent = txt;
-      }
-    }
-  });
-  
-  // title الصفحة
-  document.title = isEn 
-    ? 'Food Label Verifier | FoodCheck Jordan'
-    : 'مدقق بطاقة البيان الغذائية | FoodCheck Jordan';
-
-  // option elements داخل selects
-  document.querySelectorAll('option[data-ar]').forEach(el => {
-    el.textContent = isEn ? el.getAttribute('data-en') : el.getAttribute('data-ar');
-  });
-
-  // issue cards severity text
-  document.querySelectorAll('.issue-severity').forEach(el => {
-    if (el.classList.contains('sev-critical')) el.textContent = isEn ? 'Non-Compliant' : 'غير مطابق';
-    if (el.classList.contains('sev-warning'))  el.textContent = isEn ? 'Warning' : 'تنبيه';
-    if (el.classList.contains('sev-pass'))     el.textContent = isEn ? 'Compliant' : 'مطابق';
-  });
-
-  // score labels
-  const passEl = document.getElementById('passCount');
-  const failEl = document.getElementById('failCount');
-  if (passEl && passEl.textContent.includes(':')) {
-    const pn = passEl.textContent.match(/\d+/)?.[0] || '0';
-    const fn = failEl.textContent.match(/\d+/)?.[0] || '0';
-    const wn = failEl.textContent.match(/\d+/g)?.[1] || '0';
-    passEl.textContent = isEn ? `✅ Compliant: ${pn}` : `✅ مطابق: ${pn}`;
-    failEl.textContent = isEn ? `❌ Non-Compliant: ${fn} · ⚠️ Warnings: ${wn}` : `❌ غير مطابق: ${fn} · ⚠️ تنبيه: ${wn}`;
-  }
-}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
