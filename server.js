@@ -1,97 +1,41 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
-
 const app = express();
+
 app.use(express.json({ limit: '50mb' }));
 
-// ── تحميل البيانات ──
-let CODEX = null;
-try {
-  const raw = fs.readFileSync(path.join(__dirname, 'public', 'codex_data.json'), 'utf8');
-  CODEX = JSON.parse(raw);
-  console.log('✅ Codex loaded');
-} catch (e) {
-  console.error('❌ Failed to load codex:', e.message);
-}
-
-// ── static ──
+// ── Static files من مجلد public ──
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── helper JSON extractor ──
-function extractBalancedJson(text) {
-  if (!text) return null;
+// ── Routes صريحة للملفات الحساسة ──
+app.get('/additives.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'additives.html'));
+});
 
-  const cleaned = text
-    .replace(/```json/gi, '')
-    .replace(/```/g, '')
-    .trim();
+app.get('/codex_data.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'codex_data.json'));
+});
 
-  const start = cleaned.indexOf('{');
-  if (start === -1) return null;
-
-  let depth = 0;
-  let inString = false;
-  let escaped = false;
-
-  for (let i = start; i < cleaned.length; i++) {
-    const ch = cleaned[i];
-
-    if (escaped) {
-      escaped = false;
-      continue;
-    }
-
-    if (ch === '\\') {
-      escaped = true;
-      continue;
-    }
-
-    if (ch === '"') {
-      inString = !inString;
-      continue;
-    }
-
-    if (!inString) {
-      if (ch === '{') depth++;
-      if (ch === '}') depth--;
-
-      if (depth === 0) {
-        return cleaned.slice(start, i + 1);
-      }
-    }
+// ── Rate limiting ──
+const requests = {};
+app.use((req, res, next) => {
+  if (req.path !== '/api/analyze') return next();
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const now = Date.now();
+  if (!requests[ip]) requests[ip] = [];
+  requests[ip] = requests[ip].filter(t => now - t < 60 * 60 * 1000);
+  if (requests[ip].length >= 10) {
+    return res.status(429).json({ error: 'تجاوزت الحد المسموح — حاول بعد ساعة' });
   }
+  requests[ip].push(now);
+  next();
+});
 
-  return null;
-}
-
-// ── API analyze ──
+// ── API endpoint ──
 app.post('/api/analyze', async (req, res) => {
   try {
     const apiKey = process.env.CLAUDE_API_KEY;
-    if (!apiKey) {
-      return res.json({ ok: false, error: '❌ API key غير موجود' });
-    }
-
-    const systemPrompt = `
-أنت مدقق بطاقات بيان غذائية.
-أعد النتيجة بصيغة JSON فقط.
-ابدأ بـ { وانتهِ بـ }.
-ممنوع أي نص خارج JSON.
-`;
-
-    const payload = {
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 4000,
-      temperature: 0,
-      system: systemPrompt,
-      messages: req.body.messages || []
-    };
-
-    // ⏱️ timeout
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
-
+    if (!apiKey) return res.status(500).json({ error: 'مفتاح API غير مضبوط' });
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -99,84 +43,24 @@ app.post('/api/analyze', async (req, res) => {
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify(payload),
-      signal: controller.signal
+      body: JSON.stringify(req.body)
     });
-
-    clearTimeout(timeout);
-
     const data = await response.json();
-
-    if (!response.ok) {
-      return res.json({
-        ok: false,
-        error: data?.error?.message || '❌ API error',
-        raw: data
-      });
-    }
-
-    const rawText =
-      data?.content?.map(x => x?.text || '').join('\n').trim() || '';
-
-    const extracted = extractBalancedJson(rawText);
-
-    // 🔥 أهم تعديل (ما يكسر النظام)
-    if (!extracted) {
-      console.log("⚠️ RAW AI:", rawText);
-
-      return res.json({
-        ok: true,
-        parsed: {
-          fallback: true,
-          message: "⚠️ AI لم يرجع JSON - تم عرض النص الخام",
-          ai_output: rawText
-        },
-        rawText
-      });
-    }
-
-    let parsed;
-
-    try {
-      parsed = JSON.parse(extracted);
-    } catch (e) {
-      console.log("❌ JSON parse error:", e.message);
-
-      return res.json({
-        ok: true,
-        parsed: {
-          fallback: true,
-          message: "⚠️ JSON غير صالح - عرض النص الخام",
-          ai_output: rawText
-        },
-        rawText
-      });
-    }
-
-    return res.json({
-      ok: true,
-      parsed,
-      rawText
-    });
-
+    res.json(data);
   } catch (err) {
-    return res.json({
-      ok: false,
-      error:
-        err.name === 'AbortError'
-          ? '⏱️ انتهى الوقت - حاول مرة ثانية'
-          : '❌ Server error: ' + err.message
-    });
+    res.status(500).json({ error: 'خطأ في السيرفر: ' + err.message });
   }
 });
 
-// ── fallback route ──
+// ── Catch-all: فقط المسارات بدون امتداد تذهب لـ index.html ──
 app.get('*', (req, res) => {
+  // ملفات ذات امتداد → 404 (لأنها كان يجب أن تُخدَم من static)
+  if (path.extname(req.path)) {
+    return res.status(404).send('Not found');
+  }
+  // مسارات SPA → index.html
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// ── start ──
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`FoodCheck running on port ${PORT}`));
