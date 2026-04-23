@@ -344,7 +344,7 @@ async function loadData() {
     document.getElementById('s3').textContent = stats.table3;
     document.getElementById('s4').textContent = stats.annex;
   } catch(e) {
-    document.getElementById('dataStatus').textContent = '⚠️ تعذّر تحميل قاعدة البيانات — تحقق من الاتصال';
+    document.getElementById('dataStatus').textContent = ' تعذّر تحميل قاعدة البيانات — تحقق من الاتصال';
   }
 }
 loadData();
@@ -554,7 +554,7 @@ function renderAdditiveResult(r) {
     verdictSub=`${nameAr} (INS ${r.ins}) مسموح في جميع الفئات الغذائية، ما عدا الفئات المستثناة في Annex`;
   } else if (r.t1_cats.length>0) {
     verdict='partial';
-    verdictTitle='⚠️ مسموح في فئات محددة فقط (جدول 1)';
+    verdictTitle=' مسموح في فئات محددة فقط (جدول 1)';
     verdictSub=`${nameAr} (INS ${r.ins}) الإذن محدود بالفئات أدناه فقط`;
   } else {
     verdict='forbidden';
@@ -593,7 +593,7 @@ function renderAdditiveResult(r) {
 
   panel.innerHTML = `
     <div class="verdict-banner ${verdict}">
-      <div class="verdict-icon">${verdict==='permitted'?'✅':verdict==='partial'?'⚠️':'❌'}</div>
+      <div class="verdict-icon">${verdict==='permitted'?'✅':verdict==='partial'?'':'❌'}</div>
       <div>
         <div class="verdict-title ${verdict}">${verdictTitle}</div>
         <div class="verdict-sub">${verdictSub}</div>
@@ -727,7 +727,7 @@ function renderBatchResult(results,productRaw,catNo,catName) {
 
   panel.innerHTML=`
     <div class="verdict-banner ${forbidden>0?'partial':'permitted'}" style="margin-bottom:1rem;">
-      <div class="verdict-icon">${forbidden>0?'⚠️':'✅'}</div>
+      <div class="verdict-icon">${forbidden>0?'':'✅'}</div>
       <div>
         <div class="verdict-title ${forbidden>0?'partial':'permitted'}">${productRaw}${catNo!==productRaw?' · '+catNo:''}</div>
         <div class="verdict-sub">${results.length} مضاف ·
@@ -745,7 +745,7 @@ function renderBatchResult(results,productRaw,catNo,catName) {
           <td style="font-size:.8rem;">${translateName(r.name)}</td>
           <td>${r.verdict==='permitted'?'<span style="color:var(--success);font-weight:700;">✅ مسموح</span>':
               r.verdict==='forbidden'?'<span style="color:var(--danger);font-weight:700;">❌ غير مسموح</span>':
-              r.verdict==='not_in_category'?'<span style="color:var(--warn);font-weight:700;">⚠️ غير مسموح هنا</span>':
+              r.verdict==='not_in_category'?'<span style="color:var(--warn);font-weight:700;"> غير مسموح هنا</span>':
               '<span style="color:var(--text3);">❓ غير موجود</span>'}</td>
           <td style="font-size:.8rem;">${r.source||'—'}</td>
           <td>${r.max_level?renderLevel(r.max_level):r.detail?`<span style="font-size:.75rem;color:var(--text3);">${r.detail}</span>`:'—'}</td>
