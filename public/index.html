@@ -1292,82 +1292,6 @@ function renderJSWarnings(productType) {
     </div>`;
 }
 
-function safeParseAIJson(rawText) {
-  if (!rawText || typeof rawText !== 'string') {
-    throw new Error('الاستجابة فارغة من السيرفر');
-  }
-
-  let text = rawText.trim();
-
-  // إزالة code fences إن وجدت
-  text = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-
-  // المحاولة الأولى: النص كامل كما هو
-  try {
-    return JSON.parse(text);
-  } catch (_) {}
-
-  // المحاولة الثانية: استخراج أول block JSON متوازن
-  const firstBrace = text.indexOf('{');
-  if (firstBrace === -1) {
-    throw new Error('تعذّر العثور على JSON في الاستجابة');
-  }
-
-  let depth = 0;
-  let inString = false;
-  let escapeNext = false;
-  let start = -1;
-
-  for (let i = firstBrace; i < text.length; i++) {
-    const ch = text[i];
-
-    if (escapeNext) {
-      escapeNext = false;
-      continue;
-    }
-
-    if (ch === '\\') {
-      if (inString) escapeNext = true;
-      continue;
-    }
-
-    if (ch === '"') {
-      inString = !inString;
-      continue;
-    }
-
-    if (inString) continue;
-
-    if (ch === '{') {
-      if (depth === 0) start = i;
-      depth++;
-    } else if (ch === '}') {
-      depth--;
-      if (depth === 0 && start !== -1) {
-        const candidate = text.slice(start, i + 1);
-        try {
-          return JSON.parse(candidate);
-        } catch (_) {}
-      }
-    }
-  }
-
-  // المحاولة الثالثة: تنظيف بعض الأخطاء الشائعة جداً
-  const cleaned = text
-    .replace(/[“”]/g, '"')
-    .replace(/[‘’]/g, "'")
-    .replace(/,\s*([}\]])/g, '$1')
-    .trim();
-
-  try {
-    return JSON.parse(cleaned);
-  } catch (_) {}
-
-  console.error('RAW AI RESPONSE:', rawText);
-  throw new Error('الرد الراجع ليس JSON صحيحاً - راجع Console');
-}
-
-
 // ===== MAIN ANALYZE =====
 async function analyze() {
   if (uploadedImages.length === 0) return;
@@ -1432,25 +1356,14 @@ ${jsRulesText}
     });
     if (!response.ok) {
       let m = 'خطأ في API';
-      try {
-        const e = await response.json();
-        m = e.error || e.message || e.error?.message || m;
-      } catch(e) {}
+      try { const e = await response.json(); m = e.error?.message || m; } catch(e) {}
       throw new Error(m);
     }
     const data = await response.json();
-
-    if (!data.ok) {
-      console.error('API ERROR:', data);
-      throw new Error(data.error || 'فشل التحليل');
-    }
-
-    const parsed = data.parsed;
-    if (!parsed || typeof parsed !== 'object') {
-      throw new Error('الرد المحلل غير صالح');
-    }
-
-    displayResults(parsed, productType);
+    const text = data.content[0].text;
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('تعذّر تحليل الاستجابة');
+    displayResults(JSON.parse(jsonMatch[0]), productType);
     stopProgress();
 
   } catch (err) {
