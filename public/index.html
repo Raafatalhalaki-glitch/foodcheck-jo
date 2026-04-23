@@ -931,45 +931,45 @@ const SHELF_LIFE_EXEMPTIONS = [
 // ===== قاعدة بيانات الخنزير والكحول =====
 const PORK_TERMS = {
   critical: [
-    'pig','swine','boar','hog','porcine','piglet','sus scrofa',
-    'lard','lard oil','pork','porc','porcin','porcus','porco','maiale',
-    'carne de cerdo','griskott','flask','porcino',
-    'bacon','ham','lardo','lardon','pancetta','porchetta','prosciutto',
-    'pork gelatin','pork fat','pork skin','pork rind',
-    'pepsin','trypsin','pancreatin',
-    'porcine gelatin','porcine collagen','porcine rennet',
-    'E441','E542','E920',
-    'خنزير','شحم الخنزير','دهن الخنزير','لحم الخنزير',
-    'جيلاتين الخنزير','كولاجين الخنزير','بيكون','هام','لحم مقدد'
+    "pig","swine","boar","hog","porcine","piglet","sus scrofa",
+    "lard","lard oil","pork","porc","porcin","porcus","porco","maiale",
+    "carne de cerdo","griskott","flask","porcino",
+    "bacon","ham","lardo","lardon","pancetta","porchetta","prosciutto",
+    "pork gelatin","pork fat","pork skin","pork rind",
+    "pepsin","trypsin","pancreatin",
+    "porcine gelatin","porcine collagen","porcine rennet",
+    "E441","E542","E920",
+    "خنزير","شحم الخنزير","دهن الخنزير","لحم الخنزير",
+    "جيلاتين الخنزير","كولاجين الخنزير","بيكون","هام","لحم مقدد"
   ],
   warning: [
-    'gelatin','gelatine','glycerol','glycerin','glycerine',
-    'collagen','rennet','shortening',
-    'E422','E470','E471','E472','E472a','E472b','E472c','E472d','E472e','E472f',
-    'E473','E474','E475','E476','E477','E478','E479','E481','E482','E483',
-    'mono and diglycerides','monoglycerides','diglycerides',
-    'fatty acid esters','stearoyl','lactylate',
-    'natural flavors','natural flavour','natural flavor',
-    'animal fat','animal gelatin',
-    'جيلاتين','جلسرين','جليسرول','كولاجين','دهون حيوانية',
-    'نكهات طبيعية','دهن نباتي أو حيواني'
+    "gelatin","gelatine","glycerol","glycerin","glycerine",
+    "collagen","rennet","shortening",
+    "E422","E470","E471","E472","E472a","E472b","E472c","E472d","E472e","E472f",
+    "E473","E474","E475","E476","E477","E478","E479","E481","E482","E483",
+    "mono and diglycerides","monoglycerides","diglycerides",
+    "fatty acid esters","stearoyl","lactylate",
+    "natural flavors","natural flavour","natural flavor",
+    "animal fat","animal gelatin",
+    "جيلاتين","جلسرين","جليسرول","كولاجين","دهون حيوانية",
+    "نكهات طبيعية","دهن نباتي أو حيواني"
   ]
 };
 
 const ALCOHOL_TERMS = {
   critical: [
-    'wine','brandy','sherry','whisky','whiskey','rum','rhum','gin','vodka',
-    'beer','ethanol','ethyl alcohol','liquor','champagne','scotch','bourbon',
-    'port','perry','madeira','liquer','liqueur','absolut','sake','mirin',
-    'merisa','tequila','applejack','armagnac','cider','mead','kvass',
-    'pulque','toddy','soju','baijiu','arak','arrack','ouzo','absinthe',
-    'vermouth','bitters','distilled spirits','alcohol','alco\'ol','wijn',
-    'vin','vino','spirits','fermented alcohol','alcoholic',
-    'كحول','كحول إيثيلي','إيثانول','نبيذ','بيرة','عرق','مسكر','خمر',
-    'مشروب كحولي','مشروب روحي'
+    "wine","brandy","sherry","whisky","whiskey","rum","rhum","gin","vodka",
+    "beer","ethanol","ethyl alcohol","liquor","champagne","scotch","bourbon",
+    "port","perry","madeira","liquer","liqueur","absolut","sake","mirin",
+    "merisa","tequila","applejack","armagnac","cider","mead","kvass",
+    "pulque","toddy","soju","baijiu","arak","arrack","ouzo","absinthe",
+    "vermouth","bitters","distilled spirits","alcohol","alco\"ol","wijn",
+    "vin","vino","spirits","fermented alcohol","alcoholic",
+    "كحول","كحول إيثيلي","إيثانول","نبيذ","بيرة","عرق","مسكر","خمر",
+    "مشروب كحولي","مشروب روحي"
   ],
   warning: [
-    'fermented','fermentation','kombucha','kefir',
+    "fermented","fermentation","kombucha","kefir",
   ]
 };
 
@@ -999,21 +999,21 @@ function checkPorkAndAlcohol(ingredientsText) {
 
 // ===== ALLERGENS =====
 const ALLERGENS = [
-  {id:1,name:'الحليب ومنتجاته',en:'Milk',keywords:['milk','whey','casein','cheese','butter','cream','lactose','milk powder']},
-  {id:2,name:'البيض',en:'Eggs',keywords:['egg','egg white','egg yolk','albumin','ovalbumin']},
-  {id:3,name:'القمح والغلوتين',en:'Wheat',keywords:['wheat','wheat flour','semolina','durum','bulgur','gluten','spelt']},
-  {id:4,name:'الشعير',en:'Barley',keywords:['barley','malt','malt extract','malt syrup']},
-  {id:5,name:'الشوفان',en:'Oats',keywords:['oats','oat flour','oatmeal']},
-  {id:6,name:'الصويا',en:'Soy',keywords:['soy','soybean','soy lecithin','soy protein','tofu','soy sauce']},
-  {id:7,name:'الفول السوداني',en:'Peanuts',keywords:['peanut','groundnut','peanut butter','peanut oil']},
-  {id:8,name:'المكسرات',en:'Tree Nuts',keywords:['almond','hazelnut','walnut','cashew','pistachio','pecan','macadamia','praline','marzipan']},
-  {id:9,name:'الأسماك',en:'Fish',keywords:['fish','salmon','tuna','cod','sardine','anchovy','fish sauce','fish protein']},
-  {id:10,name:'القشريات',en:'Crustaceans',keywords:['shrimp','prawn','crab','lobster','krill']},
-  {id:11,name:'الرخويات',en:'Molluscs',keywords:['mussels','clams','oysters','scallops','squid','octopus']},
-  {id:12,name:'السمسم',en:'Sesame',keywords:['sesame','sesame seeds','sesame oil','tahini']},
-  {id:13,name:'الخردل',en:'Mustard',keywords:['mustard','mustard seeds','mustard powder']},
-  {id:14,name:'الكرفس',en:'Celery',keywords:['celery','celeriac','celery salt']},
-  {id:15,name:'الكبريتيت',en:'Sulphites',keywords:['sulphur dioxide','sodium sulphite','potassium metabisulphite','sulphite','sulfite']}
+  {id:1,name:"الحليب ومنتجاته",en:"Milk",keywords:["milk","whey","casein","cheese","butter","cream","lactose","milk powder"]},
+  {id:2,name:"البيض",en:"Eggs",keywords:["egg","egg white","egg yolk","albumin","ovalbumin"]},
+  {id:3,name:"القمح والغلوتين",en:"Wheat",keywords:["wheat","wheat flour","semolina","durum","bulgur","gluten","spelt"]},
+  {id:4,name:"الشعير",en:"Barley",keywords:["barley","malt","malt extract","malt syrup"]},
+  {id:5,name:"الشوفان",en:"Oats",keywords:["oats","oat flour","oatmeal"]},
+  {id:6,name:"الصويا",en:"Soy",keywords:["soy","soybean","soy lecithin","soy protein","tofu","soy sauce"]},
+  {id:7,name:"الفول السوداني",en:"Peanuts",keywords:["peanut","groundnut","peanut butter","peanut oil"]},
+  {id:8,name:"المكسرات",en:"Tree Nuts",keywords:["almond","hazelnut","walnut","cashew","pistachio","pecan","macadamia","praline","marzipan"]},
+  {id:9,name:"الأسماك",en:"Fish",keywords:["fish","salmon","tuna","cod","sardine","anchovy","fish sauce","fish protein"]},
+  {id:10,name:"القشريات",en:"Crustaceans",keywords:["shrimp","prawn","crab","lobster","krill"]},
+  {id:11,name:"الرخويات",en:"Molluscs",keywords:["mussels","clams","oysters","scallops","squid","octopus"]},
+  {id:12,name:"السمسم",en:"Sesame",keywords:["sesame","sesame seeds","sesame oil","tahini"]},
+  {id:13,name:"الخردل",en:"Mustard",keywords:["mustard","mustard seeds","mustard powder"]},
+  {id:14,name:"الكرفس",en:"Celery",keywords:["celery","celeriac","celery salt"]},
+  {id:15,name:"الكبريتيت",en:"Sulphites",keywords:["sulphur dioxide","sodium sulphite","potassium metabisulphite","sulphite","sulfite"]}
 ];
 
 // ===== STATE =====
