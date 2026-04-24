@@ -7,12 +7,13 @@ app.use(express.json({ limit: '50mb' }));
 // ملفات ثابتة من public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route صريح لصفحة المضافات
+// Routes صريحة للصفحات
 app.get('/additives.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'additives.html'));
 });
-
-// Route صريح لملف البيانات
+app.get('/report.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'report.html'));
+});
 app.get('/codex_data.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'codex_data.json'));
 });
@@ -53,8 +54,9 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-// الصفحة الرئيسية فقط
+// الصفحة الرئيسية فقط — لا تعترض الملفات الأخرى
 app.get('*', (req, res) => {
+  if (req.path.includes('.')) return res.status(404).send('Not found');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
