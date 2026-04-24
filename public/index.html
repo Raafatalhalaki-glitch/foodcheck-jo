@@ -426,6 +426,19 @@ footer span { color: var(--accent); }
       <span class="overall-badge" id="overallBadge">—</span>
     </div>
 
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem;">
+      <div style="font-size:.82rem;color:var(--text2);">نتائج الفحص</div>
+      <button onclick="openReport()" style="
+        display:flex;align-items:center;gap:6px;
+        background:transparent;border:1.5px solid var(--accent);
+        color:var(--accent);border-radius:8px;padding:.45rem 1rem;
+        font-family:var(--font);font-size:.85rem;font-weight:700;cursor:pointer;
+        transition:all .2s;
+      " onmouseover="this.style.background='rgba(0,212,168,.1)'" 
+         onmouseout="this.style.background='transparent'">
+        🖨️ طباعة التقرير / حفظ PDF
+      </button>
+    </div>
     <div class="tabs">
       <button class="tab active" onclick="showTab('all',this)">الكل</button>
       <button class="tab" onclick="showTab('critical',this)">مخالفات جسيمة</button>
@@ -1311,6 +1324,14 @@ ${allergensText}
 // ===== DISPLAY RESULTS =====
 function displayResults(data, productType) {
   document.getElementById('results').style.display = 'block';
+  // حفظ بيانات التقرير
+  window._lastReportData = {
+    productName: data.product_name || data.productName || '',
+    productType: productType || '',
+    results: data.compliance_results || data.results || [],
+    additives: data.additives || [],
+    nutrition: data.nutrition_facts || data.nutrition || {}
+  };
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   document.getElementById('aiSummary').textContent = data.summary || 'تم إكمال التدقيق';
@@ -1722,6 +1743,19 @@ displayResults = function(data, productType) {
   }
 };
 // ============================================================
+
+
+// ===== فتح التقرير =====
+function openReport() {
+  if (!window._lastReportData) {
+    alert('الرجاء إجراء فحص أولاً');
+    return;
+  }
+  // حفظ البيانات في sessionStorage
+  sessionStorage.setItem('foodcheck_report', JSON.stringify(window._lastReportData));
+  // فتح صفحة التقرير
+  window.open('/report.html', '_blank');
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
