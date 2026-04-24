@@ -456,58 +456,135 @@ function generateReport(data) {
     const statusText = r.status === 'pass' ? '✓ مطابق' : r.status === 'critical' ? '✗ مخالفة' : '⚠ تنبيه';
     const sevText = r.status === 'critical' ? 'جسيمة' : r.status === 'warning' ? 'تحسين' : '';
 
+    // دعم كلا الصيغتين من Claude
+    const ruleNum = r.rule_number || r.code || '—';
+    const ruleItem = r.item || r.rule || '—';
+    const ruleReq = r.requirement || r.category || '';
+    const ruleNote = r.note || '—';
+    const ruleSolution = r.solution || '';
+
     return `<tr>
-      <td><strong>${r.rule_number || '—'}</strong></td>
+      <td><strong>${ruleNum}</strong></td>
       <td>
-        <div style="font-weight:600;">${r.item || '—'}</div>
-        <div style="font-size:.75rem;color:#8899bb;">${r.requirement || ''}</div>
+        <div style="font-weight:600;">${ruleItem}</div>
+        <div style="font-size:.75rem;color:#8899bb;">${ruleReq}</div>
       </td>
       <td>
         <span class="status-badge ${statusClass}">${statusText}</span>
         ${sevText ? `<br><span class="severity-tag">${sevText}</span>` : ''}
       </td>
       <td>
-        <div style="font-size:.8rem;color:#5a6a8a;">${r.note || '—'}</div>
-        ${r.solution && r.status !== 'pass' ? `<div class="solution-box">💡 ${r.solution}</div>` : ''}
+        <div style="font-size:.8rem;color:#5a6a8a;">${ruleNote}</div>
+        ${ruleSolution && r.status !== 'pass' ? `<div class="solution-box">💡 ${ruleSolution}</div>` : ''}
       </td>
     </tr>`;
   }).join('');
 
-  // المضافات
-  if (data.additives && data.additives.length > 0) {
-    document.getElementById('additivesCount').textContent = data.additives.length + ' مضاف';
-    document.getElementById('additivesBody').innerHTML = data.additives.map(a => `
+  // المضافات - فلترة المكونات الطبيعية التي ليست مضافات
+  const NON_ADDITIVES = [
+    'starter culture', 'بادئات', 'بادئ', 'خميرة', 'yeast',
+    'ماء', 'water', 'ملح', 'salt', 'سكر', 'sugar',
+    'حليب', 'milk', 'دقيق', 'flour', 'زيت', 'oil',
+    'بيض', 'egg', 'دهن', 'fat', 'cream', 'قشدة',
+    'natural flavour', 'نكهة طبيعية', 'spices', 'بهارات',
+    'vinegar', 'خل', 'lemon juice', 'عصير ليمون'
+  ];
+
+  function isRealAdditive(a) {
+    const name = (a.name || '').toLowerCase();
+    const ins = (a.ins || '').trim();
+    // إذا فيه رقم INS = مضاف حقيقي
+    if (ins && ins !== '' && ins !== '—' && /\d/.test(ins)) return true;
+    // إذا الاسم يطابق قائمة المكونات الطبيعية = مش مضاف
+    for (const nonAdd of NON_ADDITIVES) {
+      if (name.includes(nonAdd.toLowerCase())) return false;
+    }
+    // إذا declared = false عادةً مضاف غير معلن
+    return true;
+  }
+
+  const realAdditives = (data.additives || []).filter(isRealAdditive);
+
+  if (realAdditives && realAdditives.length > 0) {
+    document.getElementById('additivesCount').textContent = realAdditives.length + ' مضاف';
+    document.getElementById('additivesBody').innerHTML = realAdditives.map(a => `
       <div class="additive-row">
         <span class="additive-ins">INS ${a.ins || '—'}</span>
         <div class="additive-name">
           ${a.name || a.additive_name || '—'}
           ${a.name_ar ? `<span class="additive-name-ar"> · ${a.name_ar}</span>` : ''}
         </div>
-        <span class="status-badge ${a.status === 'permitted' ? 'pass' : a.status === 'warning' ? 'warn' : 'fail'}">
-          ${a.status === 'permitted' ? '✓ مسموح' : a.status === 'warning' ? '⚠ تنبيه' : '✗ غير مسموح'}
+        <span class="status-badge ${
+          a.status === 'permitted' ? 'pass' :
+          a.status === 'warning' || a.status === 'unknown' ? 'warn' : 'fail'
+        }">
+          ${a.status === 'permitted' ? '✓ مسموح' :
+            a.status === 'warning' ? '⚠ تنبيه' :
+            a.status === 'unknown' ? '⚠ يحتاج تحقق' :
+            '✗ غير مسموح'}
         </span>
       </div>
     `).join('');
   }
 
-  // الحقائق التغذوية
-  if (data.nutrition && Object.keys(data.nutrition).length > 0) {
-    const rows = Object.entries(data.nutrition).map(([k, v]) =>
-      `<tr><td>${k}</td><td>${v}</td></tr>`
-    ).join('');
-    document.getElementById('nutritionBody').innerHTML = `
-      <table class="nutrition-table">
-        <thead><tr><th>العنصر الغذائي</th><th>القيمة</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>`;
+  // الحقائق التغذوية - معالجة كل الصيغ الممكنة
+  const nutr = data.nutrition || data.nutrition_facts || {};
+  if (nutr && typeof nutr === 'object') {
+    // استخراج القيم من الـ object
+    let rows = '';
+
+    // الصيغة المباشرة: {calories: '60 kcal', protein: '3.2g'}
+    // أو الصيغة المعقدة: {hasTable: true, values: {...}, per: '100g'}
+    const values = nutr.values || nutr;
+    const nutritionLabels = {
+      'calories': 'السعرات الحرارية', 'energy': 'الطاقة',
+      'protein': 'البروتين', 'fat': 'الدهون الكلية',
+      'carbohydrates': 'الكربوهيدرات', 'sugars': 'السكريات',
+      'saturated_fat': 'الدهون المشبعة', 'trans_fat': 'الدهون المتحولة',
+      'sodium': 'الصوديوم', 'fiber': 'الألياف',
+      'cholesterol': 'الكوليسترول', 'calcium': 'الكالسيوم',
+      'iron': 'الحديد', 'vitamin_c': 'فيتامين ج',
+      'vitamin_a': 'فيتامين أ',
+    };
+
+    if (typeof values === 'object' && !Array.isArray(values)) {
+      for (const [k, v] of Object.entries(values)) {
+        if (k === 'hasTable' || k === 'per' || k === 'servingSize' ||
+            k === 'nutritionNote' || k === 'values' || typeof v === 'object') continue;
+        const label = nutritionLabels[k] || k;
+        if (v && v !== '' && v !== null) {
+          rows += `<tr><td>${label}</td><td>${v}</td></tr>`;
+        }
+      }
+    }
+
+    // ملاحظة التغذية
+    const note = nutr.nutritionNote || nutr.note || '';
+    const per = nutr.per || nutr.servingSize || '';
+
+    if (rows) {
+      document.getElementById('nutritionBody').innerHTML = `
+        ${per ? `<div style="font-size:.78rem;color:#8899bb;padding:.5rem .9rem;border-bottom:1px solid #f0f4f8;">لكل ${per}</div>` : ''}
+        <table class="nutrition-table">
+          <thead><tr><th>العنصر الغذائي</th><th>القيمة</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        ${note ? `<div style="font-size:.78rem;color:#8899bb;padding:.6rem .9rem;border-top:1px solid #f0f4f8;">${note}</div>` : ''}
+      `;
+    } else if (nutr.hasTable === false) {
+      document.getElementById('nutritionBody').innerHTML =
+        '<div style="padding:1rem;color:#ff4757;font-size:.85rem;">⚠️ جدول الحقائق التغذوية غائب</div>';
+    }
   }
 
   // ملخص التوصيات
-  const issues = data.results.filter(r => r.status !== 'pass' && r.solution);
+  const issues = data.results.filter(r => r.status !== 'pass' && (r.solution || r.note));
   if (issues.length > 0) {
-    document.getElementById('summaryList').innerHTML = issues.map(r =>
-      `<li><span><strong>${r.item}:</strong> ${r.solution}</span></li>`
-    ).join('');
+    document.getElementById('summaryList').innerHTML = issues.map(r => {
+      const label = r.item || r.rule || r.code || 'بند';
+      const fix = r.solution || r.note || '';
+      return `<li><span><strong>${label}:</strong> ${fix}</span></li>`;
+    }).join('');
   } else {
     document.getElementById('summaryBox').style.display = 'none';
   }
