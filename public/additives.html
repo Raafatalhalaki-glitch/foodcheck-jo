@@ -203,6 +203,152 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
+
+// ===== ترجمة أسماء المضافات للعربي =====
+const ADDITIVE_AR = {
+  'ACETIC ACID': 'حمض الخليك',
+  'ACESULFAME POTASSIUM': 'أسيسولفام بوتاسيوم',
+  'AGAR': 'أجار',
+  'ALGINIC ACID': 'حمض الألجينيك',
+  'ALLURA RED AC': 'أحمر أليورا',
+  'AMARANTH': 'أمارانث',
+  'AMMONIUM ALGINATE': 'ألجينات أمونيوم',
+  'ANNATTO EXTRACTS': 'مستخلص أناتو',
+  'ASCORBIC ACID': 'حمض الأسكوربيك (فيتامين ج)',
+  'ASPARTAME': 'أسبرتام',
+  'AZORUBINE': 'أزوروبين',
+  'BEESWAX': 'شمع النحل',
+  'BENZOATES': 'بنزوات',
+  'BENZOIC ACID': 'حمض البنزويك',
+  'BETA-CAROTENE': 'بيتا كاروتين',
+  'BRILLIANT BLUE FCF': 'أزرق برليان',
+  'BRILLIANT BLACK (BLACK PN)': 'أسود برليان',
+  'BEET RED': 'أحمر الشمندر',
+  'CALCIUM ALGINATE': 'ألجينات كالسيوم',
+  'CALCIUM CARBONATE': 'كربونات كالسيوم',
+  'CALCIUM CHLORIDE': 'كلوريد كالسيوم',
+  'CALCIUM SORBATE': 'سوربات كالسيوم',
+  'CARRAGEENAN': 'كاراجينان',
+  'CARMINE': 'قرمزي (كارمين)',
+  'CARAMEL': 'كراميل',
+  'CAROB BEAN GUM': 'صمغ الخروب',
+  'CITRIC ACID': 'حمض الستريك',
+  'CITRIC AND FATTY ACID ESTERS': 'استرات حمض الستريك والدهون',
+  'CURCUMIN': 'كركمين',
+  'ERYTHROSINE': 'إيريثروسين',
+  'GELATIN': 'جيلاتين',
+  'GLUCOSE': 'جلوكوز',
+  'GLYCEROL': 'جليسيرول',
+  'GUM ARABIC': 'صمغ عربي',
+  'GRAPE SKIN EXTRACT': 'مستخلص قشر العنب',
+  'INDIGOTINE': 'إنديجوتين',
+  'IRON OXIDES': 'أكاسيد الحديد',
+  'LACTIC ACID': 'حمض اللاكتيك',
+  'LECITHIN': 'ليسيتين',
+  'MAGNESIUM CARBONATE': 'كربونات المغنيسيوم',
+  'MALIC ACID': 'حمض الماليك',
+  'MALTITOL': 'مالتيتول',
+  'MANNITOL': 'مانيتول',
+  'MONOSODIUM GLUTAMATE': 'غلوتامات الصوديوم',
+  'NATAMYCIN': 'ناتاميسين',
+  'NISIN': 'نيسين',
+  'NITRATES': 'نترات',
+  'NITRITES': 'نتريت',
+  'PECTIN': 'بكتين',
+  'PECTINS': 'بكتين',
+  'PHOSPHATES': 'فوسفات',
+  'POLYSORBATES': 'بوليسوربات',
+  'POTASSIUM BENZOATE': 'بنزوات بوتاسيوم',
+  'POTASSIUM SORBATE': 'سوربات بوتاسيوم',
+  'PROPIONIC ACID': 'حمض البروبيونيك',
+  'PROPYLENE GLYCOL': 'بروبيلين جليكول',
+  'RIBOFLAVIN': 'ريبوفلافين (B2)',
+  'SACCHARIN': 'سكارين',
+  'SILICON DIOXIDE': 'ثاني أكسيد السيليكون',
+  'SODIUM ALGINATE': 'ألجينات صوديوم',
+  'SODIUM BENZOATE': 'بنزوات صوديوم',
+  'SODIUM CARBONATE': 'كربونات الصوديوم',
+  'SORBATES': 'سوربات',
+  'SORBIC ACID': 'حمض السوربيك',
+  'SORBITOL': 'سوربيتول',
+  'STARCH': 'نشاء',
+  'SUCRALOSE': 'سوكرالوز',
+  'SUCROSE ESTERS': 'استرات السكروز',
+  'SUNSET YELLOW FCF': 'أصفر غروب الشمس',
+  'TARTRAZINE': 'تارترازين',
+  'TITANIUM DIOXIDE': 'ثاني أكسيد التيتانيوم',
+  'TOCOPHEROLS': 'توكوفيرول (فيتامين E)',
+  'XANTHAN GUM': 'صمغ الزانثان',
+  'XYLITOL': 'زيليتول',
+  'ZEAXANTHIN': 'زياكسانثين',
+  'CARNAUBA WAX': 'شمع الكارنوبا',
+  'GELLAN GUM': 'صمغ الجيلان',
+  'GUAR GUM': 'صمغ الغوار',
+  'GUM ARABIC': 'صمغ عربي',
+  'HYDROXYPROPYL STARCH': 'نشاء هيدروكسي بروبيل',
+  'MICROCRYSTALLINE': 'سيليلوز مجهري',
+  'MONO- AND DI-GLYCERIDES': 'أحادي وثنائي الجليسيريد',
+  'POLYDEXTROSES': 'بولي دكستروز',
+  'POTASSIUM CARBONATE': 'كربونات البوتاسيوم',
+  'POTASSIUM HYDROXIDE': 'هيدروكسيد البوتاسيوم',
+  'POLYGLYCEROL ESTERS': 'استرات بولي جليسيرول',
+  'PROPYL GALLATE': 'غالات البروبيل',
+  'SODIUM ASCORBATE': 'أسكوربات الصوديوم',
+  'SODIUM HYDROXIDE': 'هيدروكسيد الصوديوم',
+  'TRISODIUM CITRATE': 'سيترات الصوديوم الثلاثية',
+  'MAGNESIUM HYDROXIDE': 'هيدروكسيد المغنيسيوم',
+  'POTASSIUM LACTATE': 'لاكتات البوتاسيوم',
+  'ACESULFAME POTASSIUM': 'أسيسولفام البوتاسيوم',
+  'ADVANTAME': 'أدفانتام',
+  'ALLURA RED': 'أحمر أليورا',
+  'ANNATTO': 'أناتو',
+  'ASCORBYL PALMITATE': 'بالميتات الأسكوربيل',
+};
+
+const FUNC_AR = {
+  'Sweetener': 'محلّي',
+  'Preservative': 'حافظ',
+  'Colour': 'ملوّن',
+  'Emulsifier': 'مستحلب',
+  'Stabilizer': 'مثبّت',
+  'Thickener': 'مكثّف',
+  'Antioxidant': 'مضاد أكسدة',
+  'Acidifier': 'مُحمِّض',
+  'Acidity regulator': 'منظّم حموضة',
+  'Flavour enhancer': 'معزّز نكهة',
+  'Anti-caking agent': 'مانع تكتل',
+  'Bulking agent': 'عامل حجم',
+  'Gelling agent': 'عامل هلمة',
+  'Glazing agent': 'عامل تلميع',
+  'Humectant': 'مرطّب',
+  'Sequestrant': 'عامل عزل',
+  'Raising agent': 'عامل تخمير',
+  'Propellant': 'دافع',
+  'Packaging gas': 'غاز تغليف',
+  'Enzyme': 'إنزيم',
+  'Modified starch': 'نشاء معدّل',
+  'Carrier': 'ناقل',
+  'Flour treatment agent': 'معالج دقيق',
+};
+
+function translateAdditive(name) {
+  if (!name) return '';
+  const up = name.toUpperCase();
+  for (const [en, ar] of Object.entries(ADDITIVE_AR)) {
+    if (up.includes(en.toUpperCase())) return ar;
+  }
+  return '';
+}
+
+function translateFunc(func) {
+  if (!func) return func;
+  let ar = func;
+  for (const [en, arTrans] of Object.entries(FUNC_AR)) {
+    ar = ar.replace(new RegExp(en, 'gi'), arTrans);
+  }
+  return ar;
+}
+
 // ===== DATA =====
 let CODEX = null;
 let ready = false;
@@ -403,6 +549,8 @@ function queryAdditive(ins) {
   return {
     ins,
     name: t1[ins]?.name || t3[ins]?.name || 'INS ' + ins,
+    name_ar: translateAdditive(t1[ins]?.name || t3[ins]?.name || ''),
+    func_ar: translateFunc(t1[ins]?.functional_class || t3[ins]?.functional_class || ''),
     functional_class: t1[ins]?.functional_class || t3[ins]?.functional_class || '',
     t1_cats: t1[ins]?.categories || [],
     in_t3: !!t3[ins],
@@ -419,7 +567,7 @@ function renderAdditiveResult(r) {
   if (r.in_t3) {
     verdict = 'permitted';
     verdictTitle = '✅ مسموح بشكل عام (جدول 3)';
-    verdictSub = `${r.name} (INS ${r.ins}) مسموح في جميع الفئات الغذائية، باستثناء الفئات المدرجة في Annex to Table 3`;
+    verdictSub = `${r.name}${r.name_ar ? " · " + r.name_ar : ""} (INS ${r.ins}) مسموح في جميع الفئات الغذائية، باستثناء الفئات المدرجة في Annex to Table 3`;
   } else if (r.t1_cats.length > 0) {
     verdict = 'partial';
     verdictTitle = '⚠️ مسموح في فئات محددة فقط (جدول 1)';
