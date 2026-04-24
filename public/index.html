@@ -395,15 +395,15 @@ footer span { color: var(--accent); }
 
 <section class="hero">
   <div class="hero-badge">
-    <span>●</span> مدعوم بالذكاء الاصطناعي · المواصفات الأردنية JS · الكودكس CXS 192
+    <span>●</span> مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192
   </div>
   <h1>هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
   <p>افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
   <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
   <div class="hero-stats">
     <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label">مواصفة أردنية JS</div></div>
-    <div class="stat"><div class="stat-num">✔ 10</div><div class="stat-label">قواعد إلزامية</div></div>
-    <div class="stat"><div class="stat-num">✔ 15</div><div class="stat-label">مادة حساسية</div></div>
+    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label">قاعدة JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
@@ -420,8 +420,6 @@ footer span { color: var(--accent); }
     <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
   </div>
 
-  <!-- API key مخفي على السيرفر -->
-
   <div class="upload-zone" id="uploadZone">
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
@@ -430,7 +428,6 @@ footer span { color: var(--accent); }
       <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
     </div>
   </div>
-  <!-- معرض الصور المرفوعة -->
   <div id="imageGallery" style="display:none;margin-bottom:1.5rem;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
       <span style="font-size:.85rem;color:var(--text2);">الصور المرفوعة (<span id="imgCount">0</span>)</span>
@@ -492,7 +489,6 @@ footer span { color: var(--accent); }
     </span>
   </button>
 
-  <!-- شريط التقدم -->
   <div id="progressBar" style="display:none;margin-bottom:1.5rem;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
       <span id="progressText" style="font-size:.85rem;color:var(--accent);">🔍 جاري قراءة البطاقة...</span>
@@ -541,7 +537,7 @@ footer span { color: var(--accent); }
         color:var(--accent);border-radius:8px;padding:.45rem 1rem;
         font-family:var(--font);font-size:.85rem;font-weight:700;cursor:pointer;
         transition:all .2s;
-      " onmouseover="this.style.background='rgba(0,212,168,.1)'" 
+      " onmouseover="this.style.background='rgba(0,212,168,.1)'"
          onmouseout="this.style.background='transparent'">
         🖨️ طباعة التقرير / حفظ PDF
       </button>
@@ -585,19 +581,12 @@ footer span { color: var(--accent); }
       <div id="halalCheckResults"></div>
     </div>
 
-    <!-- ===== لوحة تحقق المضافات CXS 192 ===== -->
     <div id="additivesVerifyPanel" style="display:none;">
       <h4 style="margin-bottom:.3rem;font-size:1rem;">⚗️ التحقق من المضافات — CXS 192</h4>
       <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">تسلسل القرار الثلاثي: جدول 1 ← جدول 2 ← جدول 3</p>
-
-      <!-- حالة تحميل البيانات -->
       <div id="codexLoadStatus" style="font-size:.82rem;color:var(--text3);margin-bottom:1rem;padding:.5rem .8rem;background:var(--surface2);border-radius:8px;"></div>
-
-      <!-- البحث اليدوي -->
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1rem;">
         <div style="font-size:.85rem;font-weight:700;color:var(--text2);margin-bottom:.8rem;">🔍 تحقق يدوي من مضاف</div>
-
-        <!-- البحث بالاسم أو رقم INS -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;" class="additive-search-grid">
           <div style="position:relative;">
             <label style="font-size:.78rem;color:var(--text3);display:block;margin-bottom:.3rem;">اسم المضاف أو رقم INS</label>
@@ -606,26 +595,19 @@ footer span { color: var(--accent); }
               oninput="onManualAdditiveInput()" autocomplete="off">
             <div id="manualAcList" style="position:absolute;top:100%;right:0;left:0;z-index:200;background:var(--surface);border:1px solid var(--accent);border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;display:none;"></div>
           </div>
-
-          <!-- البحث بالفئة أو اسم المنتج -->
           <div>
             <label style="font-size:.78rem;color:var(--text3);display:block;margin-bottom:.3rem;">فئة المنتج أو اسمه</label>
             <input type="text" id="manualCatInput" placeholder="مثال: 01.1.4 أو حليب منكه أو بسكويت"
               style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;color:var(--text);font-family:var(--font);font-size:.88rem;outline:none;">
           </div>
         </div>
-
         <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
           <button onclick="runManualCheck()" style="background:var(--accent);color:#000;border:none;padding:.55rem 1.3rem;border-radius:8px;font-family:var(--font);font-size:.88rem;font-weight:700;cursor:pointer;">تحقق ✓</button>
           <button onclick="checkAllDetectedAdditives()" id="checkAllBtn" style="background:var(--surface);border:1px solid var(--border);color:var(--text2);padding:.55rem 1.3rem;border-radius:8px;font-family:var(--font);font-size:.88rem;cursor:pointer;display:none;">فحص كل المضافات المكتشفة</button>
           <span style="font-size:.78rem;color:var(--text3);">— أو انتقل لنتائج الفحص التلقائي أدناه</span>
         </div>
       </div>
-
-      <!-- نتيجة البحث اليدوي -->
       <div id="manualCheckResult" style="display:none;margin-bottom:1rem;"></div>
-
-      <!-- نتائج الفحص التلقائي من تحليل الصورة -->
       <div id="autoAdditivesResult"></div>
     </div>
 
@@ -652,8 +634,8 @@ footer span { color: var(--accent); }
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">🚨</div>
-      <h3 style="margin-bottom:.5rem;">10 قواعد عامة إلزامية</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">محليات صناعية، حلال، GMO، مصدر الحليب، أسبرتام، ترتيب المكونات وغيرها من الاشتراطات الأردنية العامة</p>
+      <h3 style="margin-bottom:.5rem;">110 قاعدة JS 9:2025</h3>
+      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">104 قاعدة تشمل: اسم المنتج، المكونات، المضافات، الوزن الصافي والمصفى، الصانع، بلد المنشأ، الصلاحية، اللغة، الترميز، العبوات الصغيرة، التشعيع وغيرها — حسب JS 9:2025</p>
     </div>
   </div>
   <p style="text-align:center;color:var(--text3);font-size:.78rem;margin-top:2rem;">
@@ -663,55 +645,145 @@ footer span { color: var(--accent); }
 </section>
 
 <footer>
-  <p>FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · المواصفات الأردنية JS · الكودكس CXS 192</p>
+  <p>FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192</p>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== RULES DATA (JS 9 + القواعد العامة الأردنية) =====
+// ================================================================
+// ===== RULES DATA — JS 9:2025 (110 قاعدة) =====
+// المصدر: JS+9-2025.pdf — محوّل بتاريخ 2026-04-24
+// ================================================================
 const RULES = [
-  {"رقم القاعدة":"R001","رقم المادة":"نطاق التطبيق","الشرط":"إذا كان الغذاء معبأ مسبقاً ومطروحاً للتداول في الأردن","المتطلب":"يجب أن يحمل بطاقة بيان تحتوي جميع البيانات الإلزامية","درجة المخالفة":"جسيمة","الفئة":"عام"},
-  {"رقم القاعدة":"R002","رقم المادة":"التضليل","الشرط":"إذا تضمنت البطاقة معلومات أو صوراً أو ادعاءات مضللة","المتطلب":"يعتبر المنتج غير مطابق للتشريع","درجة المخالفة":"جسيمة","الفئة":"ادعاءات مضللة"},
-  {"رقم القاعدة":"R006","رقم المادة":"اسم الغذاء","الشرط":"إذا كان المنتج يحمل بطاقة بيان","المتطلب":"يجب ذكر الاسم الحقيقي للغذاء يعبر عن ماهية المنتج","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج"},
-  {"رقم القاعدة":"R010","رقم المادة":"قائمة المكونات","الشرط":"إذا كان المنتج يحتوي أكثر من مكون","المتطلب":"يجب إدراج قائمة بالمكونات","درجة المخالفة":"جسيمة","الفئة":"مكونات"},
-  {"رقم القاعدة":"R011","رقم المادة":"ترتيب المكونات","الشرط":"إذا وجدت قائمة مكونات","المتطلب":"يجب ترتيب المكونات تنازلياً حسب الوزن من الأعلى للأقل","درجة المخالفة":"جسيمة","الفئة":"مكونات"},
-  {"رقم القاعدة":"R013","رقم المادة":"مواد الحساسية","الشرط":"إذا احتوى المنتج على مواد مسببة للحساسية","المتطلب":"يجب التصريح عنها بوضوح في البطاقة","درجة المخالفة":"جسيمة","الفئة":"الحساسية"},
-  {"رقم القاعدة":"R016","رقم المادة":"المضافات الغذائية","الشرط":"إذا استخدمت مضافات غذائية","المتطلب":"يجب ذكر الفئة الوظيفية واسم المضاف أو رقمه","درجة المخالفة":"جسيمة","الفئة":"مضافات"},
-  {"رقم القاعدة":"R018","رقم المادة":"الكمية الصافية","الشرط":"إذا كان الغذاء صلباً","المتطلب":"يجب ذكر الوزن الصافي بوحدات النظام الدولي","درجة المخالفة":"جسيمة","الفئة":"الوزن"},
-  {"رقم القاعدة":"R019","رقم المادة":"الكمية للسوائل","الشرط":"إذا كان الغذاء سائلاً","المتطلب":"يجب ذكر الحجم الصافي","درجة المخالفة":"جسيمة","الفئة":"الوزن"},
-  {"رقم القاعدة":"R021","رقم المادة":"اسم وعنوان المنتج","الشرط":"إذا تم تسويق المنتج","المتطلب":"يجب ذكر اسم وعنوان المصنع أو المستورد","درجة المخالفة":"جسيمة","الفئة":"الصانع"},
-  {"رقم القاعدة":"R022","رقم المادة":"بلد المنشأ","الشرط":"إذا كان الغذاء معبأ مسبقاً","المتطلب":"يجب ذكر بلد المنشأ","درجة المخالفة":"جسيمة","الفئة":"المنشأ"},
-  {"رقم القاعدة":"R024","رقم المادة":"تاريخ الصلاحية","الشرط":"إذا لم يكن الغذاء من المنتجات المستثناة","المتطلب":"يجب ذكر تاريخ الصلاحية مطبوعاً غير قابل للإزالة — لا يجوز ملصق لاصق. ملاحظة: إذا لم يظهر التاريخ في الصورة فقد يكون مطبوعاً في مكان آخر من العبوة — أعطِ تنبيهاً لا مخالفة جسيمة","درجة المخالفة":"تنبيه","الفئة":"التواريخ"},
-  {"رقم القاعدة":"R024B","رقم المادة":"صيغة التاريخ","الشرط":"حسب JS 288:2023","المتطلب":"صلاحية ≤3 أشهر: يوم+شهر+سنة. صلاحية >3 أشهر: شهر+سنة فقط. عبارة إلزامية قبله: يستخدم قبل / تاريخ انتهاء الصلاحية","درجة المخالفة":"متوسطة","الفئة":"التواريخ"},
-  {"رقم القاعدة":"R025","رقم المادة":"شروط التخزين","الشرط":"إذا كانت صلاحية المنتج تعتمد على ظروف التخزين","المتطلب":"يجب ذكر شروط التخزين","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
-  {"رقم القاعدة":"R025B","رقم المادة":"الاستخدام بعد الفتح","الشرط":"إذا تغيرت صلاحية المنتج بعد فتح العبوة","المتطلب":"يجب ذكر مدة الاستخدام بعد الفتح على البطاقة","درجة المخالفة":"متوسطة","الفئة":"شروط التخزين"},
-  {"رقم القاعدة":"R030","رقم المادة":"وضوح البطاقة","الشرط":"إذا كانت المعلومات الإلزامية موجودة","المتطلب":"يجب أن تكون واضحة ومقروءة وغير قابلة للإزالة","درجة المخالفة":"جسيمة","الفئة":"عام"},
-  {"رقم القاعدة":"R032","رقم المادة":"لغة البطاقة","الشرط":"إذا كان المنتج متداولاً في الأردن","المتطلب":"يجب أن تكون المعلومات باللغة العربية","درجة المخالفة":"جسيمة","الفئة":"اللغة"},
-  // القواعد العامة الأردنية الإلزامية
-  {"رقم القاعدة":"JO001","رقم المادة":"محليات صناعية","الشرط":"إذا احتوى المنتج على محليات صناعية بما فيها ستيفيا","المتطلب":"يجب ذكر نسبة المحلي الصناعي في المنتج","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  {"رقم القاعدة":"JO002","رقم المادة":"محليات كحولية كمحل سكر","الشرط":"إذا احتوى المنتج على محليات كحولية بكميات كبيرة كبديل سكر","المتطلب":"يجب ذكر عبارة: كثرة الاستخدام تسبب فعل ملين","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  {"رقم القاعدة":"JO003","رقم المادة":"كلمة حلال","الشرط":"إذا استخدم مصطلح حلال على المنتج","المتطلب":"يجب أن يكون المنتج مطابقاً لاشتراطات الحلال المعتمدة — بدون شهادة معتمدة = تضليل للمستهلك","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  {"رقم القاعدة":"JO004","رقم المادة":"منتجات الحليب — المصدر","الشرط":"على كل منتجات الحليب","المتطلب":"يجب ذكر مصدر الحليب (بقر، أغنام، خليط...) ونوعه (طازج أو مجفف)","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  {"رقم القاعدة":"JO005","رقم المادة":"الحليب المبستر","الشرط":"على كل المنتجات الحليبية المبسترة","المتطلب":"عبارة إلزامية: يحفظ مبرد في الثلاجة","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  {"رقم القاعدة":"JO006","رقم المادة":"الحليب المجفف","الشرط":"على كل منتجات الحليب المجفف","المتطلب":"عبارة إلزامية: لا يستعمل لتغذية الرضع","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  {"رقم القاعدة":"JO007","رقم المادة":"الأسبرتام","الشرط":"أي منتج يحتوي على الأسبرتام","المتطلب":"يجب ذكر: يحتوي على فينيل ألانين — غير مناسب لمرضى فينيل كيتونيوريا PKU","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية"},
-  // الحقائق التغذوية JS 1473:2022
-  {"رقم القاعدة":"N001","رقم المادة":"جدول الحقائق التغذوية","الشرط":"لجميع الأغذية المعبأة","المتطلب":"يجب وجود جدول الحقائق التغذوية — مرجع: JS 1473:2022","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N002","رقم المادة":"الطاقة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر الطاقة بالكيلوكالوري والكيلوجول لكل 100غ أو حصة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N003","رقم المادة":"البروتين","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية البروتين بالجرام","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N004","رقم المادة":"الكربوهيدرات","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر إجمالي الكربوهيدرات المتاحة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N005","رقم المادة":"السكريات الكلية","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر مجموع السكريات الكلية","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N005B","رقم المادة":"السكر المضاف","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر السكر المضاف بشكل منفصل","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N006","رقم المادة":"الدهون الكلية","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر إجمالي الدهون","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N007","رقم المادة":"الدهون المشبعة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية الدهون المشبعة","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N007B","رقم المادة":"الدهون المتحولة","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر الدهون المتحولة — إلزامي حسب JS 1473:2022","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N008","رقم المادة":"الصوديوم","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية الصوديوم أو الملح","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N009","رقم المادة":"حجم الحصة","الشرط":"إذا ذكرت القيم لكل حصة","المتطلب":"يجب تحديد حجم الحصة وعدد الحصص في العبوة","درجة المخالفة":"متوسطة","الفئة":"الحقائق التغذوية"},
-  {"رقم القاعدة":"N010","رقم المادة":"الكوليسترول","الشرط":"في جدول الحقائق التغذوية","المتطلب":"يجب ذكر كمية الكوليسترول","درجة المخالفة":"جسيمة","الفئة":"الحقائق التغذوية"}
+  {"رقم القاعدة":"JS9-1-01","رقم المادة":"1","الشرط":"Food is prepackaged and presented in final form to consumer or catering","المتطلب":"Apply JS 9:2025 labeling requirements plus any product-specific Jordanian standard labeling requirements","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Prepackaged foods / foods for catering","ملاحظات":"Use as master applicability rule."},
+  {"رقم القاعدة":"JS9-4-1-01","رقم المادة":"4-1","الشرط":"A prepackaged food is placed on the market","المتطلب":"The label shall include all mandatory labeling information required by JS 9:2025","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Mandatory technical regulation."},
+  {"رقم القاعدة":"JS9-4-2-01","رقم المادة":"4-2","الشرط":"Food is described, presented, or labeled","المتطلب":"Description/presentation shall not be false, misleading, deceptive, or create a wrong impression about food characteristics","درجة المخالفة":"جسيمة","الفئة":"ادعاءات مضللة","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Applies to text, images, presentation, and implied claims."},
+  {"رقم القاعدة":"JS9-4-3-01","رقم المادة":"4-3","الشرط":"Label wording, image, or presentation refers directly or indirectly to another product","المتطلب":"Label shall not confuse the consumer or make them believe the food is related to another product","درجة المخالفة":"متوسطة","الفئة":"ادعاءات مضللة","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Anti-confusion rule."},
+  {"رقم القاعدة":"JS9-4-4-01","رقم المادة":"4-4","الشرط":"External package volume is disproportionate to contents","المتطلب":"Package contents shall not be less than 90% of package volume unless product standard states otherwise","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Calculation","ينطبق_على":"All prepackaged foods","ملاحظات":"Requires package/content measurement or declared standard exception."},
+  {"رقم القاعدة":"JS9-4-4-02","رقم المادة":"4-4","الشرط":"Non-food-origin material is placed in package to increase apparent volume","المتطلب":"Such material shall not be used to give false volume or mislead/defraud consumer","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Examples include paper/carton or similar fillers not originating from the food."},
+  {"رقم القاعدة":"JS9-4-5-01","رقم المادة":"4-5","الشرط":"A label is pasted over another label","المتطلب":"The pasted label shall not hide information on the original label","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Arabic supplementary labels are allowed only under clause 7-2-2 conditions."},
+  {"رقم القاعدة":"JS9-4-6-01","رقم المادة":"4-6","الشرط":"Food is intended for pet animal feeding","المتطلب":"Label shall clearly state in Arabic: مخصصة لتغذية الحيوانات","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Presence","ينطبق_على":"Food intended for pet animals","ملاحظات":"Statement must be clear and not concealable."},
+  {"رقم القاعدة":"JS9-4-7-01","رقم المادة":"4-7","الشرط":"Food contains genetically modified materials or is produced using modern biotechnology","المتطلب":"Labeling shall comply with JFDA instructions for GM foods and products","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية","نوع الفحص":"Content","ينطبق_على":"Foods/products containing genetically modified materials","ملاحظات":"Refer to JFDA GMO instructions 2018 and amendments."},
+  {"رقم القاعدة":"JS9-4-8-01","رقم المادة":"4-8","الشرط":"Product is manufactured under franchise/license","المتطلب":"Label shall include all clause 5 mandatory requirements","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Presence","ينطبق_على":"Products manufactured under franchise/license from foreign/Arab companies","ملاحظات":"Franchise products must not omit mandatory JS 9 information."},
+  {"رقم القاعدة":"JS9-4-8-02","رقم المادة":"4-8","الشرط":"Product is manufactured under franchise/license","المتطلب":"Manufacturer name and country of origin shall be printed in larger letters than the name/address of franchise-granting company","درجة المخالفة":"متوسطة","الفئة":"الصانع","نوع الفحص":"Format","ينطبق_على":"Products manufactured under franchise/license from foreign/Arab companies","ملاحظات":"Requires font-size comparison."},
+  {"رقم القاعدة":"JS9-4-9-01","رقم المادة":"4-9","الشرط":"Label includes claim, symbol, logo, or mark related to Halal, quality, or organic products","المتطلب":"Such claim/symbol/logo/mark shall not appear unless authorization/approval to use it is provided","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Requires evidence/authorization."},
+  {"رقم القاعدة":"JS9-4-10-01","رقم المادة":"4-10","الشرط":"Label includes slogans, marks, or symbols for quality management systems such as ISO 9001","المتطلب":"Such quality-management-system slogans/marks/symbols shall not appear on the food label","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Examples include ISO 9001 marks/slogans."},
+  {"رقم القاعدة":"JS9-5-0-01","رقم المادة":"5","الشرط":"Prepackaged food label is evaluated","المتطلب":"Mandatory information shall correspond to the food itself and product-specific Jordanian standards shall also be considered","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Master clause for mandatory explanatory data."},
+  {"رقم القاعدة":"JS9-5-1-01","رقم المادة":"5-1","الشرط":"Food label is present","المتطلب":"Food name shall be declared","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Food name is mandatory."},
+  {"رقم القاعدة":"JS9-5-1-02","رقم المادة":"5-1-1","الشرط":"Food name is declared","المتطلب":"Name shall indicate the true nature of the food and be specific rather than generic","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Avoid vague/generic naming."},
+  {"رقم القاعدة":"JS9-5-1-03","رقم المادة":"5-1-1-1","الشرط":"Jordanian standard specifies one or more names for the food","المتطلب":"At least one of the specified standard names shall be used","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج","نوع الفحص":"Content","ينطبق_على":"Products with name specified in Jordanian standard","ملاحظات":"Product-specific standard controls naming where applicable."},
+  {"رقم القاعدة":"JS9-5-1-04","رقم المادة":"5-1-1-2","الشرط":"No Jordanian standard name exists for the food","المتطلب":"Common/customary/descriptive name in general use shall be used and shall not mislead or confuse consumers","درجة المخالفة":"متوسطة","الفئة":"اسم المنتج","نوع الفحص":"Content","ينطبق_على":"Products with no specified standard name","ملاحظات":"Use descriptive/common name."},
+  {"رقم القاعدة":"JS9-5-1-05","رقم المادة":"5-1-1-3","الشرط":"Invented/fancy/registered/trademark name is used","المتطلب":"Invented/fancy/trademark name shall be accompanied by the real food name required under 5-1-1-1 or 5-1-1-2","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج","نوع الفحص":"Presence","ينطبق_على":"Products using invented/fancy/trademark names","ملاحظات":"Brand alone is not enough."},
+  {"رقم القاعدة":"JS9-5-1-06","رقم المادة":"5-1-2","الشرط":"Terms are needed to avoid misleading/confusion about true nature or physical condition","المتطلب":"Appropriate words/phrases such as dried, concentrated, reconstituted, smoked, packing medium, or treatment type shall appear with or near food name","درجة المخالفة":"متوسطة","الفئة":"اسم المنتج","نوع الفحص":"Content","ينطبق_على":"Products where physical/natural state or treatment could affect consumer understanding","ملاحظات":"Applies when state/treatment matters."},
+  {"رقم القاعدة":"JS9-5-1-07","رقم المادة":"5-1-3","الشرط":"An ingredient/component consumers expect is substituted by another ingredient/component","المتطلب":"Label shall clearly indicate the substitute ingredient/component beside the product name, in addition to ingredient list disclosure","درجة المخالفة":"جسيمة","الفئة":"اسم المنتج","نوع الفحص":"Content","ينطبق_على":"Foods where expected ingredient/component is fully or partially substituted","ملاحظات":"Important for consumer expectations and anti-fraud."},
+  {"رقم القاعدة":"JS9-5-2-01","رقم المادة":"5-2-1","الشرط":"Food contains more than one ingredient","المتطلب":"Ingredient list shall be declared on the label","درجة المخالفة":"جسيمة","الفئة":"مكونات","نوع الفحص":"Presence","ينطبق_على":"Multi-ingredient foods","ملاحظات":"Single-ingredient foods are exempt from ingredient list requirement unless other rules apply."},
+  {"رقم القاعدة":"JS9-5-2-02","رقم المادة":"5-2-1","الشرط":"Food consists of one ingredient only","المتطلب":"Ingredient list is not required under 5-2-1 unless another specific rule requires declaration","درجة المخالفة":"تنبيه","الفئة":"مكونات","نوع الفحص":"Presence","ينطبق_على":"Single-ingredient foods","ملاحظات":"Keep allergen/product-specific requirements in mind."},
+  {"رقم القاعدة":"JS9-5-2-03","رقم المادة":"5-2-1-1","الشرط":"Ingredient list is declared","المتطلب":"Ingredient list shall be preceded by an appropriate heading including the word المكونات or المحتويات","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Presence","ينطبق_على":"Foods requiring ingredient list","ملاحظات":"Arabic heading required if Arabic label applies."},
+  {"رقم القاعدة":"JS9-5-2-04","رقم المادة":"5-2-1-2","الشرط":"Ingredients are listed","المتطلب":"Ingredients shall be listed in descending order by weight at time of manufacture","درجة المخالفة":"جسيمة","الفئة":"مكونات","نوع الفحص":"Format","ينطبق_على":"Foods requiring ingredient list","ملاحظات":"Weight/weight basis."},
+  {"رقم القاعدة":"JS9-5-2-05","رقم المادة":"5-2-1-3","الشرط":"An ingredient is itself composed of two or more ingredients","المتطلب":"Compound ingredient may be listed by name followed immediately by a parenthesized list of its ingredients in descending weight order","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Content","ينطبق_على":"Foods containing compound ingredient","ملاحظات":"Atomic rule for compound ingredients."},
+  {"رقم القاعدة":"JS9-5-2-06","رقم المادة":"5-2-1-3","الشرط":"Compound ingredient is less than 5% of the food","المتطلب":"Sub-components of the compound ingredient need not be listed, except additives that perform a technological function in final product","درجة المخالفة":"تنبيه","الفئة":"مكونات","نوع الفحص":"Content","ينطبق_على":"Compound ingredient sub-components under 5%","ملاحظات":"Exception does not apply to functional additives."},
+  {"رقم القاعدة":"JS9-5-2-07","رقم المادة":"5-2-1-3","الشرط":"A compound ingredient contains an additive that performs technological function in final product","المتطلب":"The additive shall be included in the ingredient list","درجة المخالفة":"متوسطة","الفئة":"مضافات","نوع الفحص":"Presence","ينطبق_على":"Compound ingredient additives","ملاحظات":"Overrides 5% exemption for functional additives."},
+  {"رقم القاعدة":"JS9-5-2-ALL-00","رقم المادة":"5-2-1-4","الشرط":"Any listed allergenic food/ingredient is present","المتطلب":"Allergenic food/ingredient shall always be declared","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Detailed allergen rows follow."},
+  {"رقم القاعدة":"JS9-5-2-ALL-01","رقم المادة":"5-2-1-4-1","الشرط":"Cereals containing gluten or that may contain gluten and their products are present","المتطلب":"Declare the cereal/gluten allergen, except excluded glucose syrup/dextrose from wheat, maltodextrin from wheat, and glucose syrup from barley as applicable","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"GLUTEN"},
+  {"رقم القاعدة":"JS9-5-2-ALL-02","رقم المادة":"5-2-1-4-2","الشرط":"Crustaceans or their products are present","المتطلب":"Declare crustaceans and their products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"CRUSTACEANS"},
+  {"رقم القاعدة":"JS9-5-2-ALL-03","رقم المادة":"5-2-1-4-3","الشرط":"Eggs or egg products are present","المتطلب":"Declare eggs and their products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"EGGS"},
+  {"رقم القاعدة":"JS9-5-2-ALL-04","رقم المادة":"5-2-1-4-4","الشرط":"Fish or fish products are present","المتطلب":"Declare fish and its products, except fish gelatin used as carrier for vitamins/carotenoids","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"FISH"},
+  {"رقم القاعدة":"JS9-5-2-ALL-05","رقم المادة":"5-2-1-4-5","الشرط":"Peanuts, soybeans, or their products are present","المتطلب":"Declare peanut/soy allergen unless listed refined soy oil/fat or specified tocopherol/phytosterol/stanol derivative exemption applies","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"PEANUT_SOY"},
+  {"رقم القاعدة":"JS9-5-2-ALL-06","رقم المادة":"5-2-1-4-6","الشرط":"Milk or milk products including lactose are present","المتطلب":"Declare milk and its products including lactose, except lactitol","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"MILK"},
+  {"رقم القاعدة":"JS9-5-2-ALL-07","رقم المادة":"5-2-1-4-7","الشرط":"Tree nuts or their products are present","المتطلب":"Declare nuts and their products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"TREE_NUTS"},
+  {"رقم القاعدة":"JS9-5-2-ALL-08","رقم المادة":"5-2-1-4-8","الشرط":"Sulfur dioxide or sulphites exceed 10 mg/kg in ready-to-eat product","المتطلب":"Declare sulfur dioxide/sulphites","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"SULPHITES — threshold 10 mg/kg"},
+  {"رقم القاعدة":"JS9-5-2-ALL-09","رقم المادة":"5-2-1-4-9","الشرط":"Celery or celery products are present","المتطلب":"Declare celery and its products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"CELERY"},
+  {"رقم القاعدة":"JS9-5-2-ALL-10","رقم المادة":"5-2-1-4-10","الشرط":"Mustard or mustard products are present","المتطلب":"Declare mustard and its products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"MUSTARD"},
+  {"رقم القاعدة":"JS9-5-2-ALL-11","رقم المادة":"5-2-1-4-11","الشرط":"Sesame seeds or sesame products are present","المتطلب":"Declare sesame and its products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"SESAME"},
+  {"رقم القاعدة":"JS9-5-2-ALL-12","رقم المادة":"5-2-1-4-12","الشرط":"Molluscs or mollusc products are present","المتطلب":"Declare molluscs and their products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"MOLLUSCS"},
+  {"رقم القاعدة":"JS9-5-2-ALL-13","رقم المادة":"5-2-1-4-13","الشرط":"Lupin or lupin products are present","المتطلب":"Declare lupin and its products","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"LUPIN"},
+  {"رقم القاعدة":"JS9-5-2-ALL-14","رقم المادة":"5-2-2","الشرط":"An allergenic substance from clause 5-2-1-4 is present in foods or ingredients obtained through biotechnology","المتطلب":"The allergenic substance shall be declared","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"Foods/ingredients obtained using biotechnology","ملاحظات":"If sufficient allergen information cannot be provided on label, product should not be marketed."},
+  {"رقم القاعدة":"JS9-5-2-ALL-15","رقم المادة":"5-2-2","الشرط":"Sufficient information on presence of allergens cannot be provided on the label","المتطلب":"Product should not be marketed","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Content","ينطبق_على":"Foods with uncertain allergen information","ملاحظات":"High risk rule."},
+  {"رقم القاعدة":"JS9-5-2-08","رقم المادة":"5-2-1-5","الشرط":"Water is added as an ingredient","المتطلب":"Added water shall be declared in the ingredient list","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Presence","ينطبق_على":"Foods with added water","ملاحظات":"Does not include volatile water/ingredients evaporated during manufacture."},
+  {"رقم القاعدة":"JS9-5-2-09","رقم المادة":"5-2-1-5","الشرط":"Water forms part of brine, syrup, or broth used in compound food","المتطلب":"Water/medium shall be shown in the ingredient list","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Content","ينطبق_على":"Compound foods with water as part of brine/syrup/broth","ملاحظات":"Declare as part of compound medium."},
+  {"رقم القاعدة":"JS9-5-2-10","رقم المادة":"5-2-1-6","الشرط":"Food is not consumed until water is added","المتطلب":"Ingredients may be listed by weight in prepared product, preceded by phrase: مكونات المنتج بعد إعداده حسب التعليمات الموجودة على هذه البطاقة","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Format","ينطبق_على":"Dried or concentrated foods reconstituted only by adding water","ملاحظات":"Exact Arabic phrase should be checked."},
+  {"رقم القاعدة":"JS9-5-2-11","رقم المادة":"5-2-3","الشرط":"Ingredients are named","المتطلب":"Ingredients shall be named by specific names according to clause 5-1, except allowed class names in Table 1 and specified exceptions","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Content","ينطبق_على":"Foods requiring ingredient list","ملاحظات":"Use specific names unless class-name exception applies."},
+  {"رقم القاعدة":"JS9-5-2-12","رقم المادة":"5-2-3-1","الشرط":"Ingredient falls within a general class in Table 1 and no allergen/specific-name exception applies","المتطلب":"Allowed subclass/class name from Table 1 may be used","درجة المخالفة":"تنبيه","الفئة":"مكونات","نوع الفحص":"Content","ينطبق_على":"Ingredients covered by Table 1 class names","ملاحظات":"Generic class names permitted — e.g. زيوت نباتية, أجبان, سمك, لحوم الدواجن"},
+  {"رقم القاعدة":"JS9-5-2-13","رقم المادة":"5-2-3-2","الشرط":"Pork fat, lard, or beef fat is present","المتطلب":"Ingredient shall always be declared by its specific name, prominently and in Arabic","درجة المخالفة":"جسيمة","الفئة":"مكونات","نوع الفحص":"Content","ينطبق_على":"Products containing pork fat, lard, or beef fat","ملاحظات":"Do not hide under generic fat/oil categories."},
+  {"رقم القاعدة":"JS9-5-2-14","رقم المادة":"5-2-3-3","الشرط":"Food additive falls within functional classes under JS 94","المتطلب":"Use functional class from Table 2 together with specific name or recognized international identification number/INS","درجة المخالفة":"متوسطة","الفئة":"مضافات","نوع الفحص":"Content","ينطبق_على":"Foods containing additives listed in permitted additive lists","ملاحظات":"Functional class + name or INS number required."},
+  {"رقم القاعدة":"JS9-5-2-15","رقم المادة":"5-2-3-4","الشرط":"Flavor/additive is in generally permitted additive list and belongs to listed special classes","المتطلب":"Use class names: flavor(s) or flavoring substance(s), described as natural, nature-identical, artificial, or combinations as applicable","درجة المخالفة":"متوسطة","الفئة":"مضافات","نوع الفحص":"Content","ينطبق_على":"Foods containing flavors/flavouring substances","ملاحظات":"Arabic wording should align with label language."},
+  {"رقم القاعدة":"JS9-5-2-16","رقم المادة":"5-2-3-4","الشرط":"Modified starch additive is present","المتطلب":"Use class name: modified starches / أنواع النشا المعدل","درجة المخالفة":"متوسطة","الفئة":"مضافات","نوع الفحص":"Content","ينطبق_على":"Foods containing modified starches","ملاحظات":"Applies to listed special classes."},
+  {"رقم القاعدة":"JS9-5-2-17","رقم المادة":"5-2-3-5","الشرط":"Additive can be classified under more than one class","المتطلب":"Use the classification that most accurately reflects its function in the food","درجة المخالفة":"متوسطة","الفئة":"مضافات","نوع الفحص":"Content","ينطبق_على":"Food additive has more than one functional class","ملاحظات":"Function in specific product controls declaration."},
+  {"رقم القاعدة":"JS9-5-2-18","رقم المادة":"5-2-4-1","الشرط":"Additive carries over from raw material/ingredient at noticeable level or sufficient level to perform technological function","المتطلب":"Carry-over additive shall be added to the ingredient list","درجة المخالفة":"متوسطة","الفئة":"مضافات","نوع الفحص":"Presence","ينطبق_على":"Carry-over additives","ملاحظات":"Carry-over with function must be declared."},
+  {"رقم القاعدة":"JS9-5-2-19","رقم المادة":"5-2-4-2","الشرط":"Additive carries over below level needed for technological function, or substance is processing aid","المتطلب":"Additive/processing aid may be excluded from ingredient list","درجة المخالفة":"تنبيه","الفئة":"مضافات","نوع الفحص":"Content","ينطبق_على":"Carry-over additives below functional level and processing aids","ملاحظات":"Exception does not include allergens in clause 5-2-1-4."},
+  {"رقم القاعدة":"JS9-5-2-20","رقم المادة":"5-2-4-2","الشرط":"Additive or processing aid corresponds to allergen list in clause 5-2-1-4","المتطلب":"Allergen declaration remains required despite carry-over/processing-aid exception","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"Allergenic additives or processing aids","ملاحظات":"Allergen rule overrides exclusion."},
+  {"رقم القاعدة":"JS9-5-3-01","رقم المادة":"5-3","الشرط":"Nutrition information is provided or required","المتطلب":"Nutrition information shall be written according to Jordanian Standard JS 1473","درجة المخالفة":"متوسطة","الفئة":"الحقائق التغذوية","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods where nutrition labeling is required","ملاحظات":"Check against JS 1473 rules separately."},
+  {"رقم القاعدة":"JS9-5-4-01","رقم المادة":"5-4-1","الشرط":"Food is packaged","المتطلب":"Net contents at time of packaging shall be declared using metric/SI units","درجة المخالفة":"جسيمة","الفئة":"الوزن","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Master net quantity rule."},
+  {"رقم القاعدة":"JS9-5-4-02","رقم المادة":"5-4-1-1","الشرط":"Food is liquid","المتطلب":"Net contents shall be declared by volume","درجة المخالفة":"متوسطة","الفئة":"الوزن","نوع الفحص":"Format","ينطبق_على":"Liquid foods","ملاحظات":"Use metric/SI units."},
+  {"رقم القاعدة":"JS9-5-4-03","رقم المادة":"5-4-1-2","الشرط":"Food is solid","المتطلب":"Net contents shall be declared by weight","درجة المخالفة":"متوسطة","الفئة":"الوزن","نوع الفحص":"Format","ينطبق_على":"Solid foods","ملاحظات":"Use metric/SI units."},
+  {"رقم القاعدة":"JS9-5-4-04","رقم المادة":"5-4-1-3","الشرط":"Food is semi-solid or viscous","المتطلب":"Net contents shall be declared by weight or volume","درجة المخالفة":"متوسطة","الفئة":"الوزن","نوع الفحص":"Format","ينطبق_على":"Semi-solid or viscous foods","ملاحظات":"Use metric/SI units."},
+  {"رقم القاعدة":"JS9-5-4-05","رقم المادة":"5-4-2","الشرط":"Food is packed in liquid medium","المتطلب":"Drained weight shall be declared in addition to net contents using metric/SI units","درجة المخالفة":"جسيمة","الفئة":"الوزن","نوع الفحص":"Presence","ينطبق_على":"Foods packed in liquid medium","ملاحظات":"Liquid medium includes water, sugar/salt solutions, fruit/vegetable juices in canned fruit/vegetables only, and vinegar, alone or combined."},
+  {"رقم القاعدة":"JS9-5-4-06","رقم المادة":"5-4-3","الشرط":"Net weight or volume is declared","المتطلب":"Net weight/volume shall equal packed food weight/volume at processing and be determined at 25°C unless frozen or chilled exception applies","درجة المخالفة":"متوسطة","الفئة":"الوزن","نوع الفحص":"Calculation","ينطبق_على":"All prepackaged foods","ملاحظات":"Temperature condition rule."},
+  {"رقم القاعدة":"JS9-5-4-07","رقم المادة":"5-4-3-1","الشرط":"Food is frozen","المتطلب":"Net volume/weight shall be determined at freezing point","درجة المخالفة":"متوسطة","الفئة":"الوزن","نوع الفحص":"Calculation","ينطبق_على":"Frozen foods","ملاحظات":"Frozen exception."},
+  {"رقم القاعدة":"JS9-5-4-08","رقم المادة":"5-4-3-2","الشرط":"Food is chilled","المتطلب":"Net volume/weight shall be determined at 4°C","درجة المخالفة":"متوسطة","الفئة":"الوزن","نوع الفحص":"Calculation","ينطبق_على":"Chilled foods","ملاحظات":"Chilled exception."},
+  {"رقم القاعدة":"JS9-5-5-01","رقم المادة":"5-5","الشرط":"Food is placed on market","المتطلب":"Name and address of manufacturer, packer, distributor, importer, exporter, or seller shall be declared","درجة المخالفة":"جسيمة","الفئة":"الصانع","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"At least applicable responsible operator must be declared."},
+  {"رقم القاعدة":"JS9-5-6-01","رقم المادة":"5-6-1","الشرط":"Food is placed on market","المتطلب":"Country of origin shall be declared on food packages","درجة المخالفة":"جسيمة","الفئة":"المنشأ","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Mandatory origin declaration."},
+  {"رقم القاعدة":"JS9-5-6-02","رقم المادة":"5-6-2","الشرط":"Food undergoes processing in another country that changes its original nature","المتطلب":"The country where the processing occurred shall be considered country of origin","درجة المخالفة":"متوسطة","الفئة":"المنشأ","نوع الفحص":"Content","ينطبق_على":"Foods processed in another country","ملاحظات":"Substantial transformation logic."},
+  {"رقم القاعدة":"JS9-5-7-01","رقم المادة":"5-7","الشرط":"Food package is labeled","المتطلب":"Lot/batch identification shall be placed on every package in a non-removable manner","درجة المخالفة":"جسيمة","الفئة":"الترميز","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"Non-removable batch identification required."},
+  {"رقم القاعدة":"JS9-5-8-01","رقم المادة":"5-8-1","الشرط":"Food label is evaluated for shelf life","المتطلب":"Shelf life and storage instructions shall be declared as required by JS 288","درجة المخالفة":"جسيمة","الفئة":"التواريخ","نوع الفحص":"Presence","ينطبق_على":"All prepackaged foods","ملاحظات":"JS 288 should be implemented as linked rule set."},
+  {"رقم القاعدة":"JS9-5-8-02","رقم المادة":"5-8-1","الشرط":"Instructions are necessary to ensure proper/safe use","المتطلب":"Instructions for use shall be added to label when necessary","درجة المخالفة":"متوسطة","الفئة":"التواريخ","نوع الفحص":"Presence","ينطبق_على":"Foods requiring instructions for safe/proper use","ملاحظات":"Includes reconstitution/preparation instructions if required."},
+  {"رقم القاعدة":"JS9-5-8-03","رقم المادة":"5-8-1","الشرط":"Food requires re-preparation/reconstitution before consumption","المتطلب":"Re-preparation instructions shall be declared","درجة المخالفة":"متوسطة","الفئة":"التواريخ","نوع الفحص":"Presence","ينطبق_على":"Foods requiring re-preparation/reconstitution","ملاحظات":"Applies when product needs preparation."},
+  {"رقم القاعدة":"JS9-5-8-04","رقم المادة":"5-8-2","الشرط":"Production and expiry dates are declared","المتطلب":"Additional stickers for production date or expiry date shall not be used","درجة المخالفة":"جسيمة","الفئة":"التواريخ","نوع الفحص":"Format","ينطبق_على":"All prepackaged foods","ملاحظات":"Dates should be original/non-stickered."},
+  {"رقم القاعدة":"JS9-5-8-05","رقم المادة":"5-8-2","الشرط":"Package contains production or expiry dates","المتطلب":"Package shall not contain more than one production date or more than one expiry date","درجة المخالفة":"جسيمة","الفئة":"التواريخ","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Prevents date confusion/tampering."},
+  {"رقم القاعدة":"JS9-5-8-06","رقم المادة":"5-8-2","الشرط":"Production or expiry dates appear on package","المتطلب":"Dates shall not be crossed out, changed, altered, or tampered with","درجة المخالفة":"جسيمة","الفئة":"التواريخ","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Anti-tampering rule."},
+  {"رقم القاعدة":"JS9-5-9-01","رقم المادة":"5-9-1","الشرط":"Label emphasizes the presence of one or more ingredients with special value or distinguishing character","المتطلب":"Percentage/quantity of the emphasized ingredient(s) shall be declared on the label","درجة المخالفة":"متوسطة","الفئة":"مكونات","نوع الفحص":"Presence","ينطبق_على":"Foods with emphasized/value ingredient(s)","ملاحظات":"QUID logic."},
+  {"رقم القاعدة":"JS9-5-9-02","رقم المادة":"5-9-2","الشرط":"Product standard requires declaration of ingredient percentages","المتطلب":"Required ingredient percentages shall be declared on the label","درجة المخالفة":"جسيمة","الفئة":"مكونات","نوع الفحص":"Presence","ينطبق_على":"Products whose product-specific Jordanian standard requires ingredient percentage","ملاحظات":"Product-specific standard may add QUID requirements."},
+  {"رقم القاعدة":"JS9-5-10-01","رقم المادة":"5-10-1","الشرط":"Food has been treated with ionizing radiation","المتطلب":"Label shall state irradiation treatment near the food name","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية","نوع الفحص":"Presence","ينطبق_على":"Irradiated foods","ملاحظات":"International irradiation symbol is optional."},
+  {"رقم القاعدة":"JS9-5-10-02","رقم المادة":"5-10-1","الشرط":"International irradiation symbol is used","المتطلب":"Symbol shall be placed near the food name","درجة المخالفة":"تنبيه","الفئة":"قواعد أردنية","نوع الفحص":"Format","ينطبق_على":"Irradiated foods using international irradiation symbol","ملاحظات":"Symbol use is optional, placement mandatory if used."},
+  {"رقم القاعدة":"JS9-5-10-03","رقم المادة":"5-10-2","الشرط":"An ingredient of the food has been irradiated","المتطلب":"Irradiation of the ingredient shall be indicated in the ingredient list","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية","نوع الفحص":"Presence","ينطبق_على":"Foods containing irradiated ingredient","ملاحظات":"Ingredient-level irradiation disclosure."},
+  {"رقم القاعدة":"JS9-5-10-04","رقم المادة":"5-10-3","الشرط":"Single-ingredient product is prepared from irradiated raw material","المتطلب":"Irradiation shall be indicated on the label","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية","نوع الفحص":"Presence","ينطبق_على":"Single-ingredient foods made from irradiated raw material","ملاحظات":"Single ingredient rule."},
+  {"رقم القاعدة":"JS9-6-01","رقم المادة":"6","الشرط":"Largest surface area of unit package is less than 10 cm² and product is not spices/aromatic herbs","المتطلب":"Unit package may be exempt from declaring shelf life, storage/use instructions, ingredient list, lot number, and nutrition information, subject to outer package requirements and allergen exception","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Small unit packages under 10 cm² largest surface, except spices and aromatic herbs","ملاحظات":"Exemption limited; see following rules."},
+  {"رقم القاعدة":"JS9-6-02","رقم المادة":"6","الشرط":"Small unit package uses exemption","المتطلب":"All exempted information shall be written on the outer container holding these units","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Presence","ينطبق_على":"Small unit packages under 10 cm²","ملاحظات":"Outer pack must carry full details."},
+  {"رقم القاعدة":"JS9-6-03","رقم المادة":"6","الشرط":"Small unit package uses exemption","المتطلب":"Unit package shall carry production lot symbol/number to retrieve data","درجة المخالفة":"جسيمة","الفئة":"الترميز","نوع الفحص":"Presence","ينطبق_على":"Small unit packages under 10 cm²","ملاحظات":"Traceability still required."},
+  {"رقم القاعدة":"JS9-6-04","رقم المادة":"6","الشرط":"Small unit package contains allergen information covered by 5-2-1-4-1","المتطلب":"Allergen declaration shall not be exempted","درجة المخالفة":"جسيمة","الفئة":"الحساسية","نوع الفحص":"Presence","ينطبق_على":"Small unit packages under 10 cm² containing gluten cereals allergen","ملاحظات":"Clause text specifically preserves 5-2-1-4-1."},
+  {"رقم القاعدة":"JS9-6-05","رقم المادة":"6","الشرط":"Product is spices or aromatic herbs","المتطلب":"Small unit package exemption under clause 6 does not apply","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Spices and aromatic herbs","ملاحظات":"Spices/herbs excluded from exemption."},
+  {"رقم القاعدة":"JS9-7-1-01","رقم المادة":"7-1-1","الشرط":"Food is prepackaged","المتطلب":"Label shall be placed on package in a manner that prevents separation from the package","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Format","ينطبق_على":"All prepackaged foods","ملاحظات":"Non-separable label requirement."},
+  {"رقم القاعدة":"JS9-7-1-02","رقم المادة":"7-1-2","الشرط":"Mandatory label statements are present","المتطلب":"Mandatory statements required by JS 9 or any product-specific standard shall be clear, prominent, indelible, and easy to read under normal purchase/use conditions","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Format","ينطبق_على":"All prepackaged foods","ملاحظات":"Covers clarity, prominence, non-removability, readability."},
+  {"رقم القاعدة":"JS9-7-1-03","رقم المادة":"7-1-3","الشرط":"Package is covered by wrapper","المتطلب":"Wrapper shall carry required information or allow label to be easily read through it; wrapper shall not obscure required label","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Packages covered by outer wrapper","ملاحظات":"No obscuring required information."},
+  {"رقم القاعدة":"JS9-7-1-04","رقم المادة":"7-1-4","الشرط":"Food name and net contents are displayed","المتطلب":"Food name and net contents shall appear prominently in same field of vision","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Format","ينطبق_على":"All prepackaged foods","ملاحظات":"Same field-of-vision rule."},
+  {"رقم القاعدة":"JS9-7-1-05","رقم المادة":"7-1-5","الشرط":"Names, symbols, marks, images, signs, or package forms are used","المتطلب":"They shall not offend religions/beliefs/symbols, violate rejected social values/customs, or breach prohibited legislation","درجة المخالفة":"جسيمة","الفئة":"قواعد أردنية","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Applies to label and package forms."},
+  {"رقم القاعدة":"JS9-7-1-06","رقم المادة":"7-1-6","الشرط":"Label is in direct contact with food","المتطلب":"Label shall not contain harmful chemicals or similar substances","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Labels in contact with food","ملاحظات":"Food-contact safety rule."},
+  {"رقم القاعدة":"JS9-7-1-07","رقم المادة":"7-1-6","الشرط":"Ink is used on food-contact label","المتطلب":"Ink shall be non-migrating and food grade","درجة المخالفة":"جسيمة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Labels in contact with food","ملاحظات":"Must consider food contact material regulations."},
+  {"رقم القاعدة":"JS9-7-1-08","رقم المادة":"7-1-6","الشرط":"Package/label materials contact food","المتطلب":"Packaging shall comply with Jordanian technical regulations 2130, 2131, 2132 and JFDA instructions on food-contact materials","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"Food packages / food-contact materials","ملاحظات":"Linked regulatory requirements."},
+  {"رقم القاعدة":"JS9-7-2-01","رقم المادة":"7-2-1","الشرط":"Food label and accompanying explanatory data are provided","المتطلب":"Label and accompanying explanatory data shall be in Arabic","درجة المخالفة":"جسيمة","الفئة":"اللغة","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods","ملاحظات":"Arabic is mandatory."},
+  {"رقم القاعدة":"JS9-7-2-02","رقم المادة":"7-2-1","الشرط":"Another language is used alongside Arabic","المتطلب":"All information in other languages shall match Arabic information","درجة المخالفة":"جسيمة","الفئة":"اللغة","نوع الفحص":"Content","ينطبق_على":"Labels using additional language(s)","ملاحظات":"Translation consistency rule."},
+  {"رقم القاعدة":"JS9-7-2-03","رقم المادة":"7-2-2-1","الشرط":"Arabic data is added by supplementary sticker","المتطلب":"There shall be one supplementary Arabic sticker satisfying all JS 9 requirements, applied by producer or importer after approval of relevant authorities","درجة المخالفة":"جسيمة","الفئة":"اللغة","نوع الفحص":"Content","ينطبق_على":"Arabic supplementary sticker on original label","ملاحظات":"One sticker only; approval required."},
+  {"رقم القاعدة":"JS9-7-2-04","رقم المادة":"7-2-2-2","الشرط":"Arabic supplementary sticker is applied","المتطلب":"Sticker shall not hide any information required by JS 9","درجة المخالفة":"جسيمة","الفئة":"اللغة","نوع الفحص":"Content","ينطبق_على":"Arabic supplementary sticker on original label","ملاحظات":"No concealment."},
+  {"رقم القاعدة":"JS9-7-2-05","رقم المادة":"7-2-2-3","الشرط":"Arabic supplementary sticker is applied","المتطلب":"Sticker shall not contain data contradicting the original label","درجة المخالفة":"جسيمة","الفئة":"اللغة","نوع الفحص":"Content","ينطبق_على":"Arabic supplementary sticker on original label","ملاحظات":"No contradictions."},
+  {"رقم القاعدة":"JS9-7-2-06","رقم المادة":"7-2-2-4","الشرط":"Arabic supplementary sticker is applied","المتطلب":"Sticker shall be difficult to remove under normal handling conditions","درجة المخالفة":"متوسطة","الفئة":"اللغة","نوع الفحص":"Format","ينطبق_على":"Arabic supplementary sticker on original label","ملاحظات":"Durability requirement."},
+  {"رقم القاعدة":"JS9-7-2-07","رقم المادة":"7-2-3","الشرط":"Product is imported","المتطلب":"Manufacturer name and address may be written in English only","درجة المخالفة":"تنبيه","الفئة":"اللغة","نوع الفحص":"Content","ينطبق_على":"Imported products","ملاحظات":"Allowance for imported products only."},
+  {"رقم القاعدة":"JS9-8-01","رقم المادة":"8-1","الشرط":"Optional statements, printing, pictures, or drawings are used","المتطلب":"Optional data shall not conflict with mandatory labeling requirements or with claim/misleading rules in clause 4","درجة المخالفة":"متوسطة","الفئة":"عام","نوع الفحص":"Content","ينطبق_على":"All prepackaged foods with optional data or drawings","ملاحظات":"Optional data cannot undermine mandatory data."},
+  {"رقم القاعدة":"JS9-8-02","رقم المادة":"8-2","الشرط":"Product quality grade is described","المتطلب":"Grade description shall be understandable and not deceptive","درجة المخالفة":"متوسطة","الفئة":"ادعاءات مضللة","نوع الفحص":"Content","ينطبق_على":"Labels with quality grade descriptions","ملاحظات":"Anti-deception rule for grade claims."}
 ];
 
-// ===== مواصفات JS الخاصة بكل نوع منتج =====
+// ================================================================
+// ===== ALLERGENS — JS 9:2025 (13 مادة حساسية مع الاستثناءات) =====
+// ================================================================
+const ALLERGENS = [
+  {"id":1,"allergen_id":"ALG-01","name":"الحبوب المحتوية على الغلوتين","en":"Gluten Cereals","clause":"5-2-1-4-1","exceptions":"استثناء: جلوكوز سيروب/دكستروز من القمح، مالتوديكسترين من القمح، جلوكوز سيروب من الشعير","keywords":["wheat","wheat flour","semolina","durum","bulgur","gluten","spelt","rye","barley malt","oats","triticale","flour"]},
+  {"id":2,"allergen_id":"ALG-02","name":"القشريات ومنتجاتها","en":"Crustaceans","clause":"5-2-1-4-2","exceptions":"—","keywords":["shrimp","prawn","crab","lobster","krill","crustacean"]},
+  {"id":3,"allergen_id":"ALG-03","name":"البيض ومنتجاته","en":"Eggs","clause":"5-2-1-4-3","exceptions":"—","keywords":["egg","egg white","egg yolk","albumin","ovalbumin","mayonnaise"]},
+  {"id":4,"allergen_id":"ALG-04","name":"الأسماك ومنتجاتها","en":"Fish","clause":"5-2-1-4-4","exceptions":"استثناء: جيلاتين السمك المستخدم كحامل للفيتامينات والكاروتينات","keywords":["fish","salmon","tuna","cod","sardine","anchovy","fish sauce","fish protein","tilapia","mackerel"]},
+  {"id":5,"allergen_id":"ALG-05","name":"الفول السوداني والصويا","en":"Peanut/Soy","clause":"5-2-1-4-5","exceptions":"استثناء: زيت/دهن الصويا المكرر كلياً، مشتقات توكوفيرول/فيتوستيرول/ستانول المحددة","keywords":["peanut","groundnut","peanut butter","soy","soybean","soy lecithin","soy protein","tofu","soy sauce","soya"]},
+  {"id":6,"allergen_id":"ALG-06","name":"الحليب ومنتجاته (لاكتوز)","en":"Milk/Lactose","clause":"5-2-1-4-6","exceptions":"استثناء: لاكتيتول","keywords":["milk","whey","casein","cheese","butter","cream","lactose","milk powder","dairy","buttermilk"]},
+  {"id":7,"allergen_id":"ALG-07","name":"المكسرات","en":"Tree Nuts","clause":"5-2-1-4-7","exceptions":"—","keywords":["almond","hazelnut","walnut","cashew","pistachio","pecan","macadamia","praline","marzipan","nut","brazil nut"]},
+  {"id":8,"allergen_id":"ALG-08","name":"ثاني أكسيد الكبريت والكبريتيت (>10 مغ/كغ)","en":"Sulphites","clause":"5-2-1-4-8","exceptions":"عتبة: >10 مغ/كغ في المنتج الجاهز للأكل","keywords":["sulphur dioxide","sodium sulphite","potassium metabisulphite","sulphite","sulfite","E220","E221","E222","E223","E224","E225"]},
+  {"id":9,"allergen_id":"ALG-09","name":"الكرفس ومنتجاته","en":"Celery","clause":"5-2-1-4-9","exceptions":"—","keywords":["celery","celeriac","celery salt","celery seed"]},
+  {"id":10,"allergen_id":"ALG-10","name":"الخردل ومنتجاته","en":"Mustard","clause":"5-2-1-4-10","exceptions":"—","keywords":["mustard","mustard seeds","mustard powder","mustard oil"]},
+  {"id":11,"allergen_id":"ALG-11","name":"بذور السمسم ومنتجاتها","en":"Sesame","clause":"5-2-1-4-11","exceptions":"—","keywords":["sesame","sesame seeds","sesame oil","tahini"]},
+  {"id":12,"allergen_id":"ALG-12","name":"الرخويات ومنتجاتها","en":"Molluscs","clause":"5-2-1-4-12","exceptions":"—","keywords":["mussels","clams","oysters","scallops","squid","octopus","mollusc","abalone","snail"]},
+  {"id":13,"allergen_id":"ALG-13","name":"اللوبياء (اللوبين) ومنتجاتها","en":"Lupin","clause":"5-2-1-4-13","exceptions":"—","keywords":["lupin","lupine","lupin flour","lupin seed","lupin bean"]}
+];
+
+// ================================================================
+// ===== مواصفات JS الخاصة بكل نوع منتج (محتفظ بها كما هي) =====
+// ================================================================
 const JS_SPECIFIC_RULES = {
   "processed_cheese": {
     name: "الجبن المطبوخ JS 185",
@@ -869,7 +941,6 @@ const JS_SPECIFIC_RULES = {
 
 // ===== مدد الصلاحية JS 288:2023 =====
 const SHELF_LIFE_DATA = {
-  // اللحوم
   "دواجن كاملة مبردة (دجاج، بط، أوز، حمام، رومي، نعام، أرانب)": {"عبوة مناسبة": "5 أيام من الذبح", "فاكيوم": "7 أيام من الذبح"},
   "أعضاء داخلية دجاج مبردة": {"عبوة مناسبة": "3 أيام من الذبح", "فاكيوم": "7 أيام من الذبح"},
   "لحوم مبردة - بقر، جاموس، جمال، ضأن، ماعز (ذبائح/قطع)": {"عبوة مناسبة": "14 يوم من الذبح"},
@@ -877,19 +948,16 @@ const SHELF_LIFE_DATA = {
   "لحوم مبردة - ضأن، ماعز": {"فاكيوم/جو معدل": "90 يوم من الذبح"},
   "أعضاء داخلية مبردة من مواشٍ": {"عبوة مناسبة": "7 أيام من الذبح", "فاكيوم": "30 يوم من الذبح"},
   "لحم البيرغر الطازج المبرد": {"عبوة مناسبة": "يومين"},
-  // الأسماك
   "أسماك مبردة مدخنة على البارد": {"عبوة مناسبة": "7 أيام"},
   "أسماك مبردة مدخنة على الساخن": {"عبوة مناسبة": "14 يوم"},
   "أسماك مبردة مدخنة": {"فاكيوم": "90 يوم"},
   "أسماك طازجة مبردة غير مزالة الأحشاء": {"عبوة مناسبة": "7 أيام من الصيد"},
   "أسماك طازجة مبردة منظفة ومزالة الأحشاء": {"عبوة مناسبة": "9 أيام من الصيد"},
   "أسماك طازجة مبردة": {"فاكيوم": "14 يوم من الصيد", "جو معدل": "21 يوم من الصيد"},
-  // الألبان
   "اللبن الرائب أو اللبن المُطعَّم": {"عبوة مناسبة": "10 أيام"},
   "اللبنة": {"عبوة مناسبة": "14 يوم"}
 };
 
-// ===== المستثنيات من تاريخ الصلاحية =====
 const SHELF_LIFE_EXEMPTIONS = [
   "الفاكهة والخضروات الطازجة غير المقشورة أو المقطعة",
   "النبيذ بأنواعه",
@@ -910,9 +978,7 @@ const SHELF_LIFE_EXEMPTIONS = [
 
 // ===== قاعدة بيانات الخنزير والكحول =====
 const PORK_TERMS = {
-  // مستوى 1 — تنبيه أحمر: مصدره الخنزير مباشرة
   critical: [
-    // مصطلحات إنجليزية مباشرة
     'pig','swine','boar','hog','porcine','piglet','sus scrofa',
     'lard','lard oil','pork','porc','porcin','porcus','porco','maiale',
     'carne de cerdo','griskott','flask','porcino',
@@ -920,13 +986,10 @@ const PORK_TERMS = {
     'pork gelatin','pork fat','pork skin','pork rind',
     'pepsin','trypsin','pancreatin',
     'porcine gelatin','porcine collagen','porcine rennet',
-    // أرقام E خنزير مؤكدة
     'E441','E542','E920',
-    // مصطلحات عربية
     'خنزير','شحم الخنزير','دهن الخنزير','لحم الخنزير',
     'جيلاتين الخنزير','كولاجين الخنزير','بيكون','هام','لحم مقدد'
   ],
-  // مستوى 2 — تنبيه أصفر: تأكد أن مصدر هذا المكون حلال
   warning: [
     'gelatin','gelatine','glycerol','glycerin','glycerine',
     'collagen','rennet','shortening',
@@ -936,14 +999,12 @@ const PORK_TERMS = {
     'fatty acid esters','stearoyl','lactylate',
     'natural flavors','natural flavour','natural flavor',
     'animal fat','animal gelatin',
-    // عربي
     'جيلاتين','جلسرين','جليسرول','كولاجين','دهون حيوانية',
     'نكهات طبيعية','دهن نباتي أو حيواني'
   ]
 };
 
 const ALCOHOL_TERMS = {
-  // مستوى 1 — تنبيه أحمر
   critical: [
     'wine','brandy','sherry','whisky','whiskey','rum','rhum','gin','vodka',
     'beer','ethanol','ethyl alcohol','liquor','champagne','scotch','bourbon',
@@ -952,59 +1013,26 @@ const ALCOHOL_TERMS = {
     'pulque','toddy','soju','baijiu','arak','arrack','ouzo','absinthe',
     'vermouth','bitters','distilled spirits','alcohol','alco\'ol','wijn',
     'vin','vino','spirits','fermented alcohol','alcoholic',
-    // عربي
     'كحول','كحول إيثيلي','إيثانول','نبيذ','بيرة','عرق','مسكر','خمر',
     'مشروب كحولي','مشروب روحي'
   ],
-  // مستوى 2 — تنبيه أصفر: يحتوي نسبة كحول من التخمير — تحقق
   warning: [
-    'fermented','fermentation','kombucha','kefir',
-    // ملاحظة: خل النبيذ مسموح حسب المواصفة الأردنية — لا يُدرج هنا
+    'fermented','fermentation','kombucha','kefir'
   ]
 };
 
-// دالة فحص الخنزير والكحول
 function checkPorkAndAlcohol(ingredientsText) {
   if (!ingredientsText) return { pork: [], alcohol: [], warnings: [] };
   const text = ingredientsText.toLowerCase();
   const porkFound = [];
   const alcoholFound = [];
   const warnings = [];
-
-  PORK_TERMS.critical.forEach(term => {
-    if (text.includes(term.toLowerCase())) porkFound.push(term);
-  });
-  PORK_TERMS.warning.forEach(term => {
-    if (text.includes(term.toLowerCase())) warnings.push({type:'pork', term});
-  });
-  ALCOHOL_TERMS.critical.forEach(term => {
-    if (text.includes(term.toLowerCase())) alcoholFound.push(term);
-  });
-  ALCOHOL_TERMS.warning.forEach(term => {
-    if (text.includes(term.toLowerCase())) warnings.push({type:'alcohol', term});
-  });
-
+  PORK_TERMS.critical.forEach(term => { if (text.includes(term.toLowerCase())) porkFound.push(term); });
+  PORK_TERMS.warning.forEach(term => { if (text.includes(term.toLowerCase())) warnings.push({type:'pork', term}); });
+  ALCOHOL_TERMS.critical.forEach(term => { if (text.includes(term.toLowerCase())) alcoholFound.push(term); });
+  ALCOHOL_TERMS.warning.forEach(term => { if (text.includes(term.toLowerCase())) warnings.push({type:'alcohol', term}); });
   return { pork: porkFound, alcohol: alcoholFound, warnings };
 }
-
-// ===== ALLERGENS =====
-const ALLERGENS = [
-  {id:1,name:'الحليب ومنتجاته',en:'Milk',keywords:['milk','whey','casein','cheese','butter','cream','lactose','milk powder']},
-  {id:2,name:'البيض',en:'Eggs',keywords:['egg','egg white','egg yolk','albumin','ovalbumin']},
-  {id:3,name:'القمح والغلوتين',en:'Wheat',keywords:['wheat','wheat flour','semolina','durum','bulgur','gluten','spelt']},
-  {id:4,name:'الشعير',en:'Barley',keywords:['barley','malt','malt extract','malt syrup']},
-  {id:5,name:'الشوفان',en:'Oats',keywords:['oats','oat flour','oatmeal']},
-  {id:6,name:'الصويا',en:'Soy',keywords:['soy','soybean','soy lecithin','soy protein','tofu','soy sauce']},
-  {id:7,name:'الفول السوداني',en:'Peanuts',keywords:['peanut','groundnut','peanut butter','peanut oil']},
-  {id:8,name:'المكسرات',en:'Tree Nuts',keywords:['almond','hazelnut','walnut','cashew','pistachio','pecan','macadamia','praline','marzipan']},
-  {id:9,name:'الأسماك',en:'Fish',keywords:['fish','salmon','tuna','cod','sardine','anchovy','fish sauce','fish protein']},
-  {id:10,name:'القشريات',en:'Crustaceans',keywords:['shrimp','prawn','crab','lobster','krill']},
-  {id:11,name:'الرخويات',en:'Molluscs',keywords:['mussels','clams','oysters','scallops','squid','octopus']},
-  {id:12,name:'السمسم',en:'Sesame',keywords:['sesame','sesame seeds','sesame oil','tahini']},
-  {id:13,name:'الخردل',en:'Mustard',keywords:['mustard','mustard seeds','mustard powder']},
-  {id:14,name:'الكرفس',en:'Celery',keywords:['celery','celeriac','celery salt']},
-  {id:15,name:'الكبريتيت',en:'Sulphites',keywords:['sulphur dioxide','sodium sulphite','potassium metabisulphite','sulphite','sulfite']}
-];
 
 // ===== STATE =====
 let uploadedImages = [];
@@ -1015,17 +1043,14 @@ function checkReady() {
   document.getElementById('analyzeBtn').disabled = !(uploadedImages.length > 0);
 }
 
-// ===== FILE UPLOAD (متعدد) =====
+// ===== FILE UPLOAD =====
 function handleFiles(input) {
   const files = Array.from(input.files);
   if (!files.length) return;
-
   const remaining = 5 - uploadedImages.length;
   if (remaining <= 0) { showToast('الحد الأقصى 5 صور — احذف صورة أولاً'); return; }
-
   const toProcess = files.slice(0, remaining);
   if (files.length > remaining) showToast(`تم أخذ ${remaining} صور فقط — الحد الأقصى 5`);
-
   toProcess.forEach(file => {
     if (file.size > 10 * 1024 * 1024) { showToast(`${file.name}: الحجم أكبر من 10MB`); return; }
     const reader = new FileReader();
@@ -1055,7 +1080,6 @@ function handleFiles(input) {
     };
     reader.readAsDataURL(file);
   });
-  // reset input لإتاحة رفع نفس الملف مرة ثانية
   input.value = '';
 }
 
@@ -1069,7 +1093,6 @@ function renderGallery() {
   document.getElementById('uploadZone').classList.add('has-image');
   document.querySelector('.upload-icon').textContent = '📎';
   document.querySelector('.upload-text h3').textContent = `${uploadedImages.length} صورة مرفوعة — انقر لإضافة المزيد`;
-
   thumbs.innerHTML = uploadedImages.map((img, i) => `
     <div style="position:relative;flex-shrink:0;">
       <img src="${img.src}" style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:2px solid var(--border);" />
@@ -1088,8 +1111,7 @@ function removeImage(index) {
     document.querySelector('.upload-icon').textContent = '📋';
     document.querySelector('.upload-text h3').textContent = 'اسحب صور بطاقة البيان هنا';
   }
-  renderGallery();
-  checkReady();
+  renderGallery(); checkReady();
 }
 
 function clearImages() {
@@ -1097,8 +1119,7 @@ function clearImages() {
   document.getElementById('uploadZone').classList.remove('has-image');
   document.querySelector('.upload-icon').textContent = '📋';
   document.querySelector('.upload-text h3').textContent = 'اسحب صور بطاقة البيان هنا';
-  renderGallery();
-  checkReady();
+  renderGallery(); checkReady();
 }
 
 const zone = document.getElementById('uploadZone');
@@ -1123,7 +1144,7 @@ function startProgress() {
   const steps = [
     {id:'step1', text:'📷 جاري قراءة الصورة...', pct:15},
     {id:'step2', text:'⚗️ جاري فحص المضافات...', pct:40},
-    {id:'step3', text:'📋 جاري تدقيق المواصفات الأردنية...', pct:70},
+    {id:'step3', text:'📋 جاري تدقيق 110 قاعدة JS 9:2025...', pct:70},
     {id:'step4', text:'📊 جاري توليد التقرير...', pct:90}
   ];
   let i = 0;
@@ -1132,7 +1153,6 @@ function startProgress() {
       document.getElementById('progressText').textContent = steps[i].text;
       document.getElementById('progressPercent').textContent = steps[i].pct + '%';
       document.getElementById('progressFill').style.width = steps[i].pct + '%';
-      // تفعيل الخطوة
       document.getElementById(steps[i].id).style.color = 'var(--accent)';
       document.getElementById(steps[i].id).style.borderColor = 'rgba(0,212,168,.4)';
       i++;
@@ -1155,18 +1175,19 @@ function resetProgress() {
     document.getElementById(id).style.borderColor = 'rgba(0,212,168,.15)';
   });
 }
+
 function showTab(tab, el) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel'];
+  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel','additivesVerifyPanel'];
   panels.forEach(p => document.getElementById(p).style.display = 'none');
   document.getElementById('issuesList').style.display = 'none';
-
   if (tab === 'allergens') document.getElementById('allergenPanel').style.display = 'block';
   else if (tab === 'nutrition') document.getElementById('nutritionPanel').style.display = 'block';
   else if (tab === 'jswarnings') document.getElementById('jswarningsPanel').style.display = 'block';
   else if (tab === 'halalcheck') document.getElementById('halalcheckPanel').style.display = 'block';
+  else if (tab === 'additives_verify') document.getElementById('additivesVerifyPanel').style.display = 'block';
   else {
     document.getElementById('issuesList').style.display = 'block';
     renderIssues(allResults, tab);
@@ -1178,7 +1199,6 @@ function toggleIssue(id) {
   body.classList.toggle('open');
 }
 
-// ===== RENDER ISSUES =====
 function renderIssues(results, filter) {
   const list = document.getElementById('issuesList');
   const filtered = filter === 'all' ? results : results.filter(r => r.status === filter);
@@ -1208,34 +1228,25 @@ function renderIssues(results, filter) {
   }).join('');
 }
 
-// ===== HALAL CHECK =====
 function renderHalalCheck(ingredientsText) {
   const panel = document.getElementById('halalCheckResults');
   const result = checkPorkAndAlcohol(ingredientsText || '');
-
   let html = '';
-
-  // خنزير مؤكد
   if (result.pork.length > 0) {
     html += `<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
       <div style="font-weight:700;color:var(--danger);margin-bottom:.5rem;">❌ تحتوي على مكونات خنزير</div>
       <div style="font-size:.83rem;color:var(--text2);">المصطلحات المكتشفة: <span style="color:var(--danger);font-family:var(--mono);">${result.pork.join(', ')}</span></div>
     </div>`;
   }
-
-  // كحول مؤكد
   if (result.alcohol.length > 0) {
     html += `<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
       <div style="font-weight:700;color:var(--danger);margin-bottom:.5rem;">❌ تحتوي على كحول أو مشروبات مسكرة</div>
       <div style="font-size:.83rem;color:var(--text2);">المصطلحات المكتشفة: <span style="color:var(--danger);font-family:var(--mono);">${result.alcohol.join(', ')}</span></div>
     </div>`;
   }
-
-  // تحذيرات تحتاج تحقق
   if (result.warnings.length > 0) {
     const porkWarnings = result.warnings.filter(w => w.type === 'pork');
     const alcoholWarnings = result.warnings.filter(w => w.type === 'alcohol');
-
     if (porkWarnings.length > 0) {
       html += `<div style="background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
         <div style="font-weight:700;color:var(--warn);margin-bottom:.5rem;">⚠️ تأكد أن مصدر هذه المكونات حلال</div>
@@ -1243,7 +1254,6 @@ function renderHalalCheck(ingredientsText) {
         <div style="font-size:.78rem;color:var(--text3);margin-top:.5rem;">هذه المكونات قد تكون من مصدر حيواني — تحقق من المورد أو وجود شهادة حلال</div>
       </div>`;
     }
-
     if (alcoholWarnings.length > 0) {
       html += `<div style="background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.3);border-radius:12px;padding:1rem;margin-bottom:1rem;">
         <div style="font-weight:700;color:var(--warn);margin-bottom:.5rem;">⚠️ يحتمل احتواء نسبة كحول من التخمير</div>
@@ -1251,17 +1261,15 @@ function renderHalalCheck(ingredientsText) {
       </div>`;
     }
   }
-
-  // نظيف
   if (result.pork.length === 0 && result.alcohol.length === 0 && result.warnings.length === 0) {
     html = `<div style="background:rgba(46,213,115,.08);border:1px solid rgba(46,213,115,.3);border-radius:12px;padding:1rem;">
       <div style="font-weight:700;color:var(--success);">✅ لم يُكتشف مكونات خنزير أو كحول</div>
       <div style="font-size:.83rem;color:var(--text2);margin-top:.3rem;">بناءً على المكونات المستخرجة من البطاقة — للتأكد النهائي راجع شهادة الحلال</div>
     </div>`;
   }
-
   panel.innerHTML = html;
 }
+
 function renderJSWarnings(productType) {
   const panel = document.getElementById('jsWarningsList');
   const jsRules = JS_SPECIFIC_RULES[productType];
@@ -1294,45 +1302,55 @@ async function analyze() {
   const origin = document.getElementById('origin').value;
   const strictness = document.getElementById('strictness').value;
 
-  // بناء قواعد خاصة بنوع المنتج
   const jsSpecific = JS_SPECIFIC_RULES[productType];
   const jsRulesText = jsSpecific ?
     `\n\nاشتراطات خاصة بنوع المنتج (${jsSpecific.name}):\n` +
     jsSpecific.warnings.map(w => `- [${w.code}] ${w.text}`).join('\n') : '';
 
-  const rulesText = RULES.map(r =>
-    `[${r['رقم القاعدة']}] ${r['رقم المادة']} (${r['درجة المخالفة']}): ${r['المتطلب']}`
-  ).join('\n');
+  // ===== JS 9:2025 — بنية IF/THEN الجديدة =====
+  const rulesText = RULES.map(r => {
+    const sev = r['درجة المخالفة'];
+    const cond = r['الشرط'];
+    const req = r['المتطلب'];
+    const appliesTo = r['ينطبق_على'] || '';
+    const notes = r['ملاحظات'] ? ' // ' + r['ملاحظات'] : '';
+    return `[${r['رقم القاعدة']}] البند ${r['رقم المادة']} (${sev}) — ينطبق على: ${appliesTo}\nIF ${cond}\nTHEN ${req}${notes}`;
+  }).join('\n\n');
 
+  // ===== مواد الحساسية مع الاستثناءات =====
   const allergensText = ALLERGENS.map(a =>
-    `${a.name}: ${a.keywords.join(', ')}`
+    `${a.name} [${a.allergen_id}] (${a.clause}): ${a.keywords.join(', ')}${a.exceptions && a.exceptions !== '—' ? ' | استثناءات: ' + a.exceptions : ''}`
   ).join('\n');
 
-  const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفات الأردنية والكودكس الدولي.
+  const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفة الأردنية JS 9:2025 والكودكس الدولي.
 
 معلومات المنتج:
 - نوع المنتج: ${productType}
 - المنشأ: ${origin === 'imported' ? 'مستورد' : 'محلي'}
 - مستوى التدقيق: ${strictness}
 
-قواعد التدقيق العامة (JS 9 + القواعد الأردنية الإلزامية):
+قواعد التدقيق الإلزامية حسب JS 9:2025 (104 قاعدة):
 ${rulesText}
 ${jsRulesText}
 
-مواد الحساسية للفحص:
+مواد الحساسية للفحص (13 مادة حسب JS 9:2025 البند 5-2-1-4):
 ${allergensText}
 
 تعليمات مهمة:
 1. اقرأ صورة بطاقة البيان المرفقة بعناية تامة
-2. دقق على كل قاعدة من القواعد أعلاه
-3. افحص المكونات بحثاً عن مواد الحساسية
-4. افحص المضافات الغذائية المذكورة
-5. افحص جدول الحقائق التغذوية بدقة
+2. دقق على كل قاعدة من القواعد أعلاه — استخدم منطق IF/THEN بدقة
+3. افحص المكونات بحثاً عن مواد الحساسية مع مراعاة الاستثناءات
+4. افحص المضافات الغذائية — الفئة الوظيفية + الاسم أو الرقم INS
+5. افحص جدول الحقائق التغذوية بدقة حسب JS 1473:2022
 6. أعطِ إجابة بتنسيق JSON فقط بدون أي نص إضافي
 7. النتيجة يجب أن تعتمد على ما هو مكتوب في البطاقة فقط — لا تفترض
-8. استثناء مهم — المنتج ذو المكون الواحد: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
-9. أرقام المضافات E-numbers: إذا ذُكر رقم المضاف فقط (مثل E414, E471) دون ذكر الاسم الوظيفي — أعطِ تنبيهاً لا مخالفة جسيمة. المخالفة الجسيمة فقط إذا غاب المضاف كلياً أو كان الرقم غير معترف به
-10. تاريخ الصلاحية: إذا لم يظهر في الصورة لا تحكم بمخالفة جسيمة — أعطِ تنبيهاً فقط لأنه قد يكون مطبوعاً في مكان آخر من العبوة غير ظاهر في الصورة: إذا كان المنتج يتكون من مكون واحد فقط (مثل: أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة) فإن غياب قائمة المكونات وغياب جدول الحقائق التغذوية لا يُعتبر مخالفة — بل يُعتبر مطابقاً. في هذه الحالة أعطِ R010 و R011 و R016 والحقائق التغذوية حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى"
+8. المنتج ذو المكون الواحد (أرز، سكر، ملح، تمر، بقوليات، دقيق، شاي، قهوة، توابل مفردة): غياب قائمة المكونات وغياب الحقائق التغذوية لا يُعتبر مخالفة — أعطِ JS9-5-2-01 و JS9-5-3-01 حكم "pass" مع ملاحظة "منتج مكون واحد — مستثنى حسب JS9-5-2-02"
+9. أرقام E-numbers: إذا ذُكر رقم المضاف فقط بدون الاسم الوظيفي — أعطِ تنبيهاً لا مخالفة جسيمة. المخالفة الجسيمة فقط إذا غاب المضاف كلياً أو كان الرقم غير معترف به
+10. تاريخ الصلاحية: إذا لم يظهر في الصورة — أعطِ تنبيهاً فقط لأنه قد يكون مطبوعاً في مكان آخر من العبوة
+11. الوزن المصفّى (Drained Weight) [JS9-5-4-05]: إذا كان المنتج في وسط سائل (محلول ملحي، شراب، خل، مرق، زيت) — تحقق من إعلان الوزن المصفى بجانب الوزن الإجمالي — غيابه مخالفة جسيمة
+12. الترميز (Lot/Batch) [JS9-5-7-01]: تحقق من وجود رقم الدُفعة/الاشتراطة على الغلاف — غيابه مخالفة جسيمة
+13. اسم المنتج التجاري [JS9-5-1-05]: إذا كان الاسم تجارياً فقط بدون الاسم الحقيقي = مخالفة جسيمة
+14. المكونات البديلة [JS9-5-1-07]: إذا كان المنتج يدّعي أنه "جبنة" أو "حليب" وفيه بدائل نباتية — يجب التصريح بالبديل بوضوح بجانب اسم المنتج
 
 التنسيق المطلوب:
 {
@@ -1341,7 +1359,7 @@ ${allergensText}
   "score": رقم من 0 إلى 100,
   "results": [
     {
-      "code": "رقم القاعدة مثل R006",
+      "code": "رقم القاعدة مثل JS9-5-1-01",
       "rule": "اسم القاعدة",
       "category": "الفئة",
       "requirement": "المتطلب",
@@ -1361,7 +1379,7 @@ ${allergensText}
   "additives": [
     {
       "name": "اسم المضاف",
-      "ins": "رقم INS بالأرقام فقط بدون حرف E — مثال: 160 وليس E160 أو e160E",
+      "ins": "رقم INS بالأرقام فقط بدون حرف E",
       "declared": true,
       "note": "ملاحظة"
     }
@@ -1399,8 +1417,7 @@ ${allergensText}
         { type: 'text', text: prompt }
       ]}]
     });
-    let response;
-    response = await fetch('/api/analyze', {
+    const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: requestBody
@@ -1416,10 +1433,9 @@ ${allergensText}
     if (!jsonMatch) throw new Error('تعذّر تحليل الاستجابة');
     displayResults(JSON.parse(jsonMatch[0]), productType);
     stopProgress();
-
   } catch (err) {
     let msg = err.message || 'خطأ';
-    if(msg.includes('Failed to fetch')||msg.includes('CORS')) msg = 'خطأ شبكة — تأكد من المفتاح';
+    if(msg.includes('Failed to fetch')||msg.includes('CORS')) msg = 'خطأ شبكة — تأكد من الاتصال';
     showToast('❌ ' + msg); console.error(err);
     resetProgress();
   } finally {
@@ -1431,7 +1447,6 @@ ${allergensText}
 // ===== DISPLAY RESULTS =====
 function displayResults(data, productType) {
   document.getElementById('results').style.display = 'block';
-  // حفظ بيانات التقرير
   window._lastReportData = {
     productName: data.product_name || data.productName || '',
     productType: productType || '',
@@ -1440,7 +1455,6 @@ function displayResults(data, productType) {
     nutrition: data.nutrition_facts || data.nutrition || {}
   };
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
   document.getElementById('aiSummary').textContent = data.summary || 'تم إكمال التدقيق';
 
   const score = Math.round(data.score || 0);
@@ -1479,7 +1493,7 @@ function displayResults(data, productType) {
     grid.innerHTML = '<p style="color:var(--text3);font-size:.85rem;">لم يتم الكشف عن مواد حساسية</p>';
   }
 
-  // Nutrition Panel — JS 1473:2022
+  // Nutrition Panel
   const nutrition = data.nutrition || {};
   const nGrid = document.getElementById('nutritionGrid');
   const nNote = document.getElementById('nutritionNote');
@@ -1510,28 +1524,48 @@ function displayResults(data, productType) {
     (nutrition.nutritionNote || '') +
     '<br><br><span style="color:var(--text3);font-size:.78rem;">📌 المرجع: JS 1473:2022 · القيمة المرجعية: 2000 كيلوكالوري</span>';
 
-  // JS Warnings Panel
   renderJSWarnings(productType);
 
-  // Halal Check
-  const ingredientsText = data.results
-    ?.find(r => r.category === 'مكونات')?.note || data.summary || '';
+  const ingredientsText = data.results?.find(r => r.category === 'مكونات')?.note || data.summary || '';
   renderHalalCheck(ingredientsText + ' ' + JSON.stringify(data.additives || []));
+
+  // Additives for CXS192
+  lastDetectedAdditives = data.additives || [];
+  const catMap = {
+    dairy:'01.0', processed_cheese:'01.6.2', soft_cheese:'01.6.1',
+    flavored_milk:'01.1.4', dried_milk:'01.5.1', evaporated_milk:'01.3',
+    meat:'08.0', fish:'09.0', bakery:'07.1', biscuit:'07.1.2',
+    noodles:'06.4.3', corn_chips:'15.1', chocolate:'05.1', candy:'05.2',
+    beverages:'14.1', energy_drink:'14.1.4', juice:'14.1.2.1',
+    fruit_syrup:'14.1.4', flavored_drink:'14.1.4', supplements:'13.6'
+  };
+  lastProductCatNo = catMap[productType] || null;
+  const checkAllBtn = document.getElementById('checkAllBtn');
+  if (checkAllBtn && lastDetectedAdditives.length > 0) {
+    checkAllBtn.style.display = 'inline-block';
+    checkAllBtn.textContent = `فحص كل المضافات (${lastDetectedAdditives.length})`;
+  }
+  const autoEl = document.getElementById('autoAdditivesResult');
+  if (autoEl && lastDetectedAdditives.length > 0) {
+    autoEl.innerHTML = `<div style="background:rgba(0,212,168,.06);border:1px solid rgba(0,212,168,.15);border-radius:10px;padding:.9rem;font-size:.85rem;">
+      <strong>🔍 المضافات المكتشفة من الصورة (${lastDetectedAdditives.length}):</strong><br>
+      <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">
+        ${lastDetectedAdditives.map(a => `<span style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.78rem;">${a.name}${a.ins?' ('+a.ins+')':''}</span>`).join('')}
+      </div>
+      <div style="margin-top:.7rem;color:var(--text3);font-size:.78rem;">اضغط "فحص كل المضافات" أعلاه لفحصها جميعاً بتسلسل القرار الثلاثي</div>
+    </div>`;
+  }
 }
-
-
 
 // ============================================================
 // ===== CODEX CXS 192 — نظام التحقق من المضافات =====
 // ============================================================
-
 let CODEX = null;
 let codexReady = false;
 let manualSelectedINS = null;
-let lastDetectedAdditives = []; // المضافات المستخرجة من آخر فحص
+let lastDetectedAdditives = [];
 let lastProductCatNo = null;
 
-// تحميل البيانات
 async function loadCodexData() {
   const statusEl = document.getElementById('codexLoadStatus');
   if (statusEl) statusEl.textContent = '⏳ جاري تحميل قاعدة بيانات CXS 192...';
@@ -1542,28 +1576,11 @@ async function loadCodexData() {
     codexReady = true;
     if (statusEl) statusEl.innerHTML = '✅ قاعدة البيانات جاهزة · <span style="color:var(--text3)">' + Object.keys(CODEX.table1).length + ' مضاف · ' + Object.keys(CODEX.table2).length + ' فئة</span>';
   } catch(e) {
-    if (statusEl) statusEl.textContent = '⚠️ ملف codex_data.json غير موجود على السيرفر — ضع الملف في نفس مجلد index.html';
+    if (statusEl) statusEl.textContent = '⚠️ ملف codex_data.json غير موجود على السيرفر';
   }
 }
 loadCodexData();
 
-// ===== showTab — تحديث لإضافة لوحة المضافات =====
-const _origShowTab = showTab;
-showTab = function(tab, el) {
-  _origShowTab(tab, el);
-  const avp = document.getElementById('additivesVerifyPanel');
-  if (avp) avp.style.display = tab === 'additives_verify' ? 'block' : 'none';
-  // إضافة للبانلز array
-  const panels = ['allergenPanel','nutritionPanel','jswarningsPanel','halalcheckPanel','additivesVerifyPanel'];
-  panels.forEach(p => {
-    const el2 = document.getElementById(p);
-    if (el2 && p !== 'additivesVerifyPanel') {
-      if (tab === p.replace('Panel','')) el2.style.display = 'block';
-    }
-  });
-};
-
-// ===== Autocomplete المضاف =====
 function onManualAdditiveInput() {
   const q = document.getElementById('manualAdditiveInput').value.trim().toUpperCase();
   manualSelectedINS = null;
@@ -1601,13 +1618,11 @@ function selectManualAdditive(ins, name) {
 function hideManualAC() { document.getElementById('manualAcList').style.display = 'none'; }
 document.addEventListener('click', e => { if (!e.target.closest('#manualAdditiveInput') && !e.target.closest('#manualAcList')) hideManualAC(); });
 
-// ===== استخراج INS من النص =====
 function resolveINS(inputVal) {
   if (manualSelectedINS) return manualSelectedINS;
   const val = inputVal.trim().toUpperCase();
   const numMatch = val.match(/\b(\d{3,4})\b/);
   if (numMatch && (CODEX.table1[numMatch[1]] || CODEX.table3[numMatch[1]])) return numMatch[1];
-  // بحث بالاسم
   for (const [ins, data] of Object.entries(CODEX.table1)) {
     if (data.name.toUpperCase().includes(val) || val.includes(data.name.toUpperCase().substring(0,5))) return ins;
   }
@@ -1617,20 +1632,16 @@ function resolveINS(inputVal) {
   return null;
 }
 
-// ===== استخراج رقم الفئة من النص =====
 function resolveCatNo(inputVal) {
   if (!inputVal || !inputVal.trim()) return null;
   const val = inputVal.trim();
-  // رقم مباشر
   if (/^\d{2}\.\d/.test(val)) return val;
-  // بحث بالاسم في فئات الجداول
   const up = val.toUpperCase();
   for (const [ins, data] of Object.entries(CODEX.table1)) {
     for (const c of data.categories) {
       if (c.cat_name && c.cat_name.toUpperCase().includes(up)) return c.cat_no;
     }
   }
-  // بحث بقائمة أنواع المنتجات الشائعة
   const productCatMap = {
     'حليب': '01.1', 'milk': '01.1', 'dairy': '01.0', 'ألبان': '01.0',
     'جبن': '01.6', 'cheese': '01.6', 'زبدة': '02.2', 'butter': '02.2',
@@ -1646,10 +1657,9 @@ function resolveCatNo(inputVal) {
   for (const [key, cat] of Object.entries(productCatMap)) {
     if (up.includes(key.toUpperCase())) return cat;
   }
-  return val; // أعد القيمة كما هي
+  return val;
 }
 
-// ===== منطق القرار الثلاثي =====
 function runCXS192Check(ins, catNo) {
   if (!CODEX) return null;
   const t1 = CODEX.table1, t2 = CODEX.table2, t3 = CODEX.table3, annex = CODEX.annex;
@@ -1657,7 +1667,6 @@ function runCXS192Check(ins, catNo) {
   const steps = [];
   let verdict = 'forbidden', matchData = null;
 
-  // الجدول 1
   let t1Match = null;
   if (t1[ins]) {
     const catParts = catNo ? catNo.split('.') : [];
@@ -1674,9 +1683,7 @@ function runCXS192Check(ins, catNo) {
     steps.push({ n:3, s:'skip', t:'الجدول 3', d:'' });
     verdict = 'permitted'; matchData = { source:'T1', match:t1Match };
   } else {
-    steps.push({ n:1, s:'fail', t:'الجدول 1 — غير موجود', d: t1[ins] ? `المضاف في الجدول 1 لكن ليس لهذه الفئة (${catNo}) · موجود في ${t1[ins].categories.length} فئة أخرى` : `المضاف INS ${ins} غير مدرج في الجدول 1` });
-
-    // الجدول 2
+    steps.push({ n:1, s:'fail', t:'الجدول 1 — غير موجود', d: t1[ins] ? `المضاف في الجدول 1 لكن ليس لهذه الفئة (${catNo})` : `المضاف INS ${ins} غير مدرج في الجدول 1` });
     let t2Match = null;
     if (catNo && t2[catNo]) {
       t2Match = t2[catNo].find(a => a.ins.split(/[;,\s]+/).map(s=>s.trim()).includes(ins) || a.ins === ins);
@@ -1687,30 +1694,25 @@ function runCXS192Check(ins, catNo) {
       verdict = 'permitted'; matchData = { source:'T2', match:t2Match };
     } else {
       steps.push({ n:2, s:'fail', t:'الجدول 2 — غير موجود', d: catNo && t2[catNo] ? `الفئة موجودة لكن المضاف غير مسموح فيها` : `الفئة ${catNo||'غير محددة'} غير مدرجة في الجدول 2` });
-
-      // الجدول 3
       const inAnnex = catNo ? annex.includes(catNo) : false;
       if (inAnnex) {
-        steps.push({ n:3, s:'fail', t:'الجدول 3 — مستثنى (Annex) ✗', d:`الفئة ${catNo} مستثناة — تخضع للجداول 1 و2 فقط` });
+        steps.push({ n:3, s:'fail', t:'الجدول 3 — مستثنى (Annex) ✗', d:`الفئة ${catNo} مستثناة` });
       } else if (t3[ins]) {
-        steps.push({ n:3, s:'pass', t:'الجدول 3 — مسموح ✓', d:`مضاف عام مسموح${catNo ? ' والفئة '+catNo+' غير مستثناة' : ''}` });
+        steps.push({ n:3, s:'pass', t:'الجدول 3 — مسموح ✓', d:`مضاف عام مسموح` });
         verdict = 'permitted'; matchData = { source:'T3', match:t3[ins] };
       } else {
         steps.push({ n:3, s:'fail', t:'الجدول 3 — غير مدرج', d:'المضاف غير مدرج في أي جدول من جداول CXS 192' });
       }
     }
   }
-
   return { ins, additiveName, catNo, steps, verdict, matchData };
 }
 
-// ===== عرض النتيجة =====
 function renderVerifyResult(result, container) {
   const { ins, additiveName, catNo, steps, verdict, matchData } = result;
   const vCfg = {
     permitted: { icon:'✅', label:'مسموح', cls:'permitted', col:'var(--success)' },
-    forbidden: { icon:'❌', label:'غير مسموح', cls:'forbidden', col:'var(--danger)' },
-    info:      { icon:'ℹ️', label:'معلومات', cls:'info', col:'var(--accent2)' }
+    forbidden: { icon:'❌', label:'غير مسموح', cls:'forbidden', col:'var(--danger)' }
   }[verdict] || { icon:'❓', label:'غير محدد', cls:'info', col:'var(--text2)' };
 
   const stepsHTML = steps.map(s => `
@@ -1730,7 +1732,6 @@ function renderVerifyResult(result, container) {
       <tr><th>الحد الأقصى</th><td>${m.max_level && m.max_level !== 'nan' ? '<span class="av-badge-green">'+m.max_level+'</span>' : '<span class="av-badge-blue">GMP</span>'}</td></tr>
       ${m.functional_class ? `<tr><th>التصنيف الوظيفي</th><td>${m.functional_class}</td></tr>` : ''}
       ${m.notes && m.notes !== 'nan' ? `<tr><th>ملاحظات</th><td>${notesHTML}</td></tr>` : ''}
-      ${m.specific_allowance ? `<tr><th>السماح المحدد</th><td style="font-size:.78rem;">${m.specific_allowance}</td></tr>` : ''}
     </table>`;
   }
 
@@ -1756,7 +1757,6 @@ function renderNotesBadge(notes) {
     <div class="ac-note-expanded" id="${id}">${texts.join('<br>')}</div>`;
 }
 
-// ===== تشغيل الفحص اليدوي =====
 function runManualCheck() {
   if (!codexReady) { alert('البيانات لم تُحمَّل بعد — تأكد أن ملف codex_data.json موجود على السيرفر'); return; }
   const additiveVal = document.getElementById('manualAdditiveInput').value;
@@ -1770,17 +1770,14 @@ function runManualCheck() {
   renderVerifyResult(result, container);
 }
 
-// ===== فحص كل المضافات المكتشفة من الصورة =====
 function checkAllDetectedAdditives() {
   if (!codexReady || !lastDetectedAdditives.length) return;
   const autoEl = document.getElementById('autoAdditivesResult');
   autoEl.innerHTML = `<div style="font-weight:700;margin-bottom:.8rem;color:var(--text2);">نتائج فحص المضافات المكتشفة (${lastDetectedAdditives.length} مضاف)</div>`;
-
   lastDetectedAdditives.forEach(add => {
     const name = (add.name || '').toUpperCase();
     const insRaw = (add.ins || '').replace(/E/i,'').trim();
     let ins = null;
-    // resolve INS
     if (insRaw && (CODEX.table1[insRaw] || CODEX.table3[insRaw])) ins = insRaw;
     else {
       for (const [i, d] of Object.entries(CODEX.table1)) {
@@ -1814,56 +1811,12 @@ function checkAllDetectedAdditives() {
   });
 }
 
-// ===== تكامل مع نتائج الفحص الرئيسية =====
-// يُستدعى من displayResults بعد نجاح التحليل
-const _origDisplayResults = displayResults;
-displayResults = function(data, productType) {
-  _origDisplayResults(data, productType);
-  // حفظ المضافات المكتشفة
-  lastDetectedAdditives = data.additives || [];
-  // تخمين رقم الفئة من نوع المنتج
-  const catMap = {
-    dairy:'01.0', processed_cheese:'01.6.2', soft_cheese:'01.6.1',
-    flavored_milk:'01.1.4', dried_milk:'01.5.1', evaporated_milk:'01.3',
-    meat:'08.0', fish:'09.0', bakery:'07.1', biscuit:'07.1.2',
-    noodles:'06.4.3', corn_chips:'15.1', chocolate:'05.1', candy:'05.2',
-    beverages:'14.1', energy_drink:'14.1.4', juice:'14.1.2.1',
-    fruit_syrup:'14.1.4', flavored_drink:'14.1.4', supplements:'13.6'
-  };
-  lastProductCatNo = catMap[productType] || null;
-  // تحديث زر فحص الكل
-  const btn = document.getElementById('checkAllBtn');
-  if (btn && lastDetectedAdditives.length > 0) {
-    btn.style.display = 'inline-block';
-    btn.textContent = `فحص كل المضافات (${lastDetectedAdditives.length})`;
-  }
-  // عرض ملخص في تبويب المضافات
-  const autoEl = document.getElementById('autoAdditivesResult');
-  if (autoEl && lastDetectedAdditives.length > 0) {
-    autoEl.innerHTML = `<div style="background:rgba(0,212,168,.06);border:1px solid rgba(0,212,168,.15);border-radius:10px;padding:.9rem;font-size:.85rem;">
-      <strong>🔍 المضافات المكتشفة من الصورة (${lastDetectedAdditives.length}):</strong><br>
-      <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">
-        ${lastDetectedAdditives.map(a => `<span style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.78rem;">${a.name}${a.ins?' ('+a.ins+')':''}</span>`).join('')}
-      </div>
-      <div style="margin-top:.7rem;color:var(--text3);font-size:.78rem;">اضغط "فحص كل المضافات" أعلاه لفحصها جميعاً بتسلسل القرار الثلاثي</div>
-    </div>`;
-  }
-};
-// ============================================================
-
-
 // ===== فتح التقرير =====
 function openReport() {
-  if (!window._lastReportData) {
-    alert('الرجاء إجراء فحص أولاً');
-    return;
-  }
-  // حفظ البيانات في sessionStorage
+  if (!window._lastReportData) { alert('الرجاء إجراء فحص أولاً'); return; }
   sessionStorage.setItem('foodcheck_report', JSON.stringify(window._lastReportData));
-  // فتح صفحة التقرير
   window.open('/report.html', '_blank');
 }
-
 
 // ===== نموذج التواصل =====
 function submitContact() {
@@ -1871,15 +1824,8 @@ function submitContact() {
   const email = document.getElementById('contactEmail').value.trim();
   const msg = document.getElementById('contactMsg').value.trim();
   if (!name || !email || !msg) { alert('الرجاء تعبئة الحقول المطلوبة *'); return; }
-
-  // فتح واتساب بالرسالة
-  const text = encodeURIComponent(
-    'مرحباً، أنا ' + name + '\n' +
-    'البريد: ' + email + '\n\n' +
-    'الرسالة:\n' + msg
-  );
+  const text = encodeURIComponent('مرحباً، أنا ' + name + '\nالبريد: ' + email + '\n\nالرسالة:\n' + msg);
   window.open('https://wa.me/962776195235?text=' + text, '_blank');
-
   document.getElementById('contactSuccess').style.display = 'block';
   document.getElementById('contactName').value = '';
   document.getElementById('contactEmail').value = '';
@@ -1931,7 +1877,6 @@ function showToast(msg) {
           </div>
         </div>
       </div>
-
       <div class="contact-form">
         <input type="text" id="contactName" placeholder="الاسم الكامل *">
         <input type="text" id="contactCompany" placeholder="اسم الشركة">
