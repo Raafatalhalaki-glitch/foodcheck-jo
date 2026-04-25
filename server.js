@@ -53,6 +53,71 @@ function resetDailyIfNeeded() {
   }
 }
 
+// ================================================================
+// ===== تسجيل المستخدمين =====
+// ================================================================
+
+const registeredUsers = []; // في الذاكرة — سنحوّله لـ DB لاحقاً
+
+app.post('/api/register', (req, res) => {
+  const { name, email, company } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({ error: 'الاسم والبريد مطلوبان' });
+  }
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
+           || req.socket.remoteAddress;
+
+  // تحقق إذا مسجل مسبقاً
+  const existing = registeredUsers.find(u => u.email === email);
+  if (existing) {
+    // منح فحوصات إضافية
+    if (usageDB.byIP[ip]) {
+      usageDB.byIP[ip].registered = true;
+      usageDB.byIP[ip].limit = 30; // 30 فحص/شهر للمسجلين
+    }
+    return res.json({
+      success: true,
+      message: 'مرحباً بعودتك!',
+      limit: 30
+    });
+  }
+
+  // تسجيل جديد
+  registeredUsers.push({
+    name, email,
+    company: company || '',
+    ip,
+    registered_at: new Date().toISOString()
+  });
+
+  // منح فحوصات إضافية
+  if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
+  usageDB.byIP[ip].registered = true;
+  usageDB.byIP[ip].limit = 30;
+
+  console.log(`✅ مستخدم جديد: ${name} | ${email} | ${company || 'غير محدد'}`);
+
+  res.json({
+    success: true,
+    message: 'تم التسجيل! حصلت على 30 فحص/شهر مجاناً',
+    limit: 30,
+    total_users: registeredUsers.length
+  });
+});
+
+// عرض المسجلين (للمطور فقط)
+app.get('/api/admin/users', (req, res) => {
+  const key = req.headers['x-admin-key'];
+  if (key !== process.env.ADMIN_KEY) {
+    return res.status(401).json({ error: 'غير مصرح' });
+  }
+  res.json({
+    total: registeredUsers.length,
+    users: registeredUsers
+  });
+});
+
 // API للحصول على معلومات الاستخدام
 app.get('/api/usage', (req, res) => {
   resetDailyIfNeeded();
@@ -109,17 +174,21 @@ app.use((req, res, next) => {
   // عداد الفحوصات اليومية
   resetDailyIfNeeded();
   if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
+
+  const userLimit = usageDB.byIP[ip].registered ? 30 : FREE_DAILY_LIMIT;
   const todayChecks = usageDB.byIP[ip].daily.filter(
     t => now - t < 24 * 60 * 60 * 1000
   ).length;
 
-  if (todayChecks >= FREE_DAILY_LIMIT) {
+  if (todayChecks >= userLimit) {
     return res.status(429).json({
-      error: `وصلت للحد اليومي المجاني (${FREE_DAILY_LIMIT} فحوصات/يوم)`,
+      error: usageDB.byIP[ip].registered
+        ? `وصلت للحد الشهري (${userLimit} فحص) — تواصل معنا للترقية`
+        : `وصلت للحد اليومي المجاني (${FREE_DAILY_LIMIT} فحوصات)`,
       type: 'daily_limit',
       today: todayChecks,
-      limit: FREE_DAILY_LIMIT,
-      reset_in: '24 ساعة'
+      limit: userLimit,
+      registered: usageDB.byIP[ip].registered || false
     });
   }
 
