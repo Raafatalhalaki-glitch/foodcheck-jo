@@ -1587,6 +1587,20 @@ ${allergensText}
     if (!jsonMatch) throw new Error('تعذّر تحليل الاستجابة');
     displayResults(JSON.parse(jsonMatch[0]), productType);
     stopProgress();
+
+    // ===== Google Analytics Event Tracking =====
+    try {
+      const _d = JSON.parse(jsonMatch[0]);
+      gtag('event', 'label_check_completed', {
+        'product_type': productType,
+        'score': Math.round(_d.score || 0),
+        'violations': (_d.results || []).filter(r => r.status === 'critical').length,
+        'warnings': (_d.results || []).filter(r => r.status === 'warning').length,
+        'origin': origin,
+        'additives_count': (_d.additives || []).length,
+        'overall_status': _d.overallStatus || 'unknown'
+      });
+    } catch(e) { /* لا يوقف التطبيق */ }
   } catch (err) {
     let msg = err.message || 'خطأ';
     if(msg.includes('Failed to fetch')||msg.includes('CORS')) msg = 'خطأ شبكة — تأكد من الاتصال';
