@@ -1628,8 +1628,9 @@ function updateUsageDisplay(usage) {
       position:fixed;bottom:5rem;left:1.5rem;z-index:998;
       background:var(--surface2);border:1px solid var(--border);
       border-radius:12px;padding:.7rem 1rem;font-size:.78rem;
-      color:var(--text2);min-width:160px;
+      color:var(--text2);min-width:160px;cursor:pointer;
     `;
+    bar.onclick = () => { if(usage.remaining <= 1) showRegisterModal(); };
     document.body.appendChild(bar);
   }
   const pct = (usage.today / usage.limit) * 100;
@@ -1640,11 +1641,26 @@ function updateUsageDisplay(usage) {
       <span style="color:${color};font-weight:700;">${usage.today}/${usage.limit}</span>
     </div>
     <div style="height:4px;background:var(--border);border-radius:100px;overflow:hidden;">
-      <div style="height:100%;width:${pct}%;background:${color};border-radius:100px;transition:width .5s;"></div>
+      <div style="height:100%;width:${Math.min(100,pct)}%;background:${color};border-radius:100px;transition:width .5s;"></div>
     </div>
-    ${usage.remaining === 0 ? `<div style="color:var(--danger);margin-top:.4rem;font-size:.72rem;">وصلت للحد اليومي — يتجدد غداً</div>` :
-      `<div style="color:var(--text3);margin-top:.4rem;font-size:.72rem;">متبقي ${usage.remaining} فحص</div>`}
+    ${usage.remaining === 0
+      ? `<div style="color:var(--danger);margin-top:.4rem;font-size:.72rem;text-align:center;">🔒 سجّل للمزيد</div>`
+      : usage.remaining <= 2
+      ? `<div style="color:var(--warn);margin-top:.4rem;font-size:.72rem;">متبقي ${usage.remaining} فحص فقط</div>`
+      : `<div style="color:var(--text3);margin-top:.4rem;font-size:.72rem;">متبقي ${usage.remaining} فحص</div>`
+    }
   `;
+
+  // عرض نافذة التسجيل عند الوصول للحد
+  if (usage.remaining === 0) {
+    setTimeout(() => showRegisterModal(), 1500);
+    const btn = document.getElementById('analyzeBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.querySelector('.btn-text').textContent = '🔒 سجّل مجاناً للمزيد من الفحوصات';
+      btn.onclick = (e) => { e.preventDefault(); showRegisterModal(); };
+    }
+  }
 }
 
 // تحميل العداد عند فتح الصفحة
@@ -2085,6 +2101,75 @@ function showToast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+// ================================================================
+// ===== نظام التسجيل =====
+// ================================================================
+
+function showRegisterModal() {
+  const modal = document.getElementById('registerModal');
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('regName')?.focus(), 100);
+}
+
+function hideRegisterModal() {
+  document.getElementById('registerModal').style.display = 'none';
+}
+
+function skipRegistration() {
+  hideRegisterModal();
+  showToast('يمكنك التسجيل في أي وقت للحصول على 30 فحص/شهر');
+}
+
+async function submitRegistration() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const company = document.getElementById('regCompany').value.trim();
+  const errEl = document.getElementById('regError');
+  const sucEl = document.getElementById('regSuccess');
+
+  errEl.style.display = 'none';
+  sucEl.style.display = 'none';
+
+  if (!name || !email) {
+    errEl.textContent = 'الاسم والبريد الإلكتروني مطلوبان';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!email.includes('@')) {
+    errEl.textContent = 'بريد إلكتروني غير صحيح';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const r = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, company })
+    });
+    const data = await r.json();
+
+    if (data.success) {
+      sucEl.textContent = `✅ ${data.message}`;
+      sucEl.style.display = 'block';
+      // Google Analytics
+      try { gtag('event', 'user_registered', { company: company || 'غير محدد' }); } catch(e){}
+      setTimeout(() => {
+        hideRegisterModal();
+        showToast('✅ تم التسجيل! عندك الآن 30 فحص/شهر');
+        // تحديث العداد
+        loadUsageOnStart();
+      }, 1500);
+    } else {
+      errEl.textContent = data.error || 'حدث خطأ — حاول مجدداً';
+      errEl.style.display = 'block';
+    }
+  } catch(e) {
+    errEl.textContent = 'خطأ في الاتصال — تأكد من الإنترنت';
+    errEl.style.display = 'block';
+  }
+}
 </script>
 
 <!-- ===== CONTACT SECTION ===== -->
@@ -2137,6 +2222,76 @@ function showToast(msg) {
     </div>
   </div>
 </section>
+
+<!-- ===== نافذة التسجيل ===== -->
+<div id="registerModal" style="
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:1rem;
+">
+  <div style="
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:20px;padding:2rem;max-width:440px;width:100%;
+    position:relative;
+  ">
+    <!-- أيقونة القفل -->
+    <div style="text-align:center;font-size:2.5rem;margin-bottom:1rem;">🔓</div>
+    <h3 style="text-align:center;font-size:1.3rem;font-weight:800;margin-bottom:.5rem;">
+      استمر مجاناً
+    </h3>
+    <p style="text-align:center;color:var(--text2);font-size:.88rem;margin-bottom:1.5rem;line-height:1.6;">
+      سجّل اسمك وبريدك واحصل على <strong style="color:var(--accent);">30 فحص/شهر مجاناً</strong>
+      بدلاً من 5 فحوصات يومية
+    </p>
+
+    <!-- النموذج -->
+    <div style="display:flex;flex-direction:column;gap:.75rem;">
+      <input type="text" id="regName" placeholder="الاسم الكامل *"
+        style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+        padding:.75rem 1rem;color:var(--text);font-family:var(--font);font-size:.9rem;
+        outline:none;width:100%;transition:border .2s;"
+        onfocus="this.style.borderColor='var(--accent)'"
+        onblur="this.style.borderColor='var(--border)'">
+
+      <input type="email" id="regEmail" placeholder="البريد الإلكتروني *"
+        style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+        padding:.75rem 1rem;color:var(--text);font-family:var(--font);font-size:.9rem;
+        outline:none;width:100%;transition:border .2s;"
+        onfocus="this.style.borderColor='var(--accent)'"
+        onblur="this.style.borderColor='var(--border)'">
+
+      <input type="text" id="regCompany" placeholder="اسم الشركة أو المنشأة (اختياري)"
+        style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+        padding:.75rem 1rem;color:var(--text);font-family:var(--font);font-size:.9rem;
+        outline:none;width:100%;transition:border .2s;"
+        onfocus="this.style.borderColor='var(--accent)'"
+        onblur="this.style.borderColor='var(--border)'">
+
+      <button onclick="submitRegistration()" style="
+        background:linear-gradient(135deg,var(--accent),var(--accent2));
+        color:#000;border:none;padding:.85rem;border-radius:10px;
+        font-family:var(--font);font-size:1rem;font-weight:800;
+        cursor:pointer;transition:all .2s;margin-top:.25rem;
+      " onmouseover="this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.transform='none'">
+        سجّل واحصل على 30 فحص مجاناً ←
+      </button>
+
+      <div id="regError" style="display:none;color:var(--danger);font-size:.83rem;text-align:center;"></div>
+      <div id="regSuccess" style="display:none;color:var(--success);font-size:.88rem;text-align:center;font-weight:700;"></div>
+    </div>
+
+    <!-- زر التخطي -->
+    <button onclick="skipRegistration()" style="
+      display:block;width:100%;margin-top:1rem;
+      background:transparent;border:none;color:var(--text3);
+      font-family:var(--font);font-size:.8rem;cursor:pointer;
+      text-decoration:underline dotted;
+    ">
+      تخطّ الآن — استمر بـ 5 فحوصات يومياً
+    </button>
+  </div>
+</div>
 
 </body>
 </html>
