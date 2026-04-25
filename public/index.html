@@ -1028,6 +1028,50 @@ const SHELF_LIFE_EXEMPTIONS = [
   "الشاي الجاف والمنتجات الجافة المماثلة المدرجة في الملحق أ"
 ];
 
+// ================================================================
+// ===== JS 1473:2022 — الحقائق التغذوية =====
+// ================================================================
+
+// العناصر الغذائية الإلزامية
+const JS1473_MANDATORY = [
+  {key:'ENERGY',      ar:'الطاقة',                  unit:'kcal و kJ', mandatory:true},
+  {key:'PROTEIN',     ar:'البروتين',                unit:'g',         mandatory:true},
+  {key:'AVAILABLE_CARBS', ar:'الكربوهيدرات المتاحة',unit:'g',         mandatory:true},
+  {key:'TOTAL_FAT',   ar:'الدهون الكلية',           unit:'g',         mandatory:true},
+  {key:'SAT_FAT',     ar:'الدهون المشبعة',          unit:'g',         mandatory:true},
+  {key:'TRANS_FAT',   ar:'الدهون المتحولة',         unit:'g',         mandatory:true},
+  {key:'CHOLESTEROL', ar:'الكوليسترول',             unit:'mg',        mandatory:true},
+  {key:'SODIUM',      ar:'الصوديوم',                unit:'mg',        mandatory:true},
+  {key:'TOTAL_SUGARS',ar:'مجموع السكريات',          unit:'g',         mandatory:true},
+  {key:'ADDED_SUGAR', ar:'السكر المضاف',            unit:'g',         mandatory:true},
+  {key:'DIETARY_FIBER',ar:'الألياف الغذائية',       unit:'g',         mandatory:false, trigger:'عند وجود ادعاء عن الألياف'},
+];
+
+// القيم المرجعية اليومية (NRV)
+const JS1473_NRV = {
+  ENERGY:2000, PROTEIN:50, FAT:70, SAT_FAT:20, CHOLESTEROL:300,
+  CARBS:260, FIBER:28, TOTAL_SUGARS:90, ADDED_SUGAR:50, SALT:6,
+  VIT_A:800, VIT_C:100, VIT_D:15, VIT_E:9, VIT_K:60,
+  CALCIUM:1000, IRON:14, MAGNESIUM:310, POTASSIUM:2000, IODINE:150,
+  ZINC:11, SELENIUM:60
+};
+
+// عوامل حساب الطاقة
+const JS1473_ENERGY_FACTORS = {CARBS:4, PROTEIN:4, FAT:9, ALCOHOL:7, ORGANIC_ACIDS:3};
+
+// المنتجات المستثناة من إلزامية الحقائق التغذوية
+const JS1473_EXEMPTIONS = [
+  {id:'EX1473-01', text:'منتجات ذات سعرات/مواد مغذية/ملح/سكريات لا تُذكر (صفر) — مثل التوابل والأعشاب'},
+  {id:'EX1473-02', text:'فواكه وخضروات طازجة غير مقشورة أو مقطعة بدون مضافات'},
+  {id:'EX1473-03', text:'لحوم ودواجن وأسماك طازجة/مبردة/مجمدة نيئة بدون توابل أو ماء مضاف'},
+  {id:'EX1473-04', text:'أطعمة مُعدّة للبيع المباشر من موقع التحضير (سلطات، مخبوزات، حلويات، وجبات جاهزة)'},
+  {id:'EX1473-05', text:'منتجات مكون واحد (أرز، شاي، قهوة، سكر)'},
+  {id:'EX1473-06', text:'مياه شرب معبأة أو مياه معدنية'},
+  {id:'EX1473-07', text:'عبوات صغيرة مساحتها أقل من 25 سم²'},
+  {id:'EX1473-08', text:'مضافات غذائية'},
+  {id:'EX1473-09', text:'أغذية تحتاج تعبئة أو معالجة إضافية ولا تُباع للمستهلك مباشرة'},
+];
+
 // ===== قاعدة بيانات الخنزير والكحول =====
 const PORK_TERMS = {
   critical: [
@@ -1412,6 +1456,14 @@ ${allergensText}
     • إذا المنتج يحتاج تخزيناً خاصاً بعد الفتح أو مدة استهلاك محددة بعد الفتح — يجب ذكرها (جسيمة)
     • المنتجات المستثناة من الصلاحية: خضروات وفاكهة طازجة غير مقطوعة، خل، ملح طعام، سكر، علكة، مخبوزات تُستهلك خلال 24 ساعة، مشروبات كحول >10%
     • حدود الصلاحية القصوى من جدول JS288: دجاج مبرد عادي=5أيام، دجاج فاكيوم=7أيام، لحم أحمر عادي=14يوم، لحم بقر فاكيوم=120يوم، لحم ضأن فاكيوم=90يوم، سمك مبرد عادي=7أيام، سمك فاكيوم=90يوم، لبن=10أيام، لبنة=14يوم
+18. الحقائق التغذوية JS 1473:2022 — تطبّق على جميع المنتجات غير المستثناة:
+    أ. المستثنيات (لا تطلب جدول تغذوي): توابل/أعشاب، فاكهة وخضار طازجة، لحوم/أسماك نيئة بدون إضافات، مكون واحد، مياه معبأة، عبوة <25 سم²، مضافات غذائية
+    ب. العناصر الإلزامية العشرة: الطاقة (kcal+kJ) · البروتين (g) · الكربوهيدرات المتاحة (g) · الدهون الكلية (g) · الدهون المشبعة (g) · الدهون المتحولة (g) · الكوليسترول (mg) · الصوديوم (mg) · مجموع السكريات (g) · السكر المضاف (g)
+    ج. عناصر مشروطة: الألياف الغذائية عند وجود ادعاء · الدهون الأحادية والمتعددة غير المشبعة عند ادعاء دهني
+    د. أساس الإعلان: لكل 100غ أو 100مل (إلزامي) · لكل حصة (اختياري ويستلزم ذكر حجم الحصة وعدد الحصص)
+    هـ. حساب الطاقة: كربوهيدرات×4 + بروتين×4 + دهون×9 (kcal) — إذا ظهر رقم الطاقة مختلفاً بشكل كبير = تنبيه
+    و. إذا وُجد ادعاء تغذوي (خالٍ من الدهون، غني بالبروتين، بدون سكر...) فجدول الحقائق التغذوية إلزامي حتى لو كان المنتج مستثنى
+    ز. القيم المرجعية اليومية (NRV): طاقة=2000kcal، بروتين=50g، دهون=70g، دهون مشبعة=20g، كربوهيدرات=260g، سكريات=90g، سكر مضاف=50g، صوديوم (ملح=6g)، ألياف=28g، كوليسترول=300mg
 
 التنسيق المطلوب:
 {
@@ -1554,36 +1606,57 @@ function displayResults(data, productType) {
     grid.innerHTML = '<p style="color:var(--text3);font-size:.85rem;">لم يتم الكشف عن مواد حساسية</p>';
   }
 
-  // Nutrition Panel
+  // Nutrition Panel — JS 1473:2022
   const nutrition = data.nutrition || {};
   const nGrid = document.getElementById('nutritionGrid');
   const nNote = document.getElementById('nutritionNote');
+
   if (nutrition.hasTable === false) {
     nGrid.innerHTML = '<div style="grid-column:1/-1;color:var(--danger);font-weight:700;padding:1rem;background:rgba(255,71,87,.08);border-radius:10px;border:1px solid rgba(255,71,87,.2);">❌ لا يوجد جدول حقائق تغذوية — مخالفة جسيمة حسب JS 1473:2022</div>';
+  } else if (nutrition.exempt) {
+    nGrid.innerHTML = '<div style="grid-column:1/-1;color:var(--accent2);padding:1rem;background:rgba(0,153,204,.06);border-radius:10px;border:1px solid rgba(0,153,204,.2);">ℹ️ هذا المنتج مستثنى من إلزامية الحقائق التغذوية حسب JS 1473:2022</div>';
   } else if (nutrition.values) {
+    // العناصر الإلزامية العشرة + الألياف
     const vmap = [
-      ['energy','🔥 الطاقة'],['protein','💪 البروتين'],['carbs','🌾 الكربوهيدرات'],
-      ['sugars','🍬 السكريات الكلية'],['addedSugars','➕ السكر المضاف'],
-      ['fat','🫙 الدهون'],['saturatedFat','⚠️ دهون مشبعة'],
-      ['transFat','🚨 دهون متحولة'],['cholesterol','💉 كوليسترول'],
-      ['sodium','🧂 الصوديوم'],['fiber','🌿 الألياف']
+      ['energy','🔥 الطاقة','kcal'],
+      ['protein','💪 البروتين','g'],
+      ['carbs','🌾 الكربوهيدرات','g'],
+      ['sugars','🍬 السكريات الكلية','g'],
+      ['addedSugars','➕ السكر المضاف','g'],
+      ['fat','🫙 الدهون الكلية','g'],
+      ['saturatedFat','⚠️ دهون مشبعة','g'],
+      ['transFat','🚨 دهون متحولة','g'],
+      ['cholesterol','💉 كوليسترول','mg'],
+      ['sodium','🧂 الصوديوم','mg'],
+      ['fiber','🌿 الألياف','g']
     ];
-    nGrid.innerHTML = vmap.map(([k,lbl]) => {
+    const nrvMap = {energy:2000,protein:50,carbs:260,sugars:90,addedSugars:50,fat:70,saturatedFat:20,cholesterol:300,sodium:2400};
+    nGrid.innerHTML = vmap.map(([k,lbl,unit]) => {
       const v = nutrition.values[k] || {};
+      const isMandatory = k !== 'fiber';
       const ok = v.present !== false;
-      const val = (v.value && v.value !== 'القيمة') ? v.value + ' ' + (v.unit||'') : '—';
-      const bg = ok ? 'rgba(46,213,115,.07)' : 'rgba(255,71,87,.07)';
-      const br = ok ? 'rgba(46,213,115,.25)' : 'rgba(255,71,87,.25)';
-      const cl = ok ? 'var(--success)' : 'var(--danger)';
+      const val = (v.value && v.value !== 'القيمة') ? v.value + ' ' + (v.unit || unit) : '—';
+      // حساب %NRV
+      let nrvPct = '';
+      if (ok && v.value && nrvMap[k]) {
+        const pct = Math.round((parseFloat(v.value) / nrvMap[k]) * 100);
+        if (!isNaN(pct)) nrvPct = `<div style="font-size:.65rem;color:var(--text3);margin-top:2px;">${pct}% NRV</div>`;
+      }
+      const bg = ok ? 'rgba(46,213,115,.07)' : (isMandatory ? 'rgba(255,71,87,.07)' : 'rgba(74,90,122,.07)');
+      const br = ok ? 'rgba(46,213,115,.25)' : (isMandatory ? 'rgba(255,71,87,.25)' : 'rgba(74,90,122,.2)');
+      const cl = ok ? 'var(--success)' : (isMandatory ? 'var(--danger)' : 'var(--text3)');
       return `<div style="background:${bg};border:1px solid ${br};border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-size:.73rem;color:var(--text2);margin-bottom:.3rem;">${lbl}</div>
+        <div style="font-size:.73rem;color:var(--text2);margin-bottom:.3rem;">${lbl}${!isMandatory?'<span style="font-size:.6rem;color:var(--text3);"> (مشروط)</span>':''}</div>
         <div style="font-size:1rem;font-weight:700;color:${cl};">${ok ? val : '❌ غائب'}</div>
+        ${nrvPct}
       </div>`;
     }).join('');
   }
-  nNote.innerHTML = (nutrition.servingSize ? '<strong>حجم الحصة:</strong> ' + nutrition.servingSize + '<br>' : '') +
-    (nutrition.nutritionNote || '') +
-    '<br><br><span style="color:var(--text3);font-size:.78rem;">📌 المرجع: JS 1473:2022 · القيمة المرجعية: 2000 كيلوكالوري</span>';
+  nNote.innerHTML =
+    (nutrition.servingSize ? `<strong>حجم الحصة:</strong> ${nutrition.servingSize}` + (nutrition.servingsPerPackage ? ` · <strong>عدد الحصص:</strong> ${nutrition.servingsPerPackage}` : '') + '<br>' : '') +
+    (nutrition.energyCheck ? `<span style="color:var(--warn)">⚠️ تحقق الطاقة: ${nutrition.energyCheck}</span><br>` : '') +
+    (nutrition.nutritionNote ? nutrition.nutritionNote + '<br>' : '') +
+    '<br><span style="color:var(--text3);font-size:.78rem;">📌 JS 1473:2022 · أساس: لكل 100غ/مل · القيمة المرجعية: 2000 kcal · العناصر الإلزامية: 10</span>';
 
   renderJSWarnings(productType);
 
