@@ -1601,6 +1601,12 @@ ${allergensText}
         'overall_status': _d.overallStatus || 'unknown'
       });
     } catch(e) { /* لا يوقف التطبيق */ }
+
+    // ===== عرض العداد =====
+    try {
+      const _d2 = JSON.parse(jsonMatch[0]);
+      if (_d2._usage) updateUsageDisplay(_d2._usage);
+    } catch(e) {}
   } catch (err) {
     let msg = err.message || 'خطأ';
     if(msg.includes('Failed to fetch')||msg.includes('CORS')) msg = 'خطأ شبكة — تأكد من الاتصال';
@@ -1611,6 +1617,56 @@ ${allergensText}
     btn.disabled = false;
   }
 }
+
+// ===== عرض العداد =====
+function updateUsageDisplay(usage) {
+  let bar = document.getElementById('usageBar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'usageBar';
+    bar.style.cssText = `
+      position:fixed;bottom:5rem;left:1.5rem;z-index:998;
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:12px;padding:.7rem 1rem;font-size:.78rem;
+      color:var(--text2);min-width:160px;
+    `;
+    document.body.appendChild(bar);
+  }
+  const pct = (usage.today / usage.limit) * 100;
+  const color = pct >= 80 ? 'var(--danger)' : pct >= 60 ? 'var(--warn)' : 'var(--accent)';
+  bar.innerHTML = `
+    <div style="display:flex;justify-content:space-between;margin-bottom:.4rem;">
+      <span>فحوصات اليوم</span>
+      <span style="color:${color};font-weight:700;">${usage.today}/${usage.limit}</span>
+    </div>
+    <div style="height:4px;background:var(--border);border-radius:100px;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:${color};border-radius:100px;transition:width .5s;"></div>
+    </div>
+    ${usage.remaining === 0 ? `<div style="color:var(--danger);margin-top:.4rem;font-size:.72rem;">وصلت للحد اليومي — يتجدد غداً</div>` :
+      `<div style="color:var(--text3);margin-top:.4rem;font-size:.72rem;">متبقي ${usage.remaining} فحص</div>`}
+  `;
+}
+
+// تحميل العداد عند فتح الصفحة
+async function loadUsageOnStart() {
+  try {
+    const r = await fetch('/api/usage');
+    if (r.ok) {
+      const usage = await r.json();
+      if (usage.today > 0) updateUsageDisplay(usage);
+      // تعطيل الزر إذا وصل الحد
+      if (!usage.canCheck) {
+        const btn = document.getElementById('analyzeBtn');
+        if (btn) {
+          btn.disabled = true;
+          btn.querySelector('.btn-text').textContent =
+            `🔒 وصلت للحد اليومي (${usage.limit} فحوصات) — يتجدد غداً`;
+        }
+      }
+    }
+  } catch(e) { /* صامت */ }
+}
+loadUsageOnStart();
 
 // ===== DISPLAY RESULTS =====
 function displayResults(data, productType) {
