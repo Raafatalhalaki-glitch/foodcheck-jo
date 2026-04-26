@@ -387,8 +387,10 @@ footer span { color: var(--accent); }
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
   </div>
-  <nav>
+<nav>
     <a href="#tool">التدقيق</a>
+    <a href="#about">عن النظام</a>
+</nav>    <a href="#tool">التدقيق</a>
     <a href="#about">عن النظام</a>
   </nav>
 </header>
@@ -2349,6 +2351,82 @@ async function submitRegistration() {
     </button>
   </div>
 </div>
+<script>
+const translations = {
+  ar: {
+    title: 'مدقق بطاقة البيان الغذائية | FoodCheck Jordan',
+    badge: '● مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192',
+    h1: 'هل بطاقة بيانك جاهزة للطرح في السوق؟',
+    p1: 'افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission',
+    p2: 'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
+    cta: 'ابدأ الفحص مجاناً ←',
+    navTool: 'التدقيق', navAbout: 'عن النظام',
+    stat1: 'مواصفة أردنية JS', stat2: 'قاعدة JS 9:2025',
+    stat3: 'مادة حساسية JS 9:2025', stat4: 'الكودكس الدولي',
+    uploadTitle: 'رفع وتدقيق بطاقة البيان',
+    uploadSub: 'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
+    uploadH3: 'اسحب صور بطاقة البيان هنا',
+    uploadP: 'أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة',
+    analyzeBtn: '🔍 ابدأ الفحص مجاناً',
+    contactTitle: 'تواصل معنا',
+    contactSub: 'فريقنا جاهز للإجابة على استفساراتكم',
+    dir: 'rtl', lang: 'ar'
+  },
+  en: {
+    title: 'Food Label Compliance Checker | FoodCheck Jordan',
+    badge: '● AI-Powered · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
+    h1: 'Is Your Food Label Ready for Market?',
+    p1: 'Audit ingredients and additives in seconds — verify compliance with Jordanian JS specifications and the Codex Alimentarius Commission standards.',
+    p2: 'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
+    cta: 'Start Free Check →',
+    navTool: 'Audit Tool', navAbout: 'About',
+    stat1: 'Jordanian JS Specs', stat2: 'JS 9:2025 Rules',
+    stat3: 'JS 9:2025 Allergens', stat4: 'International Codex',
+    uploadTitle: 'Upload & Audit Food Label',
+    uploadSub: 'Upload a clear photo of your label — AI will read and audit it automatically',
+    uploadH3: 'Drag food label images here',
+    uploadP: 'Or click to browse · JPG, PNG, WEBP · Up to 5 images · 10MB each',
+    analyzeBtn: '🔍 Start Free Audit',
+    contactTitle: 'Contact Us',
+    contactSub: 'Our team is ready to answer your inquiries',
+    dir: 'ltr', lang: 'en'
+  }
+};
 
+let currentLang = 'ar';
+
+function toggleLang() {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  applyLang(currentLang);
+}
+
+function applyLang(lang) {
+  const t = translations[lang];
+  document.documentElement.lang = t.lang;
+  document.documentElement.dir = t.dir;
+  document.title = t.title;
+  document.querySelector('.hero-badge').innerHTML = t.badge;
+  document.querySelector('.hero h1').textContent = t.h1;
+  const ps = document.querySelectorAll('.hero p');
+  if(ps[0]) ps[0].textContent = t.p1;
+  if(ps[1]) ps[1].textContent = t.p2;
+  document.querySelector('.scroll-cta').textContent = t.cta;
+  document.querySelector('#nav-tool').textContent = t.navTool;
+  document.querySelector('#nav-about').textContent = t.navAbout;
+  document.querySelector('#langBtn').textContent = lang === 'ar' ? 'EN' : 'عر';
+  const statLabels = document.querySelectorAll('.stat-label');
+  if(statLabels[0]) statLabels[0].textContent = t.stat1;
+  if(statLabels[1]) statLabels[1].textContent = t.stat2;
+  if(statLabels[2]) statLabels[2].textContent = t.stat3;
+  if(statLabels[3]) statLabels[3].textContent = t.stat4;
+  document.querySelector('.section-title h2').textContent = t.uploadTitle;
+  document.querySelector('.section-title p').textContent = t.uploadSub;
+  document.querySelector('.upload-text h3').textContent = t.uploadH3;
+  document.querySelector('.upload-text p').textContent = t.uploadP;
+  document.querySelector('.btn-text').textContent = t.analyzeBtn;
+  document.querySelector('.contact-title').textContent = t.contactTitle;
+  document.querySelector('.contact-sub').textContent = t.contactSub;
+}
+</script>
 </body>
 </html>
