@@ -37,9 +37,16 @@ header {
 .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
 .logo span { color: var(--text); font-weight: 300; }
-nav { display: flex; gap: 1.5rem; }
+nav { display: flex; gap: 1.5rem; align-items: center; }
 nav a { color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: color .2s; }
 nav a:hover { color: var(--accent); }
+#langBtn {
+  background: rgba(0,212,168,.1); border: 1.5px solid rgba(0,212,168,.4);
+  color: var(--accent); padding: 5px 16px; border-radius: 100px;
+  cursor: pointer; font-family: var(--font); font-size: .85rem; font-weight: 700;
+  transition: all .2s; letter-spacing: .5px;
+}
+#langBtn:hover { background: rgba(0,212,168,.2); border-color: var(--accent); }
 
 /* HERO */
 .hero {
@@ -395,21 +402,21 @@ footer span { color: var(--accent); }
 </header>
 
 <section class="hero">
-  <div class="hero-badge">
+  <div class="hero-badge" id="hero-badge">
     <span>●</span> مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192
   </div>
-  <h1>هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
-  <p>افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
-  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
+  <h1 id="hero-h1">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
+  <p id="hero-p1">افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
+  <p id="hero-p2" style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label">مواصفة أردنية JS</div></div>
-    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label">قاعدة JS 9:2025</div></div>
-    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label">مادة حساسية JS 9:2025</div></div>
-    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
+    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
-    <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
+    <a href="#tool" class="scroll-cta" id="hero-cta">ابدأ الفحص مجاناً ←</a>
+    <a href="/additives.html" id="hero-cta2" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
   </div>
 </section>
 
@@ -417,15 +424,15 @@ footer span { color: var(--accent); }
 <div class="container">
 
   <div class="section-title">
-    <h2>رفع وتدقيق بطاقة البيان</h2>
-    <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+    <h2 id="tool-title">رفع وتدقيق بطاقة البيان</h2>
+    <p id="tool-sub">ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
   </div>
 
   <div class="upload-zone" id="uploadZone">
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
-      <h3>اسحب صور بطاقة البيان هنا</h3>
+      <h3 id="upload-h3">اسحب صور بطاقة البيان هنا</h3>
       <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
     </div>
   </div>
@@ -441,49 +448,49 @@ footer span { color: var(--accent); }
     <div class="setting-card">
       <label id="label-product-type">نوع المنتج</label>
       <select class="setting-select" id="productType">
-        <option value="general">عام</option>
-        <option value="dairy">منتجات ألبان</option>
-        <option value="processed_cheese">جبن مطبوخ (JS 185)</option>
-        <option value="soft_cheese">أجبان طرية (JS 246)</option>
-        <option value="flavored_milk">حليب منكه (JS 805)</option>
-        <option value="dried_milk">حليب مجفف (JS 121)</option>
-        <option value="evaporated_milk">حليب مبخر مقشود (JS 1624)</option>
-        <option value="infant_formula">تركيبة حليب رضع (JS 472:2025)</option>
-        <option value="fsmp_infant_formula">تركيبة طبية خاصة للرضع — FSMP (JS 472:2025)</option>
-        <option value="meat">لحوم ودواجن</option>
-        <option value="fish">منتجات بحرية</option>
-        <option value="bakery">مخبوزات</option>
-        <option value="biscuit">بسكويت (JS 6)</option>
-        <option value="noodles">نودلز سريعة التحضير (JS 1719)</option>
-        <option value="corn_chips">شيبس ذرة منفوشة (JS 608)</option>
-        <option value="chocolate">شوكولاتة (JS 8)</option>
-        <option value="candy">حلوى صلبة وطرية (JS 43)</option>
-        <option value="beverages">مشروبات</option>
-        <option value="energy_drink">مشروبات طاقة (JS 2381)</option>
-        <option value="juice">عصائر فاكهة (JS 1761)</option>
-        <option value="fruit_syrup">شراب فاكهة/سكواش (JS 994)</option>
-        <option value="flavored_drink">مشروبات منكهة (JS 77)</option>
-        <option value="supplements">مكملات غذائية</option>
-        <option value="sardines">سردين معلب (JS 68:2022)</option>
-        <option value="dates">تمور (JS 549:2021)</option>
-        <option value="cereal_infant">أغذية حبوب للرضع والأطفال (JS 443:2015)</option>
-        <option value="vegetable_oil">زيوت نباتية (JS 1791:2012)</option>
-        <option value="claims_product">منتج يحمل ادعاءات تغذوية/صحية (JS 1472)</option>
+        <option value="general" id="opt-general">عام</option>
+        <option value="dairy" id="opt-dairy">منتجات ألبان</option>
+        <option value="processed_cheese" id="opt-processed-cheese">جبن مطبوخ (JS 185)</option>
+        <option value="soft_cheese" id="opt-soft-cheese">أجبان طرية (JS 246)</option>
+        <option value="flavored_milk" id="opt-flavored-milk">حليب منكه (JS 805)</option>
+        <option value="dried_milk" id="opt-dried-milk">حليب مجفف (JS 121)</option>
+        <option value="evaporated_milk" id="opt-evaporated-milk">حليب مبخر مقشود (JS 1624)</option>
+        <option value="infant_formula" id="opt-infant-formula">تركيبة حليب رضع (JS 472:2025)</option>
+        <option value="fsmp_infant_formula" id="opt-fsmp">تركيبة طبية خاصة للرضع — FSMP (JS 472:2025)</option>
+        <option value="meat" id="opt-meat">لحوم ودواجن</option>
+        <option value="fish" id="opt-fish">منتجات بحرية</option>
+        <option value="bakery" id="opt-bakery">مخبوزات</option>
+        <option value="biscuit" id="opt-biscuit">بسكويت (JS 6)</option>
+        <option value="noodles" id="opt-noodles">نودلز سريعة التحضير (JS 1719)</option>
+        <option value="corn_chips" id="opt-corn-chips">شيبس ذرة منفوشة (JS 608)</option>
+        <option value="chocolate" id="opt-chocolate">شوكولاتة (JS 8)</option>
+        <option value="candy" id="opt-candy">حلوى صلبة وطرية (JS 43)</option>
+        <option value="beverages" id="opt-beverages">مشروبات</option>
+        <option value="energy_drink" id="opt-energy-drink">مشروبات طاقة (JS 2381)</option>
+        <option value="juice" id="opt-juice">عصائر فاكهة (JS 1761)</option>
+        <option value="fruit_syrup" id="opt-fruit-syrup">شراب فاكهة/سكواش (JS 994)</option>
+        <option value="flavored_drink" id="opt-flavored-drink">مشروبات منكهة (JS 77)</option>
+        <option value="supplements" id="opt-supplements">مكملات غذائية</option>
+        <option value="sardines" id="opt-sardines">سردين معلب (JS 68:2022)</option>
+        <option value="dates" id="opt-dates">تمور (JS 549:2021)</option>
+        <option value="cereal_infant" id="opt-cereal-infant">أغذية حبوب للرضع والأطفال (JS 443:2015)</option>
+        <option value="vegetable_oil" id="opt-vegetable-oil">زيوت نباتية (JS 1791:2012)</option>
+        <option value="claims_product" id="opt-claims">منتج يحمل ادعاءات تغذوية/صحية (JS 1472)</option>
       </select>
     </div>
     <div class="setting-card">
       <label id="label-origin">المنشأ</label>
       <select class="setting-select" id="origin">
-        <option id="opt-imported" value="imported">مستورد</option>
-        <option id="opt-local" value="local">محلي الصنع</option>
+        <option value="imported" id="opt-imported">مستورد</option>
+        <option value="local" id="opt-local">محلي الصنع</option>
       </select>
     </div>
     <div class="setting-card">
       <label id="label-strictness">مستوى التدقيق</label>
       <select class="setting-select" id="strictness">
-        <option id="opt-full" value="full">كامل (جميع القواعد)</option>
-        <option id="opt-critical" value="critical">الجسيمة فقط</option>
-        <option id="opt-quick" value="quick">فحص سريع</option>
+        <option value="full" id="opt-full">كامل (جميع القواعد)</option>
+        <option value="critical" id="opt-critical">الجسيمة فقط</option>
+        <option value="quick" id="opt-quick">فحص سريع</option>
       </select>
     </div>
   </div>
@@ -632,7 +639,7 @@ footer span { color: var(--accent); }
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
       <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 20+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
@@ -1056,14 +1063,12 @@ const JS_SPECIFIC_RULES = {
       {code:"JS1791-R008", text:"⚠️ إذا كان الاسم 'كانولا' أو 'منخفض حمض الإيروسيك' — حمض الإيروسيك يجب ألا يتجاوز 2% من مجموع الأحماض الدهنية (يحتاج تحقق مختبري)"},
       {code:"JS1791-R009", text:"⚠️ إذا كان الاسم 'زيت العصفر عالي حمض الأوليك' — نسبة حمض الأوليك يجب أن تكون ≥ 70% (يحتاج تحقق مختبري)"},
       {code:"JS1791-R010", text:"⚠️ إذا كان الاسم 'زيت دوار الشمس عالي حمض الأوليك' — نسبة حمض الأوليك يجب أن تكون ≥ 75% (يحتاج تحقق مختبري)"},
-      {code:"JS1791-R012", text:"⚠️ إذا كان الادعاء 'بكر' أو 'Virgin' — الاستخراج يجب أن يكون بطرق ميكانيكية فقط بدون حرارة + لا يوجد أي مضاف (يحتاج إثبات العملية)"},
-      {code:"JS1791-R013", text:"⚠️ إذا كان الادعاء 'معصور على البارد' أو 'Cold Pressed' — الاستخراج بدون حرارة إطلاقاً + لا يوجد أي مضاف (يحتاج إثبات العملية)"},
-      {code:"JS1791-R014", text:"⚠️ إذا كانت هناك مضافات مذكورة — يجب التحقق من مطابقتها لـ JS 94 — المضافات غير مسموح بها للزيوت البكر والمعصورة على البارد"},
+      {code:"JS1791-R012", text:"⚠️ إذا كان الادعاء 'بكر' أو 'Virgin' — الاستخراج بطرق ميكانيكية فقط + لا مضافات (يحتاج إثبات العملية)"},
+      {code:"JS1791-R013", text:"⚠️ إذا كان الادعاء 'معصور على البارد' أو 'Cold Pressed' — الاستخراج بدون حرارة إطلاقاً + لا مضافات (يحتاج إثبات)"},
       {code:"JS1791-R015", text:"🚨 إذا ادّعى المنتج 'بكر' أو 'معصور على البارد' وفيه مضافات مذكورة — تناقض صريح = مخالفة جسيمة مباشرة"},
-      {code:"JS1791-R016", text:"🚨 يُمنع خلط أنواع الزيوت النباتية ببعضها — إذا ظهر 'خليط' أو 'مزيج زيوت' = مخالفة جسيمة بموجب البند 4-26"},
-      {code:"JS1791-R019", text:"⚠️ المحتوى الفعلي لا يجوز أن يقل عن 90% من سعة الحاوية — يحتاج فحص فيزيائي"},
-      {code:"JS1791-R030", text:"⚠️ إذا توفرت نتائج مختبر: زيت مكرر = رقم حمضي ≤ 0.6 مغ KOH/غ · بكر/بارد ≤ 4 · زيت نخيل بكر ≤ 10"},
-      {code:"JS1791-R031", text:"⚠️ إذا توفرت نتائج مختبر: زيت مكرر = رقم البيروكسيد ≤ 10 ميلي مكافئ O2 نشط/كغ · بكر/بارد ≤ 15"}
+      {code:"JS1791-R016", text:"🚨 يُمنع خلط أنواع الزيوت النباتية — إذا ظهر 'خليط' أو 'مزيج زيوت' = مخالفة جسيمة بموجب البند 4-26"},
+      {code:"JS1791-R030", text:"⚠️ إذا توفرت نتائج مختبر: زيت مكرر = رقم حمضي ≤ 0.6 مغ KOH/غ · بكر/بارد ≤ 4 · نخيل بكر ≤ 10"},
+      {code:"JS1791-R031", text:"⚠️ إذا توفرت نتائج مختبر: زيت مكرر = رقم البيروكسيد ≤ 10 ميلي مكافئ O2/كغ · بكر/بارد ≤ 15"}
     ]
   },
 
@@ -1075,12 +1080,12 @@ const JS_SPECIFIC_RULES = {
     warnings: [
       {code:"JS1472-R-5-4", text:"🚨 أي ادعاء علاجي محظور تماماً — الكلمات: يعالج / يشفي / يقي / يمنع المرض = مخالفة جسيمة مباشرة بدون استثناء"},
       {code:"JS1472-R-5-1", text:"🚨 ادعاء 'كامل التغذية' أو 'يحتوي جميع العناصر الغذائية' = مخالفة جسيمة — لا يجوز لأي منتج ادعاء الاكتمال الغذائي"},
-      {code:"JS1472-R-6-2", text:"⚠️ عبارات عامة مثل 'صحي' أو 'مفيد' تحتاج إثبات علمي — بدون إثبات = تنبيه وقد يُعتبر تضليلاً"},
+      {code:"JS1472-R-6-2", text:"⚠️ عبارات مثل 'صحي' أو 'مفيد' تحتاج إثبات علمي — بدون إثبات = تنبيه وقد يُعتبر تضليلاً"},
       {code:"JS1472-R-6-1", text:"⚠️ ادعاءات المقارنة مثل 'الأفضل' أو 'الأجود' تحتاج مقارنة كاملة موثقة — بدونها = تنبيه"},
       {code:"JS1472-R-7-1", text:"⚠️ ادعاء 'مدعّم' بفيتامين أو معدن — يتطلب إثبات التدعيم بالكميات الفعلية مطابقةً لـ JS 1473"},
       {code:"JS1472-R-7-3", text:"⚠️ ادعاء 'طبيعي' أو 'عضوي' — يتطلب توافق مع التشريعات الأردنية — بدون إثبات = تنبيه"},
       {code:"JS1472-R-7-4", text:"⚠️ ادعاء 'حلال' — يتطلب شهادة حلال معتمدة من جهة معترف بها — بدون شهادة = مخالفة تضليلية"},
-      {code:"JS1472-R-7-6", text:"⚠️ ادعاء 'خالٍ من' (خالٍ من السكر / الغلوتين / الدهون) — يجب التحقق من صحة الادعاء مقارنةً بالجدول التغذوي — التناقض = مخالفة جسيمة"}
+      {code:"JS1472-R-7-6", text:"⚠️ ادعاء 'خالٍ من' (سكر/غلوتين/دهون) — يجب التحقق من صحة الادعاء مقارنةً بالجدول التغذوي — التناقض = مخالفة جسيمة"}
     ]
   }
 };
@@ -2394,7 +2399,7 @@ async function submitRegistration() {
 </div>
 
 <script>
-// ===== LANGUAGE TOGGLE — FULL BILINGUAL =====
+// ===== LANGUAGE TOGGLE =====
 const T = {
   ar: {
     dir:'rtl', lang:'ar',
@@ -2404,19 +2409,33 @@ const T = {
     p1:'افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission',
     p2:'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
     cta:'ابدأ الفحص مجاناً ←', cta2:'⚗️ محرك بحث المضافات CXS 192',
-    stat1:'مواصفة أردنية JS', stat2:'قاعدة JS 9:2025',
-    stat3:'مادة حساسية JS 9:2025', stat4:'الكودكس الدولي',
+    stat1:'مواصفة أردنية JS', stat2:'قاعدة JS 9:2025', stat3:'مادة حساسية JS 9:2025', stat4:'الكودكس الدولي',
     navTool:'التدقيق', navAbout:'عن النظام', langBtn:'EN',
     toolTitle:'رفع وتدقيق بطاقة البيان',
     toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
     uploadH3:'اسحب صور بطاقة البيان هنا',
+    analyzeBtn:'🔍 ابدأ الفحص مجاناً',
     labelProductType:'نوع المنتج', labelOrigin:'المنشأ', labelStrictness:'مستوى التدقيق',
+    optGeneral:'عام', optDairy:'منتجات ألبان', optProcessedCheese:'جبن مطبوخ (JS 185)',
+    optSoftCheese:'أجبان طرية (JS 246)', optFlavoredMilk:'حليب منكه (JS 805)',
+    optDriedMilk:'حليب مجفف (JS 121)', optEvaporatedMilk:'حليب مبخر مقشود (JS 1624)',
+    optInfantFormula:'تركيبة حليب رضع (JS 472:2025)',
+    optFsmp:'تركيبة طبية خاصة للرضع — FSMP (JS 472:2025)',
+    optMeat:'لحوم ودواجن', optFish:'منتجات بحرية', optBakery:'مخبوزات',
+    optBiscuit:'بسكويت (JS 6)', optNoodles:'نودلز سريعة التحضير (JS 1719)',
+    optCornChips:'شيبس ذرة منفوشة (JS 608)', optChocolate:'شوكولاتة (JS 8)',
+    optCandy:'حلوى صلبة وطرية (JS 43)', optBeverages:'مشروبات',
+    optEnergyDrink:'مشروبات طاقة (JS 2381)', optJuice:'عصائر فاكهة (JS 1761)',
+    optFruitSyrup:'شراب فاكهة/سكواش (JS 994)', optFlavoredDrink:'مشروبات منكهة (JS 77)',
+    optSupplements:'مكملات غذائية', optSardines:'سردين معلب (JS 68:2022)',
+    optDates:'تمور (JS 549:2021)', optCerealInfant:'أغذية حبوب للرضع والأطفال (JS 443:2015)',
+    optVegetableOil:'زيوت نباتية (JS 1791:2012)',
+    optClaims:'منتج يحمل ادعاءات تغذوية/صحية (JS 1472)',
     optImported:'مستورد', optLocal:'محلي الصنع',
     optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
-    analyzeBtn:'🔍 ابدأ الفحص مجاناً',
     aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
     aboutCard1Title:'المواصفات الأردنية JS',
-    aboutCard1Text:'تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية',
+    aboutCard1Text:'تدقيق 20+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية',
     aboutCard2Title:'كودكس CXS 192',
     aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
     aboutCard3Title:'110 قاعدة JS 9:2025',
@@ -2437,26 +2456,40 @@ const T = {
     p1:'Audit ingredients and additives in seconds — verify compliance with Jordanian JS specifications and the Codex Alimentarius Commission.',
     p2:'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
     cta:'Start Free Audit →', cta2:'⚗️ Additives Search Engine CXS 192',
-    stat1:'Jordanian JS Specifications', stat2:'JS 9:2025 Rules',
-    stat3:'JS 9:2025 Allergens', stat4:'International Codex',
+    stat1:'Jordanian JS Specifications', stat2:'JS 9:2025 Rules', stat3:'JS 9:2025 Allergens', stat4:'International Codex',
     navTool:'Audit Tool', navAbout:'About', langBtn:'AR',
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
     uploadH3:'Drag food label images here',
+    analyzeBtn:'🔍 Start Free Audit',
     labelProductType:'Product Type', labelOrigin:'Origin', labelStrictness:'Audit Level',
+    optGeneral:'General', optDairy:'Dairy Products', optProcessedCheese:'Processed Cheese (JS 185)',
+    optSoftCheese:'Soft Cheese (JS 246)', optFlavoredMilk:'Flavored Milk (JS 805)',
+    optDriedMilk:'Dried Milk (JS 121)', optEvaporatedMilk:'Evaporated Skimmed Milk (JS 1624)',
+    optInfantFormula:'Infant Formula (JS 472:2025)',
+    optFsmp:'Special Medical Formula for Infants — FSMP (JS 472:2025)',
+    optMeat:'Meat & Poultry', optFish:'Seafood', optBakery:'Bakery Products',
+    optBiscuit:'Biscuits (JS 6)', optNoodles:'Instant Noodles (JS 1719)',
+    optCornChips:'Puffed Corn Chips (JS 608)', optChocolate:'Chocolate (JS 8)',
+    optCandy:'Hard & Soft Candy (JS 43)', optBeverages:'Beverages',
+    optEnergyDrink:'Energy Drinks (JS 2381)', optJuice:'Fruit Juices (JS 1761)',
+    optFruitSyrup:'Fruit Syrup/Squash (JS 994)', optFlavoredDrink:'Flavored Drinks (JS 77)',
+    optSupplements:'Food Supplements', optSardines:'Canned Sardines (JS 68:2022)',
+    optDates:'Dates (JS 549:2021)', optCerealInfant:'Cereal-Based Foods for Infants (JS 443:2015)',
+    optVegetableOil:'Vegetable Oils (JS 1791:2012)',
+    optClaims:'Product with Nutritional/Health Claims (JS 1472)',
     optImported:'Imported', optLocal:'Locally Produced',
     optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
-    analyzeBtn:'🔍 Start Free Audit',
     aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
     aboutCard1Title:'Jordanian JS Standards',
-    aboutCard1Text:'Audits 18+ Jordanian JS specifications covering dairy, meat, beverages, bakery, chocolate, confectionery, infant formula, and food supplements',
+    aboutCard1Text:'Audits 20+ Jordanian JS specifications covering dairy, meat, beverages, bakery, chocolate, confectionery, infant formula, vegetable oils, and food supplements',
     aboutCard2Title:'Codex CXS 192',
     aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
     aboutCard3Title:'110 JS 9:2025 Rules',
     aboutCard3Text:'104 rules covering: product name, ingredients, additives, net and drained weight, manufacturer, country of origin, shelf life, language, lot coding, small packages, and irradiation',
     aboutDisclaimer:'⚠️ This system is an audit assistance tool and does not replace official legal consultation. Final decisions rest with the competent regulatory authorities.',
     contactTitle:'Contact Us',
-    contactSub:'Do you have a question or want to learn more about FoodCheck Jordan? We\'re here!',
+    contactSub:"Do you have a question or want to learn more about FoodCheck Jordan? We're here!",
     contactSubmitBtn:'Send Message ✓',
     contactSuccess:'✅ Your message has been received! We will get back to you shortly.',
     footerText:'FoodCheck Jordan © 2025 · Powered by <span>Claude AI</span> · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
@@ -2487,21 +2520,51 @@ function applyLang(lang) {
   if(el('nav-tool')) el('nav-tool').textContent = t.navTool;
   if(el('nav-about')) el('nav-about').textContent = t.navAbout;
   if(el('langBtn')) el('langBtn').textContent = t.langBtn;
-  // Tool
+  // Tool section
   if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
   if(el('tool-sub')) el('tool-sub').textContent = t.toolSub;
   if(el('upload-h3')) el('upload-h3').textContent = t.uploadH3;
+  const btnText = document.querySelector('.btn-text');
+  if(btnText) btnText.textContent = t.analyzeBtn;
+  // Labels
   if(el('label-product-type')) el('label-product-type').textContent = t.labelProductType;
   if(el('label-origin')) el('label-origin').textContent = t.labelOrigin;
   if(el('label-strictness')) el('label-strictness').textContent = t.labelStrictness;
+  // Product type options
+  if(el('opt-general')) el('opt-general').textContent = t.optGeneral;
+  if(el('opt-dairy')) el('opt-dairy').textContent = t.optDairy;
+  if(el('opt-processed-cheese')) el('opt-processed-cheese').textContent = t.optProcessedCheese;
+  if(el('opt-soft-cheese')) el('opt-soft-cheese').textContent = t.optSoftCheese;
+  if(el('opt-flavored-milk')) el('opt-flavored-milk').textContent = t.optFlavoredMilk;
+  if(el('opt-dried-milk')) el('opt-dried-milk').textContent = t.optDriedMilk;
+  if(el('opt-evaporated-milk')) el('opt-evaporated-milk').textContent = t.optEvaporatedMilk;
+  if(el('opt-infant-formula')) el('opt-infant-formula').textContent = t.optInfantFormula;
+  if(el('opt-fsmp')) el('opt-fsmp').textContent = t.optFsmp;
+  if(el('opt-meat')) el('opt-meat').textContent = t.optMeat;
+  if(el('opt-fish')) el('opt-fish').textContent = t.optFish;
+  if(el('opt-bakery')) el('opt-bakery').textContent = t.optBakery;
+  if(el('opt-biscuit')) el('opt-biscuit').textContent = t.optBiscuit;
+  if(el('opt-noodles')) el('opt-noodles').textContent = t.optNoodles;
+  if(el('opt-corn-chips')) el('opt-corn-chips').textContent = t.optCornChips;
+  if(el('opt-chocolate')) el('opt-chocolate').textContent = t.optChocolate;
+  if(el('opt-candy')) el('opt-candy').textContent = t.optCandy;
+  if(el('opt-beverages')) el('opt-beverages').textContent = t.optBeverages;
+  if(el('opt-energy-drink')) el('opt-energy-drink').textContent = t.optEnergyDrink;
+  if(el('opt-juice')) el('opt-juice').textContent = t.optJuice;
+  if(el('opt-fruit-syrup')) el('opt-fruit-syrup').textContent = t.optFruitSyrup;
+  if(el('opt-flavored-drink')) el('opt-flavored-drink').textContent = t.optFlavoredDrink;
+  if(el('opt-supplements')) el('opt-supplements').textContent = t.optSupplements;
+  if(el('opt-sardines')) el('opt-sardines').textContent = t.optSardines;
+  if(el('opt-dates')) el('opt-dates').textContent = t.optDates;
+  if(el('opt-cereal-infant')) el('opt-cereal-infant').textContent = t.optCerealInfant;
+  if(el('opt-vegetable-oil')) el('opt-vegetable-oil').textContent = t.optVegetableOil;
+  if(el('opt-claims')) el('opt-claims').textContent = t.optClaims;
   if(el('opt-imported')) el('opt-imported').textContent = t.optImported;
   if(el('opt-local')) el('opt-local').textContent = t.optLocal;
   if(el('opt-full')) el('opt-full').textContent = t.optFull;
   if(el('opt-critical')) el('opt-critical').textContent = t.optCritical;
   if(el('opt-quick')) el('opt-quick').textContent = t.optQuick;
-  const btnText = document.querySelector('.btn-text');
-  if(btnText) btnText.textContent = t.analyzeBtn;
-  // About
+  // About section
   if(el('about-title')) el('about-title').textContent = t.aboutTitle;
   if(el('about-sub')) el('about-sub').textContent = t.aboutSub;
   if(el('about-card1-title')) el('about-card1-title').textContent = t.aboutCard1Title;
@@ -2525,6 +2588,5 @@ function applyLang(lang) {
   });
 }
 </script>
-
 </body>
 </html>
