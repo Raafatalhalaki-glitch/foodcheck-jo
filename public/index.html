@@ -37,9 +37,16 @@ header {
 .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
 .logo span { color: var(--text); font-weight: 300; }
-nav { display: flex; gap: 1.5rem; }
+nav { display: flex; gap: 1.5rem; align-items: center; }
 nav a { color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: color .2s; }
 nav a:hover { color: var(--accent); }
+#langBtn {
+  background: rgba(0,212,168,.1); border: 1.5px solid rgba(0,212,168,.4);
+  color: var(--accent); padding: 5px 16px; border-radius: 100px;
+  cursor: pointer; font-family: var(--font); font-size: .85rem; font-weight: 700;
+  transition: all .2s; letter-spacing: .5px;
+}
+#langBtn:hover { background: rgba(0,212,168,.2); border-color: var(--accent); }
 
 /* HERO */
 .hero {
@@ -387,30 +394,29 @@ footer span { color: var(--accent); }
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
   </div>
-<nav>
-    <a href="#tool">التدقيق</a>
-    <a href="#about">عن النظام</a>
-</nav>    <a href="#tool">التدقيق</a>
-    <a href="#about">عن النظام</a>
+  <nav>
+    <a href="#tool" id="nav-tool">التدقيق</a>
+    <a href="#about" id="nav-about">عن النظام</a>
+    <button id="langBtn" onclick="toggleLang()">EN</button>
   </nav>
 </header>
 
 <section class="hero">
-  <div class="hero-badge">
+  <div class="hero-badge" id="hero-badge">
     <span>●</span> مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192
   </div>
-  <h1>هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
-  <p>افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
-  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
+  <h1 id="hero-h1">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
+  <p id="hero-p1">افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
+  <p id="hero-p2" style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label">مواصفة أردنية JS</div></div>
-    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label">قاعدة JS 9:2025</div></div>
-    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label">مادة حساسية JS 9:2025</div></div>
-    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
+    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
-    <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
+    <a href="#tool" class="scroll-cta" id="hero-cta">ابدأ الفحص مجاناً ←</a>
+    <a href="/additives.html" id="hero-cta2" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
   </div>
 </section>
 
@@ -418,15 +424,15 @@ footer span { color: var(--accent); }
 <div class="container">
 
   <div class="section-title">
-    <h2>رفع وتدقيق بطاقة البيان</h2>
-    <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+    <h2 id="tool-title">رفع وتدقيق بطاقة البيان</h2>
+    <p id="tool-sub">ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
   </div>
 
   <div class="upload-zone" id="uploadZone">
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
-      <h3>اسحب صور بطاقة البيان هنا</h3>
+      <h3 id="upload-h3">اسحب صور بطاقة البيان هنا</h3>
       <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
     </div>
   </div>
@@ -2351,45 +2357,43 @@ async function submitRegistration() {
     </button>
   </div>
 </div>
+
 <script>
-const translations = {
+// ===== LANGUAGE TOGGLE =====
+const T = {
   ar: {
-    title: 'مدقق بطاقة البيان الغذائية | FoodCheck Jordan',
-    badge: '● مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192',
-    h1: 'هل بطاقة بيانك جاهزة للطرح في السوق؟',
-    p1: 'افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission',
-    p2: 'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
-    cta: 'ابدأ الفحص مجاناً ←',
-    navTool: 'التدقيق', navAbout: 'عن النظام',
-    stat1: 'مواصفة أردنية JS', stat2: 'قاعدة JS 9:2025',
-    stat3: 'مادة حساسية JS 9:2025', stat4: 'الكودكس الدولي',
-    uploadTitle: 'رفع وتدقيق بطاقة البيان',
-    uploadSub: 'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
-    uploadH3: 'اسحب صور بطاقة البيان هنا',
-    uploadP: 'أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة',
-    analyzeBtn: '🔍 ابدأ الفحص مجاناً',
-    contactTitle: 'تواصل معنا',
-    contactSub: 'فريقنا جاهز للإجابة على استفساراتكم',
-    dir: 'rtl', lang: 'ar'
+    dir:'rtl', lang:'ar',
+    title:'مدقق بطاقة البيان الغذائية | FoodCheck Jordan',
+    badge:'● مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192',
+    h1:'هل بطاقة بيانك جاهزة للطرح في السوق؟',
+    p1:'افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission',
+    p2:'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
+    cta:'ابدأ الفحص مجاناً ←', cta2:'⚗️ محرك بحث المضافات CXS 192',
+    stat1:'مواصفة أردنية JS', stat2:'قاعدة JS 9:2025',
+    stat3:'مادة حساسية JS 9:2025', stat4:'الكودكس الدولي',
+    navTool:'التدقيق', navAbout:'عن النظام', langBtn:'EN',
+    toolTitle:'رفع وتدقيق بطاقة البيان',
+    toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
+    uploadH3:'اسحب صور بطاقة البيان هنا',
+    contactTitle:'تواصل معنا',
+    contactSub:'هل لديك سؤال أو تريد معرفة المزيد عن FoodCheck Jordan؟ نحن هنا!'
   },
   en: {
-    title: 'Food Label Compliance Checker | FoodCheck Jordan',
-    badge: '● AI-Powered · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
-    h1: 'Is Your Food Label Ready for Market?',
-    p1: 'Audit ingredients and additives in seconds — verify compliance with Jordanian JS specifications and the Codex Alimentarius Commission standards.',
-    p2: 'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
-    cta: 'Start Free Check →',
-    navTool: 'Audit Tool', navAbout: 'About',
-    stat1: 'Jordanian JS Specs', stat2: 'JS 9:2025 Rules',
-    stat3: 'JS 9:2025 Allergens', stat4: 'International Codex',
-    uploadTitle: 'Upload & Audit Food Label',
-    uploadSub: 'Upload a clear photo of your label — AI will read and audit it automatically',
-    uploadH3: 'Drag food label images here',
-    uploadP: 'Or click to browse · JPG, PNG, WEBP · Up to 5 images · 10MB each',
-    analyzeBtn: '🔍 Start Free Audit',
-    contactTitle: 'Contact Us',
-    contactSub: 'Our team is ready to answer your inquiries',
-    dir: 'ltr', lang: 'en'
+    dir:'ltr', lang:'en',
+    title:'Food Label Compliance Checker | FoodCheck Jordan',
+    badge:'● AI-Powered · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
+    h1:'Is Your Food Label Ready for Market?',
+    p1:'Audit ingredients and additives in seconds — verify compliance with Jordanian JS specifications and the Codex Alimentarius Commission.',
+    p2:'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
+    cta:'Start Free Audit →', cta2:'⚗️ Additives Search Engine CXS 192',
+    stat1:'Jordanian JS Specifications', stat2:'JS 9:2025 Rules',
+    stat3:'JS 9:2025 Allergens', stat4:'International Codex',
+    navTool:'Audit Tool', navAbout:'About', langBtn:'عر',
+    toolTitle:'Upload & Audit Food Label',
+    toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
+    uploadH3:'Drag food label images here',
+    contactTitle:'Contact Us',
+    contactSub:'Do you have a question or want to learn more about FoodCheck Jordan? We\'re here!'
   }
 };
 
@@ -2401,31 +2405,29 @@ function toggleLang() {
 }
 
 function applyLang(lang) {
-  const t = translations[lang];
+  const t = T[lang];
   document.documentElement.lang = t.lang;
   document.documentElement.dir = t.dir;
   document.title = t.title;
-  document.querySelector('.hero-badge').innerHTML = t.badge;
-  document.querySelector('.hero h1').textContent = t.h1;
-  const ps = document.querySelectorAll('.hero p');
-  if(ps[0]) ps[0].textContent = t.p1;
-  if(ps[1]) ps[1].textContent = t.p2;
-  document.querySelector('.scroll-cta').textContent = t.cta;
-  document.querySelector('#nav-tool').textContent = t.navTool;
-  document.querySelector('#nav-about').textContent = t.navAbout;
-  document.querySelector('#langBtn').textContent = lang === 'ar' ? 'EN' : 'عر';
-  const statLabels = document.querySelectorAll('.stat-label');
-  if(statLabels[0]) statLabels[0].textContent = t.stat1;
-  if(statLabels[1]) statLabels[1].textContent = t.stat2;
-  if(statLabels[2]) statLabels[2].textContent = t.stat3;
-  if(statLabels[3]) statLabels[3].textContent = t.stat4;
-  document.querySelector('.section-title h2').textContent = t.uploadTitle;
-  document.querySelector('.section-title p').textContent = t.uploadSub;
-  document.querySelector('.upload-text h3').textContent = t.uploadH3;
-  document.querySelector('.upload-text p').textContent = t.uploadP;
-  document.querySelector('.btn-text').textContent = t.analyzeBtn;
-  document.querySelector('.contact-title').textContent = t.contactTitle;
-  document.querySelector('.contact-sub').textContent = t.contactSub;
+  const el = id => document.getElementById(id);
+  if(el('hero-badge')) el('hero-badge').innerHTML = '<span>●</span> ' + t.badge.replace('● ','');
+  if(el('hero-h1')) el('hero-h1').textContent = t.h1;
+  if(el('hero-p1')) el('hero-p1').textContent = t.p1;
+  if(el('hero-p2')) el('hero-p2').textContent = t.p2;
+  if(el('hero-cta')) el('hero-cta').textContent = t.cta;
+  if(el('hero-cta2')) el('hero-cta2').textContent = t.cta2;
+  if(el('stat1')) el('stat1').textContent = t.stat1;
+  if(el('stat2')) el('stat2').textContent = t.stat2;
+  if(el('stat3')) el('stat3').textContent = t.stat3;
+  if(el('stat4')) el('stat4').textContent = t.stat4;
+  if(el('nav-tool')) el('nav-tool').textContent = t.navTool;
+  if(el('nav-about')) el('nav-about').textContent = t.navAbout;
+  if(el('langBtn')) el('langBtn').textContent = t.langBtn;
+  if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
+  if(el('tool-sub')) el('tool-sub').textContent = t.toolSub;
+  if(el('upload-h3')) el('upload-h3').textContent = t.uploadH3;
+  if(document.querySelector('.contact-title')) document.querySelector('.contact-title').textContent = t.contactTitle;
+  if(document.querySelector('.contact-sub')) document.querySelector('.contact-sub').textContent = t.contactSub;
 }
 </script>
 </body>
