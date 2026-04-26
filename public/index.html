@@ -37,16 +37,9 @@ header {
 .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
 .logo span { color: var(--text); font-weight: 300; }
-nav { display: flex; gap: 1.5rem; align-items: center; }
+nav { display: flex; gap: 1.5rem; }
 nav a { color: var(--text2); text-decoration: none; font-size: 0.9rem; transition: color .2s; }
 nav a:hover { color: var(--accent); }
-#langBtn {
-  background: rgba(0,212,168,.1); border: 1.5px solid rgba(0,212,168,.4);
-  color: var(--accent); padding: 5px 16px; border-radius: 100px;
-  cursor: pointer; font-family: var(--font); font-size: .85rem; font-weight: 700;
-  transition: all .2s; letter-spacing: .5px;
-}
-#langBtn:hover { background: rgba(0,212,168,.2); border-color: var(--accent); }
 
 /* HERO */
 .hero {
@@ -395,28 +388,27 @@ footer span { color: var(--accent); }
     FoodCheck <span>Jordan</span>
   </div>
   <nav>
-    <a href="#tool" id="nav-tool">التدقيق</a>
-    <a href="#about" id="nav-about">عن النظام</a>
-    <button id="langBtn" onclick="toggleLang()">EN</button>
+    <a href="#tool">التدقيق</a>
+    <a href="#about">عن النظام</a>
   </nav>
 </header>
 
 <section class="hero">
-  <div class="hero-badge" id="hero-badge">
+  <div class="hero-badge">
     <span>●</span> مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192
   </div>
-  <h1 id="hero-h1">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
-  <p id="hero-p1">افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
-  <p id="hero-p2" style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
+  <h1>هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
+  <p>افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
+  <p style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
-    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
-    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
-    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
+    <div class="stat"><div class="stat-num">✔ 18</div><div class="stat-label">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label">قاعدة JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label">مادة حساسية JS 9:2025</div></div>
+    <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label">الكودكس الدولي</div></div>
   </div>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta" id="hero-cta">ابدأ الفحص مجاناً ←</a>
-    <a href="/additives.html" id="hero-cta2" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
+    <a href="#tool" class="scroll-cta">ابدأ الفحص مجاناً ←</a>
+    <a href="/additives.html" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
   </div>
 </section>
 
@@ -424,15 +416,15 @@ footer span { color: var(--accent); }
 <div class="container">
 
   <div class="section-title">
-    <h2 id="tool-title">رفع وتدقيق بطاقة البيان</h2>
-    <p id="tool-sub">ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+    <h2>رفع وتدقيق بطاقة البيان</h2>
+    <p>ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
   </div>
 
   <div class="upload-zone" id="uploadZone">
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
-      <h3 id="upload-h3">اسحب صور بطاقة البيان هنا</h3>
+      <h3>اسحب صور بطاقة البيان هنا</h3>
       <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
     </div>
   </div>
@@ -446,7 +438,7 @@ footer span { color: var(--accent); }
 
   <div class="settings-grid">
     <div class="setting-card">
-      <label>نوع المنتج</label>
+      <label id="label-product-type">نوع المنتج</label>
       <select class="setting-select" id="productType">
         <option value="general">عام</option>
         <option value="dairy">منتجات ألبان</option>
@@ -474,21 +466,23 @@ footer span { color: var(--accent); }
         <option value="sardines">سردين معلب (JS 68:2022)</option>
         <option value="dates">تمور (JS 549:2021)</option>
         <option value="cereal_infant">أغذية حبوب للرضع والأطفال (JS 443:2015)</option>
+        <option value="vegetable_oil">زيوت نباتية (JS 1791:2012)</option>
+        <option value="claims_product">منتج يحمل ادعاءات تغذوية/صحية (JS 1472)</option>
       </select>
     </div>
     <div class="setting-card">
-      <label>المنشأ</label>
+      <label id="label-origin">المنشأ</label>
       <select class="setting-select" id="origin">
-        <option value="imported">مستورد</option>
-        <option value="local">محلي الصنع</option>
+        <option id="opt-imported" value="imported">مستورد</option>
+        <option id="opt-local" value="local">محلي الصنع</option>
       </select>
     </div>
     <div class="setting-card">
-      <label>مستوى التدقيق</label>
+      <label id="label-strictness">مستوى التدقيق</label>
       <select class="setting-select" id="strictness">
-        <option value="full">كامل (جميع القواعد)</option>
-        <option value="critical">الجسيمة فقط</option>
-        <option value="quick">فحص سريع</option>
+        <option id="opt-full" value="full">كامل (جميع القواعد)</option>
+        <option id="opt-critical" value="critical">الجسيمة فقط</option>
+        <option id="opt-quick" value="quick">فحص سريع</option>
       </select>
     </div>
   </div>
@@ -630,34 +624,34 @@ footer span { color: var(--accent); }
 <section id="about" style="padding:4rem 1rem;border-top:1px solid var(--border);">
 <div class="container">
   <div class="section-title">
-    <h2>كيف يعمل النظام؟</h2>
-    <p>طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
+    <h2 id="about-title">كيف يعمل النظام؟</h2>
+    <p id="about-sub">طبقات متعددة من التدقيق مدمجة في أداة واحدة</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
-      <h3 style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
+      <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
-      <h3 style="margin-bottom:.5rem;">كودكس CXS 192</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح</p>
+      <h3 id="about-card2-title" style="margin-bottom:.5rem;">كودكس CXS 192</h3>
+      <p id="about-card2-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">🚨</div>
-      <h3 style="margin-bottom:.5rem;">110 قاعدة JS 9:2025</h3>
-      <p style="color:var(--text2);font-size:.88rem;line-height:1.7;">104 قاعدة تشمل: اسم المنتج، المكونات، المضافات، الوزن الصافي والمصفى، الصانع، بلد المنشأ، الصلاحية، اللغة، الترميز، العبوات الصغيرة، التشعيع وغيرها — حسب JS 9:2025</p>
+      <h3 id="about-card3-title" style="margin-bottom:.5rem;">110 قاعدة JS 9:2025</h3>
+      <p id="about-card3-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">104 قاعدة تشمل: اسم المنتج، المكونات، المضافات، الوزن الصافي والمصفى، الصانع، بلد المنشأ، الصلاحية، اللغة، الترميز، العبوات الصغيرة، التشعيع وغيرها — حسب JS 9:2025</p>
     </div>
   </div>
-  <p style="text-align:center;color:var(--text3);font-size:.78rem;margin-top:2rem;">
+  <p id="about-disclaimer" style="text-align:center;color:var(--text3);font-size:.78rem;margin-top:2rem;">
     ⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة القانونية الرسمية. القرار النهائي يعود للجهات الرقابية المختصة.
   </p>
 </div>
 </section>
 
 <footer>
-  <p>FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192</p>
+  <p id="footer-text">FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192</p>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -1046,6 +1040,46 @@ const JS_SPECIFIC_RULES = {
       {code:"JS443-NUT-12", text:"نوع 4-4 (بسكويت/بقسماط): الصوديوم ≤ 300 مغ/100 kcal"},
       {code:"JS443-NUT-08", text:"نوع 4-1: الدهون ≤ 3.3 غ/100 kcal (إذا تجاوزت يجب ذكر حمض اللينوليك 300-1200 مغ/100 kcal)"},
       {code:"JS443-NUT-09", text:"نوع 4-2: الدهون ≤ 4.5 غ/100 kcal"}
+    ]
+  },
+
+  // ================================================================
+  // JS 1791:2012 — الزيوت النباتية
+  // ================================================================
+  "vegetable_oil": {
+    name: "الزيوت النباتية JS 1791:2012",
+    warnings: [
+      {code:"JS1791-R002", text:"🚨 البطاقة يجب أن تكون بالعربية وواضحة وغير قابلة للإزالة — غياب العربية أو إمكانية إزالة البطاقة = مخالفة جسيمة"},
+      {code:"JS1791-R003", text:"🚨 اسم المنتج يجب أن يذكر نوع الزيت بالتحديد — مثال: زيت دوار الشمس / زيت الذرة / زيت النخيل — 'زيت نباتي' وحده غير كافٍ"},
+      {code:"JS1791-R005", text:"⚠️ تاريخ الصلاحية إلزامي وفق JS 288 — غيابه مخالفة جسيمة"},
+      {code:"JS1791-R008", text:"⚠️ إذا كان الاسم 'كانولا' أو 'منخفض حمض الإيروسيك' — حمض الإيروسيك يجب ألا يتجاوز 2% من مجموع الأحماض الدهنية (يحتاج تحقق مختبري)"},
+      {code:"JS1791-R009", text:"⚠️ إذا كان الاسم 'زيت العصفر عالي حمض الأوليك' — نسبة حمض الأوليك يجب أن تكون ≥ 70% (يحتاج تحقق مختبري)"},
+      {code:"JS1791-R010", text:"⚠️ إذا كان الاسم 'زيت دوار الشمس عالي حمض الأوليك' — نسبة حمض الأوليك يجب أن تكون ≥ 75% (يحتاج تحقق مختبري)"},
+      {code:"JS1791-R012", text:"⚠️ إذا كان الادعاء 'بكر' أو 'Virgin' — الاستخراج يجب أن يكون بطرق ميكانيكية فقط بدون حرارة + لا يوجد أي مضاف (يحتاج إثبات العملية)"},
+      {code:"JS1791-R013", text:"⚠️ إذا كان الادعاء 'معصور على البارد' أو 'Cold Pressed' — الاستخراج بدون حرارة إطلاقاً + لا يوجد أي مضاف (يحتاج إثبات العملية)"},
+      {code:"JS1791-R014", text:"⚠️ إذا كانت هناك مضافات مذكورة — يجب التحقق من مطابقتها لـ JS 94 — المضافات غير مسموح بها للزيوت البكر والمعصورة على البارد"},
+      {code:"JS1791-R015", text:"🚨 إذا ادّعى المنتج 'بكر' أو 'معصور على البارد' وفيه مضافات مذكورة — تناقض صريح = مخالفة جسيمة مباشرة"},
+      {code:"JS1791-R016", text:"🚨 يُمنع خلط أنواع الزيوت النباتية ببعضها — إذا ظهر 'خليط' أو 'مزيج زيوت' = مخالفة جسيمة بموجب البند 4-26"},
+      {code:"JS1791-R019", text:"⚠️ المحتوى الفعلي لا يجوز أن يقل عن 90% من سعة الحاوية — يحتاج فحص فيزيائي"},
+      {code:"JS1791-R030", text:"⚠️ إذا توفرت نتائج مختبر: زيت مكرر = رقم حمضي ≤ 0.6 مغ KOH/غ · بكر/بارد ≤ 4 · زيت نخيل بكر ≤ 10"},
+      {code:"JS1791-R031", text:"⚠️ إذا توفرت نتائج مختبر: زيت مكرر = رقم البيروكسيد ≤ 10 ميلي مكافئ O2 نشط/كغ · بكر/بارد ≤ 15"}
+    ]
+  },
+
+  // ================================================================
+  // JS 1472 — الادعاءات التغذوية والصحية
+  // ================================================================
+  "claims_product": {
+    name: "الادعاءات التغذوية والصحية JS 1472",
+    warnings: [
+      {code:"JS1472-R-5-4", text:"🚨 أي ادعاء علاجي محظور تماماً — الكلمات: يعالج / يشفي / يقي / يمنع المرض = مخالفة جسيمة مباشرة بدون استثناء"},
+      {code:"JS1472-R-5-1", text:"🚨 ادعاء 'كامل التغذية' أو 'يحتوي جميع العناصر الغذائية' = مخالفة جسيمة — لا يجوز لأي منتج ادعاء الاكتمال الغذائي"},
+      {code:"JS1472-R-6-2", text:"⚠️ عبارات عامة مثل 'صحي' أو 'مفيد' تحتاج إثبات علمي — بدون إثبات = تنبيه وقد يُعتبر تضليلاً"},
+      {code:"JS1472-R-6-1", text:"⚠️ ادعاءات المقارنة مثل 'الأفضل' أو 'الأجود' تحتاج مقارنة كاملة موثقة — بدونها = تنبيه"},
+      {code:"JS1472-R-7-1", text:"⚠️ ادعاء 'مدعّم' بفيتامين أو معدن — يتطلب إثبات التدعيم بالكميات الفعلية مطابقةً لـ JS 1473"},
+      {code:"JS1472-R-7-3", text:"⚠️ ادعاء 'طبيعي' أو 'عضوي' — يتطلب توافق مع التشريعات الأردنية — بدون إثبات = تنبيه"},
+      {code:"JS1472-R-7-4", text:"⚠️ ادعاء 'حلال' — يتطلب شهادة حلال معتمدة من جهة معترف بها — بدون شهادة = مخالفة تضليلية"},
+      {code:"JS1472-R-7-6", text:"⚠️ ادعاء 'خالٍ من' (خالٍ من السكر / الغلوتين / الدهون) — يجب التحقق من صحة الادعاء مقارنةً بالجدول التغذوي — التناقض = مخالفة جسيمة"}
     ]
   }
 };
@@ -2275,11 +2309,11 @@ async function submitRegistration() {
         </div>
       </div>
       <div class="contact-form">
-        <input type="text" id="contactName" placeholder="الاسم الكامل *">
-        <input type="text" id="contactCompany" placeholder="اسم الشركة">
-        <input type="email" id="contactEmail" placeholder="البريد الإلكتروني *">
-        <textarea id="contactMsg" placeholder="رسالتك *"></textarea>
-        <button class="contact-submit" onclick="submitContact()">إرسال الرسالة ✓</button>
+        <input type="text" id="contactName" placeholder="الاسم الكامل *" data-ar="الاسم الكامل *" data-en="Full Name *">
+        <input type="text" id="contactCompany" placeholder="اسم الشركة" data-ar="اسم الشركة" data-en="Company Name">
+        <input type="email" id="contactEmail" placeholder="البريد الإلكتروني *" data-ar="البريد الإلكتروني *" data-en="Email Address *">
+        <textarea id="contactMsg" placeholder="رسالتك *" data-ar="رسالتك *" data-en="Your Message *"></textarea>
+        <button class="contact-submit" id="contact-submit-btn" onclick="submitContact()">إرسال الرسالة ✓</button>
         <div class="contact-success" id="contactSuccess">
           ✅ تم استلام رسالتك! سنتواصل معك قريباً.
         </div>
@@ -2359,12 +2393,12 @@ async function submitRegistration() {
 </div>
 
 <script>
-// ===== LANGUAGE TOGGLE =====
+// ===== LANGUAGE TOGGLE — FULL BILINGUAL =====
 const T = {
   ar: {
     dir:'rtl', lang:'ar',
     title:'مدقق بطاقة البيان الغذائية | FoodCheck Jordan',
-    badge:'● مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192',
+    badge:'مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192',
     h1:'هل بطاقة بيانك جاهزة للطرح في السوق؟',
     p1:'افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission',
     p2:'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
@@ -2375,13 +2409,29 @@ const T = {
     toolTitle:'رفع وتدقيق بطاقة البيان',
     toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
     uploadH3:'اسحب صور بطاقة البيان هنا',
+    labelProductType:'نوع المنتج', labelOrigin:'المنشأ', labelStrictness:'مستوى التدقيق',
+    optImported:'مستورد', optLocal:'محلي الصنع',
+    optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
+    analyzeBtn:'🔍 ابدأ الفحص مجاناً',
+    aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
+    aboutCard1Title:'المواصفات الأردنية JS',
+    aboutCard1Text:'تدقيق 18+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، تركيبة الرضع والمكملات الغذائية',
+    aboutCard2Title:'كودكس CXS 192',
+    aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
+    aboutCard3Title:'110 قاعدة JS 9:2025',
+    aboutCard3Text:'104 قاعدة تشمل: اسم المنتج، المكونات، المضافات، الوزن الصافي والمصفى، الصانع، بلد المنشأ، الصلاحية، اللغة، الترميز، العبوات الصغيرة، التشعيع وغيرها',
+    aboutDisclaimer:'⚠️ هذا النظام أداة مساعدة للتدقيق ولا يغني عن الاستشارة القانونية الرسمية. القرار النهائي يعود للجهات الرقابية المختصة.',
     contactTitle:'تواصل معنا',
-    contactSub:'هل لديك سؤال أو تريد معرفة المزيد عن FoodCheck Jordan؟ نحن هنا!'
+    contactSub:'هل لديك سؤال أو تريد معرفة المزيد عن FoodCheck Jordan؟ نحن هنا!',
+    contactSubmitBtn:'إرسال الرسالة ✓',
+    contactSuccess:'✅ تم استلام رسالتك! سنتواصل معك قريباً.',
+    footerText:'FoodCheck Jordan © 2025 · مدعوم بـ <span>Claude AI</span> · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192',
+    waTooltip:'تواصل عبر واتساب',
   },
   en: {
     dir:'ltr', lang:'en',
     title:'Food Label Compliance Checker | FoodCheck Jordan',
-    badge:'● AI-Powered · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
+    badge:'AI-Powered · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
     h1:'Is Your Food Label Ready for Market?',
     p1:'Audit ingredients and additives in seconds — verify compliance with Jordanian JS specifications and the Codex Alimentarius Commission.',
     p2:'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
@@ -2392,25 +2442,37 @@ const T = {
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
     uploadH3:'Drag food label images here',
+    labelProductType:'Product Type', labelOrigin:'Origin', labelStrictness:'Audit Level',
+    optImported:'Imported', optLocal:'Locally Produced',
+    optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
+    analyzeBtn:'🔍 Start Free Audit',
+    aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
+    aboutCard1Title:'Jordanian JS Standards',
+    aboutCard1Text:'Audits 18+ Jordanian JS specifications covering dairy, meat, beverages, bakery, chocolate, confectionery, infant formula, and food supplements',
+    aboutCard2Title:'Codex CXS 192',
+    aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
+    aboutCard3Title:'110 JS 9:2025 Rules',
+    aboutCard3Text:'104 rules covering: product name, ingredients, additives, net and drained weight, manufacturer, country of origin, shelf life, language, lot coding, small packages, and irradiation',
+    aboutDisclaimer:'⚠️ This system is an audit assistance tool and does not replace official legal consultation. Final decisions rest with the competent regulatory authorities.',
     contactTitle:'Contact Us',
-    contactSub:'Do you have a question or want to learn more about FoodCheck Jordan? We\'re here!'
+    contactSub:'Do you have a question or want to learn more about FoodCheck Jordan? We\'re here!',
+    contactSubmitBtn:'Send Message ✓',
+    contactSuccess:'✅ Your message has been received! We will get back to you shortly.',
+    footerText:'FoodCheck Jordan © 2025 · Powered by <span>Claude AI</span> · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
+    waTooltip:'Contact via WhatsApp',
   }
 };
 
 let currentLang = 'ar';
-
-function toggleLang() {
-  currentLang = currentLang === 'ar' ? 'en' : 'ar';
-  applyLang(currentLang);
-}
+function toggleLang() { currentLang = currentLang==='ar'?'en':'ar'; applyLang(currentLang); }
 
 function applyLang(lang) {
-  const t = T[lang];
+  const t = T[lang], el = id => document.getElementById(id);
   document.documentElement.lang = t.lang;
   document.documentElement.dir = t.dir;
   document.title = t.title;
-  const el = id => document.getElementById(id);
-  if(el('hero-badge')) el('hero-badge').innerHTML = '<span>●</span> ' + t.badge.replace('● ','');
+  // Hero
+  if(el('hero-badge')) el('hero-badge').innerHTML = '<span>●</span> ' + t.badge;
   if(el('hero-h1')) el('hero-h1').textContent = t.h1;
   if(el('hero-p1')) el('hero-p1').textContent = t.p1;
   if(el('hero-p2')) el('hero-p2').textContent = t.p2;
@@ -2420,15 +2482,48 @@ function applyLang(lang) {
   if(el('stat2')) el('stat2').textContent = t.stat2;
   if(el('stat3')) el('stat3').textContent = t.stat3;
   if(el('stat4')) el('stat4').textContent = t.stat4;
+  // Nav
   if(el('nav-tool')) el('nav-tool').textContent = t.navTool;
   if(el('nav-about')) el('nav-about').textContent = t.navAbout;
   if(el('langBtn')) el('langBtn').textContent = t.langBtn;
+  // Tool
   if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
   if(el('tool-sub')) el('tool-sub').textContent = t.toolSub;
   if(el('upload-h3')) el('upload-h3').textContent = t.uploadH3;
+  if(el('label-product-type')) el('label-product-type').textContent = t.labelProductType;
+  if(el('label-origin')) el('label-origin').textContent = t.labelOrigin;
+  if(el('label-strictness')) el('label-strictness').textContent = t.labelStrictness;
+  if(el('opt-imported')) el('opt-imported').textContent = t.optImported;
+  if(el('opt-local')) el('opt-local').textContent = t.optLocal;
+  if(el('opt-full')) el('opt-full').textContent = t.optFull;
+  if(el('opt-critical')) el('opt-critical').textContent = t.optCritical;
+  if(el('opt-quick')) el('opt-quick').textContent = t.optQuick;
+  const btnText = document.querySelector('.btn-text');
+  if(btnText) btnText.textContent = t.analyzeBtn;
+  // About
+  if(el('about-title')) el('about-title').textContent = t.aboutTitle;
+  if(el('about-sub')) el('about-sub').textContent = t.aboutSub;
+  if(el('about-card1-title')) el('about-card1-title').textContent = t.aboutCard1Title;
+  if(el('about-card1-text')) el('about-card1-text').textContent = t.aboutCard1Text;
+  if(el('about-card2-title')) el('about-card2-title').textContent = t.aboutCard2Title;
+  if(el('about-card2-text')) el('about-card2-text').textContent = t.aboutCard2Text;
+  if(el('about-card3-title')) el('about-card3-title').textContent = t.aboutCard3Title;
+  if(el('about-card3-text')) el('about-card3-text').textContent = t.aboutCard3Text;
+  if(el('about-disclaimer')) el('about-disclaimer').textContent = t.aboutDisclaimer;
+  // Contact
   if(document.querySelector('.contact-title')) document.querySelector('.contact-title').textContent = t.contactTitle;
   if(document.querySelector('.contact-sub')) document.querySelector('.contact-sub').textContent = t.contactSub;
+  if(el('contact-submit-btn')) el('contact-submit-btn').textContent = t.contactSubmitBtn;
+  if(el('contactSuccess')) el('contactSuccess').textContent = t.contactSuccess;
+  if(document.querySelector('.wa-tooltip')) document.querySelector('.wa-tooltip').textContent = t.waTooltip;
+  if(el('footer-text')) el('footer-text').innerHTML = t.footerText;
+  // Form placeholders
+  ['contactName','contactCompany','contactEmail','contactMsg'].forEach(id => {
+    const inp = el(id);
+    if(inp && inp.dataset[lang]) inp.placeholder = inp.dataset[lang];
+  });
 }
 </script>
+
 </body>
 </html>
