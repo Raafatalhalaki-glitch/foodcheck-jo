@@ -388,8 +388,9 @@ footer span { color: var(--accent); }
     FoodCheck <span>Jordan</span>
   </div>
   <nav>
-    <a href="#tool">التدقيق</a>
-    <a href="#about">عن النظام</a>
+    <a href="#tool" id="nav-tool">التدقيق</a>
+    <a href="#about" id="nav-about">عن النظام</a>
+    <button id="langBtn" onclick="toggleLang()">EN</button>
   </nav>
 </header>
 
@@ -2438,7 +2439,7 @@ const T = {
     cta:'Start Free Audit →', cta2:'⚗️ Additives Search Engine CXS 192',
     stat1:'Jordanian JS Specifications', stat2:'JS 9:2025 Rules',
     stat3:'JS 9:2025 Allergens', stat4:'International Codex',
-    navTool:'Audit Tool', navAbout:'About', langBtn:'عر',
+    navTool:'Audit Tool', navAbout:'About', langBtn:'AR',
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
     uploadH3:'Drag food label images here',
