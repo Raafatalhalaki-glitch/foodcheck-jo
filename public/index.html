@@ -407,7 +407,7 @@ footer span { color: var(--accent); }
   </div>
   <h1 id="hero-h1" style="margin-bottom:.6rem;">FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات</h1>
   <div class="hero-stats" style="margin-bottom:1.5rem;">
-    <div class="stat"><div class="stat-num">✔ 25</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 28</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
@@ -486,6 +486,9 @@ footer span { color: var(--accent); }
         <option value="sardines" id="opt-sardines">سردين معلب (JS 68:2022)</option>
         <option value="dates" id="opt-dates">تمور (JS 549:2021)</option>
         <option value="cereal_infant" id="opt-cereal-infant">أغذية حبوب للرضع والأطفال (JS 443:2015)</option>
+        <option value="ice_cream" id="opt-ice-cream">مثلجات غذائية (JS 44:2022)</option>
+        <option value="foul_medames" id="opt-foul-medames">فول مدمس معبأ (JS 66:2016)</option>
+        <option value="pasta" id="opt-pasta">عجائن جافة / باستا (JS 67:2017)</option>
         <option value="mayonnaise" id="opt-mayonnaise">مايونيز (JS 938:2012)</option>
         <option value="table_olives" id="opt-table-olives">زيتون المائدة (JS 833:2006)</option>
         <option value="jam" id="opt-jam">مربيات وجيلي ومرملاد (JS 47:2012)</option>
@@ -654,7 +657,7 @@ footer span { color: var(--accent); }
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
       <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 25+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 28+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
@@ -1067,8 +1070,55 @@ const JS_SPECIFIC_RULES = {
   },
 
   // ================================================================
-  // JS 938:2012 — المايونيز
+  // JS 44:2022 — المثلجات الغذائية
   // ================================================================
+  "ice_cream": {
+    name: "المثلجات الغذائية JS 44:2022",
+    warnings: [
+      {code:"JS44-R003", text:"🚨 المثلجات الحليبية: يُمنع منعاً باتاً استخدام أي دسم أو بروتين من غير الحليب — وجود زيوت نباتية = مخالفة جسيمة فورية"},
+      {code:"JS44-R004", text:"🚨 يُمنع استخدام الزيوت النباتية المهدرجة كلياً أو جزئياً في أي نوع من المثلجات"},
+      {code:"JS44-R005", text:"🚨 المحليات الصناعية: تُستخدم فقط في مثلجات الحمية — وجودها في منتج عادي = مخالفة جسيمة، ويجب ذكرها على البطاقة"},
+      {code:"JS44-R009", text:"⚠️ مثلجات بالفواكه: نسبة الفاكهة ≥ 15% (10% لأنواع الملحق أ) — المكسرات ≥ 5% عند إضافتها"},
+      {code:"JS44-R010", text:"⚠️ السوربت: نسبة الفاكهة ≥ 25% (15% لأنواع الملحق أ) — المكسرات ≥ 7% عند إضافتها"},
+      {code:"JS44-R011", text:"⚠️ الميلوراين: البروتين ≥ 2.7% + فيتامين أ ≥ 40 وحدة دوائية لكل غرام دسم — يجب التحقق مختبرياً"},
+      {code:"JS44-R014", text:"⚠️ حدود التركيب الإلزامية — مثلجات حليبية: دسم ≥ 2%، جوامد حليب ≥ 11%، جوامد كلية ≥ 26%، وزن ≥ 538 غ/لتر · قشدية: دسم ≥ 10%"},
+      {code:"JS44-R022", text:"🚨 درجة التخزين والنقل والعرض يجب أن تكون أقل من -18°C عند المركز الحراري — أي ارتفاع = مخالفة جسيمة"},
+      {code:"JS44-R024", text:"⚠️ خلطات المثلجات المسحوقة أو السائلة: تعليمات التحضير إلزامية على البطاقة — غيابها مخالفة جسيمة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 66:2016 — الفول المدمس المعبأ
+  // ================================================================
+  "foul_medames": {
+    name: "الفول المدمس المعبأ JS 66:2016",
+    warnings: [
+      {code:"JS66-R043", text:"🚨 اسم المنتج يجب أن يكون 'فول مدمس' بالضبط — أي اسم آخر = مخالفة جسيمة"},
+      {code:"JS66-R032", text:"🚨 الوزن المصفى إلزامي — مع إضافة مادة اختيارية: الوزن المصفى ≥ 67% من الوزن الصافي · بدون إضافة: ≥ 65% — غياب الوزن المصفى = مخالفة جسيمة"},
+      {code:"JS66-R026", text:"⚠️ المواد الاختيارية المسموحة فقط: زيوت نباتية، عصير ليمون، ملح ≤ 2%، صلصة بندورة وثوم وبهارات (كل منفرداً ≤ 2% ومجتمعة ≤ 4%)، طحينة — أي مادة خارج هذه القائمة = مخالفة"},
+      {code:"JS66-R039", text:"⚠️ حجم العبوة: المحتويات يجب ألا تقل عن 90% من السعة المائية للعبوة — يُمنع وضع أي مادة غير غذائية لإعطاء حجم وهمي"},
+      {code:"JS66-R044", text:"⚠️ طريقة التجهيز أو الاستعمال إلزامية على البطاقة — غيابها مخالفة"},
+      {code:"JS66-R045", text:"⚠️ مدة الصلاحية إلزامية حسب JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS66-R035", text:"⚠️ المعلبات: فحص الحضان إلزامي — نتيجة سلبية عند 30-37°C لمدة 10-14 يوم و50-55°C لمدة 5-7 أيام — أي انتفاخ في العبوة = مخالفة جسيمة فورية"}
+    ]
+  },
+
+  // ================================================================
+  // JS 67:2017 — العجائن الجافة (الباستا والمعكرونة)
+  // ================================================================
+  "pasta": {
+    name: "العجائن الجافة (الباستا) JS 67:2017",
+    warnings: [
+      {code:"JS67-R067", text:"🚨 اسم المنتج يجب أن يكون من الأسماء المعتمدة: معكرونة / شعيرية / فرد / فتلة / لازانيا / إلخ — اسم مبتكر وحده = مخالفة جسيمة"},
+      {code:"JS67-R068", text:"🚨 إرشادات التحضير ومدة الطهي إلزاميتان على البطاقة — غيابهما مخالفة جسيمة"},
+      {code:"JS67-R053", text:"⚠️ نسبة البروتين ≥ 10.5% على أساس الوزن الجاف (بدون إضافات) — قيمة أقل = مخالفة (يحتاج تحقق مختبري)"},
+      {code:"JS67-R055", text:"⚠️ نسبة الرطوبة ≤ 13% — قيمة أعلى = مشكلة حفظ وسلامة (يحتاج تحقق مختبري)"},
+      {code:"JS67-R056", text:"⚠️ الرماد الكلي (سميد/دقيق غير كامل): ≤ 1.2% على أساس الوزن الجاف · الدقيق الكامل: ≤ 1.8% (يحتاج تحقق مختبري)"},
+      {code:"JS67-R054", text:"⚠️ إذا ادّعى المنتج تدعيماً بالبروتين — يجب التصريح به على البطاقة حسب JS 1472 — غيابه مخالفة"},
+      {code:"JS67-R069", text:"⚠️ إذا استُخدمت أنواع قمح مختلفة — يجب ذكرها في قائمة المكونات — غيابها مخالفة"},
+      {code:"JS67-R070", text:"⚠️ مدة الصلاحية إلزامية حسب JS 288 — غيابها مخالفة جسيمة"}
+    ]
+  },
   "mayonnaise": {
     name: "المايونيز JS 938:2012",
     warnings: [
@@ -2491,6 +2541,8 @@ const T = {
     optFruitSyrup:'شراب فاكهة/سكواش (JS 994)', optFlavoredDrink:'مشروبات منكهة (JS 77)',
     optSupplements:'مكملات غذائية', optSardines:'سردين معلب (JS 68:2022)',
     optDates:'تمور (JS 549:2021)', optCerealInfant:'أغذية حبوب للرضع والأطفال (JS 443:2015)',
+    optIceCream:'مثلجات غذائية (JS 44:2022)', optFoulMedames:'فول مدمس معبأ (JS 66:2016)',
+    optPasta:'عجائن جافة / باستا (JS 67:2017)',
     optMayonnaise:'مايونيز (JS 938:2012)', optTableOlives:'زيتون المائدة (JS 833:2006)',
     optJam:'مربيات وجيلي ومرملاد (JS 47:2012)', optVegetableOil:'زيوت نباتية (JS 1791:2012)',
     optClaims:'منتج يحمل ادعاءات تغذوية/صحية (JS 1472)',
@@ -2498,7 +2550,7 @@ const T = {
     optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
     aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
     aboutCard1Title:'المواصفات الأردنية JS',
-    aboutCard1Text:'تدقيق 25+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
+    aboutCard1Text:'تدقيق 28+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
     aboutCard2Title:'كودكس CXS 192',
     aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
     aboutCard3Title:'110 قاعدة JS 9:2025',
@@ -2540,6 +2592,8 @@ const T = {
     optFruitSyrup:'Fruit Syrup/Squash (JS 994)', optFlavoredDrink:'Flavored Drinks (JS 77)',
     optSupplements:'Food Supplements', optSardines:'Canned Sardines (JS 68:2022)',
     optDates:'Dates (JS 549:2021)', optCerealInfant:'Cereal-Based Foods for Infants (JS 443:2015)',
+    optIceCream:'Edible Ices (JS 44:2022)', optFoulMedames:'Packed Foul Medames (JS 66:2016)',
+    optPasta:'Dried Pasta / Noodles (JS 67:2017)',
     optMayonnaise:'Mayonnaise (JS 938:2012)', optTableOlives:'Table Olives (JS 833:2006)',
     optJam:'Jams, Jellies & Marmalade (JS 47:2012)', optVegetableOil:'Vegetable Oils (JS 1791:2012)',
     optClaims:'Product with Nutritional/Health Claims (JS 1472)',
@@ -2547,7 +2601,7 @@ const T = {
     optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
     aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
     aboutCard1Title:'Jordanian JS Standards',
-    aboutCard1Text:'Audits 25+ Jordanian JS specifications covering dairy, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
+    aboutCard1Text:'Audits 28+ Jordanian JS specifications covering dairy, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
     aboutCard2Title:'Codex CXS 192',
     aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
     aboutCard3Title:'110 JS 9:2025 Rules',
@@ -2602,7 +2656,9 @@ function applyLang(lang) {
     'opt-candy':t.optCandy,'opt-beverages':t.optBeverages,'opt-energy-drink':t.optEnergyDrink,
     'opt-juice':t.optJuice,'opt-fruit-syrup':t.optFruitSyrup,'opt-flavored-drink':t.optFlavoredDrink,
     'opt-supplements':t.optSupplements,'opt-sardines':t.optSardines,'opt-dates':t.optDates,
-    'opt-cereal-infant':t.optCerealInfant,'opt-mayonnaise':t.optMayonnaise,
+    'opt-cereal-infant':t.optCerealInfant,'opt-ice-cream':t.optIceCream,
+    'opt-foul-medames':t.optFoulMedames,'opt-pasta':t.optPasta,
+    'opt-mayonnaise':t.optMayonnaise,
     'opt-table-olives':t.optTableOlives,'opt-jam':t.optJam,'opt-vegetable-oil':t.optVegetableOil,
     'opt-claims':t.optClaims,'opt-imported':t.optImported,'opt-local':t.optLocal,
     'opt-full':t.optFull,'opt-critical':t.optCritical,'opt-quick':t.optQuick
