@@ -401,39 +401,51 @@ footer span { color: var(--accent); }
   </nav>
 </header>
 
-<section class="hero">
+<section class="hero" style="min-height:auto;padding:5.5rem 1.5rem 2rem;">
   <div class="hero-badge" id="hero-badge">
     <span>●</span> مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192
   </div>
-  <h1 id="hero-h1">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
-  <p id="hero-p1">افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission</p>
-  <p id="hero-p2" style="font-size:.95rem;color:var(--warn);margin-top:-.5rem;margin-bottom:2rem;font-weight:600;">تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق</p>
-  <div class="hero-stats">
+  <h1 id="hero-h1" style="margin-bottom:.6rem;">هل بطاقة بيانك جاهزة للطرح في السوق؟</h1>
+  <div class="hero-stats" style="margin-bottom:1.5rem;">
     <div class="stat"><div class="stat-num">✔ 25</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
   </div>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;align-items:center;">
-    <a href="#tool" class="scroll-cta" id="hero-cta">ابدأ الفحص مجاناً ←</a>
-    <a href="/additives.html" id="hero-cta2" style="display:flex;align-items:center;gap:8px;background:transparent;border:2px solid var(--accent);color:var(--accent);font-weight:700;font-size:.95rem;padding:14px 28px;border-radius:10px;cursor:pointer;text-decoration:none;transition:all .25s;white-space:nowrap;">⚗️ محرك بحث المضافات CXS 192</a>
-  </div>
 </section>
 
-<section id="tool">
+<section id="tool" style="padding-top:0;">
 <div class="container">
 
-  <div class="section-title">
-    <h2 id="tool-title">رفع وتدقيق بطاقة البيان</h2>
-    <p id="tool-sub">ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً</p>
+  <!-- جعبة التوضيح الثنائية -->
+  <div id="hero-hint-box" style="
+    background:rgba(0,212,168,.07);
+    border:1.5px solid rgba(0,212,168,.25);
+    border-radius:14px;
+    padding:1rem 1.4rem;
+    margin-bottom:1.2rem;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+  ">
+    <span style="font-size:1.5rem;flex-shrink:0;">📸</span>
+    <div>
+      <p id="hero-p1" style="font-size:.95rem;color:var(--text);font-weight:600;margin:0 0 .25rem;">
+        صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية
+      </p>
+      <p id="hero-p2" style="font-size:.82rem;color:var(--text2);margin:0;">
+        Capture or upload your food label image — AI will audit it in 30 seconds
+      </p>
+    </div>
   </div>
 
   <div class="upload-zone" id="uploadZone">
-    <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
+    <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)" capture="environment">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
       <h3 id="upload-h3">اسحب صور بطاقة البيان هنا</h3>
-      <p>أو انقر للتصفح · JPG, PNG, WEBP · حتى 5 صور · 10MB لكل صورة</p>
+      <p id="upload-sub-p">📷 التقط صورة مباشرة · أو اسحب · أو انقر للتصفح</p>
+      <p style="font-size:.75rem;color:var(--text3);margin-top:.3rem;">Tap to capture / drag / browse · JPG PNG WEBP · 5 images max</p>
     </div>
   </div>
   <div id="imageGallery" style="display:none;margin-bottom:1.5rem;">
@@ -2458,6 +2470,9 @@ const T = {
     p2:'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
     cta:'ابدأ الفحص مجاناً ←', cta2:'⚗️ محرك بحث المضافات CXS 192',
     stat1:'مواصفة أردنية JS', stat2:'قاعدة JS 9:2025', stat3:'مادة حساسية JS 9:2025', stat4:'الكودكس الدولي',
+    hintAr:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
+    hintEn:'Capture or upload your food label image — AI will audit it in 30 seconds',
+    uploadSubP:'📷 التقط صورة مباشرة · أو اسحب · أو انقر للتصفح',
     navTool:'التدقيق', navAbout:'عن النظام', langBtn:'EN',
     toolTitle:'رفع وتدقيق بطاقة البيان',
     toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
@@ -2504,6 +2519,9 @@ const T = {
     p2:'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
     cta:'Start Free Audit →', cta2:'⚗️ Additives Search Engine CXS 192',
     stat1:'Jordanian JS Specifications', stat2:'JS 9:2025 Rules', stat3:'JS 9:2025 Allergens', stat4:'International Codex',
+    hintAr:'Capture or upload your food label image — AI will audit it in 30 seconds',
+    hintEn:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
+    uploadSubP:'📷 Capture directly · or drag · or click to browse',
     navTool:'Audit Tool', navAbout:'About', langBtn:'AR',
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
@@ -2567,6 +2585,9 @@ function applyLang(lang) {
   if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
   if(el('tool-sub')) el('tool-sub').textContent = t.toolSub;
   if(el('upload-h3')) el('upload-h3').textContent = t.uploadH3;
+  if(el('hero-p1')) el('hero-p1').textContent = t.hintAr;
+  if(el('hero-p2')) el('hero-p2').textContent = t.hintEn;
+  if(el('upload-sub-p')) el('upload-sub-p').textContent = t.uploadSubP;
   const btnText = document.querySelector('.btn-text');
   if(btnText) btnText.textContent = t.analyzeBtn;
   if(el('label-product-type')) el('label-product-type').textContent = t.labelProductType;
