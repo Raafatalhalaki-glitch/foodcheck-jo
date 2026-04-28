@@ -394,6 +394,7 @@ footer span { color: var(--accent); }
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
     <a id="nav-shelf-btn" href="shelf-life.html" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;margin-right:.6rem;margin-left:.6rem;text-decoration:none;">مدد الصلاحية</a>
+    <a id="nav-additives-btn" href="additives.html" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;margin-right:.6rem;margin-left:.6rem;text-decoration:none;">المضافات</a>
     <button id="langBtn" onclick="toggleLang()" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;cursor:pointer;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;margin-right:.6rem;margin-left:.6rem;">EN</button>
   </div>
   <nav>
@@ -2524,7 +2525,7 @@ const T = {
     hintAr:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
     hintEn:'Capture or upload your food label image — AI will audit it in 30 seconds',
     uploadSubP:'📷 التقط صورة مباشرة · أو اسحب · أو انقر للتصفح',
-    navTool:'التدقيق', navShelf:'مدد الصلاحية', navAbout:'عن النظام', langBtn:'EN',
+    navTool:'التدقيق', navShelf:'مدد الصلاحية', navAdditives:'المضافات', navAbout:'عن النظام', langBtn:'EN',
     toolTitle:'رفع وتدقيق بطاقة البيان',
     toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
     uploadH3:'اسحب صور بطاقة البيان هنا',
@@ -2575,7 +2576,7 @@ const T = {
     hintAr:'Capture or upload your food label image — AI will audit it in 30 seconds',
     hintEn:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
     uploadSubP:'📷 Capture directly · or drag · or click to browse',
-    navTool:'Audit Tool', navShelf:'Shelf Lives', navAbout:'About', langBtn:'AR',
+    navTool:'Audit Tool', navShelf:'Shelf Lives', navAdditives:'Additives', navAbout:'About', langBtn:'AR',
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
     uploadH3:'Drag food label images here',
@@ -2622,6 +2623,8 @@ function toggleLang() {
   applyLang(currentLang);
   var btn = document.getElementById('nav-shelf-btn');
   if(btn) btn.href = 'shelf-life.html?lang=' + currentLang;
+  var btn2 = document.getElementById('nav-additives-btn');
+  if(btn2) btn2.href = 'additives.html?lang=' + currentLang;
 }
 
 function applyLang(lang) {
@@ -2642,6 +2645,7 @@ function applyLang(lang) {
   if(el('nav-tool')) el('nav-tool').textContent = t.navTool;
   if(el('nav-shelf')) el('nav-shelf').textContent = t.navShelf;
   if(el('nav-shelf-btn')) el('nav-shelf-btn').textContent = t.navShelf;
+  if(el('nav-additives-btn')) el('nav-additives-btn').textContent = t.navAdditives;
   if(el('nav-about')) el('nav-about').textContent = t.navAbout;
   if(el('langBtn')) el('langBtn').textContent = t.langBtn;
   if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
