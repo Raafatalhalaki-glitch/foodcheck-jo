@@ -397,6 +397,7 @@ footer span { color: var(--accent); }
   </div>
   <nav>
     <a href="#tool" id="nav-tool">التدقيق</a>
+    <a href="shelf-life.html" id="nav-shelf">مدد الصلاحية</a>
     <a href="#about" id="nav-about">عن النظام</a>
   </nav>
 </header>
@@ -2523,7 +2524,7 @@ const T = {
     hintAr:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
     hintEn:'Capture or upload your food label image — AI will audit it in 30 seconds',
     uploadSubP:'📷 التقط صورة مباشرة · أو اسحب · أو انقر للتصفح',
-    navTool:'التدقيق', navAbout:'عن النظام', langBtn:'EN',
+    navTool:'التدقيق', navShelf:'مدد الصلاحية', navAbout:'عن النظام', langBtn:'EN',
     toolTitle:'رفع وتدقيق بطاقة البيان',
     toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
     uploadH3:'اسحب صور بطاقة البيان هنا',
@@ -2574,7 +2575,7 @@ const T = {
     hintAr:'Capture or upload your food label image — AI will audit it in 30 seconds',
     hintEn:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
     uploadSubP:'📷 Capture directly · or drag · or click to browse',
-    navTool:'Audit Tool', navAbout:'About', langBtn:'AR',
+    navTool:'Audit Tool', navShelf:'Shelf Lives', navAbout:'About', langBtn:'AR',
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
     uploadH3:'Drag food label images here',
@@ -2634,6 +2635,7 @@ function applyLang(lang) {
   if(el('stat3')) el('stat3').textContent = t.stat3;
   if(el('stat4')) el('stat4').textContent = t.stat4;
   if(el('nav-tool')) el('nav-tool').textContent = t.navTool;
+  if(el('nav-shelf')) el('nav-shelf').textContent = t.navShelf;
   if(el('nav-about')) el('nav-about').textContent = t.navAbout;
   if(el('langBtn')) el('langBtn').textContent = t.langBtn;
   if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
