@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدد الصلاحية — FoodCheck Jordan</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d1f35;--navy2:#152b47;--navy3:#1a3558;
+  --teal:#00d4a8;--teal2:#00b891;--teal-dim:#00d4a820;
+  --blue:#185FA5;--blue-dim:#185FA515;
+  --green:#0F6E56;--green-dim:#0F6E5615;
+  --amber:#BA7517;--amber-dim:#BA751715;
+  --red:#A32D2D;--red-dim:#A32D2D15;
+  --text:#e8edf2;--text2:#9ab0c8;--text3:#5a7a98;
+  --border:#ffffff12;--border2:#ffffff20;
+  --card:#ffffff08;--card2:#ffffff10;
+}
+body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;font-size:15px}
+
+/* ── TABS NAV ── */
+.page-header{background:var(--navy2);border-bottom:1px solid var(--border);padding:0 1.5rem;position:sticky;top:0;z-index:100}
+.tabs{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:1rem 1.25rem;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;font-family:'Tajawal',sans-serif;background:none;border-top:none;border-right:none;border-left:none}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+
+/* ── SECTIONS ── */
+.section{display:none;padding:1.5rem;max-width:900px;margin:0 auto}
+.section.active{display:block}
+
+/* ── SEARCH SECTION ── */
+.search-box{background:var(--navy3);border:1px solid var(--border2);border-radius:12px;padding:1.25rem;margin-bottom:1.25rem}
+.search-row{display:flex;gap:8px;margin-bottom:1rem}
+.search-input{flex:1;height:42px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:var(--navy2);color:var(--text);font-size:14px;font-family:'Tajawal',sans-serif;outline:none;transition:border .2s}
+.search-input:focus{border-color:var(--teal)}
+.search-input::placeholder{color:var(--text3)}
+.btn-clear{height:42px;padding:0 16px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s}
+.btn-clear:hover{background:var(--card2);color:var(--text)}
+
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.f-btn{height:28px;padding:0 12px;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;white-space:nowrap}
+.f-btn:hover{border-color:var(--teal);color:var(--teal)}
+.f-btn.active{background:var(--teal);border-color:var(--teal);color:var(--navy)}
+
+.legend{display:flex;flex-wrap:wrap;gap:14px;padding:.75rem 0;border-top:1px solid var(--border);margin-top:.75rem}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.result-count{font-size:12px;color:var(--text3);margin-bottom:.75rem}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.125rem;margin-bottom:8px;border-right:3px solid transparent;transition:border-color .2s}
+.card:hover{border-color:var(--border2)}
+.card.mandatory{border-right-color:var(--blue)}
+.card.advisory{border-right-color:var(--green)}
+.card.exempt{border-right-color:var(--amber)}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.card-name{font-size:14px;font-weight:500;color:var(--text);line-height:1.45;flex:1}
+.badge{font-size:11px;padding:2px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0;font-weight:500}
+.badge-mandatory{background:var(--blue-dim);color:#85B7EB}
+.badge-advisory{background:var(--green-dim);color:#5DCAA5}
+.badge-exempt{background:var(--amber-dim);color:#EF9F27}
+
+.card-body{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card-details{flex:1}
+.card-detail{font-size:12px;color:var(--text2);line-height:1.7}
+.card-detail strong{color:var(--text);font-weight:500}
+.card-ref{font-size:11px;color:var(--text3);margin-top:3px;font-family:'IBM Plex Mono',monospace}
+.card-dur{text-align:left;flex-shrink:0}
+.dur-num{font-size:24px;font-weight:700;color:var(--teal);line-height:1;display:block}
+.dur-unit{font-size:12px;color:var(--text2)}
+.dur-exempt{font-size:14px;font-weight:500;color:var(--amber)}
+
+.card-warn{font-size:11px;color:#EF9F27;background:var(--amber-dim);border:1px solid #BA751730;padding:4px 10px;border-radius:6px;margin-top:8px;line-height:1.5}
+
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text2)}
+.empty-icon{font-size:36px;margin-bottom:.5rem;opacity:.4}
+
+/* ── DECISION ENGINE ── */
+.engine-intro{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.125rem;margin-bottom:1.25rem;font-size:13px;color:var(--text2);line-height:1.7}
+.engine-intro strong{color:var(--text)}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.25rem}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:12px;color:var(--text2);font-weight:500}
+.form-select,.form-input-field{height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--border2);background:var(--navy2);color:var(--text);font-size:13px;font-family:'Tajawal',sans-serif;outline:none;transition:border .2s}
+.form-select:focus,.form-input-field:focus{border-color:var(--teal)}
+.btn-analyze{width:100%;height:44px;border-radius:8px;background:var(--teal);border:none;color:var(--navy);font-size:15px;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;margin-bottom:1.25rem}
+.btn-analyze:hover{background:var(--teal2)}
+
+.result-box{border-radius:10px;padding:1.125rem;border:1px solid;margin-bottom:1rem}
+.result-box.high{border-color:var(--red);background:var(--red-dim)}
+.result-box.medium{border-color:var(--amber);background:var(--amber-dim)}
+.result-box.low{border-color:var(--green);background:var(--green-dim)}
+.result-box.info{border-color:var(--border2);background:var(--card)}
+.result-title{font-size:14px;font-weight:700;margin-bottom:.5rem}
+.result-title.high{color:#F09595}
+.result-title.medium{color:#EF9F27}
+.result-title.low{color:#5DCAA5}
+.result-body{font-size:13px;line-height:1.7;color:var(--text2)}
+.result-body strong{color:var(--text)}
+
+.rules-triggered{margin-top:.75rem}
+.rule-item{display:flex;gap:8px;align-items:flex-start;padding:.5rem .75rem;border-radius:6px;margin-bottom:6px;font-size:12px;line-height:1.6}
+.rule-item.critical{background:#A32D2D18;border:1px solid #A32D2D40}
+.rule-item.major{background:#BA751718;border:1px solid #BA751740}
+.rule-item.minor{background:#0F6E5618;border:1px solid #0F6E5640}
+.rule-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);white-space:nowrap;margin-top:1px}
+.rule-text{color:var(--text2)}
+.sev-badge{font-size:10px;padding:1px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.sev-critical{background:#A32D2D40;color:#F09595}
+.sev-major{background:#BA751740;color:#EF9F27}
+
+/* ── PROTOCOL SECTION ── */
+.protocol-tabs{display:flex;gap:6px;margin-bottom:1.25rem}
+.p-tab{height:34px;padding:0 16px;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s}
+.p-tab.active{background:var(--teal);border-color:var(--teal);color:var(--navy);font-weight:700}
+.p-tab:hover:not(.active){border-color:var(--teal);color:var(--teal)}
+.p-content{display:none}.p-content.active{display:block}
+
+.step-item{display:flex;gap:12px;padding:.875rem 0;border-bottom:1px solid var(--border)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--teal-dim);border:1px solid var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--teal);flex-shrink:0}
+.step-body{flex:1}
+.step-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.step-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.step-tag{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--card2);color:var(--text2);border:1px solid var(--border)}
+
+.stage-item{padding:.875rem 0;border-bottom:1px solid var(--border)}
+.stage-item:last-child{border-bottom:none}
+.stage-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.stage-title{font-size:14px;font-weight:500;color:var(--text)}
+.stage-verdict{font-size:12px;padding:2px 10px;border-radius:6px;font-weight:500}
+.verdict-reject{background:var(--red-dim);color:#F09595;border:1px solid #A32D2D40}
+.verdict-cond{background:var(--amber-dim);color:#EF9F27;border:1px solid #BA751740}
+.verdict-ok{background:var(--green-dim);color:#5DCAA5;border:1px solid #0F6E5640}
+.stage-req{font-size:12px;color:var(--text2);line-height:1.6}
+.stage-req strong{color:var(--text)}
+
+/* ── DISCLAIMER ── */
+.disclaimer{background:var(--amber-dim);border:1px solid #BA751750;border-radius:10px;padding:1rem 1.125rem;margin-bottom:1.25rem}
+.disclaimer-title{font-size:13px;font-weight:700;color:#EF9F27;margin-bottom:.375rem}
+.disclaimer-text{font-size:12px;color:var(--text2);line-height:1.7}
+
+.section-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('search',this)">🔍 البحث عن مدة صلاحية</button>
+    <button class="tab" onclick="showTab('engine',this)">⚙️ محرك القرار</button>
+    <button class="tab" onclick="showTab('protocol',this)">📋 بروتوكول التحديد</button>
+  </div>
+</div>
+
+<!-- ══════════ TAB 1: SEARCH ══════════ -->
+<div class="section active" id="tab-search">
+
+  <div class="disclaimer">
+    <div class="disclaimer-title">⚠️ تنبيه قانوني</div>
+    <div class="disclaimer-text">المدد الإلزامية مستمدة من JS 288:2023 — قاعدة فنية أردنية إلزامية. المدد الاسترشادية للإرشاد فقط تحت نفس شروط التصنيع والحفظ ولا تُعدّ اعتماداً رسمياً. المسؤولية القانونية تقع على المنشأة المصنّعة والمستوردة (JS 288 البند 4-5).</div>
+  </div>
+
+  <div class="search-box">
+    <div class="search-row">
+      <input class="search-input" id="q" type="text" placeholder="ابحث: دجاج، أسماك، حليب، جبن، خبز..." oninput="doSearch()">
+      <button class="btn-clear" onclick="clearSearch()">مسح</button>
+    </div>
+    <div class="filters">
+      <button class="f-btn active" data-cat="all" onclick="setFilter(this)">الكل</button>
+      <button class="f-btn" data-cat="لحوم" onclick="setFilter(this)">اللحوم</button>
+      <button class="f-btn" data-cat="أسماك" onclick="setFilter(this)">الأسماك</button>
+      <button class="f-btn" data-cat="ألبان" onclick="setFilter(this)">الألبان والبيض</button>
+      <button class="f-btn" data-cat="مخبوزات" onclick="setFilter(this)">المخبوزات</button>
+      <button class="f-btn" data-cat="وجبات" onclick="setFilter(this)">الوجبات الجاهزة</button>
+      <button class="f-btn" data-cat="مجمدات" onclick="setFilter(this)">المجمدات</button>
+      <button class="f-btn" data-cat="معفى" onclick="setFilter(this)">المعفيات</button>
+    </div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>إلزامي — JS 288:2023</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>استرشادي دولي</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>معفى من الإعلان</div>
+    </div>
+  </div>
+
+  <div class="result-count" id="rcount"></div>
+  <div id="rlist"></div>
+</div>
+
+<!-- ══════════ TAB 2: DECISION ENGINE ══════════ -->
+<div class="section" id="tab-engine">
+
+  <div class="disclaimer">
+    <div class="disclaimer-title">⚠️ أداة توثيقية وإرشادية</div>
+    <div class="disclaimer-text">المخرج هو توثيق منهجي لمبررات مدة الصلاحية — لا يُعدّ اعتماداً رسمياً. للجهات الرقابية الحق بطلب الأدلة العلمية الكاملة.</div>
+  </div>
+
+  <div class="engine-intro">
+    <strong>كيف يعمل محرك القرار:</strong> أدخل بيانات منتجك وسيحدد النظام مستوى الخطر والمسار المطلوب — هل يوجد مدة إلزامية، أم إعفاء، أم يحتاج دراسة تحديد مدة، أم تمديد. القرار يستند إلى قواعد SLE-001 إلى SLE-012 من FSAI GN18 ومعايير Codex وEU.
+  </div>
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label class="form-label">حالة المنتج</label>
+      <select class="form-select" id="rte">
+        <option value="">اختر...</option>
+        <option value="rte">جاهز للأكل (RTE)</option>
+        <option value="cooked">مطبوخ / معالج حرارياً</option>
+        <option value="raw">نيء</option>
+        <option value="dry">جاف / مستقر</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">نوع الحفظ</label>
+      <select class="form-select" id="storage">
+        <option value="">اختر...</option>
+        <option value="chilled">مبرد (≤4°C)</option>
+        <option value="frozen">مجمد (-18°C)</option>
+        <option value="ambient">حرارة الغرفة</option>
+        <option value="sterile">معقم تجارياً / UHT</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">مكونات حيوانية؟</label>
+      <select class="form-select" id="animal">
+        <option value="">اختر...</option>
+        <option value="yes">نعم (لحوم، دواجن، أسماك، بيض، ألبان)</option>
+        <option value="no">لا</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">مقطع / مفروم / مخلوط؟</label>
+      <select class="form-select" id="processed">
+        <option value="">اختر...</option>
+        <option value="yes">نعم</option>
+        <option value="no">لا — كامل / غير معالج</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">قيمة pH (إن توفرت)</label>
+      <input class="form-input-field" id="ph" type="number" step="0.1" min="1" max="14" placeholder="مثال: 6.2">
+    </div>
+    <div class="form-group">
+      <label class="form-label">النشاط المائي aw (إن توفر)</label>
+      <input class="form-input-field" id="aw" type="number" step="0.01" min="0" max="1" placeholder="مثال: 0.97">
+    </div>
+    <div class="form-group">
+      <label class="form-label">يوجد نظام HACCP / GMP موثق؟</label>
+      <select class="form-select" id="haccp">
+        <option value="">اختر...</option>
+        <option value="yes">نعم</option>
+        <option value="no">لا</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">الطلب</label>
+      <select class="form-select" id="request">
+        <option value="">اختر...</option>
+        <option value="new">تحديد مدة صلاحية جديدة</option>
+        <option value="extend">تمديد مدة قائمة</option>
+        <option value="check">التحقق من مدة معلنة</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="btn-analyze" onclick="runEngine()">تحليل المنتج ← محرك القرار</button>
+  <div id="engine-result"></div>
+</div>
+
+<!-- ══════════ TAB 3: PROTOCOL ══════════ -->
+<div class="section" id="tab-protocol">
+
+  <div class="protocol-tabs">
+    <button class="p-tab active" onclick="showPTab('determine',this)">تحديد مدة صلاحية</button>
+    <button class="p-tab" onclick="showPTab('extend',this)">تمديد مدة صلاحية</button>
+  </div>
+
+  <!-- DETERMINE -->
+  <div class="p-content active" id="ptab-determine">
+    <div class="engine-intro" style="margin-bottom:1.25rem">
+      بروتوكول 10 خطوات للمنتجات التي لا توجد لها مدة محددة في JS 288 أو المراجع الاسترشادية. يتطلب مختص سلامة غذاء ومختبر معتمد. المخرج: <strong>Declared Shelf Life with Supporting Evidence</strong> — وليس اعتماداً رسمياً.
+    </div>
+
+    <div class="section-title">خطوات البروتوكول</div>
+    <div id="determine-steps"></div>
+  </div>
+
+  <!-- EXTEND -->
+  <div class="p-content" id="ptab-extend">
+    <div class="engine-intro" style="margin-bottom:1.25rem">
+      لا يتم تمديد مدة الصلاحية اعتباطاً أو بناءً على تشابه منتجات. كل مرحلة لها شرط واضح — إذا لم يتحقق يُرفض التمديد أو يُطلب استكمال.
+    </div>
+
+    <div class="section-title">مراحل التمديد</div>
+    <div id="extend-stages"></div>
+  </div>
+</div>
+
+<script>
+// ══════════ DATA ══════════
+var PRODUCTS=[
+  {n:'لحوم الدواجن الطازجة المبردة الكاملة (دجاج، بط، أوز، رومي...)',c:'لحوم',p:'عبوة مناسبة',d:'5',u:'أيام من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'لحوم الدواجن الطازجة المبردة الكاملة',c:'لحوم',p:'فاكيوم',d:'7',u:'أيام من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأعضاء الداخلية الطازجة المبردة للدجاج',c:'لحوم',p:'عبوة مناسبة',d:'3',u:'أيام من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأعضاء الداخلية الطازجة المبردة للدجاج',c:'لحوم',p:'فاكيوم',d:'7',u:'أيام من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'اللحوم الطازجة المبردة — بقر، جاموس، جمال، ماعز',c:'لحوم',p:'عبوة مناسبة',d:'14',u:'يوم من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'اللحوم الطازجة المبردة — بقر، جاموس، جمال',c:'لحوم',p:'فاكيوم / MAP',d:'120',u:'يوم من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'اللحوم الطازجة المبردة — ضأن، ماعز',c:'لحوم',p:'فاكيوم / MAP',d:'90',u:'يوم من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأعضاء الداخلية المبردة من المواشي',c:'لحوم',p:'عبوة مناسبة',d:'7',u:'أيام من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأعضاء الداخلية المبردة من المواشي',c:'لحوم',p:'فاكيوم',d:'30',u:'يوم من الذبح',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'لحم البيرغر الطازج المبرد',c:'لحوم',p:'عبوة مناسبة',d:'2',u:'يوم',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:'خطر Listeria — عمر قصير جداً'},
+  {n:'الأسماك المبردة المدخنة على البارد',c:'أسماك',p:'عبوة مناسبة',d:'7',u:'أيام',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأسماك المبردة المدخنة على الساخن',c:'أسماك',p:'عبوة مناسبة',d:'14',u:'يوم',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأسماك المبردة المدخنة',c:'أسماك',p:'فاكيوم',d:'90',u:'يوم',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأسماك الطازجة المبردة غير مُزالة الأحشاء',c:'أسماك',p:'عبوة مناسبة',d:'7',u:'أيام من الصيد',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأسماك الطازجة المبردة منزوعة الأحشاء',c:'أسماك',p:'عبوة مناسبة',d:'9',u:'أيام من الصيد',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأسماك الطازجة المبردة',c:'أسماك',p:'فاكيوم',d:'14',u:'يوم من الصيد',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الأسماك الطازجة المبردة',c:'أسماك',p:'MAP',d:'21',u:'يوم من الصيد',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'اللبن الرائب / اللبن المُطعَّم (غير معالج حرارياً)',c:'ألبان',p:'عبوة مناسبة',d:'10',u:'أيام',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'اللبنة (غير معالجة حرارياً)',c:'ألبان',p:'عبوة مناسبة',d:'14',u:'يوم',s:'مبرد ≤4°C',t:'mandatory',r:'JS 288:2023 جدول 1',w:''},
+  {n:'الحليب الطازج المبستر',c:'ألبان',p:'عبوة مغلقة',d:'7–14',u:'يوم',s:'مبرد ≤4°C',t:'advisory',r:'Codex CXS 206 / EU Reg 853/2004',w:''},
+  {n:'الحليب UHT',c:'ألبان',p:'عبوة معقمة مغلقة',d:'6–12',u:'شهراً',s:'حرارة الغرفة',t:'advisory',r:'Codex CXS 206',w:'بعد الفتح: 3–5 أيام مبرد'},
+  {n:'الكريمة / القشطة المبردة',c:'ألبان',p:'عبوة مغلقة',d:'7–14',u:'يوم',s:'مبرد ≤4°C',t:'advisory',r:'EU Reg 853/2004 / NACMCF',w:''},
+  {n:'الجبن الطازج (ريكوتا، كوتيج، كريم تشيز)',c:'ألبان',p:'عبوة مغلقة',d:'7–14',u:'يوم',s:'مبرد ≤4°C',t:'advisory',r:'Codex CXS 221 / EU',w:'خطر Listeria — يستلزم دراسة'},
+  {n:'الجبن المُعتَّق الصلب (شيدر، إيدام، غودة)',c:'ألبان',p:'عبوة مغلقة',d:'3–12',u:'شهراً',s:'مبرد ≤8°C',t:'advisory',r:'Codex CXS 283',w:''},
+  {n:'الجبن الطري المنضج (بري، كاممبير)',c:'ألبان',p:'عبوة مغلقة',d:'2–4',u:'أسابيع',s:'مبرد ≤4°C',t:'advisory',r:'EU Reg 2073/2005',w:'خطر Listeria — دراسة إلزامية'},
+  {n:'الزبدة / السمن الطبيعي',c:'ألبان',p:'عبوة مغلقة',d:'3–6',u:'أشهر',s:'مبرد ≤4°C',t:'advisory',r:'Codex CXS 279 / GSO',w:''},
+  {n:'البيض الطازج بقشره',c:'ألبان',p:'عبوة أصلية',d:'28',u:'يوم',s:'مبرد ≤5°C',t:'advisory',r:'EU Reg 589/2008 / USDA',w:''},
+  {n:'البيض السائل / المبستر',c:'ألبان',p:'عبوة مغلقة معقمة',d:'3–5',u:'أيام',s:'مبرد ≤4°C',t:'advisory',r:'FDA 21CFR / EU',w:'بعد الفتح خلال 72 ساعة'},
+  {n:'الخبز المعبأ (يُستهلك بعد 24 ساعة من الإنتاج)',c:'مخبوزات',p:'معبأ محكم',d:'3–7',u:'أيام',s:'حرارة الغرفة',t:'advisory',r:'Codex CXG 2 / FDA',w:'الخبز غير المعبأ خلال 24 ساعة: معفى بـ JS 288'},
+  {n:'الكيك والمعجنات بالكريمة',c:'مخبوزات',p:'معبأ مبرد',d:'2–5',u:'أيام',s:'مبرد ≤4°C',t:'advisory',r:'NACMCF / EU',w:'خطر S. aureus — عمر قصير'},
+  {n:'البسكويت والكعك الجاف',c:'مخبوزات',p:'معبأ محكم',d:'3–12',u:'أشهر',s:'جاف بارد',t:'advisory',r:'FDA 21CFR / Codex',w:''},
+  {n:'المعجنات المجمدة الجاهزة للخبز',c:'مخبوزات',p:'معبأ مجمد',d:'3–6',u:'أشهر',s:'-18°C',t:'advisory',r:'EU Reg 1169/2011 / Codex',w:'بعد تذويب: استخدام فوري'},
+  {n:'وجبات جاهزة مبردة (RTE) مطبوخة',c:'وجبات',p:'معبأ مغلق مبرد',d:'3–5',u:'أيام',s:'مبرد ≤4°C',t:'advisory',r:'EU Reg 2073/2005 / NACMCF',w:'خطر Listeria — يستلزم دراسة'},
+  {n:'وجبات جاهزة مجمدة',c:'وجبات',p:'معبأ مجمد',d:'12–24',u:'شهراً',s:'-18°C',t:'advisory',r:'Codex CAC/RCP 8 / EU',w:'بعد تذويب: طبخ فوري'},
+  {n:'شوربة / مرق معبأ مبرد',c:'وجبات',p:'معبأ مغلق مبرد',d:'5–7',u:'أيام',s:'مبرد ≤4°C',t:'advisory',r:'FDA / EU Lm guidance',w:'خطر Listeria — يستلزم دراسة'},
+  {n:'صلصة الطماطم المعبأة (معلب)',c:'وجبات',p:'معلب تجاري',d:'12–24',u:'شهراً',s:'حرارة الغرفة',t:'advisory',r:'Codex CXS 057 / FDA',w:'بعد الفتح: 5–7 أيام مبرد'},
+  {n:'صلصة المايونيز',c:'وجبات',p:'عبوة مغلقة',d:'6–12',u:'أشهر',s:'حرارة الغرفة',t:'advisory',r:'FDA 21CFR 169 / Codex',w:'بعد الفتح: شهرين مبرد'},
+  {n:'المعلبات التجارية (خضار، فاصوليا، فاكهة)',c:'وجبات',p:'معلب تجاري مغلق',d:'24–48',u:'شهراً',s:'حرارة الغرفة',t:'advisory',r:'Codex CAC/RCP 23 / FDA',w:'بعد الفتح: مبرد 3–4 أيام'},
+  {n:'التونا والأسماك المعلبة',c:'أسماك',p:'معلب تجاري مغلق',d:'36–60',u:'شهراً',s:'حرارة الغرفة',t:'advisory',r:'Codex CXS 119 / FDA',w:'بعد الفتح: مبرد يومان'},
+  {n:'الأسماك والمأكولات البحرية المجمدة',c:'مجمدات',p:'معبأ مجمد',d:'6–24',u:'شهراً',s:'-18°C',t:'advisory',r:'Codex CXS 036 / EU Reg 853/2004',w:''},
+  {n:'الدواجن المجمدة',c:'مجمدات',p:'معبأ مجمد',d:'9–12',u:'شهراً',s:'-18°C',t:'advisory',r:'Codex CAC/RCP 14 / GSO',w:'بعد تذويب: طبخ خلال 24 ساعة'},
+  {n:'اللحوم المجمدة (بقري، ضأن)',c:'مجمدات',p:'معبأ مجمد',d:'12',u:'شهراً',s:'-18°C',t:'advisory',r:'Codex CAC/RCP 13 / GSO',w:''},
+  {n:'الخضروات المجمدة',c:'مجمدات',p:'معبأ مجمد',d:'18–24',u:'شهراً',s:'-18°C',t:'advisory',r:'Codex CXS 320 / EU / GSO',w:''},
+  {n:'الفاكهة والخضروات الطازجة غير المقشورة',c:'معفى',p:'—',d:'معفى',u:'',s:'حسب النوع',t:'exempt',r:'JS 288:2023 الملحق أ',w:'لا يشمل المقطوعة أو المعبأة'},
+  {n:'المخبوزات والمعجنات (تُستهلك خلال 24 ساعة)',c:'معفى',p:'—',d:'معفى',u:'',s:'حرارة الغرفة',t:'exempt',r:'JS 288:2023 الملحق أ',w:'المعبأ لأكثر من 24 ساعة غير معفى'},
+  {n:'الخل المعبأ في عبوات زجاجية',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:''},
+  {n:'ملح الطعام غير المدعم باليود',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف',t:'exempt',r:'JS 288:2023 الملحق أ',w:'الملح المدعم باليود غير معفى'},
+  {n:'السكر الصلب',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:'السكر السائل غير معفى'},
+  {n:'البقوليات الجافة غير المطبوخة (عدس، فاصوليا، حمص، فول...)',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:'المعلبة أو المطبوخة غير معفاة'},
+  {n:'الشاي السائب',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:'الشاي المعبأ في أكياس غير معفى'},
+  {n:'التوابل والبهارات الكاملة غير المطحونة',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:'البهارات المطحونة غير معفاة'},
+  {n:'الحبوب الجافة غير المعبأة (أرز، شعير، شوفان، ذرة...)',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:'الحبوب المعبأة غير معفاة'},
+  {n:'العلكة الخام',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:''},
+  {n:'جلوكوز سائل ومجفف',c:'معفى',p:'—',d:'معفى',u:'',s:'جاف بارد',t:'exempt',r:'JS 288:2023 الملحق أ',w:''},
+];
+
+var LABELS={mandatory:'إلزامي أردني',advisory:'استرشادي دولي',exempt:'معفى من الإعلان'};
+var currentCat='all', currentQ='';
+
+function filtered(){
+  return PRODUCTS.filter(function(d){
+    var cOk=currentCat==='all'||d.c===currentCat;
+    var q=currentQ.trim();
+    var qOk=!q||d.n.indexOf(q)>-1||d.c.indexOf(q)>-1||d.p.indexOf(q)>-1;
+    return cOk&&qOk;
+  });
+}
+
+function renderCards(list){
+  var el=document.getElementById('rlist');
+  var cnt=document.getElementById('rcount');
+  if(!list.length){
+    cnt.textContent='';
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">◌</div><div>لا توجد نتائج — جرّب كلمة أخرى</div></div>';
+    return;
+  }
+  cnt.textContent='عرض '+list.length+' نتيجة';
+  el.innerHTML=list.map(function(d){
+    var durH=d.d==='معفى'
+      ?'<div class="dur-exempt">معفى<br>من الإعلان</div>'
+      :'<div><span class="dur-num">'+d.d+'</span><span class="dur-unit">'+d.u+'</span></div>';
+    var wH=d.w?'<div class="card-warn">⚠ '+d.w+'</div>':'';
+    return '<div class="card '+d.t+'">'
+      +'<div class="card-top"><div class="card-name">'+d.n+'</div>'
+      +'<span class="badge badge-'+d.t+'">'+LABELS[d.t]+'</span></div>'
+      +'<div class="card-body"><div class="card-details">'
+      +(d.p!=='—'?'<div class="card-detail"><strong>التعبئة:</strong> '+d.p+'</div>':'')
+      +'<div class="card-detail"><strong>التخزين:</strong> '+d.s+'</div>'
+      +'<div class="card-ref">'+d.r+'</div>'
+      +'</div><div class="card-dur">'+durH+'</div></div>'
+      +wH+'</div>';
+  }).join('');
+}
+
+function doSearch(){currentQ=document.getElementById('q').value;renderCards(filtered());}
+function clearSearch(){document.getElementById('q').value='';currentQ='';renderCards(filtered());}
+function setFilter(btn){
+  document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');currentCat=btn.dataset.cat;renderCards(filtered());
+}
+
+// ══ ENGINE ══
+function runEngine(){
+  var rte=document.getElementById('rte').value;
+  var storage=document.getElementById('storage').value;
+  var animal=document.getElementById('animal').value;
+  var processed=document.getElementById('processed').value;
+  var ph=parseFloat(document.getElementById('ph').value);
+  var aw=parseFloat(document.getElementById('aw').value);
+  var haccp=document.getElementById('haccp').value;
+  var request=document.getElementById('request').value;
+
+  if(!rte||!storage||!animal||!request){
+    document.getElementById('engine-result').innerHTML='<div class="result-box info"><div class="result-body">يرجى تعبئة الحقول الإلزامية: حالة المنتج، نوع الحفظ، مكونات حيوانية، الطلب.</div></div>';
+    return;
+  }
+
+  var score=0,rules=[],level='',verdict='',path='';
+
+  // Score calculation
+  if(rte==='rte') score+=4;
+  if(rte==='raw') score+=2;
+  if(storage==='chilled') score+=2;
+  if(storage==='ambient'&&rte==='rte') score+=1;
+  if(animal==='yes') score+=2;
+  if(processed==='yes') score+=2;
+  if(!isNaN(ph)&&ph>4.6) score+=1;
+  if(!isNaN(aw)&&aw>0.85) score+=1;
+  if(haccp==='no') score+=2;
+
+  // Rules
+  if(rte==='rte'&&storage==='chilled'&&animal==='yes'){
+    rules.push({id:'SLE-003',sev:'critical',msg:'غذاء جاهز للأكل ومبرد وحساس — يلزم تبرير علمي للمدة وتقييم Listeria'});
+  }
+  if(storage!=='sterile'&&rte!=='dry'){
+    rules.push({id:'SLE-004',sev:'major',msg:'نتيجة العدد الميكروبي المنخفض لا تعني عدم وجود بكتيريا قابلة للنمو لاحقاً'});
+  }
+  if(request==='extend'){
+    rules.push({id:'SLE-010',sev:'critical',msg:'تمديد المدة يلزم بيانات رصد خلال العمر الحالي وما بعده + هامش أمان'});
+  }
+  if(haccp==='no'){
+    rules.push({id:'SLE-007',sev:'major',msg:'غياب HACCP/GMP يقلل موثوقية المدة المحددة — المنشأة مسؤولة عن التوثيق'});
+  }
+  if(!isNaN(ph)&&ph>4.6&&rte==='rte'){
+    rules.push({id:'SLE-003',sev:'critical',msg:'pH أعلى من 4.6 + منتج RTE = بيئة تدعم نمو الممرضات — خطر مرتفع'});
+  }
+  if(processed==='yes'&&animal==='yes'){
+    rules.push({id:'SLE-006',sev:'major',msg:'منتج مخلوط/مفروم برمجة حيوانية — لا يقبل تحديد المدة بالمقارنة مع منتج مشابه فقط'});
+  }
+
+  // Level & verdict
+  if(score>=8){level='high';verdict='High Risk';path='Level 3: يحتاج دراسة Validation / Challenge Testing عند الحاجة';}
+  else if(score>=4){level='medium';verdict='Medium Risk';path='Level 2: يحتاج سجلات تشغيلية مستمرة وفحوص منتقاة';}
+  else{level='low';verdict='Low Risk';path='Level 1: مدة محافظة مشروطة بشروط حفظ موثقة';}
+
+  if(storage==='sterile'){level='low';verdict='منتج معقم تجارياً / UHT';path='مسار المعقمات — توثيق عملية التعقيم وسلامة العبوة إلزامي';}
+
+  var levelLabels={high:'خطر مرتفع',medium:'خطر متوسط',low:'خطر منخفض'};
+  var rulesHtml=rules.length?'<div class="rules-triggered">'+rules.map(function(r){
+    return '<div class="rule-item '+r.sev+'">'
+      +'<span class="rule-id">'+r.id+'</span>'
+      +'<span class="rule-text">'+r.msg+'</span>'
+      +'<span class="sev-badge sev-'+r.sev+'">'+(r.sev==='critical'?'حرج':'مهم')+'</span>'
+      +'</div>';
+  }).join('')+'</div>':'';
+
+  document.getElementById('engine-result').innerHTML=
+    '<div class="result-box '+level+'">'
+    +'<div class="result-title '+level+'">'+(levelLabels[level]||verdict)+' — Risk Score: '+score+'</div>'
+    +'<div class="result-body">'
+    +'<strong>المسار المطلوب:</strong> '+path+'<br>'
+    +(haccp==='no'?'<strong>تحذير:</strong> غياب HACCP/GMP يضعف قبول المنهجية رقابياً<br>':'')
+    +(score>=8?'<strong>ملاحظة:</strong> منتج عالي الخطورة — لا يصدر تقرير مدة صلاحية دون فحوص موثقة من مختبر معتمد':'')
+    +'</div>'
+    +rulesHtml
+    +'</div>'
+    +'<div class="result-box info"><div class="result-body" style="font-size:12px;color:var(--text2)">'
+    +'<strong>الخطوة التالية:</strong> '
+    +(request==='extend'?'اتبع بروتوكول التمديد في تبويب "بروتوكول التحديد" ← تمديد مدة صلاحية'
+    :request==='new'?'اتبع بروتوكول التحديد في تبويب "بروتوكول التحديد" ← تحديد مدة صلاحية'
+    :'راجع البيانات مع مختص سلامة غذاء وقارن بالمدة المعلنة حالياً')
+    +'</div></div>';
+}
+
+// ══ PROTOCOL ══
+var STEPS=[
+  {n:1,t:'تعريف المنتج',d:'التركيبة، المعالجة، التعبئة، الحصة، طريقة الاستخدام — لا تبدأ الدراسة دون توصيف كامل',tags:['مختص سلامة غذاء','وصف المنتج / المواصفة الداخلية']},
+  {n:2,t:'العوامل الداخلية',d:'قياس أو توثيق pH، aw، جهد الأكسدة، المواد المضادة للميكروبات — لا تعتمد على الافتراض',tags:['مختبر + مختص','نتائج pH/aw أو مراجع موثقة']},
+  {n:3,t:'العوامل الخارجية',d:'درجة الحرارة، الرطوبة، التغليف، MAP، التوزيع، العرض، ظروف بعد الفتح',tags:['الجودة / التشغيل','خطة حفظ وتوزيع']},
+  {n:4,t:'نظام التصنيع',d:'تقييم GMP/HACCP وثقافة العاملين والبيئة — ضعف النظام يقلل موثوقية المدة',tags:['إدارة المنشأة','HACCP plan, GMP records']},
+  {n:5,t:'خطة الدراسة',d:'تحديد مدة الدراسة وظروفها ونقاط الفحص — يجب أن تغطي العمر المقترح وما بعده للهامش',tags:['مختص','Study plan — يُعتمد قبل التنفيذ']},
+  {n:6,t:'خطة العينات',d:'حجم وعدد العينات وتكرار الفحص — عينات كافية وممثلة للدفعات والظروف',tags:['مختص / مختبر','Sampling plan']},
+  {n:7,t:'الفحوص',d:'ميكروبيولوجية + كيميائية/فيزيائية + حسية — تحدد حسب المنتج والخطر وليس قائمة ثابتة',tags:['مختبر معتمد','Lab reports + sensory records']},
+  {n:8,t:'تفسير النتائج',d:'تحديد نقطة الفشل Safety/Quality — السلامة مقدمة على الجودة — لا تكفي قراءة نقطة واحدة',tags:['مختص','Trend analysis']},
+  {n:9,t:'هامش الأمان',d:'تحديد مدة أقل من نقطة الفشل — تؤخذ ظروف الاستخدام والانحرافات المتوقعة بالحسبان',tags:['مختص','Safety margin justification']},
+  {n:10,t:'التوثيق والاعتماد',d:'تجميع كل الأدلة وتوقيع المسؤول الفني — جاهز للمراجعة من جهة رقابية أو علمية',tags:['المنشأة','Final Declared Shelf Life Report']},
+];
+
+var STAGES=[
+  {t:'Pre-screen — التحقق الابتدائي',v:'رفض إذا لم يتحقق',vc:'reject',r:'<strong>المطلوب:</strong> نتائج فحوص مطابقة ابتدائية وسلامة المواد الأولية — التمديد لا يعالج تلوثاً أصلياً'},
+  {t:'البيانات التاريخية',v:'يحتاج أدلة',vc:'cond',r:'<strong>المطلوب:</strong> شكاوى، مرتجعات، سجلات حرارة، نتائج مختبر سابقة — البيانات داعمة لا بديلة عن الدراسة'},
+  {t:'نافذة الدراسة',v:'رفض إذا لم تغطِ',vc:'reject',r:'<strong>المطلوب:</strong> نقاط فحص حتى نهاية المدة الجديدة المقترحة — لا يمكن إثبات تمديد دون رصد الفترة الجديدة'},
+  {t:'ثبات الظروف التشغيلية',v:'دراسة جديدة إذا تغيرت',vc:'cond',r:'<strong>المطلوب:</strong> نفس التركيبة، المورد، التعبئة، الحرارة، العملية — أي تغيير = دراسة مستقلة'},
+  {t:'الفحوص المناسبة',v:'قبول مشروط أو رفض',vc:'cond',r:'<strong>المطلوب:</strong> ميكروبي + حسي + فيزيائي/كيميائي حسب المنتج — APC وحده لا يثبت السلامة'},
+  {t:'المحتوى الغذائي عند الحاجة',v:'شرط إضافي',vc:'cond',r:'<strong>المطلوب:</strong> تحقق من ثبات الفيتامينات/المغذيات عند وجود ادعاءات أو تدعيم'},
+  {t:'هامش الأمان والاعتماد',v:'إصدار التقرير',vc:'ok',r:'<strong>المطلوب:</strong> مدة أقل من نقطة الفشل + تعهد مسؤولية موقع من المسؤول الفني'},
+];
+
+document.getElementById('determine-steps').innerHTML=STEPS.map(function(s){
+  return '<div class="step-item">'
+    +'<div class="step-num">'+s.n+'</div>'
+    +'<div class="step-body">'
+    +'<div class="step-title">'+s.t+'</div>'
+    +'<div class="step-desc">'+s.d+'</div>'
+    +'<div class="step-meta">'+s.tags.map(function(t){return '<span class="step-tag">'+t+'</span>';}).join('')+'</div>'
+    +'</div></div>';
+}).join('');
+
+document.getElementById('extend-stages').innerHTML=STAGES.map(function(s){
+  return '<div class="stage-item">'
+    +'<div class="stage-header">'
+    +'<div class="stage-title">'+s.t+'</div>'
+    +'<span class="stage-verdict verdict-'+s.vc+'">'+s.v+'</span>'
+    +'</div>'
+    +'<div class="stage-req">'+s.r+'</div>'
+    +'</div>';
+}).join('');
+
+// ══ TABS ══
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function showPTab(id,btn){
+  document.querySelectorAll('.p-content').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.p-tab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Init
+renderCards(PRODUCTS);
+</script>
+</body>
+</html>
