@@ -393,11 +393,11 @@ footer span { color: var(--accent); }
   <div class="logo">
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
+    <a id="nav-shelf-btn" href="shelf-life.html" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;margin-right:.6rem;margin-left:.6rem;text-decoration:none;">مدد الصلاحية</a>
     <button id="langBtn" onclick="toggleLang()" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;cursor:pointer;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;margin-right:.6rem;margin-left:.6rem;">EN</button>
   </div>
   <nav>
     <a href="#tool" id="nav-tool">التدقيق</a>
-    <a href="shelf-life.html" id="nav-shelf">مدد الصلاحية</a>
     <a href="#about" id="nav-about">عن النظام</a>
   </nav>
 </header>
@@ -2617,7 +2617,12 @@ const T = {
 };
 
 let currentLang = 'ar';
-function toggleLang() { currentLang = currentLang==='ar'?'en':'ar'; applyLang(currentLang); }
+function toggleLang() {
+  currentLang = currentLang==='ar'?'en':'ar';
+  applyLang(currentLang);
+  var btn = document.getElementById('nav-shelf-btn');
+  if(btn) btn.href = 'shelf-life.html?lang=' + currentLang;
+}
 
 function applyLang(lang) {
   const t = T[lang], el = id => document.getElementById(id);
