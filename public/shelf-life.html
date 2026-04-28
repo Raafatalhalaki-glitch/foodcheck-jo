@@ -553,6 +553,61 @@ function showPTab(id,btn){
 
 // Init
 renderCards(PRODUCTS);
+
+// ── Language from URL param ──
+(function(){
+  var lang = new URLSearchParams(window.location.search).get('lang');
+  if(lang !== 'en') return;
+  // Tab labels
+  document.querySelectorAll('.tab')[0].textContent = '🔍 Shelf Life Search';
+  document.querySelectorAll('.tab')[1].textContent = '⚙️ Decision Engine';
+  document.querySelectorAll('.tab')[2].textContent = '📋 Determination Protocol';
+  // Disclaimer
+  document.querySelectorAll('.disclaimer-title')[0].textContent = '⚠️ Legal Notice';
+  document.querySelectorAll('.disclaimer-text')[0].textContent = 'Mandatory shelf lives are from JS 288:2023 — a mandatory Jordanian technical regulation. Advisory shelf lives are for guidance only under the same manufacturing and storage conditions and do not constitute official approval. Legal responsibility rests with the manufacturer or importer (JS 288 clause 4-5).';
+  document.querySelectorAll('.disclaimer-title')[1].textContent = '⚠️ Documentary & Advisory Tool';
+  document.querySelectorAll('.disclaimer-text')[1].textContent = 'The output documents the scientific justification for shelf life — it does not constitute official approval. Regulatory authorities have the right to request full scientific evidence.';
+  // Search placeholder
+  document.getElementById('q').placeholder = 'Search: chicken, fish, milk, cheese, bread...';
+  document.querySelector('.btn-clear').textContent = 'Clear';
+  // Filter buttons
+  var fb = document.querySelectorAll('.f-btn');
+  var fl = ['All','Meat','Fish','Dairy & Eggs','Bakery','Ready Meals','Frozen','Exempt'];
+  fb.forEach(function(b,i){ if(fl[i]) b.textContent=fl[i]; });
+  // Legend
+  var li = document.querySelectorAll('.leg-item');
+  if(li[0]) li[0].lastChild.textContent = ' Mandatory — JS 288:2023';
+  if(li[1]) li[1].lastChild.textContent = ' Advisory — International References';
+  if(li[2]) li[2].lastChild.textContent = ' Exempt from Date Marking';
+  // Engine intro
+  document.querySelector('.engine-intro').innerHTML = '<strong>How the Decision Engine works:</strong> Enter your product data and the system will determine the risk level and required pathway — whether there is a mandatory shelf life, an exemption, a need for a shelf-life study, or an extension. Decisions are based on rules SLE-001 to SLE-012 from FSAI GN18, Codex, and EU standards.';
+  // Form labels
+  var labels = document.querySelectorAll('.form-label');
+  var ltext = ['Product Status','Storage Type','Animal Ingredients?','Cut / Minced / Mixed?','pH value (if available)','Water activity aw (if available)','Documented HACCP / GMP system?','Request'];
+  labels.forEach(function(l,i){ if(ltext[i]) l.textContent=ltext[i]; });
+  // Select options
+  var rte = document.getElementById('rte');
+  rte.options[0].text='Select...'; rte.options[1].text='Ready to Eat (RTE)'; rte.options[2].text='Cooked / Heat-treated'; rte.options[3].text='Raw'; rte.options[4].text='Dry / Shelf-stable';
+  var st = document.getElementById('storage');
+  st.options[0].text='Select...'; st.options[1].text='Chilled (≤4°C)'; st.options[2].text='Frozen (-18°C)'; st.options[3].text='Ambient temperature'; st.options[4].text='Commercially sterile / UHT';
+  var an = document.getElementById('animal');
+  an.options[0].text='Select...'; an.options[1].text='Yes (meat, poultry, fish, eggs, dairy)'; an.options[2].text='No';
+  var pr = document.getElementById('processed');
+  pr.options[0].text='Select...'; pr.options[1].text='Yes'; pr.options[2].text='No — whole / unprocessed';
+  var hc = document.getElementById('haccp');
+  hc.options[0].text='Select...'; hc.options[1].text='Yes'; hc.options[2].text='No';
+  var rq = document.getElementById('request');
+  rq.options[0].text='Select...'; rq.options[1].text='Determine new shelf life'; rq.options[2].text='Extend existing shelf life'; rq.options[3].text='Verify declared shelf life';
+  // Analyze button
+  document.querySelector('.btn-analyze').textContent = 'Analyse Product → Decision Engine';
+  // Protocol tabs
+  document.querySelectorAll('.p-tab')[0].textContent = 'Shelf Life Determination';
+  document.querySelectorAll('.p-tab')[1].textContent = 'Shelf Life Extension';
+  document.querySelector('#ptab-determine .engine-intro').innerHTML = '10-step protocol for products with no shelf life specified in JS 288 or international advisory references. Requires a food safety specialist and an accredited laboratory. Output: <strong>Declared Shelf Life with Supporting Evidence</strong> — not official approval.';
+  document.querySelector('#ptab-extend .engine-intro').innerHTML = 'Shelf life must not be extended arbitrarily or based on similar products. Each stage has a clear requirement — if not met, the extension is rejected or completion is required.';
+  document.querySelectorAll('.section-title')[0].textContent = 'Protocol Steps';
+  document.querySelectorAll('.section-title')[1].textContent = 'Extension Stages';
+})();
 </script>
 </body>
 </html>
