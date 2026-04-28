@@ -366,37 +366,107 @@ var PRODUCTS=[
 ];
 
 var LABELS={mandatory:'إلزامي أردني',advisory:'استرشادي دولي',exempt:'معفى من الإعلان'};
-var currentCat='all', currentQ='';
+var LABELS_EN={mandatory:'Mandatory (Jordan)',advisory:'Advisory (International)',exempt:'Exempt from Date Marking'};
+var currentCat='all', currentQ='', currentLang='ar';
+
+// English product data
+var PRODUCTS_EN=[
+  {n:'Fresh chilled whole poultry (chicken, duck, goose, turkey...)',c:'Meat',p:'Suitable packaging',d:'5',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled whole poultry',c:'Meat',p:'Vacuum',d:'7',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled chicken giblets (offal)',c:'Meat',p:'Suitable packaging',d:'3',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled chicken giblets (offal)',c:'Meat',p:'Vacuum',d:'7',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled meat — beef, buffalo, camel, goat',c:'Meat',p:'Suitable packaging',d:'14',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled meat — beef, buffalo, camel',c:'Meat',p:'Vacuum / MAP',d:'120',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled meat — lamb, goat',c:'Meat',p:'Vacuum / MAP',d:'90',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled livestock offal',c:'Meat',p:'Suitable packaging',d:'7',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled livestock offal',c:'Meat',p:'Vacuum',d:'30',u:'days from slaughter',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled burger meat',c:'Meat',p:'Suitable packaging',d:'2',u:'days',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:'Listeria risk — very short shelf life'},
+  {n:'Cold-smoked chilled fish',c:'Fish',p:'Suitable packaging',d:'7',u:'days',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Hot-smoked chilled fish',c:'Fish',p:'Suitable packaging',d:'14',u:'days',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Smoked chilled fish',c:'Fish',p:'Vacuum',d:'90',u:'days',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled fish — ungutted',c:'Fish',p:'Suitable packaging',d:'7',u:'days from catch',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled fish — gutted and cleaned',c:'Fish',p:'Suitable packaging',d:'9',u:'days from catch',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled fish',c:'Fish',p:'Vacuum',d:'14',u:'days from catch',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh chilled fish',c:'Fish',p:'MAP',d:'21',u:'days from catch',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fermented milk / cultured milk (not heat-treated)',c:'Dairy & Eggs',p:'Suitable packaging',d:'10',u:'days',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Labneh / strained yogurt (not heat-treated)',c:'Dairy & Eggs',p:'Suitable packaging',d:'14',u:'days',s:'Chilled ≤4°C',t:'mandatory',r:'JS 288:2023 Table 1',w:''},
+  {n:'Fresh pasteurised milk',c:'Dairy & Eggs',p:'Sealed container',d:'7–14',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'Codex CXS 206 / EU Reg 853/2004',w:''},
+  {n:'UHT milk',c:'Dairy & Eggs',p:'Sterile sealed container',d:'6–12',u:'months',s:'Ambient temperature',t:'advisory',r:'Codex CXS 206',w:'After opening: 3–5 days chilled'},
+  {n:'Cream / whipping cream — chilled',c:'Dairy & Eggs',p:'Sealed container',d:'7–14',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'EU Reg 853/2004 / NACMCF',w:''},
+  {n:'Fresh cheese (ricotta, cottage, cream cheese)',c:'Dairy & Eggs',p:'Sealed container',d:'7–14',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'Codex CXS 221 / EU',w:'Listeria risk — study required'},
+  {n:'Hard ripened cheese (cheddar, edam, gouda)',c:'Dairy & Eggs',p:'Sealed container',d:'3–12',u:'months',s:'Chilled ≤8°C',t:'advisory',r:'Codex CXS 283',w:''},
+  {n:'Soft ripened cheese (brie, camembert)',c:'Dairy & Eggs',p:'Sealed container',d:'2–4',u:'weeks',s:'Chilled ≤4°C',t:'advisory',r:'EU Reg 2073/2005',w:'Listeria risk — mandatory study'},
+  {n:'Butter / natural ghee',c:'Dairy & Eggs',p:'Sealed container',d:'3–6',u:'months',s:'Chilled ≤4°C',t:'advisory',r:'Codex CXS 279 / GSO',w:''},
+  {n:'Fresh shell eggs',c:'Dairy & Eggs',p:'Original container',d:'28',u:'days',s:'Chilled ≤5°C',t:'advisory',r:'EU Reg 589/2008 / USDA',w:''},
+  {n:'Liquid / pasteurised egg',c:'Dairy & Eggs',p:'Sterile sealed container',d:'3–5',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'FDA 21CFR / EU',w:'Use within 72 hours of opening'},
+  {n:'Packaged bread (consumed after 24 hours)',c:'Bakery',p:'Sealed packaging',d:'3–7',u:'days',s:'Ambient temperature',t:'advisory',r:'Codex CXG 2 / FDA',w:'Unwrapped bread consumed within 24 h: exempt under JS 288'},
+  {n:'Cream cakes and pastries',c:'Bakery',p:'Chilled packaging',d:'2–5',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'NACMCF / EU',w:'S. aureus risk — very short life'},
+  {n:'Dry biscuits and cookies',c:'Bakery',p:'Sealed packaging',d:'3–12',u:'months',s:'Cool dry place',t:'advisory',r:'FDA 21CFR / Codex',w:''},
+  {n:'Frozen pastry dough (ready to bake)',c:'Bakery',p:'Frozen packaging',d:'3–6',u:'months',s:'-18°C',t:'advisory',r:'EU Reg 1169/2011 / Codex',w:'After thawing: use immediately'},
+  {n:'Chilled ready-to-eat (RTE) cooked meals',c:'Ready Meals',p:'Sealed chilled packaging',d:'3–5',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'EU Reg 2073/2005 / NACMCF',w:'Listeria risk — study required'},
+  {n:'Frozen ready meals',c:'Ready Meals',p:'Frozen packaging',d:'12–24',u:'months',s:'-18°C',t:'advisory',r:'Codex CAC/RCP 8 / EU',w:'After thawing: cook immediately'},
+  {n:'Chilled soup / broth',c:'Ready Meals',p:'Sealed chilled packaging',d:'5–7',u:'days',s:'Chilled ≤4°C',t:'advisory',r:'FDA / EU Lm guidance',w:'Listeria risk — study required'},
+  {n:'Canned tomato sauce',c:'Ready Meals',p:'Commercial can (sealed)',d:'12–24',u:'months',s:'Ambient temperature',t:'advisory',r:'Codex CXS 057 / FDA',w:'After opening: 5–7 days chilled'},
+  {n:'Mayonnaise',c:'Ready Meals',p:'Sealed container',d:'6–12',u:'months',s:'Ambient temperature',t:'advisory',r:'FDA 21CFR 169 / Codex',w:'After opening: 2 months chilled'},
+  {n:'Commercially canned vegetables / beans / fruit',c:'Ready Meals',p:'Commercial can (sealed)',d:'24–48',u:'months',s:'Ambient temperature',t:'advisory',r:'Codex CAC/RCP 23 / FDA',w:'After opening: 3–4 days chilled'},
+  {n:'Canned tuna and canned fish',c:'Fish',p:'Commercial can (sealed)',d:'36–60',u:'months',s:'Ambient temperature',t:'advisory',r:'Codex CXS 119 / FDA',w:'After opening: 2 days chilled'},
+  {n:'Frozen fish and seafood',c:'Frozen',p:'Frozen packaging',d:'6–24',u:'months',s:'-18°C',t:'advisory',r:'Codex CXS 036 / EU Reg 853/2004',w:''},
+  {n:'Frozen poultry',c:'Frozen',p:'Frozen packaging',d:'9–12',u:'months',s:'-18°C',t:'advisory',r:'Codex CAC/RCP 14 / GSO',w:'After thawing: cook within 24 hours'},
+  {n:'Frozen red meat (beef, lamb)',c:'Frozen',p:'Frozen packaging',d:'12',u:'months',s:'-18°C',t:'advisory',r:'Codex CAC/RCP 13 / GSO',w:''},
+  {n:'Frozen vegetables',c:'Frozen',p:'Frozen packaging',d:'18–24',u:'months',s:'-18°C',t:'advisory',r:'Codex CXS 320 / EU / GSO',w:''},
+  {n:'Fresh unpeeled fruit and vegetables',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Depends on type',t:'exempt',r:'JS 288:2023 Annex A',w:'Does not include cut or packaged produce'},
+  {n:'Bakery and pastry consumed within 24 hours of production',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Ambient temperature',t:'exempt',r:'JS 288:2023 Annex A',w:'Packaged for >24 hours is NOT exempt'},
+  {n:'Vinegar in glass containers',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:''},
+  {n:'Non-iodised table salt',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Dry',t:'exempt',r:'JS 288:2023 Annex A',w:'Iodised salt is NOT exempt'},
+  {n:'Solid sugar',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:'Liquid sugar is NOT exempt'},
+  {n:'Dried uncooked legumes (lentils, beans, chickpeas...)',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:'Canned or cooked are NOT exempt'},
+  {n:'Loose tea (bulk)',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:'Packaged tea bags are NOT exempt'},
+  {n:'Whole (unground) spices and herbs',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:'Ground spices are NOT exempt'},
+  {n:'Unpackaged dry grains (rice, barley, oats, corn...)',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:'Packaged grains are NOT exempt'},
+  {n:'Raw chewing gum base',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:''},
+  {n:'Liquid and dried glucose',c:'Exempt',p:'—',d:'Exempt',u:'',s:'Cool dry place',t:'exempt',r:'JS 288:2023 Annex A',w:''},
+];
+
+function getProducts(){ return currentLang==='en'?PRODUCTS_EN:PRODUCTS; }
+function getLabels(){ return currentLang==='en'?LABELS_EN:LABELS; }
 
 function filtered(){
-  return PRODUCTS.filter(function(d){
-    var cOk=currentCat==='all'||d.c===currentCat;
+  var data=getProducts();
+  var catMapToEn={لحوم:'Meat',أسماك:'Fish',ألبان:'Dairy & Eggs',مخبوزات:'Bakery',وجبات:'Ready Meals',مجمدات:'Frozen',معفى:'Exempt'};
+  var cat=currentLang==='en'&&catMapToEn[currentCat]?catMapToEn[currentCat]:currentCat;
+  return data.filter(function(d){
+    var cOk=cat==='all'||d.c===cat;
     var q=currentQ.trim();
-    var qOk=!q||d.n.indexOf(q)>-1||d.c.indexOf(q)>-1||d.p.indexOf(q)>-1;
+    var qOk=!q||d.n.toLowerCase().indexOf(q.toLowerCase())>-1||d.c.toLowerCase().indexOf(q.toLowerCase())>-1;
     return cOk&&qOk;
   });
 }
 
 function renderCards(list){
+  var isEn=currentLang==='en';
+  var lbl=getLabels();
   var el=document.getElementById('rlist');
   var cnt=document.getElementById('rcount');
   if(!list.length){
     cnt.textContent='';
-    el.innerHTML='<div class="empty-state"><div class="empty-icon">◌</div><div>لا توجد نتائج — جرّب كلمة أخرى</div></div>';
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">◌</div><div>'+(isEn?'No results — try another term':'لا توجد نتائج — جرّب كلمة أخرى')+'</div></div>';
     return;
   }
-  cnt.textContent='عرض '+list.length+' نتيجة';
+  cnt.textContent=isEn?('Showing '+list.length+' result'+(list.length!==1?'s':'')):'عرض '+list.length+' نتيجة';
   el.innerHTML=list.map(function(d){
-    var durH=d.d==='معفى'
-      ?'<div class="dur-exempt">معفى<br>من الإعلان</div>'
+    var isExempt=d.d==='Exempt'||d.d==='معفى';
+    var durH=isExempt
+      ?'<div class="dur-exempt">'+(isEn?'Exempt':'معفى')+'<br>'+(isEn?'from marking':'من الإعلان')+'</div>'
       :'<div><span class="dur-num">'+d.d+'</span><span class="dur-unit">'+d.u+'</span></div>';
+    var pkg=isEn?'Packaging':'التعبئة';
+    var sto=isEn?'Storage':'التخزين';
     var wH=d.w?'<div class="card-warn">⚠ '+d.w+'</div>':'';
     return '<div class="card '+d.t+'">'
       +'<div class="card-top"><div class="card-name">'+d.n+'</div>'
-      +'<span class="badge badge-'+d.t+'">'+LABELS[d.t]+'</span></div>'
+      +'<span class="badge badge-'+d.t+'">'+lbl[d.t]+'</span></div>'
       +'<div class="card-body"><div class="card-details">'
-      +(d.p!=='—'?'<div class="card-detail"><strong>التعبئة:</strong> '+d.p+'</div>':'')
-      +'<div class="card-detail"><strong>التخزين:</strong> '+d.s+'</div>'
+      +(d.p!=='—'?'<div class="card-detail"><strong>'+pkg+':</strong> '+d.p+'</div>':'')
+      +'<div class="card-detail"><strong>'+sto+':</strong> '+d.s+'</div>'
       +'<div class="card-ref">'+d.r+'</div>'
       +'</div><div class="card-dur">'+durH+'</div></div>'
       +wH+'</div>';
@@ -552,7 +622,9 @@ function showPTab(id,btn){
 }
 
 // Init
-renderCards(PRODUCTS);
+var urlLang = new URLSearchParams(window.location.search).get('lang');
+if(urlLang==='en') currentLang='en';
+renderCards(filtered());
 
 // ── Language from URL param ──
 (function(){
