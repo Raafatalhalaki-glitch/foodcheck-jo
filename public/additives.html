@@ -18,7 +18,6 @@
 }
 body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;direction:rtl}
 
-/* ── HEADER ── */
 .pg-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--navy2)}
 .pg-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
 .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
@@ -27,8 +26,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 .pg-back{font-size:12px;color:var(--text3);text-decoration:none;border:1px solid var(--border2);padding:4px 12px;border-radius:99px;transition:all .2s}
 .pg-back:hover{color:var(--teal);border-color:var(--teal)}
 
-/* ── HERO ── */
-.pg-hero{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--border)}
+.pg-hero{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border)}
 .pg-title{font-size:18px;font-weight:700;margin-bottom:4px}
 .pg-sub{font-size:13px;color:var(--text2);line-height:1.6}
 .method-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:.75rem;align-items:center;font-size:12px;color:var(--text3)}
@@ -40,85 +38,33 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 
 /* ── SEARCH AREA ── */
 .search-wrap{padding:1.25rem 1.5rem;background:var(--navy2);border-bottom:1px solid var(--border)}
-.search-row{display:flex;gap:8px;margin-bottom:10px}
-.s-input{flex:1;height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:var(--navy3);color:var(--text);font-size:14px;font-family:'Tajawal',sans-serif;outline:none;transition:border .2s}
+
+/* Shared input style */
+.ac-wrap{position:relative;flex:1}
+.s-input{width:100%;height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:var(--navy3);color:var(--text);font-size:14px;font-family:'Tajawal',sans-serif;outline:none;transition:border .2s}
 .s-input:focus{border-color:var(--teal)}
 .s-input::placeholder{color:var(--text3)}
-.s-clear{height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;white-space:nowrap}
-.s-clear:hover{background:var(--navy3)}
 
-/* Autocomplete */
-.autocomplete-wrap{position:relative;flex:1}
-.autocomplete-list{position:absolute;top:48px;right:0;left:0;background:var(--navy2);border:1px solid var(--border2);border-radius:8px;max-height:220px;overflow-y:auto;z-index:100;display:none}
+.ac-list{position:absolute;top:48px;right:0;left:0;background:var(--navy2);border:1px solid var(--border2);border-radius:8px;max-height:240px;overflow-y:auto;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .ac-item{padding:8px 14px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s;display:flex;align-items:center;gap:8px}
 .ac-item:last-child{border-bottom:none}
-.ac-item:hover{background:var(--navy3)}
-.ac-ins{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);flex-shrink:0;width:40px}
-.ac-name{color:var(--text)}
-.ac-class{font-size:11px;color:var(--text3);margin-right:auto}
+.ac-item:hover,.ac-item.focused{background:var(--navy3)}
+.ac-code{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);flex-shrink:0;min-width:36px}
+.ac-name{color:var(--text);flex:1;font-size:12px}
+.ac-class{font-size:11px;color:var(--text3)}
 
-/* Category select */
-.cat-row{display:flex;gap:8px;align-items:center}
-.cat-select{flex:1;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--border2);background:var(--navy3);color:var(--text);font-size:13px;font-family:'Tajawal',sans-serif;outline:none;transition:border .2s}
-.cat-select:focus{border-color:var(--teal)}
-.btn-check{height:44px;padding:0 24px;border-radius:8px;background:var(--teal);border:none;color:var(--navy);font-size:14px;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;white-space:nowrap}
+/* Two-row layout */
+.row1{display:flex;gap:8px;margin-bottom:8px}
+.row2{display:flex;gap:8px;align-items:center}
+.s-clear{height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.s-clear:hover{background:var(--navy3)}
+.btn-check{height:44px;padding:0 24px;border-radius:8px;background:var(--teal);border:none;color:var(--navy);font-size:14px;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .btn-check:hover{background:var(--teal2)}
-.btn-check:disabled{opacity:.5;cursor:not-allowed}
 
-/* ── RESULTS ── */
-.results-wrap{padding:1.25rem 1.5rem}
-
-/* VERDICT CARD */
-.verdict-card{border-radius:12px;padding:1.25rem;margin-bottom:1rem;border:1.5px solid}
-.verdict-card.PASS{background:var(--pass-bg);border-color:var(--pass-border)}
-.verdict-card.FAIL{background:var(--fail-bg);border-color:var(--fail-border)}
-.verdict-card.CONDITIONAL{background:var(--cond-bg);border-color:var(--cond-border)}
-.verdict-card.NOT_FOUND{background:#111827;border-color:var(--border2)}
-
-.vc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px}
-.vc-name{font-size:16px;font-weight:700;color:var(--text)}
-.vc-ins{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:3px}
-.vc-badge{padding:5px 16px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0}
-.badge-PASS{background:#00d4a820;color:var(--pass-color);border:1px solid #00d4a840}
-.badge-FAIL{background:#a32d2d20;color:var(--fail-color);border:1px solid #a32d2d40}
-.badge-CONDITIONAL{background:#ba751720;color:var(--cond-color);border:1px solid #ba751740}
-.badge-NOT_FOUND{background:#ffffff10;color:var(--text2);border:1px solid var(--border2)}
-
-.vc-message{font-size:13px;color:var(--text2);margin-bottom:12px;padding:.625rem .875rem;background:#ffffff06;border-radius:8px;line-height:1.6}
-
-.vc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
-@media(max-width:500px){.vc-grid{grid-template-columns:1fr 1fr}}
-.vc-box{background:#ffffff08;border-radius:8px;padding:8px 10px}
-.vc-label{font-size:11px;color:var(--text3);margin-bottom:3px}
-.vc-val{font-size:13px;font-weight:500;color:var(--text)}
-.vc-val.green{color:var(--teal)}
-.vc-val.amber{color:#ef9f27}
-.vc-val.red{color:#f09595}
-
-/* Steps trail */
-.steps-trail{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.st{font-size:11px;padding:3px 9px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-weight:500}
-.st-pass{background:#00d4a820;color:var(--teal);border:1px solid #00d4a840}
-.st-fail{background:#a32d2d20;color:#f09595;border:1px solid #a32d2d40}
-.st-skip{background:#ffffff08;color:var(--text3);border:1px solid var(--border)}
-.st-warn{background:#ba751720;color:#ef9f27;border:1px solid #ba751740}
-
-/* Notes */
-.notes-section{margin-top:10px}
-.notes-title{font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:500}
-.note-item{font-size:12px;color:var(--text2);padding:5px 10px;background:#ffffff06;border-radius:6px;margin-bottom:4px;border-right:2px solid var(--cond-border);line-height:1.5}
-.note-id{font-family:'IBM Plex Mono',monospace;color:var(--cond-color);font-size:11px;margin-left:6px}
-
-/* Loading */
-.loading{text-align:center;padding:2rem;color:var(--text3);font-size:14px}
-.loading-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--teal);animation:ld .8s infinite alternate;margin:0 3px}
-.loading-dot:nth-child(2){animation-delay:.2s}
-.loading-dot:nth-child(3){animation-delay:.4s}
-@keyframes ld{to{opacity:.2;transform:scale(.7)}}
-
-/* Empty */
-.empty-state{text-align:center;padding:3rem 1rem;color:var(--text3)}
-.empty-icon{font-size:36px;margin-bottom:.75rem;opacity:.3}
+/* Selected category tag */
+.cat-tag{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:var(--navy);padding:3px 10px 3px 6px;border-radius:99px;font-size:12px;font-weight:700;margin-top:6px}
+.cat-tag-x{cursor:pointer;font-size:14px;line-height:1;opacity:.7}
+.cat-tag-x:hover{opacity:1}
 
 /* History */
 .history-section{margin-top:.75rem}
@@ -127,7 +73,47 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 .h-tag{font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s}
 .h-tag:hover{border-color:var(--teal);color:var(--teal)}
 
-/* Disclaimer */
+/* ── RESULTS ── */
+.results-wrap{padding:1.25rem 1.5rem}
+.verdict-card{border-radius:12px;padding:1.25rem;margin-bottom:1rem;border:1.5px solid}
+.verdict-card.PASS{background:var(--pass-bg);border-color:var(--pass-border)}
+.verdict-card.FAIL{background:var(--fail-bg);border-color:var(--fail-border)}
+.verdict-card.CONDITIONAL{background:var(--cond-bg);border-color:var(--cond-border)}
+.verdict-card.NOT_FOUND{background:#111827;border-color:var(--border2)}
+.vc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px}
+.vc-name{font-size:16px;font-weight:700;color:var(--text)}
+.vc-ins{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:3px}
+.vc-badge{padding:5px 16px;border-radius:99px;font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.badge-PASS{background:#00d4a820;color:var(--pass-color);border:1px solid #00d4a840}
+.badge-FAIL{background:#a32d2d20;color:var(--fail-color);border:1px solid #a32d2d40}
+.badge-CONDITIONAL{background:#ba751720;color:var(--cond-color);border:1px solid #ba751740}
+.badge-NOT_FOUND{background:#ffffff10;color:var(--text2);border:1px solid var(--border2)}
+.vc-message{font-size:13px;color:var(--text2);margin-bottom:12px;padding:.625rem .875rem;background:#ffffff06;border-radius:8px;line-height:1.6}
+.vc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+@media(max-width:500px){.vc-grid{grid-template-columns:1fr 1fr}}
+.vc-box{background:#ffffff08;border-radius:8px;padding:8px 10px}
+.vc-label{font-size:11px;color:var(--text3);margin-bottom:3px}
+.vc-val{font-size:13px;font-weight:500;color:var(--text)}
+.vc-val.green{color:var(--teal)}
+.vc-val.amber{color:#ef9f27}
+.vc-val.red{color:#f09595}
+.steps-trail{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.st{font-size:11px;padding:3px 9px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-weight:500}
+.st-pass{background:#00d4a820;color:var(--teal);border:1px solid #00d4a840}
+.st-fail{background:#a32d2d20;color:#f09595;border:1px solid #a32d2d40}
+.st-skip{background:#ffffff08;color:var(--text3);border:1px solid var(--border)}
+.st-warn{background:#ba751720;color:#ef9f27;border:1px solid #ba751740}
+.notes-section{margin-top:10px}
+.notes-title{font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:500}
+.note-item{font-size:12px;color:var(--text2);padding:5px 10px;background:#ffffff06;border-radius:6px;margin-bottom:4px;border-right:2px solid var(--cond-border);line-height:1.5}
+.note-id{font-family:'IBM Plex Mono',monospace;color:var(--cond-color);font-size:11px;margin-left:6px}
+.loading{text-align:center;padding:2rem;color:var(--text3);font-size:14px}
+.loading-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--teal);animation:ld .8s infinite alternate;margin:0 3px}
+.loading-dot:nth-child(2){animation-delay:.2s}
+.loading-dot:nth-child(3){animation-delay:.4s}
+@keyframes ld{to{opacity:.2;transform:scale(.7)}}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text3)}
+.empty-icon{font-size:36px;margin-bottom:.75rem;opacity:.3}
 .disclaimer{margin-bottom:1rem;padding:.75rem 1rem;background:#ba751710;border:1px solid #ba751730;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6}
 .disclaimer strong{color:#ef9f27}
 </style>
@@ -144,7 +130,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 
 <div class="pg-hero">
   <div class="pg-title">🧪 التحقق من المضافات الغذائية</div>
-  <div class="pg-sub">نتيجة قطعية: مسموح / ممنوع / مشروط — مستمدة من قاعدة بيانات Codex CXS 192:2025</div>
+  <div class="pg-sub">نتيجة قطعية: مسموح / ممنوع / مشروط — من قاعدة بيانات Codex CXS 192:2025</div>
   <div class="method-pills">
     <span>منهجية البحث:</span>
     <span class="mp mp1">① Table 1 — مسموح في هذه الفئة؟</span>
@@ -156,21 +142,38 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 </div>
 
 <div class="search-wrap">
-  <div class="search-row">
-    <div class="autocomplete-wrap">
+
+  <!-- Row 1: INS search -->
+  <div class="row1">
+    <div class="ac-wrap" id="ins-wrap">
       <input class="s-input" id="ins-input" type="text"
-        placeholder="ابحث: رقم INS أو اسم المضاف... مثال: 211 أو benzoate"
+        placeholder="🔬 رقم INS أو اسم المضاف... مثال: 211 أو benzoate"
         oninput="onInsInput()" autocomplete="off">
-      <div class="autocomplete-list" id="ac-list"></div>
+      <div class="ac-list" id="ins-ac"></div>
     </div>
     <button class="s-clear" onclick="clearAll()">مسح</button>
   </div>
-  <div class="cat-row">
-    <select class="cat-select" id="cat-select">
-      <option value="">— اختر فئة المنتج الغذائي —</option>
-    </select>
-    <button class="btn-check" id="btn-check" onclick="doCheck()">تحقق</button>
+
+  <!-- Row 2: Category search -->
+  <div class="row2">
+    <div class="ac-wrap" id="cat-wrap">
+      <input class="s-input" id="cat-input" type="text"
+        placeholder="🗂 فئة المنتج... مثال: 01.1 أو milk أو حليب"
+        oninput="onCatInput()" autocomplete="off">
+      <div class="ac-list" id="cat-ac"></div>
+    </div>
+    <button class="btn-check" onclick="doCheck()">تحقق</button>
   </div>
+
+  <!-- Selected category tag -->
+  <div id="cat-tag-wrap" style="display:none;margin-top:6px">
+    <span class="cat-tag">
+      <span id="cat-tag-text"></span>
+      <span class="cat-tag-x" onclick="clearCat()">✕</span>
+    </span>
+  </div>
+
+  <!-- History -->
   <div class="history-section" id="history-section" style="display:none">
     <div class="history-title">بحوث سابقة:</div>
     <div class="history-tags" id="history-tags"></div>
@@ -185,83 +188,108 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 </div>
 
 <script>
-var selectedIns = null;
-var selectedInsName = '';
-var searchTimeout = null;
+var selIns = null, selInsName = '', selCat = null, selCatName = '';
+var insTimeout = null, catTimeout = null;
+var allCats = [];
 var history_ = [];
 
-// ── Load categories ──
+// ── Load categories once ──
 async function loadCategories() {
   try {
     const r = await fetch('/api/additives/categories');
-    const cats = await r.json();
-    const sel = document.getElementById('cat-select');
-    // Group by parent
-    cats.forEach(function(c) {
-      const opt = document.createElement('option');
-      opt.value = c.cat_no;
-      const indent = (c.cat_no.split('.').length - 1);
-      opt.textContent = '\u00A0'.repeat(indent * 2) + c.cat_no + ' — ' + c.cat_name;
-      sel.appendChild(opt);
-    });
-  } catch(e) {
-    console.error('Categories load error:', e);
-  }
+    allCats = await r.json();
+  } catch(e) { console.error('Categories error:', e); }
 }
 
-// ── Autocomplete ──
+// ── INS Autocomplete ──
 async function onInsInput() {
   const q = document.getElementById('ins-input').value.trim();
-  selectedIns = null;
-  clearTimeout(searchTimeout);
-  if (q.length < 2) { hideAC(); return; }
-  searchTimeout = setTimeout(async function() {
+  selIns = null;
+  clearTimeout(insTimeout);
+  if (q.length < 2) { hideAC('ins-ac'); return; }
+  insTimeout = setTimeout(async function() {
     try {
       const r = await fetch('/api/additives/search?q=' + encodeURIComponent(q));
       const items = await r.json();
-      showAC(items);
-    } catch(e) { hideAC(); }
-  }, 250);
+      const list = document.getElementById('ins-ac');
+      if (!items || !items.length) { hideAC('ins-ac'); return; }
+      list.innerHTML = items.map(function(it) {
+        return '<div class="ac-item" onclick="pickIns(\'' + it.ins + '\',\'' + esc(it.name) + '\')">'
+          + '<span class="ac-code">' + it.ins + '</span>'
+          + '<span class="ac-name">' + esc(it.name) + '</span>'
+          + '<span class="ac-class">' + (it.functional_class || '') + '</span>'
+          + '</div>';
+      }).join('');
+      list.style.display = 'block';
+    } catch(e) { hideAC('ins-ac'); }
+  }, 220);
 }
 
-function showAC(items) {
-  const list = document.getElementById('ac-list');
-  if (!items || !items.length) { hideAC(); return; }
-  list.innerHTML = items.map(function(it) {
-    return '<div class="ac-item" onclick="selectIns(\'' + it.ins + '\',\'' + escHtml(it.name) + '\')">'
-      + '<span class="ac-ins">' + it.ins + '</span>'
-      + '<span class="ac-name">' + escHtml(it.name) + '</span>'
-      + '<span class="ac-class">' + (it.functional_class || '') + '</span>'
-      + '</div>';
-  }).join('');
-  list.style.display = 'block';
-}
-
-function hideAC() {
-  document.getElementById('ac-list').style.display = 'none';
-}
-
-function selectIns(ins, name) {
-  selectedIns = ins;
-  selectedInsName = name;
+function pickIns(ins, name) {
+  selIns = ins; selInsName = name;
   document.getElementById('ins-input').value = ins + ' — ' + name;
-  hideAC();
+  hideAC('ins-ac');
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ── Category Autocomplete ──
+function onCatInput() {
+  const q = document.getElementById('cat-input').value.trim().toLowerCase();
+  selCat = null;
+  clearCatTag();
+  clearTimeout(catTimeout);
+  if (q.length < 1) { hideAC('cat-ac'); return; }
+  catTimeout = setTimeout(function() {
+    const filtered = allCats.filter(function(c) {
+      return c.cat_no.toLowerCase().includes(q) || c.cat_name.toLowerCase().includes(q);
+    }).slice(0, 12);
+    const list = document.getElementById('cat-ac');
+    if (!filtered.length) { hideAC('cat-ac'); return; }
+    list.innerHTML = filtered.map(function(c) {
+      const indent = (c.cat_no.split('.').length - 1);
+      const pad = '\u00A0'.repeat(indent * 2);
+      return '<div class="ac-item" onclick="pickCat(\'' + esc(c.cat_no) + '\',\'' + esc(c.cat_name) + '\')">'
+        + '<span class="ac-code">' + c.cat_no + '</span>'
+        + '<span class="ac-name">' + pad + esc(c.cat_name) + '</span>'
+        + '</div>';
+    }).join('');
+    list.style.display = 'block';
+  }, 150);
+}
+
+function pickCat(no, name) {
+  selCat = no; selCatName = name;
+  document.getElementById('cat-input').value = no + ' — ' + name;
+  hideAC('cat-ac');
+  // Show tag
+  document.getElementById('cat-tag-text').textContent = no + ' — ' + name;
+  document.getElementById('cat-tag-wrap').style.display = 'block';
+}
+
+function clearCat() {
+  selCat = null; selCatName = '';
+  document.getElementById('cat-input').value = '';
+  clearCatTag();
+}
+
+function clearCatTag() {
+  document.getElementById('cat-tag-wrap').style.display = 'none';
+}
+
+function hideAC(id) { document.getElementById(id).style.display = 'none'; }
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
 }
 
 // ── Check ──
 async function doCheck() {
   const insVal = document.getElementById('ins-input').value.trim();
-  const catVal = document.getElementById('cat-select').value;
+  const catVal = selCat || document.getElementById('cat-input').value.trim().split(/[\s—-]/)[0];
 
-  if (!insVal) { alert('يرجى إدخال رقم INS أو اسم المضاف'); return; }
-  if (!catVal) { alert('يرجى اختيار فئة المنتج الغذائي'); return; }
+  if (!insVal) { alert('أدخل رقم INS أو اسم المضاف'); return; }
+  if (!catVal) { alert('اختر فئة المنتج الغذائي'); return; }
 
-  // Extract INS number
-  const ins = selectedIns || insVal.split(/[\s—-]/)[0].trim();
+  const ins = selIns || insVal.split(/[\s—-]/)[0].trim();
 
   document.getElementById('results-wrap').innerHTML = '<div class="loading">'
     + '<span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span>'
@@ -281,55 +309,43 @@ async function doCheck() {
 function renderResult(d, catVal) {
   var v = d.verdict || 'NOT_FOUND';
   var vLabel = {PASS:'✓ مسموح', FAIL:'✗ غير مسموح', CONDITIONAL:'⚠ مشروط', NOT_FOUND:'غير موجود'}[v] || v;
-  var vLabelEn = {PASS:'Permitted', FAIL:'Not Permitted', CONDITIONAL:'Conditional', NOT_FOUND:'Not Found'}[v] || v;
 
-  // Steps trail
   var steps = d.steps || {};
-  var stepsHtml = '';
-  if (steps.table1) stepsHtml += '<span class="st st-pass">✓ Table 1 — مدرج</span>';
-  else stepsHtml += '<span class="st st-fail">✗ Table 1 — غير مدرج</span>';
-  if (steps.table2) stepsHtml += '<span class="st st-pass">✓ Table 2 — مدرج</span>';
-  else stepsHtml += '<span class="st st-skip">— Table 2</span>';
-  if (steps.table3) stepsHtml += '<span class="st st-warn">⚠ Table 3 — قيود</span>';
-  else stepsHtml += '<span class="st st-pass">✓ Table 3 — لا قيود</span>';
-  if (steps.annex3) stepsHtml += '<span class="st st-warn">⚠ Annex 3 — مستثناة</span>';
-  else stepsHtml += '<span class="st st-pass">✓ Annex 3 — لا استثناء</span>';
+  var stHtml = '';
+  stHtml += steps.table1 ? '<span class="st st-pass">✓ Table 1</span>' : '<span class="st st-fail">✗ Table 1</span>';
+  stHtml += steps.table2 ? '<span class="st st-pass">✓ Table 2</span>' : '<span class="st st-skip">— Table 2</span>';
+  stHtml += steps.table3 ? '<span class="st st-warn">⚠ Table 3</span>' : '<span class="st st-pass">✓ T3 حر</span>';
+  stHtml += steps.annex3 ? '<span class="st st-warn">⚠ Annex 3</span>' : '<span class="st st-pass">✓ Annex حر</span>';
 
-  // Notes
   var notesHtml = '';
   if (d.notes_text && d.notes_text.length) {
     notesHtml = '<div class="notes-section"><div class="notes-title">الملاحظات:</div>'
       + d.notes_text.map(function(n) {
-          return '<div class="note-item"><span class="note-id">#' + n.id + '</span>' + escHtml(n.text) + '</div>';
+          return '<div class="note-item"><span class="note-id">#' + n.id + '</span>' + esc(n.text) + '</div>';
         }).join('') + '</div>';
   }
 
-  // Table 3 details
   var t3Html = '';
   if (steps.table3) {
     t3Html = '<div class="vc-box" style="grid-column:1/-1"><div class="vc-label">شروط Table 3</div>'
-      + '<div class="vc-val amber" style="font-size:12px">' + escHtml(steps.table3.specific_allowance || steps.table3.max_level || 'GMP') + '</div></div>';
+      + '<div class="vc-val amber" style="font-size:12px">' + esc(steps.table3.specific_allowance || steps.table3.max_level || 'GMP') + '</div></div>';
   }
 
-  var catName = document.getElementById('cat-select').selectedOptions[0]?.textContent || catVal;
-
-  var html = '<div class="disclaimer"><strong>تنبيه:</strong> هذه النتيجة مستمدة من Codex CXS 192:2025. التطبيق في الأردن يخضع للتشريعات الأردنية. للتأكد راجع مختص سلامة غذاء.</div>'
+  var html = '<div class="disclaimer"><strong>تنبيه:</strong> النتيجة من Codex CXS 192:2025 — التطبيق في الأردن يخضع للتشريعات الأردنية.</div>'
     + '<div class="verdict-card ' + v + '">'
     + '<div class="vc-top">'
-    + '<div><div class="vc-name">' + escHtml(d.additive_name || 'INS ' + d.ins) + '</div>'
+    + '<div><div class="vc-name">' + esc(d.additive_name || 'INS ' + d.ins) + '</div>'
     + '<div class="vc-ins">INS ' + d.ins + (d.functional_class ? ' — ' + d.functional_class : '') + '</div></div>'
     + '<div class="vc-badge badge-' + v + '">' + vLabel + '</div>'
     + '</div>'
-    + '<div class="vc-message">' + escHtml(d.message_ar || '') + '</div>'
+    + '<div class="vc-message">' + esc(d.message_ar || '') + '</div>'
     + '<div class="vc-grid">'
-    + '<div class="vc-box"><div class="vc-label">الفئة الغذائية</div><div class="vc-val">' + escHtml(catVal) + '</div></div>'
-    + '<div class="vc-box"><div class="vc-label">الحد الأقصى</div><div class="vc-val ' + (v==='FAIL'?'red':'green') + '">' + escHtml(d.max_level || '—') + '</div></div>'
+    + '<div class="vc-box"><div class="vc-label">الفئة</div><div class="vc-val">' + esc(catVal) + '</div></div>'
+    + '<div class="vc-box"><div class="vc-label">الحد الأقصى</div><div class="vc-val ' + (v==='FAIL'?'red':'green') + '">' + esc(d.max_level || '—') + '</div></div>'
     + '<div class="vc-box"><div class="vc-label">المرجع</div><div class="vc-val">CXS 192:2025</div></div>'
-    + t3Html
-    + '</div>'
-    + '<div class="steps-trail">' + stepsHtml + '</div>'
-    + notesHtml
-    + '</div>';
+    + t3Html + '</div>'
+    + '<div class="steps-trail">' + stHtml + '</div>'
+    + notesHtml + '</div>';
 
   document.getElementById('results-wrap').innerHTML = html;
 }
@@ -338,47 +354,46 @@ function renderResult(d, catVal) {
 function addHistory(ins, name, cat) {
   history_.unshift({ ins, name, cat });
   if (history_.length > 6) history_ = history_.slice(0, 6);
-  renderHistory();
-}
-
-function renderHistory() {
   var sec = document.getElementById('history-section');
-  var tags = document.getElementById('history-tags');
-  if (!history_.length) { sec.style.display='none'; return; }
-  sec.style.display='block';
-  tags.innerHTML = history_.map(function(h, i) {
+  sec.style.display = 'block';
+  document.getElementById('history-tags').innerHTML = history_.map(function(h, i) {
     return '<span class="h-tag" onclick="replayHistory(' + i + ')">INS ' + h.ins + '</span>';
   }).join('');
 }
 
 function replayHistory(i) {
   var h = history_[i];
+  selIns = h.ins;
   document.getElementById('ins-input').value = h.ins + ' — ' + h.name;
-  selectedIns = h.ins;
-  document.getElementById('cat-select').value = h.cat;
+  selCat = h.cat;
+  document.getElementById('cat-input').value = h.cat;
+  document.getElementById('cat-tag-text').textContent = h.cat;
+  document.getElementById('cat-tag-wrap').style.display = 'block';
   doCheck();
 }
 
 function clearAll() {
   document.getElementById('ins-input').value = '';
-  document.getElementById('cat-select').value = '';
-  selectedIns = null;
-  hideAC();
+  selIns = null;
+  clearCat();
+  hideAC('ins-ac'); hideAC('cat-ac');
   document.getElementById('results-wrap').innerHTML =
     '<div class="empty-state"><div class="empty-icon">🔬</div><div>أدخل رقم INS أو اسم المضاف واختر فئة المنتج</div></div>';
 }
 
-// Close autocomplete on outside click
+// Close on outside click
 document.addEventListener('click', function(e) {
-  if (!e.target.closest('.autocomplete-wrap')) hideAC();
+  if (!e.target.closest('#ins-wrap')) hideAC('ins-ac');
+  if (!e.target.closest('#cat-wrap')) hideAC('cat-ac');
 });
 
-// Enter key
 document.getElementById('ins-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') { hideAC(); doCheck(); }
+  if (e.key === 'Enter') { hideAC('ins-ac'); doCheck(); }
+});
+document.getElementById('cat-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { hideAC('cat-ac'); doCheck(); }
 });
 
-// Init
 loadCategories();
 </script>
 </body>
