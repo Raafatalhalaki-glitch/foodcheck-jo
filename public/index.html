@@ -409,7 +409,7 @@ footer span { color: var(--accent); }
   </div>
   <h1 id="hero-h1" style="margin-bottom:.6rem;">FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات</h1>
   <div class="hero-stats" style="margin-bottom:1.5rem;">
-    <div class="stat"><div class="stat-num">✔ 33</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 37</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
@@ -501,6 +501,10 @@ footer span { color: var(--accent); }
         <option value="jam" id="opt-jam">مربيات وجيلي ومرملاد (JS 47:2012)</option>
         <option value="vegetable_oil" id="opt-vegetable-oil">زيوت نباتية (JS 1791:2012)</option>
         <option value="claims_product" id="opt-claims">منتج يحمل ادعاءات تغذوية/صحية (JS 1472)</option>
+        <option value="labneh" id="opt-labneh">لبنة (JS 108)</option>
+        <option value="butter" id="opt-butter">زبدة (JS 116)</option>
+        <option value="condensed_milk" id="opt-condensed-milk">حليب مكثف محلى (JS 71)</option>
+        <option value="cocoa_powder" id="opt-cocoa-powder">مسحوق الكاكاو / خليط الكاكاو والسكر (JS 517:2025)</option>
       </select>
     </div>
     <div class="setting-card">
@@ -664,7 +668,7 @@ footer span { color: var(--accent); }
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
       <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 33+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 37+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
@@ -1297,6 +1301,73 @@ const JS_SPECIFIC_RULES = {
       {code:"JS1472-R-7-1", text:"⚠️ ادعاء 'مدعّم' بفيتامين أو معدن — يتطلب إثبات التدعيم بالكميات الفعلية مطابقةً لـ JS 1473"},
       {code:"JS1472-R-7-4", text:"⚠️ ادعاء 'حلال' — يتطلب شهادة حلال معتمدة — بدون شهادة = مخالفة تضليلية"},
       {code:"JS1472-R-7-6", text:"⚠️ ادعاء 'خالٍ من' (سكر/غلوتين/دهون) — يجب التحقق من صحته بالجدول التغذوي — التناقض = مخالفة جسيمة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 108 — اللبنة
+  // ================================================================
+  "labneh": {
+    name: "اللبنة JS 108",
+    warnings: [
+      {code:"JS108-8-1", text:"🚨 اسم المنتج الإلزامي: 'لبنة' أو 'لبنة زيت' أو 'لبنة خزين' حسب نوع المنتج — اسم مبتكر وحده = مخالفة جسيمة"},
+      {code:"JS108-8-4", text:"🚨 مصدر الحليب إلزامي — يجب ذكر: بقري / أغنام / خليط — غيابه مخالفة جسيمة"},
+      {code:"JS108-7-1", text:"🚨 نسبة الدهن إلزامية على البطاقة — اللبنة العادية (بقري) ≥ 9% دهن — قيمة أقل أو غياب النسبة = مخالفة"},
+      {code:"JS108-7-2", text:"⚠️ اللبنة من حليب الأغنام ≥ 12% دهن — إذا صرّح بالمصدر يجب التحقق من التوافق مع الجدول"},
+      {code:"JS108-ADD", text:"⚠️ المضافات الغذائية يجب أن تكون مسموحاً بها حسب JS 94 — أي مضاف خارج القائمة = مخالفة"},
+      {code:"JS108-DATE", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS108-STORE", text:"⚠️ شروط التخزين إلزامية — اللبنة منتج مبرد — غياب تعليمات الحفظ = مخالفة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 116 — الزبدة
+  // ================================================================
+  "butter": {
+    name: "الزبدة JS 116",
+    warnings: [
+      {code:"JS116-NAME", text:"🚨 اسم المنتج يجب أن يكون 'زبدة' — إذا كانت مملّحة يُذكر 'زبدة مملّحة' — إذا كانت من أغنام/ماعز يُذكر المصدر — اسم مضلل = مخالفة جسيمة"},
+      {code:"JS116-4-1", text:"🚨 نسبة الدهن الكلية إلزامية — الزبدة ≥ 80% دهن — قيمة معلنة أقل = مخالفة جسيمة"},
+      {code:"JS116-4-2", text:"🚨 نسبة الرطوبة — الزبدة ≤ 16% ماء — قيمة معلنة أعلى = مخالفة (يحتاج تحقق مختبري)"},
+      {code:"JS116-ORIGIN", text:"⚠️ إذا كانت الزبدة من حليب أغنام أو ماعز — يجب ذكر المصدر بوضوح بجانب الاسم"},
+      {code:"JS116-SALT", text:"⚠️ إذا كانت مملّحة — نسبة الملح يجب ذكرها أو التصريح بكلمة 'مملّحة' — غيابها تضليل"},
+      {code:"JS116-ADD", text:"⚠️ المضافات المسموحة محدودة — الملح، بيتا كاروتين، فيتامين أ فقط — أي مضاف آخر يستوجب التحقق من JS 94"},
+      {code:"JS116-DATE", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS116-STORE", text:"⚠️ شروط التخزين إلزامية — الزبدة منتج مبرد/مجمد — غياب تعليمات الحفظ = مخالفة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 71 — الحليب المكثف المحلى
+  // ================================================================
+  "condensed_milk": {
+    name: "الحليب المكثف المحلى JS 71",
+    warnings: [
+      {code:"JS71-NAME", text:"🚨 اسم المنتج الإلزامي: 'حليب مكثف محلى' — إذا كان منزوع الدسم يُضاف 'منزوع الدسم' — اسم مبهم وحده = مخالفة جسيمة"},
+      {code:"JS71-9-1", text:"🚨 السكر إلزامي في قائمة المكونات — نوع السكر المستخدم يجب الإفصاح عنه — غيابه مخالفة جسيمة"},
+      {code:"JS71-FAT", text:"🚨 نسبة الدهن إلزامية على البطاقة — الحليب المكثف المحلى ≥ 8% دهن — قيمة معلنة أقل = مخالفة"},
+      {code:"JS71-MSNF", text:"⚠️ الجوامد الحليبية غير الدهنية ≥ 20% — يمكن التحقق إذا أُعلنت القيمة على البطاقة"},
+      {code:"JS71-INFANT", text:"🚨 عبارة 'غير ملائم لتغذية الرضع' إلزامية — غيابها مخالفة جسيمة وخطيرة على السلامة"},
+      {code:"JS71-ADD", text:"⚠️ المضافات الغذائية يجب أن تكون مسموحاً بها حسب JS 94 — أي مضاف خارج القائمة = مخالفة"},
+      {code:"JS71-DATE", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 517:2025 — مسحوق الكاكاو وخليط الكاكاو والسكر
+  // ================================================================
+  "cocoa_powder": {
+    name: "مسحوق الكاكاو / خليط الكاكاو والسكر JS 517:2025",
+    warnings: [
+      {code:"JS517-11-1-1-01", text:"🚨 اسم المنتج يجب أن يكون دقيقاً حسب جدول 1: 'مسحوق الكاكاو' (≥20% زبدة كاكاو) / 'مسحوق الكاكاو منخفض الدسم' (10–20%) / 'مسحوق الكاكاو منخفض الدسم إلى حد كبير' (<10%) / 'الخليط الجاف من الكاكاو والسكر' — اسم مخالف = مخالفة جسيمة"},
+      {code:"JS517-11-1-2-01", text:"🚨 إذا استُخدم اسم 'مسحوق الشوكولاتة' — يجب ذكر الحد الأدنى لمحتوى مسحوق الكاكاو (≥ 32%) على البطاقة"},
+      {code:"JS517-11-1-3-01", text:"🚨 إذا احتوى المنتج محليات — يجب ذكر 'بالمحليات' أو 'بإضافة المحليات' أو 'محلى بالسكر والمحليات' بجانب الاسم"},
+      {code:"JS517-11-2-01", text:"🚨 إذا احتوى على محليات صناعية — يجب ذكر: اسم المحلي + الكمية المستخدمة في العبوة + الحدود المسموحة + أي تحذير خاص"},
+      {code:"JS517-11-4-01", text:"🚨 البيان التغذوي إلزامي وفق JS 1473 — غيابه مخالفة جسيمة"},
+      {code:"JS517-11-3-01", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS517-6-1-7-01", text:"⚠️ إذا سُمّي 'مسحوق الشوكولاتة' — محتوى مسحوق الكاكاو ≥ 32% كتلة/كتلة — قيمة معلنة أقل = مخالفة"},
+      {code:"JS517-8-3-01", text:"⚠️ المنكهات المستخدمة يجب ألا تقلّد نكهة الشوكولاتة أو الحليب — وجود منكه مقلِّد = مخالفة"},
+      {code:"JS517-11-5-01", text:"⚠️ أي ادعاء غذائي أو صحي على البطاقة يجب أن يكون وفق JS 1474 — ادعاء غير مثبت = مخالفة"}
     ]
   }
 };
@@ -2652,11 +2723,15 @@ const T = {
     optMayonnaise:'مايونيز (JS 938:2012)', optTableOlives:'زيتون المائدة (JS 833:2006)',
     optJam:'مربيات وجيلي ومرملاد (JS 47:2012)', optVegetableOil:'زيوت نباتية (JS 1791:2012)',
     optClaims:'منتج يحمل ادعاءات تغذوية/صحية (JS 1472)',
+    optLabneh:'لبنة (JS 108)',
+    optButter:'زبدة (JS 116)',
+    optCondensedMilk:'حليب مكثف محلى (JS 71)',
+    optCocoaPowder:'مسحوق الكاكاو / خليط الكاكاو والسكر (JS 517:2025)',
     optImported:'مستورد', optLocal:'محلي الصنع',
     optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
     aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
     aboutCard1Title:'المواصفات الأردنية JS',
-    aboutCard1Text:'تدقيق 33+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
+    aboutCard1Text:'تدقيق 37+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
     aboutCard2Title:'كودكس CXS 192',
     aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
     aboutCard3Title:'110 قاعدة JS 9:2025',
@@ -2708,11 +2783,15 @@ const T = {
     optMayonnaise:'Mayonnaise (JS 938:2012)', optTableOlives:'Table Olives (JS 833:2006)',
     optJam:'Jams, Jellies & Marmalade (JS 47:2012)', optVegetableOil:'Vegetable Oils (JS 1791:2012)',
     optClaims:'Product with Nutritional/Health Claims (JS 1472)',
+    optLabneh:'Labneh / Strained Yoghurt (JS 108)',
+    optButter:'Butter (JS 116)',
+    optCondensedMilk:'Sweetened Condensed Milk (JS 71)',
+    optCocoaPowder:'Cocoa Powder / Cocoa-Sugar Dry Mix (JS 517:2025)',
     optImported:'Imported', optLocal:'Locally Produced',
     optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
     aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
     aboutCard1Title:'Jordanian JS Standards',
-    aboutCard1Text:'Audits 33+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
+    aboutCard1Text:'Audits 37+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
     aboutCard2Title:'Codex CXS 192',
     aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
     aboutCard3Title:'110 JS 9:2025 Rules',
@@ -2787,7 +2866,10 @@ function applyLang(lang) {
     'opt-foul-medames':t.optFoulMedames,'opt-pasta':t.optPasta,
     'opt-mayonnaise':t.optMayonnaise,
     'opt-table-olives':t.optTableOlives,'opt-jam':t.optJam,'opt-vegetable-oil':t.optVegetableOil,
-    'opt-claims':t.optClaims,'opt-imported':t.optImported,'opt-local':t.optLocal,
+    'opt-claims':t.optClaims,
+    'opt-labneh':t.optLabneh,'opt-butter':t.optButter,
+    'opt-condensed-milk':t.optCondensedMilk,'opt-cocoa-powder':t.optCocoaPowder,
+    'opt-imported':t.optImported,'opt-local':t.optLocal,
     'opt-full':t.optFull,'opt-critical':t.optCritical,'opt-quick':t.optQuick
   };
   Object.entries(opts).forEach(([id,txt]) => { if(el(id)) el(id).textContent = txt; });
