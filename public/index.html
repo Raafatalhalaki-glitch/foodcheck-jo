@@ -409,7 +409,7 @@ footer span { color: var(--accent); }
   </div>
   <h1 id="hero-h1" style="margin-bottom:.6rem;">FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات</h1>
   <div class="hero-stats" style="margin-bottom:1.5rem;">
-    <div class="stat"><div class="stat-num">✔ 28</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 30</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
@@ -469,6 +469,8 @@ footer span { color: var(--accent); }
         <option value="flavored_milk" id="opt-flavored-milk">حليب منكه (JS 805)</option>
         <option value="dried_milk" id="opt-dried-milk">حليب مجفف (JS 121)</option>
         <option value="evaporated_milk" id="opt-evaporated-milk">حليب مبخر مقشود (JS 1624)</option>
+        <option value="yoghurt" id="opt-yoghurt">لبن رائب / زبادي (JS 135:2018)</option>
+        <option value="uht_milk" id="opt-uht-milk">حليب معقم UHT (JS 600:2018)</option>
         <option value="infant_formula" id="opt-infant-formula">تركيبة حليب رضع (JS 472:2025)</option>
         <option value="fsmp_infant_formula" id="opt-fsmp">تركيبة طبية خاصة للرضع — FSMP (JS 472:2025)</option>
         <option value="meat" id="opt-meat">لحوم ودواجن</option>
@@ -659,7 +661,7 @@ footer span { color: var(--accent); }
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
       <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 28+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 30+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
@@ -1102,6 +1104,42 @@ const JS_SPECIFIC_RULES = {
       {code:"JS66-R044", text:"⚠️ طريقة التجهيز أو الاستعمال إلزامية على البطاقة — غيابها مخالفة"},
       {code:"JS66-R045", text:"⚠️ مدة الصلاحية إلزامية حسب JS 288 — غيابها مخالفة جسيمة"},
       {code:"JS66-R035", text:"⚠️ المعلبات: فحص الحضان إلزامي — نتيجة سلبية عند 30-37°C لمدة 10-14 يوم و50-55°C لمدة 5-7 أيام — أي انتفاخ في العبوة = مخالفة جسيمة فورية"}
+    ]
+  },
+
+  // ================================================================
+  // JS 135:2018 — اللبن الرائب (الزبادي)
+  // ================================================================
+  "yoghurt": {
+    name: "اللبن الرائب JS 135:2018",
+    warnings: [
+      {code:"JS135-11-1-01", text:"🚨 اسم المنتج يجب أن يكون: 'لبن رائب' أو 'لبن رائب (محلى)' أو 'لبن رائب بالخمائر الحيوية' — يجوز مرافقة أسماء دارجة كـ 'زبادي' أو 'روب' فقط بجانب الاسم الأساسي وليس بديلاً عنه"},
+      {code:"JS135-11-2-01", text:"🚨 إذا كان الحليب من مصدر غير بقري (أغنام/ماعز/غيره) — يجب ذكر مصدر الحليب مباشرةً بعد اسم المنتج — مثال: 'لبن رائب من حليب الأغنام'"},
+      {code:"JS135-11-3-01", text:"🚨 عبارة 'تحفظ مبرداً' إلزامية على البطاقة — غيابها مخالفة جسيمة"},
+      {code:"JS135-11-4-01", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS135-8-01", text:"🚨 لا يُسمح بأي مضافات غذائية في اللبن الرائب — وجود أي مضاف في قائمة المكونات (باستثناء مزارع البادئ/الخمائر الحيوية) = مخالفة جسيمة"},
+      {code:"JS135-4-1-01", text:"⚠️ المكونات الأساسية المسموحة: حليب طازج مبستر / حليب مجفف / قشدة مبسترة / مزارع حمض اللبن البكتيرية — أي مكون خارج هذه القائمة يستوجب المراجعة"},
+      {code:"JS135-4-4-01", text:"⚠️ الخمائر الكربوهيدراتية (سكريات التحلية) مسموحة للبن الرائب المحلى فقط — إذا ذُكر سكر/مواد تحلية في اللبن الرائب العادي = مخالفة"},
+      {code:"JS135-5-2-01", text:"⚠️ إذا أُضيف فيتامين (أ) أو (د) — يجب إظهاره في المكونات أو البيان التغذوي"},
+      {code:"JS135-6-1-7-01", text:"⚠️ إذا ادّعى المنتج وصف الدسم (كامل/منزوع/منخفض) — يجب أن تكون النسبة مطابقة لجدول 1 في المواصفة — تناقض الادعاء مع التركيب = مخالفة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 600:2018 — الحليب المعقم (UHT)
+  // ================================================================
+  "uht_milk": {
+    name: "الحليب المعقم JS 600:2018",
+    warnings: [
+      {code:"JS600-9-1-01", text:"🚨 اسم المنتج يجب أن يتضمن المصدر والحالة: 'حليب بقري طازج معقم' / 'حليب أغنام طازج معقم' / 'حليب مسترجع معقم من حليب مجفف' — اسم مبهم وحده = مخالفة جسيمة"},
+      {code:"JS600-9-2-01", text:"🚨 يجب ذكر وصف الدسم: كامل الدسم / منزوع الدسم جزئياً / منزوع الدسم كلياً — غيابه مخالفة جسيمة"},
+      {code:"JS600-9-3-01", text:"🚨 نسبة الدسم المئوية إلزامية على البطاقة — غيابها مخالفة جسيمة"},
+      {code:"JS600-9-4-01", text:"🚨 نوع المعاملة الحرارية إلزامي: 'معقم' أو 'معامل بالحرارة فوق العالية (UHT)' — غيابه مخالفة جسيمة"},
+      {code:"JS600-9-5-01", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS600-4-1-7-01", text:"⚠️ حدود الدسم حسب جدول 1: بقري كامل الدسم ≥ 3% · بقري جزئي 1%–2% · بقري منزوع ≤ 0.5% · أغنام كامل ≥ 5.5% · أغنام منزوع ≤ 0.5% — قيمة معلنة خارج الحدود = مخالفة"},
+      {code:"JS600-6-01", text:"⚠️ المضافات الغذائية يجب أن تكون مسموحاً بها حسب JS 94 — أي مضاف خارج القائمة = مخالفة"},
+      {code:"JS600-4-1-11-01", text:"⚠️ إذا ادّعى المنتج تدعيماً بفيتامين (أ) — الكمية يجب أن تكون بين 1200–2000 وحدة دولية/لتر"},
+      {code:"JS600-4-1-12-01", text:"⚠️ إذا ادّعى المنتج تدعيماً بفيتامين (د) — الكمية يجب أن تكون بين 300–400 وحدة دولية/لتر"}
     ]
   },
 
@@ -2552,7 +2590,7 @@ const T = {
     optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
     aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
     aboutCard1Title:'المواصفات الأردنية JS',
-    aboutCard1Text:'تدقيق 28+ مواصفة أردنية JS تشمل الألبان، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
+    aboutCard1Text:'تدقيق 30+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
     aboutCard2Title:'كودكس CXS 192',
     aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
     aboutCard3Title:'110 قاعدة JS 9:2025',
@@ -2603,7 +2641,7 @@ const T = {
     optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
     aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
     aboutCard1Title:'Jordanian JS Standards',
-    aboutCard1Text:'Audits 28+ Jordanian JS specifications covering dairy, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
+    aboutCard1Text:'Audits 30+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
     aboutCard2Title:'Codex CXS 192',
     aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
     aboutCard3Title:'110 JS 9:2025 Rules',
