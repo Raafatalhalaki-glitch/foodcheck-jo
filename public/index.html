@@ -409,7 +409,7 @@ footer span { color: var(--accent); }
   </div>
   <h1 id="hero-h1" style="margin-bottom:.6rem;">FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات</h1>
   <div class="hero-stats" style="margin-bottom:1.5rem;">
-    <div class="stat"><div class="stat-num">✔ 30</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 33</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
@@ -469,6 +469,9 @@ footer span { color: var(--accent); }
         <option value="flavored_milk" id="opt-flavored-milk">حليب منكه (JS 805)</option>
         <option value="dried_milk" id="opt-dried-milk">حليب مجفف (JS 121)</option>
         <option value="evaporated_milk" id="opt-evaporated-milk">حليب مبخر مقشود (JS 1624)</option>
+        <option value="filled_evaporated_milk" id="opt-filled-evaporated-milk">حليب مبخر ممزوج بزيوت نباتية (JS 1624:2008)</option>
+        <option value="filled_condensed_milk" id="opt-filled-condensed-milk">حليب مكثف محلى ممزوج بزيوت نباتية (JS 1625:2008)</option>
+        <option value="filled_dried_milk" id="opt-filled-dried-milk">حليب مجفف ممزوج بزيوت نباتية (JS 1626:2007)</option>
         <option value="yoghurt" id="opt-yoghurt">لبن رائب / زبادي (JS 135:2018)</option>
         <option value="uht_milk" id="opt-uht-milk">حليب معقم UHT (JS 600:2018)</option>
         <option value="infant_formula" id="opt-infant-formula">تركيبة حليب رضع (JS 472:2025)</option>
@@ -661,7 +664,7 @@ footer span { color: var(--accent); }
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
       <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 30+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 33+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
@@ -869,6 +872,64 @@ const JS_SPECIFIC_RULES = {
       {code:"JS1624-2", text:"يجب ذكر نوع الزيوت النباتية: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
       {code:"JS1624-3", text:"يجب ذكر محتوى الدهون الكلي ومحتوى البروتين"},
       {code:"JS1624-4", text:"إضافة فيتامينات يجب ذكر نسبها بالوحدات الدولية"}
+    ]
+  },
+
+  // ================================================================
+  // JS 1624:2008 — الحليب المبخر المقشود الممزوج مع الزيوت/الدهون النباتية
+  // ================================================================
+  "filled_evaporated_milk": {
+    name: "الحليب المبخر الممزوج بزيوت نباتية JS 1624:2008",
+    warnings: [
+      {code:"JS1624-10-01-01", text:"🚨 اسم المنتج الإلزامي: 'الحليب المبخر المقشود الممزوج مع الدهون و/أو الزيوت النباتية' — إذا كان منخفض الدسم يُضاف: (منخفض الدسم) — اسم مخالف = مخالفة جسيمة"},
+      {code:"JS1624-10-06-01", text:"🚨 عبارة تحذيرية إلزامية: 'غير ملائم لتغذية الرضع' أو ما يعادلها — غيابها مخالفة جسيمة"},
+      {code:"JS1624-10-02-01", text:"🚨 محتوى الدهن الكلي إلزامي على البطاقة — يُعبّر عنه بـ %وزن/وزن أو %حجم/حجم أو غرام/حصة"},
+      {code:"JS1624-10-04-01", text:"🚨 محتوى البروتين إلزامي على البطاقة — يُعبّر عنه بـ %وزن/وزن أو %حجم/حجم أو غرام/حصة"},
+      {code:"JS1624-10-03-01", text:"🚨 نوع الزيوت/الدهون النباتية المستخدمة إلزامي — وحالة الهدرجة: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
+      {code:"JS1624-10-05-01", text:"🚨 قائمة مكونات كاملة تشمل المضافات الغذائية — مرتبة تنازلياً حسب النسب — غيابها مخالفة جسيمة"},
+      {code:"JS1624-10-07-01", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS1624-5-04-01", text:"⚠️ حدود الدهن (جدول 1): النوع العادي ≥ 7.5% · منخفض الدسم > 1% و< 7.5% — قيمة معلنة خارج الحدود = مخالفة"},
+      {code:"JS1624-5-03-01", text:"⚠️ إذا أُضيفت فيتامينات (أ) أو (د) — يجب إظهار نسبها بالوحدات الدولية على البطاقة"}
+    ]
+  },
+
+  // ================================================================
+  // JS 1625:2008 — الحليب المكثف المحلى الممزوج مع الزيوت/الدهون النباتية
+  // ================================================================
+  "filled_condensed_milk": {
+    name: "الحليب المكثف المحلى الممزوج بزيوت نباتية JS 1625:2008",
+    warnings: [
+      {code:"JS1625-10-01-01", text:"🚨 اسم المنتج الإلزامي: 'الحليب المكثف المحلى المقشود الممزوج مع الدهون و/أو الزيوت النباتية' — إذا كان منخفض الدسم يُضاف: (منخفض الدسم) — اسم مخالف = مخالفة جسيمة"},
+      {code:"JS1625-10-06-01", text:"🚨 عبارة تحذيرية إلزامية: 'غير ملائم لتغذية الرضع' أو ما يعادلها — غيابها مخالفة جسيمة"},
+      {code:"JS1625-10-02-01", text:"🚨 محتوى الدهن الكلي إلزامي على البطاقة — يُعبّر عنه بـ %وزن/وزن أو %حجم/حجم أو غرام/حصة"},
+      {code:"JS1625-10-04-01", text:"🚨 محتوى البروتين إلزامي على البطاقة — يُعبّر عنه بـ %وزن/وزن أو %حجم/حجم أو غرام/حصة"},
+      {code:"JS1625-10-03-01", text:"🚨 نوع الزيوت/الدهون النباتية المستخدمة إلزامي — وحالة الهدرجة: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
+      {code:"JS1625-10-05-01", text:"🚨 قائمة مكونات كاملة تشمل المضافات — مرتبة تنازلياً حسب النسب — غيابها مخالفة جسيمة"},
+      {code:"JS1625-10-07-01", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS1625-5-04-01", text:"⚠️ حدود الدهن (جدول 1): النوع العادي ≥ 8% · منخفض الدسم > 1% و< 8% — قيمة معلنة خارج الحدود = مخالفة"},
+      {code:"JS1625-5-03-01", text:"⚠️ إذا أُضيفت فيتامينات (أ) أو (د) — يجب إظهار نسبها بالوحدات الدولية على البطاقة"},
+      {code:"JS1625-5-2-03-01", text:"⚠️ السكر المضاف في هذا المنتج هو السكروز — إذا استُخدمت سكريات أخرى يجب التصريح بنوعها"}
+    ]
+  },
+
+  // ================================================================
+  // JS 1626:2007 — الحليب المجفف الممزوج مع الزيوت/الدهون النباتية
+  // ================================================================
+  "filled_dried_milk": {
+    name: "الحليب المجفف الممزوج بزيوت نباتية JS 1626:2007",
+    warnings: [
+      {code:"JS1626-10-01-01", text:"🚨 اسم المنتج الإلزامي: 'الحليب المجفف الممزوج مع الزيوت و/أو الدهون النباتية' — يجوز باللغة الإنجليزية استخدام 'Filled milk' مرافقاً للاسم العربي فقط — اسم مخالف = مخالفة جسيمة"},
+      {code:"JS1626-10-07-01", text:"🚨 عبارة تحذيرية إلزامية: 'غير ملائم لتغذية الرضع' أو ما يعادلها — غيابها مخالفة جسيمة"},
+      {code:"JS1626-10-06-01", text:"🚨 تصنيف الدسم إلزامي بجانب الاسم: 'كامل الدسم / Full Fat' أو 'منزوع الدسم جزئياً / Partially Skimmed' أو 'منزوع الدسم / Skimmed' — غيابه مخالفة جسيمة"},
+      {code:"JS1626-10-02-01", text:"🚨 نسبة الدسم المئوية إلزامية على البطاقة — غيابها مخالفة جسيمة"},
+      {code:"JS1626-10-04-01", text:"🚨 نسبة البروتين المئوية إلزامية على البطاقة — غيابها مخالفة جسيمة"},
+      {code:"JS1626-10-03-01", text:"🚨 نوع الزيوت/الدهون النباتية المستخدمة إلزامي — وحالة الهدرجة: مهدرجة / مهدرجة جزئياً / غير مهدرجة"},
+      {code:"JS1626-10-05-01", text:"🚨 قائمة مكونات كاملة تشمل المضافات — مرتبة تنازلياً حسب النسب — غيابها مخالفة جسيمة"},
+      {code:"JS1626-10-08-01", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"JS1626-10-13-01", text:"🚨 طريقة التحضير/الإعداد إلزامية كتابةً أو برسوم — غيابها مخالفة جسيمة"},
+      {code:"JS1626-5-03-01", text:"⚠️ حدود الدسم (جدول 1): كامل الدسم ≥ 26% · منزوع جزئياً > 1.5% و< 26% — قيمة معلنة خارج الحدود = مخالفة"},
+      {code:"JS1626-10-12-01", text:"⚠️ إذا كان المنتج سريع التحضير — يجب ذكر 'سريع التحضير / Instant' — وإذا كان عادياً يُذكر 'عادي'"},
+      {code:"JS1626-6-01-01", text:"⚠️ إذا أُضيف فيتامين (أ) أو (د) — يجب إظهاره على البطاقة"}
     ]
   },
   // ================================================================
@@ -2572,6 +2633,11 @@ const T = {
     optGeneral:'عام', optDairy:'منتجات ألبان', optProcessedCheese:'جبن مطبوخ (JS 185)',
     optSoftCheese:'أجبان طرية (JS 246)', optFlavoredMilk:'حليب منكه (JS 805)',
     optDriedMilk:'حليب مجفف (JS 121)', optEvaporatedMilk:'حليب مبخر مقشود (JS 1624)',
+    optFilledEvaporatedMilk:'حليب مبخر ممزوج بزيوت نباتية (JS 1624:2008)',
+    optFilledCondensedMilk:'حليب مكثف محلى ممزوج بزيوت نباتية (JS 1625:2008)',
+    optFilledDriedMilk:'حليب مجفف ممزوج بزيوت نباتية (JS 1626:2007)',
+    optYoghurt:'لبن رائب / زبادي (JS 135:2018)',
+    optUhtMilk:'حليب معقم UHT (JS 600:2018)',
     optInfantFormula:'تركيبة حليب رضع (JS 472:2025)', optFsmp:'تركيبة طبية خاصة للرضع — FSMP (JS 472:2025)',
     optMeat:'لحوم ودواجن', optFish:'منتجات بحرية', optBakery:'مخبوزات',
     optBiscuit:'بسكويت (JS 6)', optNoodles:'نودلز سريعة التحضير (JS 1719)',
@@ -2590,7 +2656,7 @@ const T = {
     optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
     aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
     aboutCard1Title:'المواصفات الأردنية JS',
-    aboutCard1Text:'تدقيق 30+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
+    aboutCard1Text:'تدقيق 33+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
     aboutCard2Title:'كودكس CXS 192',
     aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
     aboutCard3Title:'110 قاعدة JS 9:2025',
@@ -2623,6 +2689,11 @@ const T = {
     optGeneral:'General', optDairy:'Dairy Products', optProcessedCheese:'Processed Cheese (JS 185)',
     optSoftCheese:'Soft Cheese (JS 246)', optFlavoredMilk:'Flavored Milk (JS 805)',
     optDriedMilk:'Dried Milk (JS 121)', optEvaporatedMilk:'Evaporated Skimmed Milk (JS 1624)',
+    optFilledEvaporatedMilk:'Filled Evaporated Milk with Vegetable Oils (JS 1624:2008)',
+    optFilledCondensedMilk:'Filled Sweetened Condensed Milk with Vegetable Oils (JS 1625:2008)',
+    optFilledDriedMilk:'Filled Dried Milk with Vegetable Oils (JS 1626:2007)',
+    optYoghurt:'Yoghurt (JS 135:2018)',
+    optUhtMilk:'Sterilized / UHT Milk (JS 600:2018)',
     optInfantFormula:'Infant Formula (JS 472:2025)', optFsmp:'Special Medical Formula for Infants — FSMP (JS 472:2025)',
     optMeat:'Meat & Poultry', optFish:'Seafood', optBakery:'Bakery Products',
     optBiscuit:'Biscuits (JS 6)', optNoodles:'Instant Noodles (JS 1719)',
@@ -2641,7 +2712,7 @@ const T = {
     optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
     aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
     aboutCard1Title:'Jordanian JS Standards',
-    aboutCard1Text:'Audits 30+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
+    aboutCard1Text:'Audits 33+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
     aboutCard2Title:'Codex CXS 192',
     aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
     aboutCard3Title:'110 JS 9:2025 Rules',
@@ -2700,7 +2771,13 @@ function applyLang(lang) {
   const opts = {
     'opt-general':t.optGeneral,'opt-dairy':t.optDairy,'opt-processed-cheese':t.optProcessedCheese,
     'opt-soft-cheese':t.optSoftCheese,'opt-flavored-milk':t.optFlavoredMilk,'opt-dried-milk':t.optDriedMilk,
-    'opt-evaporated-milk':t.optEvaporatedMilk,'opt-infant-formula':t.optInfantFormula,'opt-fsmp':t.optFsmp,
+    'opt-evaporated-milk':t.optEvaporatedMilk,
+    'opt-filled-evaporated-milk':t.optFilledEvaporatedMilk,
+    'opt-filled-condensed-milk':t.optFilledCondensedMilk,
+    'opt-filled-dried-milk':t.optFilledDriedMilk,
+    'opt-yoghurt':t.optYoghurt,
+    'opt-uht-milk':t.optUhtMilk,
+    'opt-infant-formula':t.optInfantFormula,'opt-fsmp':t.optFsmp,
     'opt-meat':t.optMeat,'opt-fish':t.optFish,'opt-bakery':t.optBakery,'opt-biscuit':t.optBiscuit,
     'opt-noodles':t.optNoodles,'opt-corn-chips':t.optCornChips,'opt-chocolate':t.optChocolate,
     'opt-candy':t.optCandy,'opt-beverages':t.optBeverages,'opt-energy-drink':t.optEnergyDrink,
