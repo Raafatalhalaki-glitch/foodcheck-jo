@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aflatoxin Compliance Engine — FoodCheck Jordan</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Tajawal:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --navy: #0a0f1e;
+  --navy2: #111827;
+  --navy3: #1a2236;
+  --teal: #00d4a8;
+  --teal2: #00b894;
+  --teal3: rgba(0,212,168,0.12);
+  --red: #ff4757;
+  --amber: #ffa502;
+  --green: #00d4a8;
+  --blue: #4f9cf9;
+  --text: #e8eaf0;
+  --text2: #9ba3b8;
+  --border: rgba(255,255,255,0.07);
+  --card: rgba(255,255,255,0.03);
+  --card2: rgba(255,255,255,0.06);
+  --radius: 12px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+  --urdu: 'Tajawal', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,168,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,168,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ─── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,15,30,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-logo {
+  width: 32px; height: 32px;
+  background: var(--teal);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--navy);
+}
+
+.header-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.header-sub {
+  font-size: 11px;
+  color: var(--teal);
+  font-family: var(--mono);
+  letter-spacing: 0.5px;
+}
+
+.header-badge {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.badge {
+  font-size: 10px;
+  font-family: var(--mono);
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.badge-codex { background: rgba(79,156,249,0.15); color: #4f9cf9; border: 1px solid rgba(79,156,249,0.3); }
+.badge-eu    { background: rgba(0,212,168,0.12); color: var(--teal); border: 1px solid rgba(0,212,168,0.25); }
+
+/* ─── MAIN LAYOUT ─── */
+.main {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ─── PAGE TITLE ─── */
+.page-title {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.page-title h1 {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #fff 0%, var(--teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.page-title .urdu {
+  font-family: var(--urdu);
+  font-size: 16px;
+  color: var(--text2);
+  direction: rtl;
+}
+
+.page-title .sub {
+  font-size: 13px;
+  color: var(--text2);
+  font-family: var(--mono);
+  margin-top: 6px;
+}
+
+/* ─── STEP INDICATOR ─── */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding: 0 1rem;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text2);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.step.active { color: var(--teal); }
+.step.done   { color: var(--text2); }
+
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.step.active .step-num {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--navy);
+}
+
+.step.done .step-num {
+  background: rgba(0,212,168,0.15);
+  border-color: rgba(0,212,168,0.4);
+  color: var(--teal);
+}
+
+.step-connector {
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ─── CARD ─── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.card:hover { border-color: rgba(0,212,168,0.15); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--teal3);
+  border: 1px solid rgba(0,212,168,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.card-subtitle {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: var(--mono);
+  margin-top: 2px;
+}
+
+/* ─── FORM ELEMENTS ─── */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text2);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.field label span.required {
+  color: var(--teal);
+  margin-left: 2px;
+}
+
+.field-hint {
+  font-size: 10px;
+  color: var(--text2);
+  opacity: 0.7;
+  margin-top: -2px;
+}
+
+input, select, textarea {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(0,212,168,0.1);
+}
+
+input.error { border-color: var(--red); }
+input.valid { border-color: var(--teal); }
+
+select option { background: var(--navy2); }
+
+.input-unit {
+  position: relative;
+}
+
+.input-unit input { padding-right: 52px; }
+
+.input-unit .unit {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text2);
+  pointer-events: none;
+}
+
+/* ─── TOGGLE ─── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.toggle-row:last-child { border-bottom: none; }
+
+.toggle-label {
+  font-size: 13px;
+}
+
+.toggle-hint {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 2px;
+  font-family: var(--mono);
+}
+
+.toggle {
+  position: relative;
+  width: 44px; height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle input { opacity: 0; width: 0; height: 0; }
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--text2);
+  top: 2px; left: 2px;
+  transition: all 0.2s;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: rgba(0,212,168,0.2);
+  border-color: var(--teal);
+}
+
+.toggle input:checked + .toggle-slider::after {
+  background: var(--teal);
+  transform: translateX(20px);
+}
+
+/* ─── OCR UPLOAD ─── */
+.upload-area {
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.upload-area:hover, .upload-area.drag-over {
+  border-color: var(--teal);
+  background: var(--teal3);
+}
+
+.upload-area input[type=file] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+
+.upload-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-text { font-size: 13px; color: var(--text2); }
+.upload-text strong { color: var(--teal); }
+.upload-formats { font-size: 10px; font-family: var(--mono); color: var(--text2); margin-top: 4px; opacity: 0.7; }
+
+.ocr-status {
+  display: none;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+
+.ocr-status.loading { background: rgba(79,156,249,0.1); color: #4f9cf9; border: 1px solid rgba(79,156,249,0.2); }
+.ocr-status.success { background: rgba(0,212,168,0.1); color: var(--teal); border: 1px solid rgba(0,212,168,0.2); }
+.ocr-status.error   { background: rgba(255,71,87,0.1); color: var(--red); border: 1px solid rgba(255,71,87,0.2); }
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: var(--navy);
+}
+
+.btn-primary:hover {
+  background: var(--teal2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0,212,168,0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--teal);
+  border: 1px solid rgba(0,212,168,0.4);
+}
+
+.btn-outline:hover {
+  background: var(--teal3);
+  border-color: var(--teal);
+}
+
+.btn-ghost {
+  background: var(--card2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.15);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+/* ─── PRODUCT SELECTOR ─── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.product-card {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--card);
+}
+
+.product-card:hover {
+  border-color: rgba(0,212,168,0.3);
+  background: var(--teal3);
+}
+
+.product-card.selected {
+  border-color: var(--teal);
+  background: rgba(0,212,168,0.08);
+}
+
+.product-card .p-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.product-card .p-group {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text2);
+}
+
+.product-card .p-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-family: var(--mono);
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+.p-badge.codex { background: rgba(79,156,249,0.15); color: #4f9cf9; }
+.p-badge.eu    { background: rgba(255,165,2,0.15); color: var(--amber); }
+
+/* ─── RESULTS ─── */
+#results-section { display: none; }
+
+.result-banner {
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.result-banner.pass {
+  background: rgba(0,212,168,0.08);
+  border: 1.5px solid rgba(0,212,168,0.3);
+}
+
+.result-banner.fail {
+  background: rgba(255,71,87,0.08);
+  border: 1.5px solid rgba(255,71,87,0.3);
+}
+
+.result-banner.warn {
+  background: rgba(255,165,2,0.08);
+  border: 1.5px solid rgba(255,165,2,0.3);
+}
+
+.result-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.result-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.result-sub {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 3px;
+}
+
+.result-urdu {
+  font-family: var(--urdu);
+  font-size: 15px;
+  direction: rtl;
+  margin-top: 4px;
+}
+
+/* ─── DECISION TREE ─── */
+.decision-tree {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.decision-tree h3 {
+  font-size: 13px;
+  font-family: var(--mono);
+  color: var(--teal);
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.tree-step {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.tree-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: -12px;
+  width: 1px;
+  background: var(--border);
+}
+
+.tree-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mono);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tree-dot.pass  { background: rgba(0,212,168,0.2); color: var(--teal); border: 1px solid rgba(0,212,168,0.4); }
+.tree-dot.fail  { background: rgba(255,71,87,0.2); color: var(--red); border: 1px solid rgba(255,71,87,0.4); }
+.tree-dot.warn  { background: rgba(255,165,2,0.2); color: var(--amber); border: 1px solid rgba(255,165,2,0.4); }
+.tree-dot.info  { background: rgba(79,156,249,0.15); color: #4f9cf9; border: 1px solid rgba(79,156,249,0.3); }
+.tree-dot.skip  { background: var(--card2); color: var(--text2); border: 1px solid var(--border); }
+
+.tree-content { flex: 1; }
+
+.tree-label {
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 3px;
+}
+
+.tree-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tree-explain {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.tree-explain-urdu {
+  font-family: var(--urdu);
+  font-size: 12px;
+  direction: rtl;
+  color: var(--text2);
+  margin-top: 2px;
+}
+
+/* ─── VALUES TABLE ─── */
+.values-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.values-table th {
+  text-align: left;
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.values-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.values-table tr:last-child td { border-bottom: none; }
+
+.val-reported { font-family: var(--mono); font-size: 14px; font-weight: 600; }
+.val-ml       { font-family: var(--mono); font-size: 12px; color: var(--text2); }
+.val-status   { font-size: 12px; font-weight: 600; }
+.val-status.pass { color: var(--teal); }
+.val-status.fail { color: var(--red); }
+.val-status.warn { color: var(--amber); }
+
+/* ─── FLAGS ─── */
+.flags-list { display: flex; flex-direction: column; gap: 8px; }
+
+.flag-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  align-items: flex-start;
+}
+
+.flag-item.high   { background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.2); }
+.flag-item.medium { background: rgba(255,165,2,0.08); border: 1px solid rgba(255,165,2,0.2); }
+.flag-item.info   { background: rgba(79,156,249,0.08); border: 1px solid rgba(79,156,249,0.2); }
+
+.flag-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.flag-text { flex: 1; }
+.flag-title { font-weight: 600; margin-bottom: 2px; }
+.flag-detail { color: var(--text2); line-height: 1.4; }
+.flag-action { font-style: italic; margin-top: 3px; }
+.flag-urdu { font-family: var(--urdu); direction: rtl; font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+/* ─── REFERENCE BOX ─── */
+.ref-box {
+  background: rgba(79,156,249,0.06);
+  border: 1px solid rgba(79,156,249,0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: #4f9cf9;
+  line-height: 1.6;
+}
+
+/* ─── LOADING ─── */
+.analyzing-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,15,30,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analyzing-overlay.active { display: flex; }
+
+.spinner {
+  width: 48px; height: 48px;
+  border: 3px solid var(--border);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.analyzing-text {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--teal);
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .main { padding: 1rem 1rem 3rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .steps { gap: 4px; }
+  .step-connector { width: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ANALYZING OVERLAY -->
+<div class="analyzing-overlay" id="analyzingOverlay">
+  <div class="spinner"></div>
+  <div class="analyzing-text">Processing aflatoxin data...</div>
+  <div style="font-size:11px;color:var(--text2);font-family:var(--mono);">Applying Codex CXS 193 → EU 2023/915 decision hierarchy</div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">FC</div>
+    <div>
+      <div class="header-title">FoodCheck Jordan</div>
+      <div class="header-sub">AFLATOXIN COMPLIANCE ENGINE</div>
+    </div>
+  </div>
+  <div class="header-badge">
+    <span class="badge badge-codex">Codex CXS 193-1995</span>
+    <span class="badge badge-eu">EU 2023/915</span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <h1>Aflatoxin Regulatory Assessment</h1>
+    <div class="urdu">اناج میں آفلاٹوکسن کی ریگولیٹری جانچ</div>
+    <div class="sub">HPLC Results → Regulatory Decision | ISO 17025 Compatible</div>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps">
+    <div class="step active" id="step-ind-1">
+      <div class="step-num">1</div>
+      <span>Sample Identity</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" id="step-ind-2">
+      <div class="step-num">2</div>
+      <span>Product & Lot</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" id="step-ind-3">
+      <div class="step-num">3</div>
+      <span>HPLC Results</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" id="step-ind-4">
+      <div class="step-num">4</div>
+      <span>Method Validity</span>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" id="step-ind-5">
+      <div class="step-num">5</div>
+      <span>Decision & Report</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 1: SAMPLE IDENTITY -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="section-1">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🧪</div>
+        <div>
+          <div class="card-title">Sample Identity & Chain of Custody</div>
+          <div class="card-subtitle">نمونہ کی شناخت اور تحویل کا سلسلہ</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Laboratory Reference No.<span class="required">*</span></label>
+          <input type="text" id="lab_ref" placeholder="e.g. LAB-2025-00123" />
+          <div class="field-hint">لیبارٹری کا حوالہ نمبر</div>
+        </div>
+        <div class="field">
+          <label>Sample ID / Field Code</label>
+          <input type="text" id="sample_id" placeholder="e.g. NIBGE-AF-001" />
+        </div>
+        <div class="field">
+          <label>Date of Sampling<span class="required">*</span></label>
+          <input type="date" id="date_sampling" />
+        </div>
+        <div class="field">
+          <label>Date of Receipt at Lab<span class="required">*</span></label>
+          <input type="date" id="date_receipt" />
+        </div>
+        <div class="field">
+          <label>Date of Analysis<span class="required">*</span></label>
+          <input type="date" id="date_analysis" />
+        </div>
+        <div class="field">
+          <label>Analyst Name</label>
+          <input type="text" id="analyst" placeholder="Full name" />
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;">
+        <div class="form-grid">
+          <div class="field">
+            <label>Commodity Description (as declared)<span class="required">*</span></label>
+            <input type="text" id="commodity_desc" placeholder="e.g. Wheat grain, hard red winter" />
+            <div class="field-hint">اشیاء کی تفصیل جیسا کہ اعلان کیا گیا</div>
+          </div>
+          <div class="field">
+            <label>Country of Origin</label>
+            <input type="text" id="origin" placeholder="e.g. Pakistan" />
+          </div>
+          <div class="field">
+            <label>Supplier / Consignor</label>
+            <input type="text" id="supplier" placeholder="Company name" />
+          </div>
+          <div class="field">
+            <label>Lot / Batch Number<span class="required">*</span></label>
+            <input type="text" id="lot_number" placeholder="e.g. LOT-2025-789" />
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;">
+        <div class="form-grid">
+          <div class="field">
+            <label>Seal Number (if applicable)</label>
+            <input type="text" id="seal_number" placeholder="Official seal / container seal" />
+          </div>
+          <div class="field">
+            <label>Sample Condition on Receipt</label>
+            <select id="sample_condition">
+              <option value="">Select condition</option>
+              <option value="Intact and sealed">Intact and sealed</option>
+              <option value="Intact, no seal">Intact, no seal</option>
+              <option value="Partially open">Partially open</option>
+              <option value="Damaged">Damaged</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Storage Before Analysis</label>
+            <select id="storage_condition">
+              <option value="">Select storage</option>
+              <option value="Room temperature, dark">Room temperature, dark</option>
+              <option value="Refrigerated (4°C)">Refrigerated (4°C)</option>
+              <option value="Frozen (-18°C)">Frozen (-18°C)</option>
+              <option value="Ambient, not controlled">Ambient, not controlled</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Sampler Identity</label>
+            <input type="text" id="sampler" placeholder="Name / Official / Lab technician" />
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="goToSection(2)">
+          Next: Product & Lot →
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 2: PRODUCT & LOT -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="section-2" style="display:none;">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🌾</div>
+        <div>
+          <div class="card-title">Product Category & Lot Information</div>
+          <div class="card-subtitle">پروڈکٹ کیٹیگری اور لاٹ کی معلومات</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:11px;font-family:var(--mono);color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:8px;">
+          Select Product Category<span style="color:var(--teal);"> *</span>
+        </label>
+        <div class="product-grid" id="productGrid"></div>
+        <div id="productExplain" style="display:none;margin-top:10px;padding:10px 14px;background:var(--teal3);border:1px solid rgba(0,212,168,0.2);border-radius:8px;font-size:12px;line-height:1.5;"></div>
+      </div>
+
+      <div style="margin-top:1.25rem;" class="form-grid">
+        <div class="field">
+          <label>Lot Weight (tonnes)<span class="required">*</span></label>
+          <div class="input-unit">
+            <input type="number" id="lot_weight" placeholder="0.0" step="0.01" min="0.001" />
+            <span class="unit">t</span>
+          </div>
+          <div class="field-hint" id="lotWeightHint">Enter lot weight for sublot calculation</div>
+        </div>
+        <div class="field">
+          <label>Number of Incremental Samples Taken</label>
+          <input type="number" id="increments_taken" placeholder="e.g. 10" min="1" />
+          <div class="field-hint" id="incrementsHint">Required per Codex Annex VI</div>
+        </div>
+        <div class="field">
+          <label>Laboratory Sample Weight (kg)</label>
+          <div class="input-unit">
+            <input type="number" id="lab_sample_weight" placeholder="e.g. 5" step="0.1" min="0.1" />
+            <span class="unit">kg</span>
+          </div>
+          <div class="field-hint" id="labSampleHint">Minimum required weight</div>
+        </div>
+        <div class="field">
+          <label>Test Portion Weight (g)</label>
+          <div class="input-unit">
+            <input type="number" id="test_portion" placeholder="e.g. 25" step="0.1" />
+            <span class="unit">g</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;" class="form-grid">
+        <div class="field">
+          <label>Sublot Number (if applicable)</label>
+          <input type="text" id="sublot_number" placeholder="e.g. Sublot 1 of 3" />
+        </div>
+        <div class="field">
+          <label>Sample Preparation / Grinding</label>
+          <select id="grinding">
+            <option value="">Select</option>
+            <option value="Dry grind, particles < 0.85 mm (20 mesh)">Dry grind, particles &lt; 0.85 mm (20 mesh) — Codex standard</option>
+            <option value="Wet grind / slurry">Wet grind / slurry</option>
+            <option value="Not ground (processed product)">Not ground (processed product)</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Sampling Compliance Confirmed?<span class="required">*</span></label>
+          <select id="sampling_compliance">
+            <option value="No">No / Not confirmed</option>
+            <option value="Yes">Yes — documented per Codex Annex VI</option>
+          </select>
+          <div class="field-hint">نمونہ لینے کی تعمیل کی تصدیق</div>
+        </div>
+      </div>
+
+      <!-- Sublot info box -->
+      <div id="sublotBox" style="display:none;margin-top:1rem;padding:12px 16px;background:rgba(79,156,249,0.07);border:1px solid rgba(79,156,249,0.2);border-radius:8px;">
+        <div style="font-size:11px;font-family:var(--mono);color:#4f9cf9;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">📋 Codex Sublot Requirement</div>
+        <div id="sublotText" style="font-size:13px;"></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px;">Required incremental samples: <strong id="reqIncrements">—</strong></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goToSection(1)">← Back</button>
+        <button class="btn btn-primary" onclick="goToSection(3)">Next: HPLC Results →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 3: HPLC RESULTS -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="section-3" style="display:none;">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div>
+          <div class="card-title">HPLC Analytical Results</div>
+          <div class="card-subtitle">HPLC تجزیاتی نتائج — افلاٹوکسن B1, B2, G1, G2</div>
+        </div>
+      </div>
+
+      <!-- OCR Upload -->
+      <div style="margin-bottom:1.25rem;">
+        <label style="font-size:11px;font-family:var(--mono);color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:8px;">
+          📎 Upload HPLC Report (OCR Auto-Fill)
+        </label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="ocrFile" accept="image/*,.pdf" onchange="handleOCR(this)" />
+          <div class="upload-icon">🔬</div>
+          <div class="upload-text">Drop HPLC report image or <strong>click to browse</strong></div>
+          <div class="upload-formats">JPG · PNG · PDF · TIFF — Max 10MB</div>
+        </div>
+        <div class="ocr-status" id="ocrStatus"></div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="font-size:11px;font-family:var(--mono);color:var(--text2);">OR ENTER MANUALLY</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- Individual aflatoxins -->
+      <div style="margin-bottom:1rem;">
+        <div style="font-size:11px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">
+          Individual Aflatoxin Values (µg/kg)
+        </div>
+        <div class="form-grid-3">
+          <div class="field">
+            <label>AFB1 — Aflatoxin B1<span class="required">*</span></label>
+            <div class="input-unit">
+              <input type="number" id="afb1" placeholder="0.00" step="0.01" min="0" oninput="updateTotal()" />
+              <span class="unit">µg/kg</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>AFB2 — Aflatoxin B2</label>
+            <div class="input-unit">
+              <input type="number" id="afb2" placeholder="0.00" step="0.01" min="0" oninput="updateTotal()" />
+              <span class="unit">µg/kg</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>AFG1 — Aflatoxin G1</label>
+            <div class="input-unit">
+              <input type="number" id="afg1" placeholder="0.00" step="0.01" min="0" oninput="updateTotal()" />
+              <span class="unit">µg/kg</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>AFG2 — Aflatoxin G2</label>
+            <div class="input-unit">
+              <input type="number" id="afg2" placeholder="0.00" step="0.01" min="0" oninput="updateTotal()" />
+              <span class="unit">µg/kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:11px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;">Total Aflatoxins (B1+B2+G1+G2)</div>
+          <div style="font-size:10px;color:var(--text2);margin-top:2px;">Lower bound: values below LOQ counted as zero</div>
+        </div>
+        <div style="text-align:right;">
+          <div id="totalDisplay" style="font-size:28px;font-family:var(--mono);font-weight:700;color:var(--teal);">0.00</div>
+          <div style="font-size:11px;font-family:var(--mono);color:var(--text2);">µg/kg</div>
+        </div>
+      </div>
+
+      <!-- Lower bound note -->
+      <div style="margin-bottom:1.25rem;">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Apply Lower Bound Concentration (EU requirement)</div>
+            <div class="toggle-hint">Values below LOQ counted as zero in total calculation</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="lowerBound" checked onchange="updateTotal()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Result basis -->
+      <div class="form-grid">
+        <div class="field">
+          <label>Result Basis<span class="required">*</span></label>
+          <select id="result_basis">
+            <option value="as-is">As-is (fresh weight basis) — required for ML comparison</option>
+            <option value="dry-weight">Dry weight basis — conversion needed</option>
+          </select>
+          <div class="field-hint">نتیجے کی بنیاد — ML کے موازنے کے لیے as-is ضروری ہے</div>
+        </div>
+        <div class="field">
+          <label>Unit Confirmed as µg/kg (= ppb)?<span class="required">*</span></label>
+          <select id="unit_confirmed">
+            <option value="Yes">Yes — µg/kg confirmed</option>
+            <option value="No">No — different unit used</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Measurement Uncertainty -->
+      <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1.25rem;">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Measurement Uncertainty Available?</div>
+            <div class="toggle-hint">پیمائش کی غیر یقینی صورتحال — ISO 17025 requirement</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="muAvailable" onchange="toggleMU()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div id="muFields" style="display:none;margin-top:1rem;" class="form-grid-3">
+          <div class="field">
+            <label>U (Total Aflatoxins) µg/kg</label>
+            <div class="input-unit">
+              <input type="number" id="mu_total" placeholder="± value" step="0.01" min="0" />
+              <span class="unit">±</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>U (AFB1) µg/kg</label>
+            <div class="input-unit">
+              <input type="number" id="mu_afb1" placeholder="± value" step="0.01" min="0" />
+              <span class="unit">±</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Coverage Factor (k)</label>
+            <input type="number" id="mu_k" placeholder="2" value="2" step="0.1" min="1" />
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goToSection(2)">← Back</button>
+        <button class="btn btn-primary" onclick="goToSection(4)">Next: Method Validity →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 4: METHOD VALIDATION -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="section-4" style="display:none;">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔬</div>
+        <div>
+          <div class="card-title">HPLC Method Validity — ISO 17025 / Codex Annex VI</div>
+          <div class="card-subtitle">طریقہ کار کی درستگی — ریگولیٹری ضرورت</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Analytical Method Reference</label>
+          <input type="text" id="method_ref" placeholder="e.g. AOAC 2005.08 / ISO 14718 / In-house" />
+        </div>
+        <div class="field">
+          <label>Method Validation Status</label>
+          <select id="method_validated">
+            <option value="Yes">Yes — validated per Codex performance criteria</option>
+            <option value="Partial">Partially validated</option>
+            <option value="No">No — not confirmed</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Extraction Solvent</label>
+          <input type="text" id="extraction_solvent" placeholder="e.g. Methanol:Water (80:20)" />
+        </div>
+        <div class="field">
+          <label>Cleanup Procedure</label>
+          <select id="cleanup">
+            <option value="">Select</option>
+            <option value="Immunoaffinity column (IAC)">Immunoaffinity column (IAC) — preferred</option>
+            <option value="SPE column">SPE column</option>
+            <option value="MycoSep column">MycoSep column</option>
+            <option value="None">None</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;">
+        <div style="font-size:11px;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">
+          Performance Criteria (per Codex Annex VI Table 3)
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Recovery % — AFB1+B2+G1+G2</label>
+            <div class="input-unit">
+              <input type="number" id="recovery_total" placeholder="e.g. 85" step="0.1" min="0" max="200" />
+              <span class="unit">%</span>
+            </div>
+            <div class="field-hint" id="recoveryHint">Required: 60–115%</div>
+          </div>
+          <div class="field">
+            <label>Recovery % — AFB1</label>
+            <div class="input-unit">
+              <input type="number" id="recovery_b1" placeholder="e.g. 80" step="0.1" min="0" max="200" />
+              <span class="unit">%</span>
+            </div>
+            <div class="field-hint">Required: 40–120%</div>
+          </div>
+          <div class="field">
+            <label>LOD — AFB1+B2+G1+G2 (µg/kg)</label>
+            <div class="input-unit">
+              <input type="number" id="lod_total" placeholder="e.g. 0.5" step="0.01" min="0" />
+              <span class="unit">µg/kg</span>
+            </div>
+            <div class="field-hint" id="lodHint">Must be ≤ required LOD for product</div>
+          </div>
+          <div class="field">
+            <label>LOQ — AFB1+B2+G1+G2 (µg/kg)</label>
+            <div class="input-unit">
+              <input type="number" id="loq_total" placeholder="e.g. 1.5" step="0.01" min="0" />
+              <span class="unit">µg/kg</span>
+            </div>
+            <div class="field-hint" id="loqHint">Must be ≤ required LOQ for product</div>
+          </div>
+          <div class="field">
+            <label>RSDr % (Repeatability)</label>
+            <div class="input-unit">
+              <input type="number" id="rsdr" placeholder="e.g. 8" step="0.1" min="0" />
+              <span class="unit">%</span>
+            </div>
+            <div class="field-hint">Required: &lt; 44% (Horwitz)</div>
+          </div>
+          <div class="field">
+            <label>RSDR % (Reproducibility)</label>
+            <div class="input-unit">
+              <input type="number" id="rsdr_repro" placeholder="e.g. 15" step="0.1" min="0" />
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Results Recovery-Corrected?</label>
+            <select id="recovery_corrected">
+              <option value="No">No — reported as measured</option>
+              <option value="Yes">Yes — corrected for recovery</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Calibration Range</label>
+            <input type="text" id="calibration_range" placeholder="e.g. 0.5 – 50 µg/kg" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Required criteria display -->
+      <div id="criteriaBox" style="display:none;margin-top:1rem;padding:14px 16px;background:rgba(79,156,249,0.07);border:1px solid rgba(79,156,249,0.2);border-radius:8px;">
+        <div style="font-size:11px;font-family:var(--mono);color:#4f9cf9;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">📋 Required Criteria for Selected Product</div>
+        <div id="criteriaText" style="font-size:12px;line-height:1.8;font-family:var(--mono);"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goToSection(3)">← Back</button>
+        <button class="btn btn-primary" onclick="runAssessment()">
+          🔍 Generate Assessment & Report
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 5: RESULTS -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div id="results-section">
+
+    <!-- MAIN VERDICT -->
+    <div id="mainBanner" class="result-banner"></div>
+
+    <!-- DECISION TREE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🧭</div>
+        <div>
+          <div class="card-title">Regulatory Decision — Step by Step</div>
+          <div class="card-subtitle">ریگولیٹری فیصلہ — مرحلہ وار</div>
+        </div>
+      </div>
+      <div class="decision-tree">
+        <h3>Decision Pathway</h3>
+        <div id="decisionSteps"></div>
+      </div>
+    </div>
+
+    <!-- VALUES TABLE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <div>
+          <div class="card-title">Analytical Values vs Maximum Levels</div>
+          <div class="card-subtitle">تجزیاتی اقدار بمقابلہ زیادہ سے زیادہ سطح</div>
+        </div>
+      </div>
+      <table class="values-table" id="valuesTable"></table>
+    </div>
+
+    <!-- FLAGS -->
+    <div class="card" id="flagsCard">
+      <div class="card-header">
+        <div class="card-icon">⚠️</div>
+        <div>
+          <div class="card-title">Quality Flags & Warnings</div>
+          <div class="card-subtitle">معیار کے جھنڈے اور انتباہات</div>
+        </div>
+      </div>
+      <div class="flags-list" id="flagsList"></div>
+    </div>
+
+    <!-- REFERENCE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📚</div>
+        <div>
+          <div class="card-title">Regulatory References Applied</div>
+        </div>
+      </div>
+      <div class="ref-box" id="refBox"></div>
+    </div>
+
+    <!-- AUTHORITY DISCLAIMER -->
+    <div style="background:rgba(255,165,2,0.06);border:1px solid rgba(255,165,2,0.2);border-radius:10px;padding:14px 16px;margin-bottom:1.25rem;">
+      <div style="font-size:11px;font-family:var(--mono);color:var(--amber);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">⚖️ Authority Declaration</div>
+      <div style="font-size:13px;line-height:1.6;">This report provides laboratory interpretation support based on the stated regulatory hierarchy. <strong>The final official regulatory decision belongs to the competent regulatory authority.</strong></div>
+      <div style="font-family:var(--urdu);direction:rtl;font-size:13px;color:var(--text2);margin-top:6px;">یہ رپورٹ لیبارٹری تشریح کی مدد فراہم کرتی ہے۔ حتمی سرکاری فیصلہ مجاز ریگولیٹری اتھارٹی کا اختیار ہے۔</div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn btn-outline" onclick="goToSection(1);document.getElementById('results-section').style.display='none';">
+        🔄 New Assessment
+      </button>
+      <button class="btn btn-primary" onclick="generatePDF()">
+        📄 Download PDF Report
+      </button>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATABASE — Embedded from Codex CXS 193-1995 + EU 2023/915
+// ═══════════════════════════════════════════════════════════
+const PRODUCTS = [
+  { key:'MAIZE_GRAIN_DFP',       display:'Maize grain — destined for further processing',            group:'Cereal grain',          codex:true,  codex_ml:15, eu_section:'1.1.12', eu_afb1:2,   eu_total:4,   sampling:'GRAIN_DYNAMIC_5KG', lab_kg:5,   tp_g:25, lod_max:3,  loq_max:6,  explanation:'Maize grain documented as destined for further processing only. Codex CXS 193 Annex VI applies. EU AFB1 limit (2 µg/kg) reported as observation.' },
+  { key:'MAIZE_DERIVED',         display:'Maize flour, meal, semolina, flakes',                      group:'Cereal-derived product', codex:true,  codex_ml:10, eu_section:'1.1.12', eu_afb1:2,   eu_total:4,   sampling:'PROCESSED_1KG',     lab_kg:1,   tp_g:25, lod_max:2,  loq_max:4,  explanation:'Processed maize products. Codex ML = 10 µg/kg total. Fixed sampling plan: 10 × 100 g increments.' },
+  { key:'HUSKED_RICE',           display:'Husked rice',                                              group:'Cereal grain',          codex:true,  codex_ml:20, eu_section:'1.1.12', eu_afb1:2,   eu_total:4,   sampling:'GRAIN_DYNAMIC_5KG', lab_kg:5,   tp_g:25, lod_max:4,  loq_max:8,  explanation:'Husked rice with Codex ML = 20 µg/kg total. Stricter than polished rice limit.' },
+  { key:'POLISHED_RICE',         display:'Polished rice',                                            group:'Cereal grain',          codex:true,  codex_ml:5,  eu_section:'1.1.12', eu_afb1:2,   eu_total:4,   sampling:'GRAIN_DYNAMIC_5KG', lab_kg:5,   tp_g:25, lod_max:1,  loq_max:2,  explanation:'Polished rice has the strictest Codex ML = 5 µg/kg. Same as infant cereal foods.' },
+  { key:'SORGHUM_GRAIN_DFP',     display:'Sorghum grain — destined for further processing',          group:'Cereal grain',          codex:true,  codex_ml:10, eu_section:'1.1.12', eu_afb1:2,   eu_total:4,   sampling:'GRAIN_DYNAMIC_5KG', lab_kg:5,   tp_g:25, lod_max:2,  loq_max:4,  explanation:'Sorghum DFP. Codex ML = 10 µg/kg. Must be documented as destined for further processing.' },
+  { key:'INFANT_CEREAL',         display:'Cereal-based food — infants and young children',           group:'Infant food',           codex:true,  codex_ml:5,  eu_section:'1.1.18', eu_afb1:0.1, eu_total:null,sampling:'PROCESSED_1KG',     lab_kg:1,   tp_g:25, lod_max:1,  loq_max:2,  explanation:'Strictest category. Codex ML = 5 µg/kg total. EU 1.1.18: AFB1 ≤ 0.10 µg/kg (dry matter) — disclose both.' },
+  { key:'INFANT_CEREAL_AID',     display:'Cereal-based food — food aid programmes (infants)',        group:'Infant food',           codex:true,  codex_ml:10, eu_section:'1.1.18', eu_afb1:0.1, eu_total:null,sampling:'PROCESSED_1KG',     lab_kg:1,   tp_g:25, lod_max:2,  loq_max:4,  explanation:'Food aid programmes only. Codex ML = 10 µg/kg. EU AFB1 observation still applies.' },
+  { key:'WHEAT_GRAIN',           display:'Wheat grain (common, durum, spelt, emmer)',                group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for wheat grain aflatoxins. EU Regulation 2023/915 §1.1.12 applies as primary reference: AFB1 ≤ 2 µg/kg, Total ≤ 4 µg/kg.' },
+  { key:'BARLEY_GRAIN',          display:'Barley grain',                                             group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for barley aflatoxins. EU 2023/915 §1.1.12: AFB1 ≤ 2, Total ≤ 4 µg/kg.' },
+  { key:'OATS_GRAIN',            display:'Oats grain',                                               group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for oats aflatoxins. EU 2023/915 §1.1.12 applies as fallback.' },
+  { key:'RYE_GRAIN',             display:'Rye grain',                                                group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for rye aflatoxins. EU 2023/915 §1.1.12 applies as fallback.' },
+  { key:'MILLET_GRAIN',          display:'Millet grain (pearl, finger, foxtail)',                    group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for millet aflatoxins. EU 2023/915 §1.1.12 applies as fallback.' },
+  { key:'TRITICALE_GRAIN',       display:'Triticale grain',                                          group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for triticale. EU 2023/915 §1.1.12 applies as fallback.' },
+  { key:'SORGHUM_DIRECT',        display:'Sorghum grain — direct human consumption (not DFP)',       group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'Codex only covers sorghum DFP. For direct consumption, EU 2023/915 §1.1.12 applies: AFB1 ≤ 2, Total ≤ 4 µg/kg.' },
+  { key:'MAIZE_GRAIN_DIRECT',    display:'Maize grain — direct consumption / before sorting',        group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.13',eu_afb1:5,  eu_total:10,  sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'Codex only covers maize DFP. For direct consumption, EU 2023/915 §1.1.13: AFB1 ≤ 5, Total ≤ 10 µg/kg.' },
+  { key:'RICE_BEFORE_SORTING',   display:'Rice — before sorting or physical treatment',              group:'Cereal grain',          codex:false, codex_ml:null,eu_section:'1.1.13',eu_afb1:5,  eu_total:10,  sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'Before sorting/physical treatment. EU 2023/915 §1.1.13: AFB1 ≤ 5, Total ≤ 10 µg/kg. For husked/polished rice use respective categories.' },
+  { key:'WHEAT_FLOUR_DERIVED',   display:'Wheat flour, bread, pasta, biscuits, semolina',           group:'Cereal-derived product', codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'No Codex ML for wheat-derived products. EU 2023/915 §1.1.12: AFB1 ≤ 2, Total ≤ 4 µg/kg. Includes processed cereal products.' },
+  { key:'MIXED_CEREAL',          display:'Mixed / processed cereal products (≥80% cereal content)', group:'Cereal-derived product', codex:false, codex_ml:null,eu_section:'1.1.12',eu_afb1:2,  eu_total:4,   sampling:'EU_FALLBACK',       lab_kg:null,tp_g:null,lod_max:null,loq_max:null,explanation:'Mixed cereal products containing ≥80% cereals. EU 2023/915 §1.1.12 applies as fallback.' },
+];
+
+let selectedProduct = null;
+let assessmentData = {};
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function goToSection(n) {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`section-${i}`);
+    if (el) el.style.display = (i === n) ? 'block' : 'none';
+  }
+  document.getElementById('results-section').style.display = 'none';
+
+  // Update step indicators
+  for (let i = 1; i <= 5; i++) {
+    const ind = document.getElementById(`step-ind-${i}`);
+    if (!ind) continue;
+    ind.className = 'step' + (i === n ? ' active' : (i < n ? ' done' : ''));
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// PRODUCT GRID
+// ═══════════════════════════════════════════════════════════
+function buildProductGrid() {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = '';
+  PRODUCTS.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="p-name">${p.display}</div>
+      <div class="p-group">${p.group}</div>
+      <span class="p-badge ${p.codex ? 'codex' : 'eu'}">${p.codex ? 'Codex CXS 193' : 'EU 2023/915'}</span>
+    `;
+    card.onclick = () => selectProduct(p, card);
+    grid.appendChild(card);
+  });
+}
+
+function selectProduct(p, card) {
+  document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedProduct = p;
+
+  // Show explanation
+  const expBox = document.getElementById('productExplain');
+  expBox.style.display = 'block';
+  expBox.innerHTML = `<strong>${p.display}</strong><br>${p.explanation}`;
+
+  // Update sampling hints
+  updateSamplingHints();
+  updateCriteriaBox();
+  updateTotal();
+}
+
+function updateSamplingHints() {
+  if (!selectedProduct) return;
+  const p = selectedProduct;
+  const lotW = parseFloat(document.getElementById('lot_weight').value) || 0;
+
+  // Required lab sample
+  const labHint = document.getElementById('labSampleHint');
+  if (p.lab_kg) labHint.textContent = `Required: ≥ ${p.lab_kg} kg (Codex Annex VI)`;
+  else labHint.textContent = 'Per EU/national guidelines';
+
+  // Required increments
+  let reqInc = '—';
+  if (p.sampling === 'GRAIN_DYNAMIC_5KG' && lotW > 0) {
+    if (lotW <= 0.05) reqInc = 3;
+    else if (lotW <= 0.5) reqInc = 5;
+    else if (lotW <= 1) reqInc = 10;
+    else if (lotW <= 3) reqInc = 20;
+    else if (lotW <= 10) reqInc = 40;
+    else if (lotW <= 20) reqInc = 60;
+    else reqInc = 100;
+  } else if (p.sampling === 'PROCESSED_1KG') {
+    reqInc = '10 × 100 g';
+  }
+
+  document.getElementById('reqIncrements').textContent = reqInc;
+  document.getElementById('incrementsHint').textContent = `Required: ${reqInc} increments`;
+
+  // Sublot requirement
+  let sublotText = '';
+  if (p.sampling === 'GRAIN_DYNAMIC_5KG' && lotW > 0) {
+    if (lotW >= 1500) sublotText = 'Subdivide into 500-tonne sublots (100 increments each)';
+    else if (lotW > 300) sublotText = 'Subdivide into 3 sublots minimum (100 increments each)';
+    else if (lotW >= 100) sublotText = 'Subdivide into 100-tonne sublots (100 increments each)';
+    else if (lotW >= 50) sublotText = 'Subdivide into 2 sublots (100 increments each)';
+    else sublotText = 'No sublot required — use Table 2 increment count';
+
+    const sublotBox = document.getElementById('sublotBox');
+    sublotBox.style.display = 'block';
+    document.getElementById('sublotText').textContent = sublotText;
+  } else {
+    document.getElementById('sublotBox').style.display = 'none';
+  }
+
+  // LOD/LOQ hints
+  if (p.lod_max) {
+    document.getElementById('lodHint').textContent = `Must be ≤ ${p.lod_max} µg/kg (Codex Annex VI Table 3)`;
+    document.getElementById('loqHint').textContent = `Must be ≤ ${p.loq_max} µg/kg (Codex Annex VI Table 3)`;
+    document.getElementById('recoveryHint').textContent = 'Required: 60–115% (total), 40–120% (individual)';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// TOTAL CALCULATION
+// ═══════════════════════════════════════════════════════════
+function updateTotal() {
+  const loq = parseFloat(document.getElementById('loq_total').value) || 0;
+  const lowerBound = document.getElementById('lowerBound').checked;
+
+  function val(id) {
+    const v = parseFloat(document.getElementById(id).value) || 0;
+    if (lowerBound && loq > 0 && v < loq) return 0;
+    return v;
+  }
+
+  const total = val('afb1') + val('afb2') + val('afg1') + val('afg2');
+  document.getElementById('totalDisplay').textContent = total.toFixed(2);
+
+  // Color based on product ML
+  const disp = document.getElementById('totalDisplay');
+  if (selectedProduct) {
+    const ml = selectedProduct.codex ? selectedProduct.codex_ml : selectedProduct.eu_total;
+    if (ml) {
+      disp.style.color = total > ml ? 'var(--red)' : total > ml * 0.8 ? 'var(--amber)' : 'var(--teal)';
+    }
+  }
+}
+
+function toggleMU() {
+  const fields = document.getElementById('muFields');
+  fields.style.display = document.getElementById('muAvailable').checked ? 'grid' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+// OCR
+// ═══════════════════════════════════════════════════════════
+async function handleOCR(input) {
+  if (!input.files[0]) return;
+  const status = document.getElementById('ocrStatus');
+  status.style.display = 'block';
+  status.className = 'ocr-status loading';
+  status.textContent = '🔄 Extracting HPLC data with AI OCR...';
+
+  try {
+    const file = input.files[0];
+    const base64 = await fileToBase64(file);
+    const mediaType = file.type === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: mediaType === 'application/pdf' ? 'document' : 'image',
+              source: { type: 'base64', media_type: mediaType, data: base64 }
+            },
+            {
+              type: 'text',
+              text: `Extract aflatoxin HPLC results from this laboratory report. Return ONLY valid JSON with these exact keys: {"afb1": number_or_null, "afb2": number_or_null, "afg1": number_or_null, "afg2": number_or_null, "unit": "µg/kg or ppb", "recovery_total": number_or_null, "lod": number_or_null, "loq": number_or_null, "method_ref": "string_or_null", "sample_id": "string_or_null"}. All numeric values in µg/kg. If a value is below LOD write 0. No markdown, no explanation, just JSON.`
+            }
+          ]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    // Fill fields
+    if (parsed.afb1 !== null) document.getElementById('afb1').value = parsed.afb1;
+    if (parsed.afb2 !== null) document.getElementById('afb2').value = parsed.afb2;
+    if (parsed.afg1 !== null) document.getElementById('afg1').value = parsed.afg1;
+    if (parsed.afg2 !== null) document.getElementById('afg2').value = parsed.afg2;
+    if (parsed.recovery_total) document.getElementById('recovery_total').value = parsed.recovery_total;
+    if (parsed.lod) { document.getElementById('lod_total').value = parsed.lod; document.getElementById('loq_total').value = parsed.loq; }
+    if (parsed.method_ref) document.getElementById('method_ref').value = parsed.method_ref;
+    if (parsed.sample_id) document.getElementById('sample_id').value = parsed.sample_id;
+
+    updateTotal();
+
+    status.className = 'ocr-status success';
+    status.textContent = `✅ OCR successful — AFB1: ${parsed.afb1 ?? '—'}, AFB2: ${parsed.afb2 ?? '—'}, AFG1: ${parsed.afg1 ?? '—'}, AFG2: ${parsed.afg2 ?? '—'} µg/kg. Please verify all values.`;
+
+  } catch (e) {
+    status.className = 'ocr-status error';
+    status.textContent = `⚠️ OCR could not extract values automatically. Please enter results manually. (${e.message})`;
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Read failed'));
+    r.readAsDataURL(file);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// CRITERIA BOX
+// ═══════════════════════════════════════════════════════════
+function updateCriteriaBox() {
+  if (!selectedProduct) return;
+  const p = selectedProduct;
+  const box = document.getElementById('criteriaBox');
+  box.style.display = 'block';
+  const t = document.getElementById('criteriaText');
+  if (p.lod_max) {
+    t.innerHTML = `
+      Analyte: AFB1+AFB2+AFG1+AFG2 | ML: ${p.codex_ml ?? p.eu_total} µg/kg<br>
+      LOD (max): ≤ ${p.lod_max} µg/kg | LOQ (max): ≤ ${p.loq_max} µg/kg<br>
+      Recovery (total): 60–115% | Recovery (individual): 40–120%<br>
+      Precision (RSDr): &lt; 44% | Source: Codex Annex VI Table 3
+    `;
+  } else {
+    t.innerHTML = `EU 2023/915 §${p.eu_section} — No Codex performance criteria assigned.<br>Apply EURL or national accreditation body guidelines.`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAIN ASSESSMENT ENGINE
+// ═══════════════════════════════════════════════════════════
+function runAssessment() {
+  if (!selectedProduct) {
+    alert('Please select a product category first.');
+    goToSection(2);
+    return;
+  }
+
+  document.getElementById('analyzingOverlay').classList.add('active');
+
+  setTimeout(() => {
+    const p = selectedProduct;
+
+    // Collect values
+    const afb1 = parseFloat(document.getElementById('afb1').value) || 0;
+    const afb2 = parseFloat(document.getElementById('afb2').value) || 0;
+    const afg1 = parseFloat(document.getElementById('afg1').value) || 0;
+    const afg2 = parseFloat(document.getElementById('afg2').value) || 0;
+    const loq  = parseFloat(document.getElementById('loq_total').value) || 0;
+    const lowerBound = document.getElementById('lowerBound').checked;
+
+    function lbVal(v) { return (lowerBound && loq > 0 && v < loq) ? 0 : v; }
+    const total = lbVal(afb1) + lbVal(afb2) + lbVal(afg1) + lbVal(afg2);
+
+    const muAvail  = document.getElementById('muAvailable').checked;
+    const mu_total = parseFloat(document.getElementById('mu_total').value) || 0;
+    const mu_afb1  = parseFloat(document.getElementById('mu_afb1').value) || 0;
+    const samplingOK = document.getElementById('sampling_compliance').value === 'Yes';
+    const methodOK   = document.getElementById('method_validated').value === 'Yes';
+    const unitOK     = document.getElementById('unit_confirmed').value === 'Yes';
+    const basisOK    = document.getElementById('result_basis').value === 'as-is';
+
+    const recovery_total = parseFloat(document.getElementById('recovery_total').value) || null;
+    const lod_entered    = parseFloat(document.getElementById('lod_total').value) || null;
+    const loq_entered    = parseFloat(document.getElementById('loq_total').value) || null;
+
+    // ─── DECISION LOGIC ───
+    const steps = [];
+    const flags  = [];
+    let overallStatus = 'pass';
+
+    // STEP 1: Unit/basis check
+    if (!unitOK || !basisOK) {
+      steps.push({ dot:'fail', label:'Step 1 — Unit & Basis', value:'❌ INVALID', explain:'Result unit or basis not confirmed. ML comparison cannot proceed.', explainUrdu:'نتیجے کی اکائی یا بنیاد کی تصدیق نہیں ہوئی۔ موازنہ ممکن نہیں۔' });
+      flags.push({ sev:'high', icon:'❌', title:'Unit/Basis Not Confirmed', detail:'Result must be in µg/kg on as-is basis before comparing to any ML.', action:'Confirm unit and basis — re-issue result if needed.', urdu:'اکائی µg/kg اور as-is بنیاد کی تصدیق کریں۔' });
+      overallStatus = 'fail';
+    } else {
+      steps.push({ dot:'pass', label:'Step 1 — Unit & Basis', value:'✅ Confirmed: µg/kg, as-is basis', explain:'Results are in µg/kg on as-is basis — suitable for ML comparison.', explainUrdu:'نتائج µg/kg میں اور as-is بنیاد پر ہیں — ML موازنے کے لیے موزوں۔' });
+    }
+
+    // STEP 2: Regulatory hierarchy
+    if (p.codex) {
+      steps.push({ dot:'info', label:'Step 2 — Regulatory Reference', value:`Codex CXS 193-1995 (Primary)`, explain:`Product is covered by Codex. Codex ML controls the primary decision. EU 2023/915 §${p.eu_section} reported as observation.`, explainUrdu:`پروڈکٹ Codex CXS 193 میں شامل ہے۔ Codex ML بنیادی فیصلے کو کنٹرول کرتا ہے۔` });
+    } else {
+      steps.push({ dot:'info', label:'Step 2 — Regulatory Reference', value:`EU Commission Regulation 2023/915 §${p.eu_section} (Fallback)`, explain:`No Codex ML for this product. EU 2023/915 applies as primary fallback reference.`, explainUrdu:`اس پروڈکٹ کے لیے کوئی Codex ML نہیں ہے۔ EU 2023/915 بطور فال بیک حوالہ لاگو ہوتا ہے۔` });
+    }
+
+    // STEP 3: Primary assessment
+    let primaryStatus, primaryValue, primaryExplain, primaryUrdu;
+
+    if (p.codex) {
+      const ml = p.codex_ml;
+      if (muAvail && mu_total > 0) {
+        if (total + mu_total <= ml) {
+          primaryStatus = 'pass';
+          primaryValue = `✅ COMPLIES — Total: ${total.toFixed(2)} + U:${mu_total} = ${(total+mu_total).toFixed(2)} ≤ ${ml} µg/kg`;
+          primaryExplain = `Total aflatoxins (${total.toFixed(2)} µg/kg) plus measurement uncertainty (±${mu_total}) remains below Codex ML of ${ml} µg/kg.`;
+          primaryUrdu = `کل آفلاٹوکسن Codex ML ${ml} µg/kg سے کم یا برابر ہے، غیر یقینی صورتحال کو مدنظر رکھتے ہوئے۔`;
+        } else if (total - mu_total > ml) {
+          primaryStatus = 'fail';
+          primaryValue = `❌ EXCEEDS — Total: ${total.toFixed(2)} - U:${mu_total} = ${(total-mu_total).toFixed(2)} > ${ml} µg/kg`;
+          primaryExplain = `Total aflatoxins (${total.toFixed(2)} µg/kg) minus measurement uncertainty exceeds Codex ML of ${ml} µg/kg. Lot fails.`;
+          primaryUrdu = `کل آفلاٹوکسن Codex ML ${ml} µg/kg سے زیادہ ہے، غیر یقینی صورتحال کے بعد بھی۔`;
+          overallStatus = 'fail';
+        } else {
+          primaryStatus = 'warn';
+          primaryValue = `⚠️ INCONCLUSIVE — Result near limit, uncertainty overlaps ML`;
+          primaryExplain = `Total: ${total.toFixed(2)} µg/kg with U:±${mu_total}. The uncertainty interval crosses the ML of ${ml} µg/kg. Regulatory review required.`;
+          primaryUrdu = `نتیجہ حد کے قریب ہے اور غیر یقینی صورتحال ML کو عبور کرتی ہے۔ ریگولیٹری جائزہ ضروری ہے۔`;
+          if (overallStatus !== 'fail') overallStatus = 'warn';
+          flags.push({ sev:'medium', icon:'⚠️', title:'Borderline Result — Inconclusive', detail:`Result (${total.toFixed(2)}) ± U(${mu_total}) crosses the Codex ML of ${ml} µg/kg. Cannot issue definitive pass/fail.`, action:'Flag for regulatory authority review.', urdu:'نتیجہ ML کے قریب ہے — ریگولیٹری اتھارٹی سے جائزہ لیں۔' });
+        }
+      } else {
+        if (total <= ml) {
+          primaryStatus = 'pass';
+          primaryValue = `✅ COMPLIES — Total: ${total.toFixed(2)} µg/kg ≤ Codex ML: ${ml} µg/kg`;
+          primaryExplain = `Total aflatoxins (${total.toFixed(2)} µg/kg) is within the Codex CXS 193 maximum level of ${ml} µg/kg for this product.`;
+          primaryUrdu = `کل آفلاٹوکسن (${total.toFixed(2)} µg/kg) اس پروڈکٹ کے Codex ML ${ml} µg/kg کے اندر ہے۔`;
+        } else {
+          primaryStatus = 'fail';
+          primaryValue = `❌ EXCEEDS — Total: ${total.toFixed(2)} µg/kg > Codex ML: ${ml} µg/kg`;
+          primaryExplain = `Total aflatoxins (${total.toFixed(2)} µg/kg) exceeds the Codex CXS 193 maximum level of ${ml} µg/kg. Lot does not comply.`;
+          primaryUrdu = `کل آفلاٹوکسن (${total.toFixed(2)} µg/kg) Codex ML ${ml} µg/kg سے زیادہ ہے۔ لاٹ معیار کے مطابق نہیں ہے۔`;
+          overallStatus = 'fail';
+        }
+        if (!muAvail) {
+          flags.push({ sev:'medium', icon:'⚠️', title:'Measurement Uncertainty Not Provided', detail:'Result interpreted using reported value only. Near-limit results should be treated with caution.', action:'Request U from accredited lab for complete interpretation.', urdu:'پیمائش کی غیر یقینی صورتحال فراہم نہیں کی گئی۔ تصدیق شدہ لیب سے U طلب کریں۔' });
+        }
+      }
+      steps.push({ dot:primaryStatus, label:'Step 3 — Codex Assessment (Total Aflatoxins)', value:primaryValue, explain:primaryExplain, explainUrdu:primaryUrdu });
+
+      // EU AFB1 observation
+      const euAfb1Limit = p.eu_afb1;
+      let euObsStatus, euObsValue;
+      if (afb1 <= euAfb1Limit) {
+        euObsStatus = 'pass';
+        euObsValue = `ℹ AFB1: ${afb1.toFixed(2)} µg/kg ≤ EU limit: ${euAfb1Limit} µg/kg — Within EU observation limit`;
+      } else {
+        euObsStatus = 'warn';
+        euObsValue = `⚠️ AFB1: ${afb1.toFixed(2)} µg/kg > EU limit: ${euAfb1Limit} µg/kg — Exceeds EU observation limit`;
+        flags.push({ sev:'medium', icon:'⚠️', title:'AFB1 Exceeds EU Observation Limit', detail:`AFB1 (${afb1.toFixed(2)} µg/kg) exceeds EU 2023/915 §${p.eu_section} AFB1 limit of ${euAfb1Limit} µg/kg. Codex total assessment unchanged — but EU observation must be disclosed in report.`, action:'Disclose in report. Authority determines EU applicability.', urdu:`AFB1 EU حد ${euAfb1Limit} µg/kg سے زیادہ ہے۔ رپورٹ میں ظاہر کریں۔` });
+        if (overallStatus !== 'fail') overallStatus = 'warn';
+      }
+      steps.push({ dot:euObsStatus, label:`Step 4 — EU AFB1 Observation (§${p.eu_section})`, value:euObsValue, explain:'EU AFB1 observation reported alongside Codex decision. Does not override Codex total assessment.', explainUrdu:'EU AFB1 مشاہدہ Codex فیصلے کے ساتھ رپورٹ کیا جاتا ہے۔' });
+
+    } else {
+      // EU FALLBACK
+      const euAfb1 = p.eu_afb1;
+      const euTotal = p.eu_total;
+      let afb1Status, totalStatus;
+
+      if (p.eu_section === '1.1.18') {
+        // B1 only
+        afb1Status = afb1 <= euAfb1 ? 'pass' : 'fail';
+        if (afb1Status === 'fail') overallStatus = 'fail';
+        steps.push({ dot:afb1Status, label:`Step 3 — EU Fallback AFB1 Assessment (§1.1.18)`, value:`${afb1Status==='pass'?'✅':'❌'} AFB1: ${afb1.toFixed(2)} µg/kg ${afb1Status==='pass'?'≤':'>'}  EU limit: ${euAfb1} µg/kg`, explain:`EU 2023/915 §1.1.18 (infant food): AFB1 ≤ ${euAfb1} µg/kg applied to dry matter. No EU Total ML in this category.`, explainUrdu:`EU §1.1.18 (شیر خوار بچوں کی غذا): AFB1 ≤ ${euAfb1} µg/kg۔` });
+      } else {
+        afb1Status = afb1 <= euAfb1 ? 'pass' : 'fail';
+        totalStatus = euTotal && total <= euTotal ? 'pass' : 'fail';
+        if (afb1Status === 'fail' || totalStatus === 'fail') overallStatus = 'fail';
+        steps.push({ dot:afb1Status, label:`Step 3A — EU Fallback: AFB1 (§${p.eu_section})`, value:`${afb1Status==='pass'?'✅':'❌'} AFB1: ${afb1.toFixed(2)} µg/kg ${afb1Status==='pass'?'≤':'>'} EU limit: ${euAfb1} µg/kg`, explain:`EU 2023/915 §${p.eu_section} AFB1 limit = ${euAfb1} µg/kg. Both AFB1 and Total must comply.`, explainUrdu:`EU §${p.eu_section}: AFB1 حد = ${euAfb1} µg/kg۔ AFB1 اور Total دونوں کو معیار پر پورا اترنا ضروری ہے۔` });
+        if (euTotal) {
+          steps.push({ dot:totalStatus, label:`Step 3B — EU Fallback: Total Aflatoxins (§${p.eu_section})`, value:`${totalStatus==='pass'?'✅':'❌'} Total: ${total.toFixed(2)} µg/kg ${totalStatus==='pass'?'≤':'>'} EU limit: ${euTotal} µg/kg`, explain:`EU 2023/915 §${p.eu_section} Total aflatoxins limit = ${euTotal} µg/kg.`, explainUrdu:`EU Total حد = ${euTotal} µg/kg۔` });
+        }
+      }
+    }
+
+    // STEP: Method validity
+    if (methodOK) {
+      steps.push({ dot:'pass', label:'Step 5 — Method Validity', value:'✅ Method validity confirmed', explain:'Analytical method meets performance criteria (LOD/LOQ/recovery/precision) — result is analytically reliable.', explainUrdu:'تجزیاتی طریقہ کار کارکردگی کے معیار پر پورا اترتا ہے۔' });
+    } else {
+      steps.push({ dot:'warn', label:'Step 5 — Method Validity', value:'⚠️ Method validity not confirmed', explain:'Analytical method suitability has not been confirmed. Result reliability cannot be fully assured.', explainUrdu:'تجزیاتی طریقہ کار کی موزونیت کی تصدیق نہیں ہوئی۔' });
+      flags.push({ sev:'high', icon:'🔬', title:'Method Validity Not Confirmed', detail:'Regulatory comparison requires method meeting LOD/LOQ/precision/recovery per Codex Annex VI Table 3.', action:'Obtain method validation data from the laboratory.', urdu:'لیبارٹری سے طریقہ کار کی توثیق کا ڈیٹا حاصل کریں۔' });
+      if (overallStatus !== 'fail') overallStatus = 'warn';
+    }
+
+    // Check recovery
+    if (recovery_total !== null) {
+      if (recovery_total < 60 || recovery_total > 115) {
+        flags.push({ sev:'high', icon:'⚗️', title:'Recovery Out of Range', detail:`Reported recovery ${recovery_total}% is outside required range (60–115% for total aflatoxins). Result may not be reliable.`, action:'Investigate extraction/cleanup procedure.', urdu:`بازیابی ${recovery_total}% مطلوبہ حد (60–115%) سے باہر ہے۔` });
+        if (overallStatus !== 'fail') overallStatus = 'warn';
+      }
+    }
+
+    // STEP: Sampling
+    if (samplingOK) {
+      steps.push({ dot:'pass', label:'Step 6 — Sampling Validity', value:'✅ Sampling confirmed — result is representative', explain:'Sample collected per documented Codex Annex VI sampling plan. Result is representative of the lot.', explainUrdu:'نمونہ Codex Annex VI کے مطابق لیا گیا — نتیجہ لاٹ کی نمائندگی کرتا ہے۔' });
+    } else {
+      steps.push({ dot:'warn', label:'Step 6 — Sampling Validity', value:'⚠️ Sampling not confirmed', explain:'Sampling compliance not confirmed. Without documented sampling plan, result may not represent the lot.', explainUrdu:'نمونہ لینے کی تعمیل کی تصدیق نہیں ہوئی — نتیجہ لاٹ کی نمائندگی نہ کر سکے۔' });
+      flags.push({ sev:'high', icon:'📋', title:'Sampling Compliance Not Confirmed', detail:'Aflatoxins are highly non-homogeneous. Without documented sampling plan, the analytical result may not be representative of the lot.', action:'Request sampling records and verify against Codex Annex VI Tables 1 & 2.', urdu:'آفلاٹوکسن انتہائی غیر یکساں ہوتے ہیں۔ نمونہ لینے کا دستاویزی ریکارڈ فراہم کریں۔' });
+      if (overallStatus !== 'fail') overallStatus = 'warn';
+    }
+
+    // Check LOD/LOQ
+    if (lod_entered !== null && p.lod_max && lod_entered > p.lod_max) {
+      flags.push({ sev:'high', icon:'📉', title:'LOD Above Codex Requirement', detail:`Reported LOD (${lod_entered} µg/kg) exceeds maximum allowed LOD (${p.lod_max} µg/kg) for this product category per Codex Annex VI Table 3.`, action:'Improve method sensitivity or use alternative method.', urdu:`رپورٹ شدہ LOD (${lod_entered} µg/kg) Codex کی زیادہ سے زیادہ LOD سے زیادہ ہے۔` });
+    }
+
+    // Confidence level
+    let confidence, confColor;
+    if (!unitOK || !basisOK) { confidence = 'INVALID'; confColor = 'var(--red)'; }
+    else if (samplingOK && methodOK && muAvail) { confidence = 'HIGH'; confColor = 'var(--teal)'; }
+    else if (samplingOK && methodOK) { confidence = 'MEDIUM'; confColor = 'var(--amber)'; }
+    else { confidence = 'LOW'; confColor = 'var(--red)'; }
+
+    steps.push({ dot: confidence === 'HIGH' ? 'pass' : confidence === 'MEDIUM' ? 'warn' : 'fail', label:'Step 7 — Overall Confidence Level', value:`Confidence: ${confidence}`, explain:`${confidence === 'HIGH' ? 'All supporting checks confirmed with measurement uncertainty.' : confidence === 'MEDIUM' ? 'Sampling and method confirmed but uncertainty not provided.' : 'One or more critical checks not confirmed — result reliability limited.'}`, explainUrdu:`اعتماد کی سطح: ${confidence}` });
+
+    // ─── RENDER RESULTS ───
+    renderResults(overallStatus, steps, flags, total, afb1, p);
+
+    assessmentData = { p, total, afb1, afb2, afg1, afg2, mu_total, muAvail, overallStatus, confidence, samplingOK, methodOK };
+
+    document.getElementById('analyzingOverlay').classList.remove('active');
+    document.getElementById('results-section').style.display = 'block';
+    document.getElementById('step-ind-5').className = 'step active';
+    setTimeout(() => document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' }), 100);
+
+  }, 1200);
+}
+
+function renderResults(status, steps, flags, total, afb1, p) {
+  // Banner
+  const banner = document.getElementById('mainBanner');
+  const icons  = { pass:'✅', fail:'❌', warn:'⚠️' };
+  const labels = { pass:'LOT COMPLIES', fail:'LOT DOES NOT COMPLY', warn:'BORDERLINE — REGULATORY REVIEW REQUIRED' };
+  const urduLabels = { pass:'لاٹ معیار کے مطابق ہے', fail:'لاٹ معیار کے مطابق نہیں ہے', warn:'سرحدی نتیجہ — ریگولیٹری جائزہ ضروری ہے' };
+  banner.className = `result-banner ${status}`;
+  banner.innerHTML = `
+    <div class="result-icon">${icons[status]}</div>
+    <div>
+      <div class="result-title">${labels[status]}</div>
+      <div class="result-urdu">${urduLabels[status]}</div>
+      <div class="result-sub">${p.display} — Total Aflatoxins: ${total.toFixed(2)} µg/kg | AFB1: ${afb1.toFixed(2)} µg/kg</div>
+    </div>
+  `;
+
+  // Decision steps
+  const stepsEl = document.getElementById('decisionSteps');
+  stepsEl.innerHTML = '';
+  steps.forEach(s => {
+    stepsEl.innerHTML += `
+      <div class="tree-step">
+        <div class="tree-dot ${s.dot}">${s.dot==='pass'?'✓':s.dot==='fail'?'✗':s.dot==='warn'?'!':s.dot==='info'?'i':'—'}</div>
+        <div class="tree-content">
+          <div class="tree-label">${s.label}</div>
+          <div class="tree-value">${s.value}</div>
+          <div class="tree-explain">${s.explain}</div>
+          <div class="tree-explain-urdu">${s.explainUrdu}</div>
+        </div>
+      </div>
+    `;
+  });
+
+  // Values table
+  const tbl = document.getElementById('valuesTable');
+  const codexML = p.codex ? p.codex_ml : null;
+  const euAfb1  = p.eu_afb1;
+  const euTotal = p.eu_total;
+
+  const afb1_raw = parseFloat(document.getElementById('afb1').value) || 0;
+  const afb2_raw = parseFloat(document.getElementById('afb2').value) || 0;
+  const afg1_raw = parseFloat(document.getElementById('afg1').value) || 0;
+  const afg2_raw = parseFloat(document.getElementById('afg2').value) || 0;
+
+  function rowStatus(val, limit) {
+    if (!limit) return { cls:'', txt:'—' };
+    return val <= limit ? { cls:'pass', txt:'✅ Within limit' } : { cls:'fail', txt:'❌ Exceeds limit' };
+  }
+
+  tbl.innerHTML = `
+    <thead><tr>
+      <th>Analyte</th>
+      <th>Reported (µg/kg)</th>
+      <th>ML / Limit (µg/kg)</th>
+      <th>Reference</th>
+      <th>Status</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>AFB1</strong></td>
+        <td class="val-reported">${afb1_raw.toFixed(2)}</td>
+        <td class="val-ml">${p.codex ? `${euAfb1} (EU obs.)` : euAfb1}</td>
+        <td style="font-size:11px;font-family:var(--mono)">EU 2023/915 §${p.eu_section}</td>
+        <td class="val-status ${rowStatus(afb1_raw, euAfb1).cls}">${rowStatus(afb1_raw, euAfb1).txt}</td>
+      </tr>
+      <tr>
+        <td>AFB2</td>
+        <td class="val-reported">${afb2_raw.toFixed(2)}</td>
+        <td class="val-ml">—</td>
+        <td style="font-size:11px;font-family:var(--mono)">Component only</td>
+        <td class="val-status">ℹ Reported</td>
+      </tr>
+      <tr>
+        <td>AFG1</td>
+        <td class="val-reported">${afg1_raw.toFixed(2)}</td>
+        <td class="val-ml">—</td>
+        <td style="font-size:11px;font-family:var(--mono)">Component only</td>
+        <td class="val-status">ℹ Reported</td>
+      </tr>
+      <tr>
+        <td>AFG2</td>
+        <td class="val-reported">${afg2_raw.toFixed(2)}</td>
+        <td class="val-ml">—</td>
+        <td style="font-size:11px;font-family:var(--mono)">Component only</td>
+        <td class="val-status">ℹ Reported</td>
+      </tr>
+      <tr style="background:var(--card2);">
+        <td><strong>Total (B1+B2+G1+G2)</strong></td>
+        <td class="val-reported" style="font-size:18px;">${total.toFixed(2)}</td>
+        <td class="val-ml">${codexML ?? euTotal ?? '—'}</td>
+        <td style="font-size:11px;font-family:var(--mono)">${p.codex ? 'Codex CXS 193' : `EU §${p.eu_section}`}</td>
+        <td class="val-status ${rowStatus(total, codexML ?? euTotal).cls}">${rowStatus(total, codexML ?? euTotal).txt}</td>
+      </tr>
+    </tbody>
+  `;
+
+  // Flags
+  const flagsList = document.getElementById('flagsList');
+  if (flags.length === 0) {
+    flagsList.innerHTML = '<div style="font-size:13px;color:var(--teal);padding:8px 0;">✅ No flags raised — all supporting checks passed.</div>';
+  } else {
+    flagsList.innerHTML = flags.map(f => `
+      <div class="flag-item ${f.sev}">
+        <div class="flag-icon">${f.icon}</div>
+        <div class="flag-text">
+          <div class="flag-title">${f.title}</div>
+          <div class="flag-detail">${f.detail}</div>
+          <div class="flag-action">→ ${f.action}</div>
+          <div class="flag-urdu">${f.urdu}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Reference box
+  document.getElementById('refBox').innerHTML = `
+    Primary Reference: ${p.codex ? 'Codex Alimentarius CXS 193-1995 (amended 2025) — General Standard for Contaminants and Toxins in Food and Feed' : 'EU Commission Regulation 2023/915 on maximum levels for certain contaminants in food'}<br>
+    ${p.codex ? `Fallback/Observation: EU Commission Regulation 2023/915 §${p.eu_section}` : `Fallback applied: ${p.eu_section}`}<br>
+    Sampling: Codex CXS 193 Annex VI | Method criteria: Codex Annex VI Table 3<br>
+    Decision hierarchy: Codex CXS 193 (primary) → EU 2023/915 (fallback/observation)<br>
+    Lower bound concentration applied: ${document.getElementById('lowerBound').checked ? 'Yes (values below LOQ counted as zero)' : 'No'}
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PDF GENERATION
+// ═══════════════════════════════════════════════════════════
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const p = assessmentData.p;
+
+  const now = new Date();
+  const reportNum = `FC-AF-${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*9000+1000)}`;
+
+  let y = 15;
+
+  // Header
+  doc.setFillColor(10, 15, 30);
+  doc.rect(0, 0, 210, 28, 'F');
+  doc.setTextColor(0, 212, 168);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('FOODCHECK JORDAN', 15, 11);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Aflatoxin Regulatory Compliance Report', 15, 18);
+  doc.setTextColor(150, 160, 180);
+  doc.text(`Report No: ${reportNum}`, 15, 24);
+  doc.text(`Generated: ${now.toISOString().split('T')[0]}`, 130, 24);
+
+  y = 38;
+
+  // Status banner
+  const statusColors = {
+    pass: [0, 180, 140],
+    fail: [220, 60, 70],
+    warn: [220, 140, 0]
+  };
+  const statusLabels = {
+    pass: 'LOT COMPLIES',
+    fail: 'LOT DOES NOT COMPLY',
+    warn: 'BORDERLINE — REVIEW REQUIRED'
+  };
+
+  const sc = statusColors[assessmentData.overallStatus];
+  doc.setFillColor(...sc);
+  doc.rect(15, y, 180, 14, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text(statusLabels[assessmentData.overallStatus], 105, y + 9, { align: 'center' });
+  y += 22;
+
+  function section(title) {
+    doc.setFillColor(240, 242, 245);
+    doc.rect(15, y, 180, 7, 'F');
+    doc.setTextColor(30, 40, 60);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title.toUpperCase(), 17, y + 5);
+    y += 10;
+  }
+
+  function row(label, value, indent = false) {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(80, 90, 110);
+    doc.text(label, indent ? 22 : 17, y);
+    doc.setTextColor(20, 30, 50);
+    doc.setFont('helvetica', 'bold');
+    doc.text(String(value ?? '—'), 90, y);
+    y += 6;
+  }
+
+  // Sample identity
+  section('1. Sample Identity');
+  row('Laboratory Reference:', document.getElementById('lab_ref').value || '—');
+  row('Sample ID:', document.getElementById('sample_id').value || '—');
+  row('Date of Sampling:', document.getElementById('date_sampling').value || '—');
+  row('Date of Receipt:', document.getElementById('date_receipt').value || '—');
+  row('Date of Analysis:', document.getElementById('date_analysis').value || '—');
+  row('Analyst:', document.getElementById('analyst').value || '—');
+  row('Commodity (as declared):', document.getElementById('commodity_desc').value || '—');
+  row('Country of Origin:', document.getElementById('origin').value || '—');
+  row('Supplier / Consignor:', document.getElementById('supplier').value || '—');
+  row('Lot / Batch Number:', document.getElementById('lot_number').value || '—');
+  row('Seal Number:', document.getElementById('seal_number').value || '—');
+  row('Sampler:', document.getElementById('sampler').value || '—');
+  y += 3;
+
+  // Product & lot
+  section('2. Product Category & Lot Information');
+  row('Product Category:', p.display);
+  row('Regulatory Coverage:', p.codex ? `Codex CXS 193-1995 (ML: ${p.codex_ml} µg/kg total)` : `EU 2023/915 §${p.eu_section} (Fallback)`);
+  row('Lot Weight:', `${document.getElementById('lot_weight').value || '—'} tonnes`);
+  row('Laboratory Sample Weight:', `${document.getElementById('lab_sample_weight').value || '—'} kg`);
+  row('Test Portion:', `${document.getElementById('test_portion').value || '—'} g`);
+  row('Increments Taken:', document.getElementById('increments_taken').value || '—');
+  row('Sublot:', document.getElementById('sublot_number').value || 'Not applicable');
+  row('Sample Preparation:', document.getElementById('grinding').value || '—');
+  row('Sampling Compliance:', document.getElementById('sampling_compliance').value);
+  y += 3;
+
+  // Results
+  section('3. HPLC Analytical Results');
+  row('AFB1 — Aflatoxin B1:', `${assessmentData.afb1?.toFixed(2) ?? '0.00'} µg/kg`);
+  row('AFB2 — Aflatoxin B2:', `${assessmentData.afb2?.toFixed(2) ?? '0.00'} µg/kg`);
+  row('AFG1 — Aflatoxin G1:', `${assessmentData.afg1?.toFixed(2) ?? '0.00'} µg/kg`);
+  row('AFG2 — Aflatoxin G2:', `${assessmentData.afg2?.toFixed(2) ?? '0.00'} µg/kg`);
+  row('Total Aflatoxins (B1+B2+G1+G2):', `${assessmentData.total?.toFixed(2) ?? '0.00'} µg/kg`);
+  row('Lower Bound Applied:', document.getElementById('lowerBound').checked ? 'Yes — values below LOQ counted as zero' : 'No');
+  row('Result Basis:', document.getElementById('result_basis').value);
+  row('Measurement Uncertainty:', assessmentData.muAvail ? `± ${assessmentData.mu_total} µg/kg (total)` : 'Not provided');
+  y += 3;
+
+  // Method
+  section('4. Analytical Method');
+  row('Method Reference:', document.getElementById('method_ref').value || '—');
+  row('Method Validation:', document.getElementById('method_validated').value);
+  row('Extraction Solvent:', document.getElementById('extraction_solvent').value || '—');
+  row('Cleanup Procedure:', document.getElementById('cleanup').value || '—');
+  row('Recovery % (Total):', document.getElementById('recovery_total').value || '—');
+  row('LOD (Total):', `${document.getElementById('lod_total').value || '—'} µg/kg`);
+  row('LOQ (Total):', `${document.getElementById('loq_total').value || '—'} µg/kg`);
+  row('RSDr %:', document.getElementById('rsdr').value || '—');
+  row('Recovery Corrected:', document.getElementById('recovery_corrected').value);
+  y += 3;
+
+  // Decision
+  if (y > 240) { doc.addPage(); y = 20; }
+  section('5. Regulatory Decision');
+  row('Primary Reference:', p.codex ? 'Codex CXS 193-1995 (amended 2025)' : `EU Commission Regulation 2023/915 §${p.eu_section}`);
+  row('Applicable ML:', p.codex ? `${p.codex_ml} µg/kg total aflatoxins` : p.eu_total ? `AFB1 ≤ ${p.eu_afb1} µg/kg | Total ≤ ${p.eu_total} µg/kg` : `AFB1 ≤ ${p.eu_afb1} µg/kg`);
+  row('Total Result:', `${assessmentData.total?.toFixed(2)} µg/kg`);
+  row('Decision:', statusLabels[assessmentData.overallStatus]);
+  row('Confidence Level:', assessmentData.confidence);
+  y += 3;
+
+  // Authority declaration
+  if (y > 250) { doc.addPage(); y = 20; }
+  doc.setFillColor(255, 248, 230);
+  doc.rect(15, y, 180, 20, 'F');
+  doc.setDrawColor(220, 140, 0);
+  doc.rect(15, y, 180, 20, 'S');
+  doc.setTextColor(100, 70, 0);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('AUTHORITY DECLARATION', 17, y + 6);
+  doc.setFont('helvetica', 'normal');
+  const disclaimer = 'This report provides laboratory interpretation support. The final official regulatory decision belongs to the competent regulatory authority. FoodCheck Jordan — foodcheck-jo-production.up.railway.app';
+  const lines = doc.splitTextToSize(disclaimer, 174);
+  doc.text(lines, 17, y + 12);
+  y += 26;
+
+  // Footer
+  doc.setFillColor(10, 15, 30);
+  doc.rect(0, 282, 210, 15, 'F');
+  doc.setTextColor(0, 212, 168);
+  doc.setFontSize(8);
+  doc.text('FoodCheck Jordan | Aflatoxin Compliance Engine | Codex CXS 193-1995 + EU 2023/915', 105, 290, { align: 'center' });
+  doc.setTextColor(100, 110, 130);
+  doc.text(reportNum, 15, 290);
+  doc.text(now.toISOString().split('T')[0], 185, 290, { align: 'right' });
+
+  doc.save(`FoodCheck_Aflatoxin_${reportNum}.pdf`);
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+buildProductGrid();
+
+document.getElementById('lot_weight').addEventListener('input', updateSamplingHints);
+
+// Set today's date
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('date_receipt').value = today;
+document.getElementById('date_analysis').value = today;
+
+// Drag and drop
+const uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    document.getElementById('ocrFile').files = dt.files;
+    handleOCR(document.getElementById('ocrFile'));
+  }
+});
+</script>
+</body>
+</html>
