@@ -409,7 +409,7 @@ footer span { color: var(--accent); }
   </div>
   <h1 id="hero-h1" style="margin-bottom:.6rem;">FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات</h1>
   <div class="hero-stats" style="margin-bottom:1.5rem;">
-    <div class="stat"><div class="stat-num">✔ 44</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
+    <div class="stat"><div class="stat-num">✔ 48</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">✔ 13</div><div class="stat-label" id="stat3">مادة حساسية JS 9:2025</div></div>
     <div class="stat"><div class="stat-num">CXS 192</div><div class="stat-label" id="stat4">الكودكس الدولي</div></div>
@@ -491,6 +491,10 @@ footer span { color: var(--accent); }
         <option value="flavored_drink" id="opt-flavored-drink">مشروبات منكهة (JS 77)</option>
         <option value="supplements" id="opt-supplements">مكملات غذائية</option>
         <option value="sardines" id="opt-sardines">سردين معلب (JS 68:2022)</option>
+        <option value="tuna_bonito" id="opt-tuna-bonito">تونة / بونيتو معلبة (JS 1103:2025)</option>
+        <option value="frozen_fish" id="opt-frozen-fish">سمك مجمد (JS 400:2014)</option>
+        <option value="cream" id="opt-cream">قشدة (JS 430:2010)</option>
+        <option value="tomato_concentrate" id="opt-tomato-concentrate">مركزات البندورة (JS 41:2012)</option>
         <option value="dates" id="opt-dates">تمور (JS 549:2021)</option>
         <option value="cereal_infant" id="opt-cereal-infant">أغذية حبوب للرضع والأطفال (JS 443:2015)</option>
         <option value="ice_cream" id="opt-ice-cream">مثلجات غذائية (JS 44:2022)</option>
@@ -675,7 +679,7 @@ footer span { color: var(--accent); }
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
       <h3 id="about-card1-title" style="margin-bottom:.5rem;">المواصفات الأردنية JS</h3>
-      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 44+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
+      <p id="about-card1-text" style="color:var(--text2);font-size:.88rem;line-height:1.7;">تدقيق 48+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;">
       <div style="font-size:2rem;margin-bottom:1rem;">⚗️</div>
@@ -1101,6 +1105,70 @@ const JS_SPECIFIC_RULES = {
       {code:"JS68-11-6-01", text:"الوزن المصفى إلزامي بجانب الوزن الصافي — حدود JS68: زيت زيتون/زيت نباتي/محلول ملحي/ماء/تتبيلة ≥ 70% · صلصة طماطم ≥ 65% · وسط آخر ≥ 50%"},
       {code:"JS68-SPECIES", text:"الأنواع المسموحة 22 نوعاً — الأشهر: Sardina pilchardus, Sardinops sagax, Sardinella aurita, Clupea harengus, Engraulis mordax — أي نوع خارج القائمة = مخالفة جسيمة"},
       {code:"JS68-7-1-01", text:"المضافات الغذائية يجب أن تكون مطابقة لـ JS94 — يجب ذكر الاسم الوظيفي والاسم أو الرقم INS لكل مضاف"}
+    ]
+  },
+
+  // ================================================================
+  // JS 1103:2025 — التونة والبونيتو المعلبة
+  // ================================================================
+  "tuna_bonito": {
+    name: "التونة / البونيتو المعلبة JS 1103:2025",
+    warnings: [
+      {code:"TUN-01", text:"🚨 اسم المنتج إلزامي ويجب أن يتضمن كلمة 'تونة' أو 'بونيتو' — مع ذكر طريقة المعالجة: معقمة/معلبة — اسم مبهم = مخالفة جسيمة"},
+      {code:"TUN-02", text:"🚨 وسط التعبئة إلزامي كجزء من اسم المنتج أو بجانبه: ماء / زيت الزيتون / زيت نباتي / محلول ملحي / صلصة طماطم — غيابه مخالفة جسيمة"},
+      {code:"TUN-03", text:"⚠️ شكل التجهيز يُذكر إذا كان مطلوباً أو مُعلناً: قطع كاملة / شرائح / مفتت — التصريح به إذا استُخدم في وصف المنتج إلزامي"},
+      {code:"TUN-04", text:"🚨 الوزن المصفى إلزامي بجانب الوزن الصافي — غيابه مخالفة جسيمة"},
+      {code:"TUN-05", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"TUN-06", text:"🚨 بلد المنشأ إلزامي — غيابه مخالفة جسيمة"},
+      {code:"TUN-07", text:"⚠️ المضافات الغذائية يجب التصريح عنها وفق JS 94 — الاسم الوظيفي + الاسم أو رقم INS إلزاميان"}
+    ]
+  },
+
+  // ================================================================
+  // JS 400:2014 — الأسماك المجمدة
+  // ================================================================
+  "frozen_fish": {
+    name: "الأسماك المجمدة JS 400:2014",
+    warnings: [
+      {code:"FRF-01", text:"🚨 اسم المنتج يجب أن يُبيّن أنه سمك مجمد — يجب ذكر الاسم الشائع للنوع — اسم مبهم = مخالفة جسيمة"},
+      {code:"FRF-02", text:"🚨 شكل التجميد/التجهيز إلزامي إذا استُخدم في تسمية المنتج: كامل / مجهز جزئياً / مجهز كلياً / مقطع / منزوع الجلد — غيابه مخالفة جسيمة"},
+      {code:"FRF-03", text:"🚨 شروط الحفظ المجمد إلزامية — يجب ذكر درجة الحرارة المطلوبة للحفظ والنقل — غيابها مخالفة جسيمة"},
+      {code:"FRF-04", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"FRF-05", text:"🚨 بلد المنشأ إلزامي — غيابه مخالفة جسيمة"},
+      {code:"FRF-06", text:"⚠️ إذا جُلِّخ السمك أو طُحّن أو أُضيف إليه ماء أو مواد أخرى — يجب الإفصاح عن ذلك في قائمة المكونات"},
+      {code:"FRF-07", text:"⚠️ المضافات الغذائية يجب التصريح عنها وفق JS 94 — الاسم الوظيفي + الاسم أو رقم INS إلزاميان"}
+    ]
+  },
+
+  // ================================================================
+  // JS 430:2010 — القشدة
+  // ================================================================
+  "cream": {
+    name: "القشدة JS 430:2010",
+    warnings: [
+      {code:"CRM-01", text:"🚨 اسم المنتج يجب أن يطابق نوع القشدة — الأنواع المعتمدة: قشدة طازجة / قشدة معاد تكوينها / قشدة معاد تجميعها / قشدة قابلة للخفق / قشدة مخفوقة / قشدة متخمرة / قشدة محمضة — اسم عام وحده = مخالفة جسيمة"},
+      {code:"CRM-02", text:"🚨 نوع القشدة إلزامي على البطاقة — غيابه مخالفة جسيمة في هوية المنتج"},
+      {code:"CRM-03", text:"🚨 نسبة الدهن إلزامية على البطاقة — القشدة الكاملة ≥ 30% دهن — قيمة معلنة أقل أو غياب النسبة = مخالفة جسيمة"},
+      {code:"CRM-04", text:"🚨 شروط الحفظ إلزامية — القشدة منتج مبرد حساس — غيابها مخالفة جسيمة"},
+      {code:"CRM-05", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"CRM-06", text:"⚠️ إذا ادّعت البطاقة احتواء القشدة المتخمرة على أحياء دقيقة حية — يجب التحقق من توافق الادعاء مع اشتراطات JS 430"},
+      {code:"CRM-07", text:"⚠️ المضافات الغذائية يجب التصريح عنها وفق JS 94 — الاسم الوظيفي + الاسم أو رقم INS إلزاميان"}
+    ]
+  },
+
+  // ================================================================
+  // JS 41:2012 — مركزات البندورة (رب / معجون / هريس)
+  // ================================================================
+  "tomato_concentrate": {
+    name: "مركزات البندورة JS 41:2012",
+    warnings: [
+      {code:"TOM-01", text:"🚨 اسم المنتج يجب أن يطابق درجة التركيز تماماً — رب البندورة (≥24% مواد صلبة) / هريس البندورة (7%–أقل من 24%) / مركز البندورة (≥24%) — اسم مخالف لدرجة التركيز = مخالفة جسيمة"},
+      {code:"TOM-02", text:"🚨 درجة التركيز أو نسبة المواد الصلبة الذائبة إلزامية على البطاقة — غيابها مخالفة جسيمة"},
+      {code:"TOM-03", text:"🚨 لا يجوز تسمية المنتج بأسماء منتجات مستثناة من مجال هذه المواصفة: كاتشب / صلصة حارة / صلصة بندورة / تغطية بيتزا — هذه تخضع لمواصفات مختلفة"},
+      {code:"TOM-04", text:"🚨 مدة الصلاحية إلزامية وفق JS 288 — غيابها مخالفة جسيمة"},
+      {code:"TOM-05", text:"🚨 بلد المنشأ إلزامي — غيابه مخالفة جسيمة"},
+      {code:"TOM-06", text:"⚠️ إذا وجدت مضافات غذائية مسموحة وفق JS 94 — يجب التصريح عنها بالاسم الوظيفي ورقم INS أو الاسم في قائمة المكونات"},
+      {code:"TOM-07", text:"⚠️ الملح والسكر إذا أُضيفا — يجب ذكرهما في قائمة المكونات مرتبَين تنازلياً حسب النسبة"}
     ]
   },
 
@@ -2834,6 +2902,10 @@ const T = {
     optEnergyDrink:'مشروبات طاقة (JS 2381)', optJuice:'عصائر فاكهة (JS 1761)',
     optFruitSyrup:'شراب فاكهة/سكواش (JS 994)', optFlavoredDrink:'مشروبات منكهة (JS 77)',
     optSupplements:'مكملات غذائية', optSardines:'سردين معلب (JS 68:2022)',
+    optTunaBonito:'تونة / بونيتو معلبة (JS 1103:2025)',
+    optFrozenFish:'سمك مجمد (JS 400:2014)',
+    optCream:'قشدة (JS 430:2010)',
+    optTomatoConcentrate:'مركزات البندورة (JS 41:2012)',
     optDates:'تمور (JS 549:2021)', optCerealInfant:'أغذية حبوب للرضع والأطفال (JS 443:2015)',
     optIceCream:'مثلجات غذائية (JS 44:2022)', optFoulMedames:'فول مدمس معبأ (JS 66:2016)',
     optPasta:'عجائن جافة / باستا (JS 67:2017)',
@@ -2855,7 +2927,7 @@ const T = {
     optFull:'كامل (جميع القواعد)', optCritical:'الجسيمة فقط', optQuick:'فحص سريع',
     aboutTitle:'كيف يعمل النظام؟', aboutSub:'طبقات متعددة من التدقيق مدمجة في أداة واحدة',
     aboutCard1Title:'المواصفات الأردنية JS',
-    aboutCard1Text:'تدقيق 44+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
+    aboutCard1Text:'تدقيق 48+ مواصفة أردنية JS تشمل الألبان، اللبن الرائب، الحليب المعقم، اللحوم، المشروبات، المخبوزات، الشوكولاتة، الحلوى، الزيوت، المايونيز، الزيتون، تركيبة الرضع والمكملات الغذائية',
     aboutCard2Title:'كودكس CXS 192',
     aboutCard2Text:'التحقق من المضافات الغذائية حسب الجداول الدولية الثلاثة — جدول 1، جدول 2، جدول 3 مع تسلسل القرار الصحيح',
     aboutCard3Title:'110 قاعدة JS 9:2025',
@@ -2901,6 +2973,10 @@ const T = {
     optEnergyDrink:'Energy Drinks (JS 2381)', optJuice:'Fruit Juices (JS 1761)',
     optFruitSyrup:'Fruit Syrup/Squash (JS 994)', optFlavoredDrink:'Flavored Drinks (JS 77)',
     optSupplements:'Food Supplements', optSardines:'Canned Sardines (JS 68:2022)',
+    optTunaBonito:'Canned Tuna / Bonito (JS 1103:2025)',
+    optFrozenFish:'Frozen Fish (JS 400:2014)',
+    optCream:'Cream (JS 430:2010)',
+    optTomatoConcentrate:'Tomato Concentrates (JS 41:2012)',
     optDates:'Dates (JS 549:2021)', optCerealInfant:'Cereal-Based Foods for Infants (JS 443:2015)',
     optIceCream:'Edible Ices (JS 44:2022)', optFoulMedames:'Packed Foul Medames (JS 66:2016)',
     optPasta:'Dried Pasta / Noodles (JS 67:2017)',
@@ -2922,7 +2998,7 @@ const T = {
     optFull:'Full (All Rules)', optCritical:'Critical Violations Only', optQuick:'Quick Check',
     aboutTitle:'How Does the System Work?', aboutSub:'Multiple layers of compliance checking in one tool',
     aboutCard1Title:'Jordanian JS Standards',
-    aboutCard1Text:'Audits 44+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
+    aboutCard1Text:'Audits 48+ Jordanian JS specifications covering dairy, yoghurt, UHT milk, meat, beverages, bakery, chocolate, confectionery, oils, mayonnaise, olives, infant formula, and food supplements',
     aboutCard2Title:'Codex CXS 192',
     aboutCard2Text:'Verifies food additives against three international tables — Table 1, Table 2, Table 3 — using the correct three-step decision sequence',
     aboutCard3Title:'110 JS 9:2025 Rules',
@@ -2992,7 +3068,10 @@ function applyLang(lang) {
     'opt-noodles':t.optNoodles,'opt-corn-chips':t.optCornChips,'opt-chocolate':t.optChocolate,
     'opt-candy':t.optCandy,'opt-beverages':t.optBeverages,'opt-energy-drink':t.optEnergyDrink,
     'opt-juice':t.optJuice,'opt-fruit-syrup':t.optFruitSyrup,'opt-flavored-drink':t.optFlavoredDrink,
-    'opt-supplements':t.optSupplements,'opt-sardines':t.optSardines,'opt-dates':t.optDates,
+    'opt-supplements':t.optSupplements,'opt-sardines':t.optSardines,
+    'opt-tuna-bonito':t.optTunaBonito,'opt-frozen-fish':t.optFrozenFish,
+    'opt-cream':t.optCream,'opt-tomato-concentrate':t.optTomatoConcentrate,
+    'opt-dates':t.optDates,
     'opt-cereal-infant':t.optCerealInfant,'opt-ice-cream':t.optIceCream,
     'opt-foul-medames':t.optFoulMedames,'opt-pasta':t.optPasta,
     'opt-mayonnaise':t.optMayonnaise,
