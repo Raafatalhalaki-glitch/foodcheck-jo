@@ -442,7 +442,7 @@ footer span { color: var(--accent); }
   </div>
 
   <div class="upload-zone" id="uploadZone">
-    <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
+    <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple>
     <div class="upload-icon">📋</div>
     <div class="upload-text">
       <h3 id="upload-h3">اسحب صور بطاقة البيان هنا</h3>
@@ -1803,9 +1803,8 @@ function checkReady() {
 
 // ===== FILE UPLOAD =====
 function handleFiles(input) {
-  alert('handleFiles called, files: ' + input.files.length);
   const files = Array.from(input.files);
-  if (!files.length) { alert('No files found'); return; }
+  if (!files.length) return;
   const remaining = 5 - uploadedImages.length;
   if (remaining <= 0) { showToast('الحد الأقصى 5 صور — احذف صورة أولاً'); return; }
   const toProcess = files.slice(0, remaining);
@@ -1884,6 +1883,8 @@ function clearImages() {
 }
 
 const zone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+fileInput.addEventListener('change', function() { handleFiles(this); });
 zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
 zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
 zone.addEventListener('drop', e => {
