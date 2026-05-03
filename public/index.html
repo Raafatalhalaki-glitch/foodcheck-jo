@@ -143,7 +143,7 @@ nav a:hover { color: var(--accent); }
 .upload-icon { font-size: 3rem; margin-bottom: 1rem; }
 .upload-text h3 { font-size: 1.1rem; margin-bottom: .4rem; }
 .upload-text p { color: var(--text2); font-size: .85rem; }
-.upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; pointer-events: none; }
 .preview-img { max-height: 320px; max-width: 100%; border-radius: 12px; object-fit: contain; display: none; }
 .preview-img.show { display: block; margin: 1rem auto 0; }
 
@@ -441,7 +441,7 @@ footer span { color: var(--accent); }
     </div>
   </div>
 
-  <div class="upload-zone" id="uploadZone">
+  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
     <input type="file" class="upload-input" id="fileInput" accept="image/*" multiple onchange="handleFiles(this)">
     <div class="upload-icon">📋</div>
     <div class="upload-text">
