@@ -1809,9 +1809,8 @@ function handleFiles(input) {
   if (remaining <= 0) { showToast('الحد الأقصى 5 صور — احذف صورة أولاً'); return; }
   const toProcess = files.slice(0, remaining);
   if (files.length > remaining) showToast(`تم أخذ ${remaining} صور فقط — الحد الأقصى 5`);
-  let processed = 0;
   toProcess.forEach(file => {
-    if (file.size > 10 * 1024 * 1024) { showToast(`${file.name}: الحجم أكبر من 10MB`); processed++; return; }
+    if (file.size > 10 * 1024 * 1024) { showToast(`${file.name}: الحجم أكبر من 10MB`); return; }
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
@@ -1834,13 +1833,12 @@ function handleFiles(input) {
         uploadedImages.push({ base64: dataURL.split(',')[1], type: 'image/jpeg', name: file.name, src: dataURL });
         renderGallery();
         checkReady();
-        processed++;
-        if (processed === toProcess.length) { setTimeout(() => { input.value = ''; }, 100); }
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   });
+  input.value = '';
 }
 
 function renderGallery() {
