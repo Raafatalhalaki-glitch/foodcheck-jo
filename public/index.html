@@ -1803,8 +1803,9 @@ function checkReady() {
 
 // ===== FILE UPLOAD =====
 function handleFiles(input) {
+  alert('handleFiles called, files: ' + input.files.length);
   const files = Array.from(input.files);
-  if (!files.length) return;
+  if (!files.length) { alert('No files found'); return; }
   const remaining = 5 - uploadedImages.length;
   if (remaining <= 0) { showToast('الحد الأقصى 5 صور — احذف صورة أولاً'); return; }
   const toProcess = files.slice(0, remaining);
