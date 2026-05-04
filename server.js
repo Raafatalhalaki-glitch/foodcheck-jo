@@ -15,6 +15,234 @@ try {
   console.warn('⚠️ codex.db not loaded:', e.message);
 }
 
+// ================================================================
+// ===== نظام GMP/HACCP =====
+// ================================================================
+let gmpDB;
+try {
+  const Database = require('better-sqlite3');
+  gmpDB = new Database(path.join(__dirname, 'gmp_assessments.db'));
+  gmpDB.exec(`
+    CREATE TABLE IF NOT EXISTS assessments (
+      id TEXT PRIMARY KEY,
+      org_name TEXT,
+      facility_type TEXT,
+      sectors TEXT,
+      inputs TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      status TEXT DEFAULT 'in_progress'
+    );
+    CREATE TABLE IF NOT EXISTS answers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      assessment_id TEXT,
+      module_id TEXT,
+      rule_id TEXT,
+      answer TEXT,
+      evidence_status TEXT DEFAULT 'not_provided',
+      notes TEXT,
+      answered_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS results (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      assessment_id TEXT,
+      module_id TEXT,
+      score REAL,
+      critical_count INTEGER,
+      major_count INTEGER,
+      minor_count INTEGER,
+      risk_level TEXT,
+      decision TEXT,
+      calculated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_answers_unique ON answers(assessment_id, rule_id);
+  `);
+  console.log('✅ gmp_assessments.db loaded');
+} catch(e) {
+  console.warn('⚠️ gmp_assessments.db not loaded:', e.message);
+}
+
+// تحميل محرك GMP
+let gmpEngine = null;
+try {
+  const fs = require('fs');
+  gmpEngine = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'gmp_engine.json'), 'utf8'));
+  console.log(`✅ GMP Engine loaded: ${gmpEngine.rules.length} rules`);
+} catch(e) {
+  console.warn('⚠️ gmp_engine.json not loaded:', e.message);
+}
+
+// دوال محرك GMP
+function getActiveGMPRules(inputs) {
+  if (!gmpEngine) return [];
+  return gmpEngine.rules.filter(rule => {
+    const applicability = rule['Applicability Rule'] || 'All';
+    const sector = rule['Sector'] || 'All';
+    if (applicability === 'All') return true;
+    if (sector !== 'All' && inputs.sectors) {
+      const ruleSectors = sector.split(/[,;/]/).map(s => s.trim().toLowerCase());
+      const userSectors = (inputs.sectors || []).map(s => s.toLowerCase());
+      const match = ruleSectors.some(rs => userSectors.some(us => us.includes(rs) || rs.includes(us)));
+      if (!match && sector !== 'All') return false;
+    }
+    const trigger = rule['Product / Process Trigger'] || '';
+    if (trigger.includes('RTE') && !inputs.rte) return false;
+    if (trigger.includes('CIP') && !inputs.cip) return false;
+    if (trigger.includes('Animal-derived') && !inputs.animal_origin) return false;
+    return true;
+  });
+}
+
+function calcModuleScore(moduleId, answerMap, activeRules) {
+  const moduleRules = activeRules.filter(r => r['Module ID'] === moduleId);
+  if (!moduleRules.length) return null;
+  let totalWeight = 0, earnedWeight = 0, criticalCount = 0, majorCount = 0, minorCount = 0, criticalFail = false;
+  moduleRules.forEach(rule => {
+    const answer = answerMap[rule['Rule ID']];
+    const severity = rule['Severity'];
+    const weight = parseFloat(rule['Weight']) || 0;
+    totalWeight += weight;
+    if (!answer || answer === 'Not Assessed') return;
+    if (answer === 'Yes') { earnedWeight += weight; }
+    else if (answer === 'N/A') { totalWeight -= weight; }
+    else if (answer === 'No' || answer === 'Partial') {
+      if (severity === 'Critical') { criticalCount++; criticalFail = true; }
+      else if (severity === 'Major') { majorCount++; }
+      else { minorCount++; }
+      if (answer === 'Partial') earnedWeight += weight * 0.5;
+    }
+  });
+  const score = totalWeight > 0 ? (earnedWeight / totalWeight) * 100 : 0;
+  let riskLevel, decision;
+  if (criticalFail || score < 60) { riskLevel = 'Critical'; decision = 'FAIL'; }
+  else if (score >= 90) { riskLevel = 'Low'; decision = 'PASS'; }
+  else if (score >= 75) { riskLevel = 'Medium'; decision = 'CONDITIONAL PASS'; }
+  else { riskLevel = 'High'; decision = 'FAIL'; }
+  return { moduleId, score: Math.round(score * 10) / 10, totalRules: moduleRules.length, criticalCount, majorCount, minorCount, criticalFail, riskLevel, decision };
+}
+
+// ── GMP API Routes ──
+
+app.get('/api/gmp/engine', (req, res) => {
+  if (!gmpEngine) return res.status(503).json({ error: 'GMP Engine غير متاح' });
+  res.json({
+    totalRules: gmpEngine.rules.length,
+    modules: ['M01','M02','M03','M04','M05','M06','M07','M08'],
+    moduleNames: { M01:'Supplier & Primary Production', M02:'Facility & Infrastructure', M03:'Cleaning & Sanitation', M04:'Pest Control', M05:'Personnel Hygiene', M06:'Operational Control', M07:'Documentation & Evidence', M08:'Traceability & Recall' }
+  });
+});
+
+app.post('/api/gmp/assessment', (req, res) => {
+  if (!gmpDB) return res.status(503).json({ error: 'GMP DB غير متاح' });
+  const { org_name, facility_type, sectors, inputs } = req.body;
+  if (!org_name || !facility_type || !sectors) return res.status(400).json({ error: 'بيانات ناقصة' });
+  const id = 'GMP-' + Date.now() + '-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  gmpDB.prepare('INSERT INTO assessments (id,org_name,facility_type,sectors,inputs) VALUES (?,?,?,?,?)')
+    .run(id, org_name, facility_type, JSON.stringify(sectors), JSON.stringify(inputs || {}));
+  res.json({ assessment_id: id });
+});
+
+app.get('/api/gmp/assessment/:id', (req, res) => {
+  if (!gmpDB) return res.status(503).json({ error: 'GMP DB غير متاح' });
+  const assessment = gmpDB.prepare('SELECT * FROM assessments WHERE id=?').get(req.params.id);
+  if (!assessment) return res.status(404).json({ error: 'غير موجود' });
+  const answers = gmpDB.prepare('SELECT rule_id, answer FROM answers WHERE assessment_id=?').all(req.params.id);
+  const answerMap = {};
+  answers.forEach(a => { answerMap[a.rule_id] = a.answer; });
+  res.json({ ...assessment, answers: answerMap });
+});
+
+app.get('/api/gmp/assessment/:id/module/:moduleId', (req, res) => {
+  if (!gmpDB || !gmpEngine) return res.status(503).json({ error: 'GMP غير متاح' });
+  const assessment = gmpDB.prepare('SELECT * FROM assessments WHERE id=?').get(req.params.id);
+  if (!assessment) return res.status(404).json({ error: 'غير موجود' });
+  const inputs = JSON.parse(assessment.inputs || '{}');
+  inputs.sectors = JSON.parse(assessment.sectors || '[]');
+  const activeRules = getActiveGMPRules(inputs)
+    .filter(r => r['Module ID'] === req.params.moduleId)
+    .map(r => ({
+      id: r['Rule ID'], category: r['Category'], question: r['Question'],
+      hazard: r['Hazard / Risk'], severity: r['Severity'], weight: r['Weight'],
+      requiredEvidence: r['Required Evidence'], correctiveAction: r['Corrective Action'],
+      haccpTrigger: r['HACCP Trigger'], sopId: r['SOP ID'], reference: r['Codex / EU Reference']
+    }));
+  const answers = gmpDB.prepare('SELECT rule_id, answer, evidence_status FROM answers WHERE assessment_id=? AND module_id=?').all(req.params.id, req.params.moduleId);
+  const answerMap = {};
+  answers.forEach(a => { answerMap[a.rule_id] = { answer: a.answer, evidence_status: a.evidence_status }; });
+  res.json({ moduleId: req.params.moduleId, totalRules: activeRules.length, rules: activeRules, answers: answerMap });
+});
+
+app.post('/api/gmp/assessment/:id/module/:moduleId/answers', (req, res) => {
+  if (!gmpDB) return res.status(503).json({ error: 'GMP DB غير متاح' });
+  const { answers } = req.body;
+  if (!answers) return res.status(400).json({ error: 'لا توجد إجابات' });
+  const insertOrReplace = gmpDB.prepare(`
+    INSERT INTO answers (assessment_id, module_id, rule_id, answer, evidence_status, notes)
+    VALUES (?,?,?,?,?,?)
+    ON CONFLICT(assessment_id, rule_id) DO UPDATE SET
+      answer=excluded.answer, evidence_status=excluded.evidence_status, notes=excluded.notes, answered_at=CURRENT_TIMESTAMP
+  `);
+  const insertMany = gmpDB.transaction((answers) => {
+    for (const [ruleId, data] of Object.entries(answers)) {
+      insertOrReplace.run(req.params.id, req.params.moduleId, ruleId, data.answer || data, data.evidence_status || 'not_provided', data.notes || null);
+    }
+  });
+  insertMany(answers);
+  const assessment = gmpDB.prepare('SELECT * FROM assessments WHERE id=?').get(req.params.id);
+  const inputs = JSON.parse(assessment.inputs || '{}');
+  inputs.sectors = JSON.parse(assessment.sectors || '[]');
+  const activeRules = getActiveGMPRules(inputs);
+  const allAnswers = gmpDB.prepare('SELECT rule_id, answer FROM answers WHERE assessment_id=?').all(req.params.id);
+  const answerMap = {};
+  allAnswers.forEach(a => { answerMap[a.rule_id] = a.answer; });
+  const score = calcModuleScore(req.params.moduleId, answerMap, activeRules);
+  if (score) {
+    gmpDB.prepare('INSERT OR REPLACE INTO results (assessment_id,module_id,score,critical_count,major_count,minor_count,risk_level,decision) VALUES (?,?,?,?,?,?,?,?)')
+      .run(req.params.id, req.params.moduleId, score.score, score.criticalCount, score.majorCount, score.minorCount, score.riskLevel, score.decision);
+  }
+  res.json({ success: true, score });
+});
+
+app.get('/api/gmp/assessment/:id/results', (req, res) => {
+  if (!gmpDB || !gmpEngine) return res.status(503).json({ error: 'GMP غير متاح' });
+  const assessment = gmpDB.prepare('SELECT * FROM assessments WHERE id=?').get(req.params.id);
+  if (!assessment) return res.status(404).json({ error: 'غير موجود' });
+  const inputs = JSON.parse(assessment.inputs || '{}');
+  inputs.sectors = JSON.parse(assessment.sectors || '[]');
+  const activeRules = getActiveGMPRules(inputs);
+  const allAnswers = gmpDB.prepare('SELECT rule_id, answer FROM answers WHERE assessment_id=?').all(req.params.id);
+  const answerMap = {};
+  allAnswers.forEach(a => { answerMap[a.rule_id] = a.answer; });
+  const modules = ['M01','M02','M03','M04','M05','M06','M07','M08'];
+  const moduleResults = modules.map(m => calcModuleScore(m, answerMap, activeRules)).filter(Boolean);
+  const weights = { M01:15, M02:10, M03:15, M04:10, M05:10, M06:20, M07:10, M08:10 };
+  let weightedScore = 0, totalW = 0;
+  moduleResults.forEach(r => { const w = weights[r.moduleId]||10; weightedScore += r.score*w; totalW += w; });
+  weightedScore = totalW > 0 ? weightedScore/totalW : 0;
+  const hasAnyCritical = moduleResults.some(r => r.criticalFail);
+  let finalDecision, systemStatus;
+  if (hasAnyCritical) { finalDecision='FAIL'; systemStatus='تم تحديد إشكالية حرجة. يلزم إجراء تصحيحي فوري.'; }
+  else if (weightedScore>=90) { finalDecision='PASS'; systemStatus='النظام يبدو مضبوطاً بشكل كافٍ بناءً على الإجابات المقدمة.'; }
+  else if (weightedScore>=75) { finalDecision='CONDITIONAL PASS'; systemStatus='النظام يحتوي على نقاط ضعف تستوجب خطة CAPA.'; }
+  else { finalDecision='FAIL'; systemStatus='ضبط النظام ضعيف. مطلوب خطة تصحيحية شاملة.'; }
+  const findings = [];
+  activeRules.forEach(rule => {
+    const answer = answerMap[rule['Rule ID']];
+    if (answer === 'No' || answer === 'Partial') {
+      findings.push({ moduleId:rule['Module ID'], ruleId:rule['Rule ID'], question:rule['Question'], severity:rule['Severity'], correctiveAction:rule['Corrective Action'], sopId:rule['SOP ID'] });
+    }
+  });
+  res.json({ assessment:{ id:assessment.id, org_name:assessment.org_name, facility_type:assessment.facility_type, sectors:inputs.sectors }, moduleResults, finalDecision:{ finalDecision, systemStatus, weightedScore:Math.round(weightedScore*10)/10, hasAnyCritical }, findings, totalAnswered:allAnswers.length, totalActive:activeRules.length });
+});
+
+// ── GMP Page Routes ──
+app.get('/gmp', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'gmp', 'index.html'));
+});
+
+// ================================================================
+// ===== Rule Engine — 4-step decision (FIXED) =====
+// ================================================================
 // Rule Engine — 4-step decision (FIXED)
 function checkAdditive(ins, catNo) {
   const result = {
@@ -201,6 +429,9 @@ app.get('/additives.html', (req, res) => {
 });
 app.get('/shelf-life.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'shelf-life.html'));
+});
+app.get('/restaurant-shelf-life.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'restaurant-shelf-life.html'));
 });
 app.get('/report.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'report.html'));
