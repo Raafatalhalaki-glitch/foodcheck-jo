@@ -15,7 +15,7 @@ try {
   console.warn('⚠️ codex.db not loaded:', e.message);
 }
 
-// Rule Engine — 4-step decision
+// Rule Engine — 4-step decision (FIXED)
 function checkAdditive(ins, catNo) {
   const result = {
     ins, cat_no: catNo,
@@ -24,53 +24,133 @@ function checkAdditive(ins, catNo) {
     message_ar: null, notes: null, notes_text: [],
     steps: { table1: null, table2: null, table3: null, annex3: false }
   };
-  const ai = additivesDB.prepare('SELECT name, functional_class FROM additive_info WHERE ins=?').get(ins);
-  const t3info = additivesDB.prepare('SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?').get(ins);
+
+  // ── معلومات المضاف الأساسية ──
+  const ai = additivesDB.prepare(
+    'SELECT name, functional_class FROM additive_info WHERE ins=?'
+  ).get(ins);
+
+  const t3info = additivesDB.prepare(
+    'SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?'
+  ).get(ins);
+
   if (!ai && !t3info) {
     result.verdict = 'NOT_FOUND';
     result.message_ar = `INS ${ins} غير موجود في قاعدة البيانات`;
     return result;
   }
-  result.additive_name = ai ? ai.name : t3info.name;
+
+  result.additive_name  = ai ? ai.name           : t3info.name;
   result.functional_class = ai ? ai.functional_class : (t3info ? t3info.functional_class : '');
-  const annex = additivesDB.prepare('SELECT cat_no FROM annex3 WHERE cat_no=?').get(catNo);
-  result.steps.annex3 = !!annex;
-  result.steps.table3 = t3info || null;
-  const t1 = additivesDB.prepare('SELECT * FROM table1 WHERE ins=? AND cat_no=?').get(ins, catNo);
-  result.steps.table1 = t1 || null;
-  const t2 = additivesDB.prepare('SELECT * FROM table2 WHERE cat_no=? AND (ins=? OR ins LIKE ?)').get(catNo, ins, `%${ins}%`);
-  result.steps.table2 = t2 || null;
+
+  // ── دالة استخراج ملاحظات ──
   function resolveNotes(str) {
     if (!str) return [];
-    return str.split(/[,&\s]+/).map(s => s.trim()).filter(s => /^\d+$/.test(s)).map(id => {
-      const n = additivesDB.prepare('SELECT text FROM notes WHERE note_id=?').get(id);
-      return n ? { id, text: n.text } : null;
-    }).filter(Boolean);
+    return str.split(/[,&\s]+/)
+      .map(s => s.trim())
+      .filter(s => /^\d+$/.test(s))
+      .map(id => {
+        const n = additivesDB.prepare('SELECT text FROM notes WHERE note_id=?').get(id);
+        return n ? { id, text: n.text } : null;
+      }).filter(Boolean);
   }
-  if (t1) {
-    result.max_level = t1.max_level; result.notes = t1.notes;
-    result.notes_text = resolveNotes(t1.notes);
-    result.verdict = t3info ? 'CONDITIONAL' : 'PASS';
-    result.message_ar = `مسموح — Table 1 — الحد: ${t1.max_level}` + (t3info ? ' — توجد قيود إضافية في Table 3' : '');
-  } else if (t2) {
-    result.max_level = t2.max_level; result.notes = t2.notes;
-    result.notes_text = resolveNotes(t2.notes);
-    result.verdict = t3info ? 'CONDITIONAL' : 'PASS';
-    result.message_ar = `مسموح — Table 2 — الحد: ${t2.max_level}`;
-  } else if (t3info) {
-    if (annex) {
-      result.verdict = 'FAIL';
-      result.message_ar = 'غير مسموح — الفئة مستثناة في Annex 3 من شروط Table 3';
-    } else {
-      result.verdict = 'PASS'; result.max_level = t3info.max_level || 'GMP';
-      result.message_ar = 'مسموح — Table 3 GMP';
+
+  // ── بناء قائمة الفئات الأعلى (hierarchy) ──
+  // مثال: 14.1.4.1 → ['14.1.4.1', '14.1.4', '14.1', '14']
+  function getParentCats(cat) {
+    const parts = cat.split('.');
+    const cats = [];
+    for (let i = parts.length; i >= 1; i--) {
+      cats.push(parts.slice(0, i).join('.'));
     }
-  } else {
-    result.verdict = 'FAIL';
-    result.message_ar = 'غير مسموح — غير مدرج في أي جدول لهذه الفئة الغذائية';
+    return cats;
   }
+
+  const catHierarchy = getParentCats(catNo);
+
+  // ════════════════════════════════
+  // STEP 1: Table 1 — المضاف مسموح صراحةً في هذه الفئة أو أي فئة أعلى؟
+  // ════════════════════════════════
+  let t1 = null;
+  for (const cat of catHierarchy) {
+    t1 = additivesDB.prepare(
+      'SELECT * FROM table1 WHERE ins=? AND cat_no=?'
+    ).get(ins, cat);
+    if (t1) break;
+  }
+  result.steps.table1 = t1 || null;
+
+  if (t1) {
+    result.max_level  = t1.max_level;
+    result.notes      = t1.notes;
+    result.notes_text = resolveNotes(t1.notes);
+    result.verdict    = 'PASS';
+    result.message_ar = `مسموح — Table 1 — الفئة: ${t1.cat_no} — الحد: ${t1.max_level}`;
+    result.steps.table3 = t3info || null;
+    result.steps.annex3 = false; // لا يهم — Table 1 يتغلب
+    return result;
+  }
+
+  // ════════════════════════════════
+  // STEP 2: Table 2 — carry-over أو إذن بالنقل؟
+  // ════════════════════════════════
+  let t2 = null;
+  for (const cat of catHierarchy) {
+    t2 = additivesDB.prepare(
+      'SELECT * FROM table2 WHERE cat_no=? AND (ins=? OR ins LIKE ?)'
+    ).get(cat, ins, `%${ins}%`);
+    if (t2) break;
+  }
+  result.steps.table2 = t2 || null;
+
+  if (t2) {
+    result.max_level  = t2.max_level;
+    result.notes      = t2.notes;
+    result.notes_text = resolveNotes(t2.notes);
+    result.verdict    = 'PASS';
+    result.message_ar = `مسموح — Table 2 — الحد: ${t2.max_level}`;
+    result.steps.table3 = t3info || null;
+    result.steps.annex3 = false;
+    return result;
+  }
+
+  // ════════════════════════════════
+  // STEP 3: Table 3 (GMP) — لكن هل الفئة مستثناة في Annex 3؟
+  // ════════════════════════════════
+  result.steps.table3 = t3info || null;
+
+  // فحص Annex 3 على الفئة الحالية والفئات الأعلى
+  let annex = null;
+  for (const cat of catHierarchy) {
+    annex = additivesDB.prepare(
+      'SELECT cat_no FROM annex3 WHERE cat_no=?'
+    ).get(cat);
+    if (annex) break;
+  }
+  result.steps.annex3 = !!annex;
+
+  if (t3info) {
+    if (annex) {
+      // الفئة مستثناة من GMP → المضاف غير مسموح
+      result.verdict    = 'FAIL';
+      result.message_ar = `غير مسموح — الفئة ${annex.cat_no} مستثناة في Annex 3 من شروط Table 3 (GMP)`;
+    } else {
+      // GMP — مسموح بكميات تقنية ضرورية
+      result.verdict    = 'PASS';
+      result.max_level  = t3info.max_level || 'GMP';
+      result.message_ar = `مسموح — Table 3 GMP — الفئة غير مستثناة`;
+    }
+    return result;
+  }
+
+  // ════════════════════════════════
+  // STEP 4: غير موجود في أي جدول
+  // ════════════════════════════════
+  result.verdict    = 'FAIL';
+  result.message_ar = `غير مسموح — INS ${ins} غير مدرج في أي جدول لهذه الفئة الغذائية`;
   return result;
 }
+
 
 // API Routes — المضافات
 app.get('/api/additives/check', (req, res) => {
