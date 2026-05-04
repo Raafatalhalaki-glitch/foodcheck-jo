@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodCheck GMP/HACCP — بناء نظام سلامة الغذاء</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0a1628;
+  --navy-mid: #0f2040;
+  --navy-light: #1a3358;
+  --teal: #00d4a8;
+  --teal-dim: #00a882;
+  --teal-glow: rgba(0,212,168,0.15);
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --green: #10b981;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --border: rgba(0,212,168,0.2);
+  --card: rgba(255,255,255,0.04);
+  --card-hover: rgba(255,255,255,0.07);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT ── */
+.app { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 280px;
+  background: var(--navy-mid);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.main {
+  flex: 1;
+  margin-right: 280px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar-logo {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo .brand {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--teal);
+  letter-spacing: -0.5px;
+}
+
+.sidebar-logo .sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-top: 2px;
+}
+
+.sidebar-modules {
+  padding: 16px 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-dim);
+  padding: 8px 20px 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.module-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-right: 3px solid transparent;
+  position: relative;
+}
+
+.module-item:hover { background: var(--card-hover); }
+.module-item.active {
+  background: var(--teal-glow);
+  border-right-color: var(--teal);
+}
+
+.module-item.locked { opacity: 0.4; cursor: not-allowed; }
+
+.module-badge {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--navy-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--teal);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.module-item.active .module-badge {
+  background: var(--teal);
+  color: var(--navy);
+}
+
+.module-item.done .module-badge {
+  background: var(--green);
+  color: white;
+}
+
+.module-info { flex: 1; min-width: 0; }
+.module-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.module-status { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+
+.module-score-pill {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.score-pass { background: rgba(16,185,129,0.2); color: var(--green); }
+.score-warn { background: rgba(245,158,11,0.2); color: var(--amber); }
+.score-fail { background: rgba(239,68,68,0.2); color: var(--red); }
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.overall-score {
+  text-align: center;
+  padding: 12px;
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.overall-label { font-size: 10px; color: var(--text-dim); margin-bottom: 4px; }
+.overall-value { font-size: 28px; font-weight: 800; color: var(--teal); font-family: 'IBM Plex Mono', monospace; }
+.overall-decision { font-size: 11px; margin-top: 4px; }
+
+/* ── HEADER ── */
+.header {
+  background: var(--navy-mid);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-left h1 { font-size: 18px; font-weight: 700; }
+.header-left p { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.btn-primary { background: var(--teal); color: var(--navy); }
+.btn-primary:hover { background: var(--teal-dim); transform: translateY(-1px); }
+.btn-ghost { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--card-hover); }
+.btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+/* ── CONTENT ── */
+.content { flex: 1; padding: 32px; }
+
+/* ── SCREEN: WELCOME ── */
+#screen-welcome { display: block; }
+#screen-onboarding,
+#screen-assessment,
+#screen-results { display: none; }
+
+.welcome-hero {
+  text-align: center;
+  max-width: 700px;
+  margin: 60px auto;
+}
+
+.welcome-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal-glow);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--teal);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 24px;
+}
+
+.welcome-hero h2 {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #e2e8f0, var(--teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcome-hero p {
+  font-size: 16px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.welcome-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--teal);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.stat-card .label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+.standards-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.standard-badge {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-dim);
+}
+
+/* ── SCREEN: ONBOARDING ── */
+.onboarding-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.step-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--navy-light);
+  transition: all 0.3s;
+}
+
+.step-dot.active { background: var(--teal); width: 24px; border-radius: 4px; }
+.step-dot.done { background: var(--green); }
+
+.form-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 20px;
+}
+
+.form-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.form-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.form-group { margin-bottom: 20px; }
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.form-label span { color: var(--red); margin-right: 2px; }
+
+.form-input {
+  width: 100%;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-input:focus { border-color: var(--teal); }
+
+.toggle-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.toggle-item {
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-item:hover { border-color: var(--teal); background: var(--teal-glow); }
+.toggle-item.selected { border-color: var(--teal); background: var(--teal-glow); }
+.toggle-item.selected .toggle-check { background: var(--teal); border-color: var(--teal); }
+
+.toggle-check {
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.toggle-check svg { width: 10px; height: 10px; opacity: 0; transition: opacity 0.2s; }
+.toggle-item.selected .toggle-check svg { opacity: 1; }
+
+.toggle-label { font-size: 13px; font-weight: 500; }
+
+.risk-toggles { display: flex; flex-direction: column; gap: 8px; }
+
+.risk-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.risk-toggle:hover { border-color: rgba(0,212,168,0.4); }
+
+.risk-toggle-info { display: flex; flex-direction: column; gap: 2px; }
+.risk-toggle-name { font-size: 13px; font-weight: 600; }
+.risk-toggle-desc { font-size: 11px; color: var(--text-dim); }
+
+.switch {
+  width: 40px; height: 22px;
+  background: var(--navy-light);
+  border-radius: 100px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.switch.on { background: var(--teal); }
+.switch::after {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px;
+  background: white;
+  border-radius: 50%;
+  top: 3px; right: 3px;
+  transition: transform 0.2s;
+}
+.switch.on::after { transform: translateX(-18px); }
+
+/* ── ASSESSMENT SCREEN ── */
+.assessment-header {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.module-title { display: flex; align-items: center; gap: 14px; }
+.module-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--teal-glow);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.module-title-text h2 { font-size: 18px; font-weight: 700; }
+.module-title-text p { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+.progress-ring { position: relative; width: 56px; height: 56px; }
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring .track { fill: none; stroke: var(--navy-light); stroke-width: 4; }
+.progress-ring .fill { fill: none; stroke: var(--teal); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
+.progress-ring .label {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--teal);
+}
+
+.questions-list { display: flex; flex-direction: column; gap: 12px; }
+
+.question-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  transition: border-color 0.2s;
+}
+
+.question-card:hover { border-color: rgba(0,212,168,0.3); }
+.question-card.answered { border-color: rgba(0,212,168,0.25); }
+.question-card.critical-answered-no { border-color: rgba(239,68,68,0.4); }
+
+.q-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+
+.q-severity {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sev-critical { background: rgba(239,68,68,0.2); color: var(--red); }
+.sev-major { background: rgba(245,158,11,0.2); color: var(--amber); }
+.sev-minor { background: rgba(148,163,184,0.15); color: var(--text-dim); }
+
+.q-text { font-size: 14px; font-weight: 500; line-height: 1.6; flex: 1; }
+
+.q-hazard {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.q-answers { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.answer-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--navy);
+  color: var(--text-dim);
+  transition: all 0.15s;
+}
+
+.answer-btn:hover { border-color: var(--teal); color: var(--text); }
+.answer-btn.selected-yes { background: rgba(16,185,129,0.2); border-color: var(--green); color: var(--green); }
+.answer-btn.selected-partial { background: rgba(245,158,11,0.2); border-color: var(--amber); color: var(--amber); }
+.answer-btn.selected-no { background: rgba(239,68,68,0.2); border-color: var(--red); color: var(--red); }
+.answer-btn.selected-na { background: rgba(148,163,184,0.15); border-color: rgba(148,163,184,0.3); color: var(--text-dim); }
+
+.q-corrective {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #fca5a5;
+  line-height: 1.5;
+  display: none;
+}
+
+.q-corrective.show { display: block; }
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.15s;
+}
+
+.filter-btn.active { background: var(--teal-glow); border-color: var(--teal); color: var(--teal); }
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.save-indicator {
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.save-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── RESULTS SCREEN ── */
+.results-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.decision-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  border: 2px solid;
+}
+
+.decision-pass { background: rgba(16,185,129,0.15); border-color: var(--green); color: var(--green); }
+.decision-conditional { background: rgba(245,158,11,0.15); border-color: var(--amber); color: var(--amber); }
+.decision-fail { background: rgba(239,68,68,0.15); border-color: var(--red); color: var(--red); }
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.result-module-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.result-module-card:hover { border-color: rgba(0,212,168,0.3); transform: translateY(-2px); }
+
+.rmc-id {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.rmc-name { font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+
+.rmc-score {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 4px;
+}
+
+.rmc-decision { font-size: 11px; font-weight: 600; }
+
+.findings-section { margin-bottom: 32px; }
+.findings-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+.finding-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.finding-item.critical { border-right: 3px solid var(--red); }
+.finding-item.major { border-right: 3px solid var(--amber); }
+
+.finding-content { flex: 1; }
+.finding-q { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+.finding-action { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+.finding-sop { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--teal); margin-top: 4px; }
+
+/* ── LOADING ── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--navy-mid);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 13px;
+  z-index: 9999;
+  transition: transform 0.3s;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(--green); color: var(--green); }
+.toast.error { border-color: var(--red); color: var(--red); }
+
+/* ── LOCKED OVERLAY ── */
+.locked-overlay {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 60px;
+  text-align: center;
+}
+
+.locked-overlay h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.locked-overlay p { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-right: 0; }
+  .results-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="brand">FoodCheck GMP</div>
+      <div class="sub">HACCP · ISO · BRCGS · IFS</div>
+    </div>
+
+    <div class="sidebar-modules">
+      <div class="sidebar-section">التقدم</div>
+
+      <div class="module-item locked" id="nav-M01" onclick="navigateModule('M01')">
+        <div class="module-badge">M01</div>
+        <div class="module-info">
+          <div class="module-name">الموردون والإنتاج الأولي</div>
+          <div class="module-status" id="status-M01">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M02" onclick="navigateModule('M02')">
+        <div class="module-badge">M02</div>
+        <div class="module-info">
+          <div class="module-name">المنشأة والبنية التحتية</div>
+          <div class="module-status" id="status-M02">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M03" onclick="navigateModule('M03')">
+        <div class="module-badge">M03</div>
+        <div class="module-info">
+          <div class="module-name">التنظيف والتطهير</div>
+          <div class="module-status" id="status-M03">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M04" onclick="navigateModule('M04')">
+        <div class="module-badge">M04</div>
+        <div class="module-info">
+          <div class="module-name">مكافحة الآفات</div>
+          <div class="module-status" id="status-M04">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M05" onclick="navigateModule('M05')">
+        <div class="module-badge">M05</div>
+        <div class="module-info">
+          <div class="module-name">نظافة الأفراد</div>
+          <div class="module-status" id="status-M05">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M06" onclick="navigateModule('M06')">
+        <div class="module-badge">M06</div>
+        <div class="module-info">
+          <div class="module-name">ضبط التشغيل</div>
+          <div class="module-status" id="status-M06">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M07" onclick="navigateModule('M07')">
+        <div class="module-badge">M07</div>
+        <div class="module-info">
+          <div class="module-name">التوثيق والأدلة</div>
+          <div class="module-status" id="status-M07">لم يبدأ</div>
+        </div>
+      </div>
+
+      <div class="module-item locked" id="nav-M08" onclick="navigateModule('M08')">
+        <div class="module-badge">M08</div>
+        <div class="module-info">
+          <div class="module-name">التتبع والاستدعاء</div>
+          <div class="module-status" id="status-M08">لم يبدأ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="overall-score">
+        <div class="overall-label">التقييم الكلي</div>
+        <div class="overall-value" id="overall-score">—</div>
+        <div class="overall-decision" id="overall-decision" style="color:var(--text-dim)">ابدأ التقييم</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        <h1 id="header-title">نظام GMP/HACCP</h1>
+        <p id="header-sub">منصة بناء أنظمة سلامة الغذاء — مستوى BRCGS / IFS / FSSC 22000</p>
+      </div>
+      <div class="header-actions" id="header-actions">
+        <button class="btn btn-ghost" onclick="showScreen('welcome')" id="btn-home" style="display:none">الرئيسية</button>
+        <button class="btn btn-primary" onclick="showScreen('onboarding')" id="btn-start">ابدأ التقييم</button>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- WELCOME SCREEN -->
+      <div id="screen-welcome">
+        <div class="welcome-hero">
+          <div class="welcome-badge">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <circle cx="6" cy="6" r="6" fill="#00d4a8"/>
+              <path d="M3.5 6L5.5 8L8.5 4" stroke="#0a1628" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            GMP · HACCP · Codex CXC 1-1969
+          </div>
+          <h2>بناء نظام سلامة غذاء متكامل لمنشأتك</h2>
+          <p>506 متطلب مرجعي موزعة على 8 وحدات متكاملة. النظام يحلل مخاطر منشأتك تلقائياً ويولّد تقارير امتثال، خطط تصحيح، وإجراءات تشغيل موحدة SOPs.</p>
+
+          <div class="welcome-stats">
+            <div class="stat-card">
+              <div class="num">506</div>
+              <div class="label">متطلب مرجعي</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">8</div>
+              <div class="label">وحدات تقييم</div>
+            </div>
+            <div class="stat-card">
+              <div class="num">100+</div>
+              <div class="label">إجراء تشغيل SOP</div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="font-size:16px;padding:14px 36px;margin:0 auto;display:flex;" onclick="showScreen('onboarding')">
+            ابدأ تقييم منشأتك
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:6px">
+              <path d="M6 12L2 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M2 8H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+          <div class="standards-row">
+            <span class="standard-badge">Codex CXC 1-1969</span>
+            <span class="standard-badge">EU 852/2004</span>
+            <span class="standard-badge">EU 178/2002</span>
+            <span class="standard-badge">BRCGS</span>
+            <span class="standard-badge">IFS Food</span>
+            <span class="standard-badge">FSSC 22000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ONBOARDING SCREEN -->
+      <div id="screen-onboarding" style="display:none">
+        <div class="onboarding-container">
+          <div class="step-indicator">
+            <div class="step-dot active" id="step-0"></div>
+            <div class="step-dot" id="step-1"></div>
+            <div class="step-dot" id="step-2"></div>
+          </div>
+
+          <!-- Step 0: Basic Info -->
+          <div id="onboard-step-0">
+            <div class="form-card">
+              <h3>معلومات المنشأة</h3>
+              <p>نبدأ بمعلومات أساسية عن منشأتك لتخصيص نظام التقييم</p>
+
+              <div class="form-group">
+                <label class="form-label"><span>*</span>اسم الشركة أو المنشأة</label>
+                <input type="text" class="form-input" id="org-name" placeholder="مثال: شركة الأردن للألبان">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label"><span>*</span>نوع المنشأة</label>
+                <div class="toggle-group">
+                  <div class="toggle-item" onclick="selectFacilityType(this, 'Factory')" data-value="Factory">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">مصنع إنتاج</span>
+                  </div>
+                  <div class="toggle-item" onclick="selectFacilityType(this, 'Importer')" data-value="Importer">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">مستورد / موزع</span>
+                  </div>
+                  <div class="toggle-item" onclick="selectFacilityType(this, 'Warehouse')" data-value="Warehouse">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">مستودع / تخزين</span>
+                  </div>
+                  <div class="toggle-item" onclick="selectFacilityType(this, 'Composite')" data-value="Composite">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">مركب / متعدد</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label"><span>*</span>قطاع الإنتاج (اختر كل ما ينطبق)</label>
+                <div class="toggle-group">
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Dairy">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">ألبان ومشتقات</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Meat">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">لحوم ودواجن</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Fish">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">أسماك ومأكولات بحرية</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Grains">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">حبوب وبقوليات</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Beverage">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">مشروبات</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Bakery">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">مخابز ومعجنات</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Produce">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">خضار وفواكه</span>
+                  </div>
+                  <div class="toggle-item" onclick="toggleSector(this)" data-value="Other">
+                    <div class="toggle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <span class="toggle-label">أخرى</span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="nextOnboardStep(1)">التالي</button>
+            </div>
+          </div>
+
+          <!-- Step 1: Risk Toggles -->
+          <div id="onboard-step-1" style="display:none">
+            <div class="form-card">
+              <h3>خصائص المنتج والعملية</h3>
+              <p>هذه المعلومات تُفعّل متطلبات إضافية ذات صلة بمخاطر منتجك</p>
+
+              <div class="risk-toggles">
+                <div class="risk-toggle" onclick="toggleRisk(this, 'rte')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">منتج جاهز للأكل (RTE)</div>
+                    <div class="risk-toggle-desc">لا تتطلب عملية طهي قبل الاستهلاك</div>
+                  </div>
+                  <div class="switch" id="sw-rte"></div>
+                </div>
+                <div class="risk-toggle" onclick="toggleRisk(this, 'heat_treatment')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">معالجة حرارية</div>
+                    <div class="risk-toggle-desc">بسترة، تعقيم، طهي، أو أي معالجة حرارية</div>
+                  </div>
+                  <div class="switch" id="sw-heat_treatment"></div>
+                </div>
+                <div class="risk-toggle" onclick="toggleRisk(this, 'animal_origin')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">مكونات من أصل حيواني</div>
+                    <div class="risk-toggle-desc">لحوم، ألبان، بيض، أو مشتقاتها</div>
+                  </div>
+                  <div class="switch" id="sw-animal_origin"></div>
+                </div>
+                <div class="risk-toggle" onclick="toggleRisk(this, 'allergens')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">مسببات حساسية</div>
+                    <div class="risk-toggle-desc">المنتج يحتوي أو يتلامس مع مواد مثيرة للحساسية</div>
+                  </div>
+                  <div class="switch" id="sw-allergens"></div>
+                </div>
+                <div class="risk-toggle" onclick="toggleRisk(this, 'cip')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">نظام CIP للتنظيف الداخلي</div>
+                    <div class="risk-toggle-desc">Cleaning in Place — للأنظمة المغلقة</div>
+                  </div>
+                  <div class="switch" id="sw-cip"></div>
+                </div>
+                <div class="risk-toggle" onclick="toggleRisk(this, 'high_moisture')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">منتج عالي الرطوبة</div>
+                    <div class="risk-toggle-desc">aw > 0.85 أو بيئة رطبة في الإنتاج</div>
+                  </div>
+                  <div class="switch" id="sw-high_moisture"></div>
+                </div>
+                <div class="risk-toggle" onclick="toggleRisk(this, 'distribution')">
+                  <div class="risk-toggle-info">
+                    <div class="risk-toggle-name">توزيع لعملاء تجاريين</div>
+                    <div class="risk-toggle-desc">شحن لموزعين، مطاعم، أو بائعين</div>
+                  </div>
+                  <div class="switch" id="sw-distribution"></div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;margin-top:24px;">
+                <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="nextOnboardStep(0)">السابق</button>
+                <button class="btn btn-primary" style="flex:2;justify-content:center;" onclick="nextOnboardStep(2)">التالي</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Confirm -->
+          <div id="onboard-step-2" style="display:none">
+            <div class="form-card">
+              <h3>ملخص التقييم</h3>
+              <p>تأكد من المعلومات قبل بدء التقييم</p>
+              <div id="onboard-summary" style="background:var(--navy);border-radius:10px;padding:16px;margin-bottom:24px;line-height:1.8;font-size:13px;"></div>
+              <div style="background:var(--teal-glow);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:24px;font-size:13px;">
+                <strong style="color:var(--teal);">سيتم تفعيل:</strong>
+                <div id="activated-rules-count" style="margin-top:4px;color:var(--text-dim);"></div>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="nextOnboardStep(1)">السابق</button>
+                <button class="btn btn-primary" style="flex:2;justify-content:center;" onclick="startAssessment()">ابدأ التقييم الآن</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSESSMENT SCREEN -->
+      <div id="screen-assessment" style="display:none">
+        <div class="assessment-header">
+          <div class="module-title">
+            <div class="module-icon" id="assess-module-id">M01</div>
+            <div class="module-title-text">
+              <h2 id="assess-module-name">الموردون والإنتاج الأولي</h2>
+              <p id="assess-module-desc">0 سؤال نشط · 0 تم الإجابة</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div class="progress-ring">
+              <svg width="56" height="56" viewBox="0 0 56 56">
+                <circle class="track" cx="28" cy="28" r="22"/>
+                <circle class="fill" id="progress-circle" cx="28" cy="28" r="22" stroke-dasharray="138.2" stroke-dashoffset="138.2"/>
+              </svg>
+              <div class="label" id="progress-pct">0%</div>
+            </div>
+            <button class="btn btn-primary" onclick="saveAndNext()">حفظ والتالي</button>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterQuestions('all', this)">الكل</button>
+          <button class="filter-btn" onclick="filterQuestions('Critical', this)">حرجة</button>
+          <button class="filter-btn" onclick="filterQuestions('Major', this)">رئيسية</button>
+          <button class="filter-btn" onclick="filterQuestions('unanswered', this)">غير مجابة</button>
+        </div>
+
+        <div class="questions-list" id="questions-list">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="btn btn-ghost" onclick="prevModule()">الوحدة السابقة</button>
+          <div class="save-indicator">
+            <div class="save-dot"></div>
+            <span>يُحفظ تلقائياً</span>
+          </div>
+          <button class="btn btn-primary" onclick="saveAndNext()">حفظ والتالي</button>
+        </div>
+      </div>
+
+      <!-- RESULTS SCREEN -->
+      <div id="screen-results" style="display:none">
+        <div class="results-header">
+          <div class="decision-badge" id="final-decision-badge">جاري الحساب...</div>
+          <p id="final-decision-text" style="font-size:14px;color:var(--text-dim);max-width:600px;margin:0 auto;line-height:1.6;"></p>
+        </div>
+
+        <div class="results-grid" id="results-grid"></div>
+
+        <div class="findings-section" id="findings-section"></div>
+
+        <div style="text-align:center;margin-top:32px;">
+          <button class="btn btn-ghost" onclick="showScreen('assessment')">العودة للتقييم</button>
+          <button class="btn btn-primary" style="margin-right:10px;" onclick="showPremiumPrompt()">
+            تحميل التقرير الكامل + خطة CAPA
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const STATE = {
+  assessmentId: null,
+  currentModule: null,
+  facilityType: null,
+  sectors: [],
+  inputs: {},
+  moduleOrder: ['M01','M02','M03','M04','M05','M06','M07','M08'],
+  moduleNames: {
+    M01: 'الموردون والإنتاج الأولي',
+    M02: 'المنشأة والبنية التحتية',
+    M03: 'التنظيف والتطهير',
+    M04: 'مكافحة الآفات',
+    M05: 'نظافة الأفراد',
+    M06: 'ضبط التشغيل',
+    M07: 'التوثيق والأدلة',
+    M08: 'التتبع والاستدعاء'
+  },
+  answers: {},
+  moduleData: {},
+  scores: {}
+};
+
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+function showScreen(name) {
+  ['welcome','onboarding','assessment','results'].forEach(s => {
+    document.getElementById('screen-' + s).style.display = 'none';
+  });
+  document.getElementById('screen-' + name).style.display = 'block';
+
+  if (name === 'welcome') {
+    document.getElementById('btn-start').style.display = 'flex';
+    document.getElementById('btn-home').style.display = 'none';
+    document.getElementById('header-title').textContent = 'نظام GMP/HACCP';
+  } else {
+    document.getElementById('btn-start').style.display = 'none';
+    document.getElementById('btn-home').style.display = 'flex';
+  }
+}
+
+// ── ONBOARDING ──────────────────────────────────────────────────────────────
+let currentStep = 0;
+
+function nextOnboardStep(step) {
+  if (step === 1 && !validateStep0()) return;
+  if (step === 2) buildSummary();
+
+  document.getElementById('onboard-step-' + currentStep).style.display = 'none';
+  document.getElementById('onboard-step-' + step).style.display = 'block';
+
+  // Update step dots
+  document.querySelectorAll('.step-dot').forEach((d,i) => {
+    d.className = 'step-dot';
+    if (i < step) d.classList.add('done');
+    if (i === step) d.classList.add('active');
+  });
+
+  currentStep = step;
+}
+
+function validateStep0() {
+  const name = document.getElementById('org-name').value.trim();
+  if (!name) { showToast('أدخل اسم المنشأة', 'error'); return false; }
+  if (!STATE.facilityType) { showToast('اختر نوع المنشأة', 'error'); return false; }
+  if (STATE.sectors.length === 0) { showToast('اختر قطاع إنتاج واحد على الأقل', 'error'); return false; }
+  return true;
+}
+
+function selectFacilityType(el, value) {
+  document.querySelectorAll('.toggle-item[data-value]').forEach(i => {
+    if (['Factory','Importer','Warehouse','Composite'].includes(i.dataset.value)) {
+      i.classList.remove('selected');
+    }
+  });
+  el.classList.add('selected');
+  STATE.facilityType = value;
+}
+
+function toggleSector(el) {
+  const v = el.dataset.value;
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    STATE.sectors = STATE.sectors.filter(s => s !== v);
+  } else {
+    el.classList.add('selected');
+    STATE.sectors.push(v);
+  }
+}
+
+function toggleRisk(el, key) {
+  STATE.inputs[key] = !STATE.inputs[key];
+  const sw = document.getElementById('sw-' + key);
+  sw.classList.toggle('on', STATE.inputs[key]);
+}
+
+function buildSummary() {
+  const name = document.getElementById('org-name').value.trim();
+  const sectorAr = {
+    Dairy:'ألبان', Meat:'لحوم ودواجن', Fish:'أسماك', Grains:'حبوب',
+    Beverage:'مشروبات', Bakery:'مخابز', Produce:'خضار وفواكه', Other:'أخرى'
+  };
+  const typeAr = { Factory:'مصنع', Importer:'مستورد', Warehouse:'مستودع', Composite:'مركب' };
+
+  document.getElementById('onboard-summary').innerHTML = `
+    <div><strong>المنشأة:</strong> ${name}</div>
+    <div><strong>النوع:</strong> ${typeAr[STATE.facilityType] || STATE.facilityType}</div>
+    <div><strong>القطاعات:</strong> ${STATE.sectors.map(s => sectorAr[s] || s).join(' · ')}</div>
+    <div><strong>خصائص نشطة:</strong> ${Object.entries(STATE.inputs).filter(([,v])=>v).map(([k])=>k).join(' · ') || 'لا يوجد'}</div>
+  `;
+  document.getElementById('activated-rules-count').textContent =
+    'سيتم تفعيل متطلبات مخصصة بناءً على قطاعك وخصائص منتجك عبر 8 وحدات تقييم';
+}
+
+async function startAssessment() {
+  const name = document.getElementById('org-name').value.trim();
+
+  try {
+    const res = await fetch('/api/gmp/assessment', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        org_name: name,
+        facility_type: STATE.facilityType,
+        sectors: STATE.sectors,
+        inputs: STATE.inputs
+      })
+    });
+    const data = await res.json();
+    STATE.assessmentId = data.assessment_id;
+
+    // Unlock all modules
+    STATE.moduleOrder.forEach(m => {
+      const nav = document.getElementById('nav-' + m);
+      if (nav) nav.classList.remove('locked');
+    });
+
+    document.getElementById('header-title').textContent = name;
+    showScreen('assessment');
+    loadModule('M01');
+  } catch(e) {
+    showToast('خطأ في الاتصال بالخادم', 'error');
+  }
+}
+
+// ── MODULE NAVIGATION ───────────────────────────────────────────────────────
+function navigateModule(moduleId) {
+  const nav = document.getElementById('nav-' + moduleId);
+  if (nav && nav.classList.contains('locked')) return;
+  if (STATE.assessmentId) {
+    showScreen('assessment');
+    loadModule(moduleId);
+  }
+}
+
+async function loadModule(moduleId) {
+  STATE.currentModule = moduleId;
+
+  // Update sidebar
+  document.querySelectorAll('.module-item').forEach(el => el.classList.remove('active'));
+  const nav = document.getElementById('nav-' + moduleId);
+  if (nav) nav.classList.add('active');
+
+  // Update header
+  document.getElementById('assess-module-id').textContent = moduleId;
+  document.getElementById('assess-module-name').textContent = STATE.moduleNames[moduleId];
+  document.getElementById('assess-module-desc').textContent = 'جاري التحميل...';
+
+  // Show loading
+  document.getElementById('questions-list').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+  try {
+    const res = await fetch(`/api/gmp/assessment/${STATE.assessmentId}/module/${moduleId}`);
+    const data = await res.json();
+    STATE.moduleData[moduleId] = data;
+    renderQuestions(data);
+  } catch(e) {
+    document.getElementById('questions-list').innerHTML = '<p style="color:var(--red);padding:20px;">خطأ في تحميل الوحدة</p>';
+  }
+}
+
+function renderQuestions(data, filter = 'all') {
+  const { rules, answers, totalRules } = data;
+  const moduleId = STATE.currentModule;
+
+  const answered = Object.keys(answers).length;
+  document.getElementById('assess-module-desc').textContent =
+    `${totalRules} سؤال نشط · ${answered} تم الإجابة`;
+
+  updateProgress(answered, totalRules);
+
+  let filtered = rules;
+  if (filter === 'Critical') filtered = rules.filter(r => r.severity === 'Critical');
+  else if (filter === 'Major') filtered = rules.filter(r => r.severity === 'Major');
+  else if (filter === 'unanswered') filtered = rules.filter(r => !answers[r.id]);
+
+  const html = filtered.map(rule => {
+    const ans = answers[rule.id];
+    const currentAns = STATE.answers[rule.id] || ans?.answer;
+    const isNo = currentAns === 'No';
+    const isCritNo = isNo && rule.severity === 'Critical';
+
+    return `
+    <div class="question-card ${currentAns ? 'answered' : ''} ${isCritNo ? 'critical-answered-no' : ''}" id="qcard-${rule.id}">
+      <div class="q-header">
+        <span class="q-severity sev-${rule.severity.toLowerCase()}">${rule.severity}</span>
+        <div class="q-text">${rule.question}</div>
+      </div>
+      ${rule.hazard ? `<div class="q-hazard">⚠ ${rule.hazard}</div>` : ''}
+      <div class="q-answers">
+        <button class="answer-btn ${currentAns==='Yes'?'selected-yes':''}" onclick="setAnswer('${rule.id}', 'Yes', this)">نعم ✓</button>
+        <button class="answer-btn ${currentAns==='Partial'?'selected-partial':''}" onclick="setAnswer('${rule.id}', 'Partial', this)">جزئي</button>
+        <button class="answer-btn ${currentAns==='No'?'selected-no':''}" onclick="setAnswer('${rule.id}', 'No', this)">لا ✗</button>
+        <button class="answer-btn ${currentAns==='N/A'?'selected-na':''}" onclick="setAnswer('${rule.id}', 'N/A', this)">لا ينطبق</button>
+      </div>
+      <div class="q-corrective ${isNo ? 'show' : ''}" id="corr-${rule.id}">
+        📋 <strong>الإجراء التصحيحي:</strong> ${rule.correctiveAction || '—'}
+        ${rule.sopId ? `<div class="finding-sop">${rule.sopId}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('questions-list').innerHTML = html || '<p style="color:var(--text-dim);padding:20px;text-align:center;">لا توجد أسئلة في هذه الفئة</p>';
+}
+
+function setAnswer(ruleId, answer, btn) {
+  STATE.answers[ruleId] = answer;
+
+  // Update button styles
+  const card = document.getElementById('qcard-' + ruleId);
+  card.querySelectorAll('.answer-btn').forEach(b => {
+    b.className = 'answer-btn';
+  });
+
+  const cls = { Yes:'selected-yes', Partial:'selected-partial', No:'selected-no', 'N/A':'selected-na' };
+  btn.classList.add(cls[answer]);
+
+  card.classList.add('answered');
+  card.classList.toggle('critical-answered-no', answer === 'No' && card.querySelector('.sev-critical'));
+
+  // Show/hide corrective
+  const corr = document.getElementById('corr-' + ruleId);
+  if (corr) corr.classList.toggle('show', answer === 'No');
+
+  // Update progress
+  const data = STATE.moduleData[STATE.currentModule];
+  if (data) {
+    const answeredNow = data.rules.filter(r =>
+      STATE.answers[r.id] || data.answers[r.id]
+    ).length;
+    updateProgress(answeredNow, data.totalRules);
+    document.getElementById('assess-module-desc').textContent =
+      `${data.totalRules} سؤال نشط · ${answeredNow} تم الإجابة`;
+  }
+
+  // Auto-save debounced
+  clearTimeout(STATE.saveTimer);
+  STATE.saveTimer = setTimeout(() => saveAnswers(), 2000);
+}
+
+function filterQuestions(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (STATE.moduleData[STATE.currentModule]) {
+    renderQuestions(STATE.moduleData[STATE.currentModule], filter);
+  }
+}
+
+function updateProgress(answered, total) {
+  const pct = total > 0 ? Math.round((answered / total) * 100) : 0;
+  const circumference = 138.2;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('progress-circle').style.strokeDashoffset = offset;
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+async function saveAnswers() {
+  if (!STATE.assessmentId || !STATE.currentModule) return;
+  const answers = {};
+  Object.entries(STATE.answers).forEach(([k, v]) => {
+    answers[k] = { answer: v };
+  });
+  if (Object.keys(answers).length === 0) return;
+
+  try {
+    const res = await fetch(`/api/gmp/assessment/${STATE.assessmentId}/module/${STATE.currentModule}/answers`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ answers })
+    });
+    const data = await res.json();
+    if (data.score) updateSidebarScore(STATE.currentModule, data.score);
+    STATE.answers = {};
+  } catch(e) {}
+}
+
+function updateSidebarScore(moduleId, score) {
+  STATE.scores[moduleId] = score;
+  const nav = document.getElementById('nav-' + moduleId);
+  if (!nav) return;
+
+  nav.classList.add('done');
+
+  let existing = nav.querySelector('.module-score-pill');
+  if (!existing) {
+    existing = document.createElement('span');
+    existing.className = 'module-score-pill';
+    nav.appendChild(existing);
+  }
+
+  const cls = score.score >= 90 ? 'score-pass' : score.score >= 75 ? 'score-warn' : 'score-fail';
+  existing.className = 'module-score-pill ' + cls;
+  existing.textContent = score.score + '%';
+
+  document.getElementById('status-' + moduleId).textContent =
+    score.criticalFail ? '⚠ إشكالية حرجة' : score.score + '% مكتمل';
+
+  updateOverallScore();
+}
+
+function updateOverallScore() {
+  const scores = Object.values(STATE.scores);
+  if (scores.length === 0) return;
+
+  const avg = scores.reduce((s,r) => s + r.score, 0) / scores.length;
+  const hasCritical = scores.some(s => s.criticalFail);
+
+  document.getElementById('overall-score').textContent = Math.round(avg) + '%';
+
+  let decision, color;
+  if (hasCritical) { decision = 'FAIL'; color = 'var(--red)'; }
+  else if (avg >= 90) { decision = 'PASS'; color = 'var(--green)'; }
+  else if (avg >= 75) { decision = 'CONDITIONAL'; color = 'var(--amber)'; }
+  else { decision = 'FAIL'; color = 'var(--red)'; }
+
+  const decEl = document.getElementById('overall-decision');
+  decEl.textContent = decision;
+  decEl.style.color = color;
+}
+
+async function saveAndNext() {
+  await saveAnswers();
+  showToast('تم الحفظ', 'success');
+
+  const idx = STATE.moduleOrder.indexOf(STATE.currentModule);
+  if (idx < STATE.moduleOrder.length - 1) {
+    loadModule(STATE.moduleOrder[idx + 1]);
+  } else {
+    loadResults();
+  }
+}
+
+function prevModule() {
+  const idx = STATE.moduleOrder.indexOf(STATE.currentModule);
+  if (idx > 0) {
+    saveAnswers();
+    loadModule(STATE.moduleOrder[idx - 1]);
+  }
+}
+
+// ── RESULTS ─────────────────────────────────────────────────────────────────
+async function loadResults() {
+  showScreen('results');
+
+  try {
+    const res = await fetch(`/api/gmp/assessment/${STATE.assessmentId}/results`);
+    const data = await res.json();
+    renderResults(data);
+  } catch(e) {
+    showToast('خطأ في تحميل النتائج', 'error');
+  }
+}
+
+function renderResults(data) {
+  const { moduleResults, finalDecision, findings } = data;
+
+  // Final decision badge
+  const badge = document.getElementById('final-decision-badge');
+  const cls = { PASS:'decision-pass', 'CONDITIONAL PASS':'decision-conditional', FAIL:'decision-fail', HOLD:'decision-fail' };
+  badge.className = 'decision-badge ' + (cls[finalDecision.finalDecision] || 'decision-fail');
+  badge.textContent = finalDecision.finalDecision + ' — ' + Math.round(finalDecision.weightedScore) + '%';
+  document.getElementById('final-decision-text').textContent = finalDecision.systemStatus;
+
+  // Module cards
+  const grid = document.getElementById('results-grid');
+  const scoreColor = s => s >= 90 ? 'var(--green)' : s >= 75 ? 'var(--amber)' : 'var(--red)';
+
+  grid.innerHTML = moduleResults.map(r => `
+    <div class="result-module-card" onclick="loadModule('${r.moduleId}');showScreen('assessment')">
+      <div class="rmc-id">${r.moduleId}</div>
+      <div class="rmc-name">${STATE.moduleNames[r.moduleId] || r.moduleId}</div>
+      <div class="rmc-score" style="color:${scoreColor(r.score)}">${r.score}%</div>
+      <div class="rmc-decision" style="color:${scoreColor(r.score)}">${r.decision}</div>
+      ${r.criticalCount > 0 ? `<div style="font-size:11px;color:var(--red);margin-top:4px;">${r.criticalCount} إشكالية حرجة</div>` : ''}
+    </div>
+  `).join('');
+
+  // Findings
+  const criticals = findings.filter(f => f.severity === 'Critical');
+  const majors = findings.filter(f => f.severity === 'Major');
+
+  const section = document.getElementById('findings-section');
+  let html = '';
+
+  if (criticals.length > 0) {
+    html += `<h3 style="color:var(--red);">⚠ الإشكاليات الحرجة (${criticals.length})</h3>`;
+    html += criticals.map(f => `
+      <div class="finding-item critical">
+        <div class="q-severity sev-critical" style="margin-top:2px;">حرجة</div>
+        <div class="finding-content">
+          <div class="finding-q">${f.question}</div>
+          <div class="finding-action">${f.correctiveAction || ''}</div>
+          ${f.sopId ? `<div class="finding-sop">${f.sopId}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  if (majors.length > 0) {
+    html += `<h3 style="color:var(--amber);margin-top:24px;">الإشكاليات الرئيسية (${majors.length})</h3>`;
+    html += majors.slice(0, 10).map(f => `
+      <div class="finding-item major">
+        <div class="q-severity sev-major" style="margin-top:2px;">رئيسية</div>
+        <div class="finding-content">
+          <div class="finding-q">${f.question}</div>
+          <div class="finding-action">${f.correctiveAction || ''}</div>
+        </div>
+      </div>
+    `).join('');
+    if (majors.length > 10) {
+      html += `<p style="font-size:12px;color:var(--text-dim);text-align:center;margin-top:8px;">+ ${majors.length-10} إشكاليات أخرى في التقرير الكامل</p>`;
+    }
+  }
+
+  section.innerHTML = html;
+}
+
+function showPremiumPrompt() {
+  showToast('التقرير الكامل متاح في الاشتراك المدفوع', 'success');
+}
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+showScreen('welcome');
+</script>
+</body>
+</html>
