@@ -1335,10 +1335,13 @@ function renderQuestions(data, filter = 'all') {
     return `
     <div class="question-card ${currentAns ? 'answered' : ''} ${isCritNo ? 'critical-answered-no' : ''}" id="qcard-${rule.id}">
       <div class="q-header">
-        <span class="q-severity sev-${rule.severity.toLowerCase()}">${rule.severity}</span>
-        <div class="q-text">${rule.question}</div>
+        <span class="q-severity sev-${rule.severity.toLowerCase()}">${rule.severityAr || rule.severity}</span>
+        <div class="q-text">
+          ${rule.questionAr || rule.question}
+          ${rule.questionAr ? `<div style="font-size:11px;color:var(--text-dim);margin-top:5px;font-weight:400;direction:ltr;text-align:left;border-top:1px solid rgba(255,255,255,0.06);padding-top:5px;">${rule.question}</div>` : ''}
+        </div>
       </div>
-      ${rule.hazard ? `<div class="q-hazard">⚠ ${rule.hazard}</div>` : ''}
+      ${(rule.hazardAr || rule.hazard) ? `<div class="q-hazard">⚠ ${rule.hazardAr || rule.hazard}</div>` : ''}
       <div class="q-answers">
         <button class="answer-btn ${currentAns==='Yes'?'selected-yes':''}" onclick="setAnswer('${rule.id}', 'Yes', this)">نعم ✓</button>
         <button class="answer-btn ${currentAns==='Partial'?'selected-partial':''}" onclick="setAnswer('${rule.id}', 'Partial', this)">جزئي</button>
@@ -1346,7 +1349,7 @@ function renderQuestions(data, filter = 'all') {
         <button class="answer-btn ${currentAns==='N/A'?'selected-na':''}" onclick="setAnswer('${rule.id}', 'N/A', this)">لا ينطبق</button>
       </div>
       <div class="q-corrective ${isNo ? 'show' : ''}" id="corr-${rule.id}">
-        📋 <strong>الإجراء التصحيحي:</strong> ${rule.correctiveAction || '—'}
+        📋 <strong>الإجراء التصحيحي:</strong> ${rule.correctiveActionAr || rule.correctiveAction || '—'}
         ${rule.sopId ? `<div class="finding-sop">${rule.sopId}</div>` : ''}
       </div>
     </div>`;
