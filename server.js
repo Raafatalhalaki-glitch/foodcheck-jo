@@ -253,14 +253,43 @@ function checkAdditive(ins, catNo) {
     steps: { table1: null, table2: null, table3: null, annex3: false }
   };
 
+  // ── تطبيع رقم INS — يحل مشكلة 170 vs 170(i) ──
+  // البحث أولاً بتطابق تام، ثم بـ LIKE للمضافات ذات النسخ (i)(ii)(a)(b)...
+  function resolveINS(insInput) {
+    // تطابق تام أولاً
+    const exact = additivesDB.prepare(
+      'SELECT ins FROM additive_info WHERE ins=?'
+    ).get(insInput);
+    if (exact) return [insInput];
+
+    // بحث LIKE — يلاقي 170(i), 170(ii), 472(a)...
+    const variants = additivesDB.prepare(
+      "SELECT ins FROM additive_info WHERE ins LIKE ? ORDER BY ins"
+    ).all(insInput + '%');
+    if (variants.length) return variants.map(v => v.ins);
+
+    // بحث في table1 و table3 مباشرة
+    const t1variants = additivesDB.prepare(
+      "SELECT DISTINCT ins FROM table1 WHERE ins LIKE ? ORDER BY ins"
+    ).all(insInput + '%');
+    if (t1variants.length) return t1variants.map(v => v.ins);
+
+    return [insInput]; // إرجاع الأصل إذا ما لقى شي
+  }
+
+  const insVariants = resolveINS(ins);
+  // نستخدم أول نسخة للبحث الرئيسي، ونحتفظ بالكل للـ fallback
+  const primaryINS = insVariants[0];
+  result.ins_resolved = insVariants.length > 1 ? insVariants : undefined;
+
   // ── معلومات المضاف الأساسية ──
   const ai = additivesDB.prepare(
     'SELECT name, functional_class FROM additive_info WHERE ins=?'
-  ).get(ins);
+  ).get(primaryINS);
 
   const t3info = additivesDB.prepare(
     'SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?'
-  ).get(ins);
+  ).get(primaryINS);
 
   if (!ai && !t3info) {
     result.verdict = 'NOT_FOUND';
@@ -270,6 +299,11 @@ function checkAdditive(ins, catNo) {
 
   result.additive_name  = ai ? ai.name           : t3info.name;
   result.functional_class = ai ? ai.functional_class : (t3info ? t3info.functional_class : '');
+  // تحديث الـ ins في النتيجة ليعكس النسخة الفعلية
+  if (primaryINS !== ins) {
+    result.ins_original = ins;
+    result.ins = primaryINS;
+  }
 
   // ── دالة استخراج ملاحظات ──
   function resolveNotes(str) {
@@ -303,7 +337,7 @@ function checkAdditive(ins, catNo) {
   for (const cat of catHierarchy) {
     t1 = additivesDB.prepare(
       'SELECT * FROM table1 WHERE ins=? AND cat_no=?'
-    ).get(ins, cat);
+    ).get(primaryINS, cat);
     if (t1) break;
   }
   result.steps.table1 = t1 || null;
@@ -326,7 +360,7 @@ function checkAdditive(ins, catNo) {
   for (const cat of catHierarchy) {
     t2 = additivesDB.prepare(
       'SELECT * FROM table2 WHERE cat_no=? AND (ins=? OR ins LIKE ?)'
-    ).get(cat, ins, `%${ins}%`);
+    ).get(cat, primaryINS, `%${primaryINS}%`);
     if (t2) break;
   }
   result.steps.table2 = t2 || null;
@@ -372,7 +406,25 @@ function checkAdditive(ins, catNo) {
   }
 
   // ════════════════════════════════
-  // STEP 4: غير موجود في أي جدول
+  // STEP 4: البحث في الفئات الفرعية (للأسفل)
+  // مثال: المستخدم حط 08.2 لكن الإذن موجود في 08.2.2
+  // ════════════════════════════════
+  const subT1 = additivesDB.prepare(
+    "SELECT * FROM table1 WHERE ins=? AND cat_no LIKE ? ORDER BY cat_no LIMIT 1"
+  ).get(primaryINS, catNo + '.%');
+
+  if (subT1) {
+    result.max_level  = subT1.max_level;
+    result.notes      = subT1.notes;
+    result.notes_text = resolveNotes(subT1.notes);
+    result.verdict    = 'PASS';
+    result.message_ar = `مسموح — Table 1 — الفئة الفرعية: ${subT1.cat_no} — الحد: ${subT1.max_level} (تم البحث تلقائياً في الفئات الفرعية لـ ${catNo})`;
+    result.steps.table1 = subT1;
+    return result;
+  }
+
+  // ════════════════════════════════
+  // STEP 5: غير موجود في أي جدول أو فئة فرعية
   // ════════════════════════════════
   result.verdict    = 'FAIL';
   result.message_ar = `غير مسموح — INS ${ins} غير مدرج في أي جدول لهذه الفئة الغذائية`;
