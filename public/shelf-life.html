@@ -155,7 +155,9 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 </head>
 <body>
 
-<div class="page-header">
+<div class="page-header" style="display:flex;align-items:center;padding:0">
+  <a href="/" style="display:flex;align-items:center;gap:6px;padding:0 1.25rem;color:var(--text2);text-decoration:none;font-size:13px;height:100%;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--text2)'">← الرئيسية</a>
+  <div style="width:1px;height:20px;background:var(--border);flex-shrink:0"></div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('search',this)">🔍 البحث عن مدة صلاحية</button>
     <button class="tab" onclick="showTab('engine',this)">⚙️ محرك القرار</button>
