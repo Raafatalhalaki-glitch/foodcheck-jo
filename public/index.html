@@ -464,6 +464,7 @@ footer span { color: var(--accent); }
     <div class="setting-card">
       <label id="label-product-type">نوع المنتج</label>
       <select class="setting-select" id="productType">
+        <option value="auto" id="opt-auto">🤖 تلقائي — يحدده الذكاء الاصطناعي</option>
         <option value="general" id="opt-general">عام</option>
         <option value="dairy" id="opt-dairy">منتجات ألبان</option>
         <option value="processed_cheese" id="opt-processed-cheese">جبن مطبوخ (JS 185)</option>
@@ -2087,7 +2088,7 @@ async function analyze() {
   const prompt = `أنت خبير متخصص في تدقيق بطاقات البيان الغذائية حسب المواصفة الأردنية JS 9:2025 والكودكس الدولي.
 
 معلومات المنتج:
-- نوع المنتج: ${productType}
+- نوع المنتج: ${productType === 'auto' ? 'تلقائي — حدد نوع المنتج من الصورة وطبّق المواصفة المناسبة. اذكر في أول سطر من summary: تم تحديد المنتج تلقائياً كـ [النوع] ثم طبق: حبوب رضع→JS443، تركيبة رضع→JS472، لحوم مصنعة→JS79، مايونيز→JS938، زيتون→JS833، مربيات→JS47، وإلا→عام' : productType}
 - المنشأ: ${origin === 'imported' ? 'مستورد' : 'محلي'}
 - مستوى التدقيق: ${strictness}
 
@@ -2099,7 +2100,7 @@ ${jsRulesText}
 ${allergensText}
 
 تعليمات مهمة:
-1. اقرأ صورة بطاقة البيان المرفقة بعناية تامة
+1. اقرأ جميع الصور المرفقة بعناية تامة — المنتج قد يكون مصوراً من أكثر من زاوية. تاريخ الصلاحية ورقم الدفعة وبلد المنشأ قد تكون على الوجه السفلي أو الجانبي من العبوة — لا تحكم بغيابها إذا لم تظهر في صورة واحدة فقط
 2. دقق على كل قاعدة من القواعد أعلاه — استخدم منطق IF/THEN بدقة
 3. افحص المكونات بحثاً عن مواد الحساسية مع مراعاة الاستثناءات
 4. افحص المضافات الغذائية — الفئة الوظيفية + الاسم أو الرقم INS
