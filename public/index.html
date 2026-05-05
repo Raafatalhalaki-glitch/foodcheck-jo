@@ -2454,10 +2454,20 @@ function displayResults(data, productType) {
     beverages:'14.1', energy_drink:'14.1.4', juice:'14.1.2.1',
     fruit_syrup:'14.1.4', flavored_drink:'14.1.4', supplements:'13.6',
     sardines:'09.2.1', dates:'04.1.1.2',
-    cereal_infant:'13.1.3',
-    infant_formula:'13.1.1', fsmp_infant_formula:'13.1.1'
+    cereal_infant:'13.1.3', infant_cereal:'13.1.3',
+    infant_formula:'13.1.1', fsmp_infant_formula:'13.1.1',
+    auto: null  // يُحدد من الـ AI لاحقاً
   };
-  lastProductCatNo = catMap[productType] || null;
+  // تحديد الفئة — إذا auto نستخرجها من الـ summary
+  if (productType === 'auto') {
+    const summary = data.summary || '';
+    const autoType = Object.keys(catMap).find(k =>
+      k !== 'auto' && summary.toLowerCase().includes(k.replace('_',' '))
+    );
+    lastProductCatNo = autoType ? catMap[autoType] : null;
+  } else {
+    lastProductCatNo = catMap[productType] || null;
+  }
   const checkAllBtn = document.getElementById('checkAllBtn');
   if (checkAllBtn && lastDetectedAdditives.length > 0) {
     checkAllBtn.style.display = 'inline-block';
@@ -2466,13 +2476,73 @@ function displayResults(data, productType) {
   const autoEl = document.getElementById('autoAdditivesResult');
   if (autoEl && lastDetectedAdditives.length > 0) {
     autoEl.innerHTML = `<div style="background:rgba(0,212,168,.06);border:1px solid rgba(0,212,168,.15);border-radius:10px;padding:.9rem;font-size:.85rem;">
-      <strong>🔍 المضافات المكتشفة من الصورة (${lastDetectedAdditives.length}):</strong><br>
-      <div style="margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.4rem;">
-        ${lastDetectedAdditives.map(a => `<span style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.78rem;">${a.name}${a.ins?' ('+a.ins+')':''}</span>`).join('')}
-      </div>
-      <div style="margin-top:.7rem;color:var(--text3);font-size:.78rem;">اضغط "فحص كل المضافات" أعلاه لفحصها جميعاً بتسلسل القرار الثلاثي</div>
+      <strong>🔍 فحص المضافات عبر قاعدة بيانات CXS 192...</strong>
+      <div id="additives-api-result" style="margin-top:.5rem;"></div>
     </div>`;
+    // فحص تلقائي فوري بالـ API
+    checkAdditivesViaAPI(lastDetectedAdditives, lastProductCatNo);
   }
+}
+
+// ── فحص المضافات عبر /api/additives/check ──
+async function checkAdditivesViaAPI(additives, catNo) {
+  const container = document.getElementById('additives-api-result');
+  if (!container) return;
+  container.innerHTML = '<div style="color:var(--text3);font-size:.8rem;">⏳ جاري الفحص...</div>';
+
+  const results = [];
+  for (const add of additives) {
+    const insRaw = (add.ins || '').replace(/^E/i, '').trim();
+    const name = (add.name || '').trim();
+    if (!insRaw && !name) continue;
+
+    // ابحث بالرقم أولاً، ثم بالاسم
+    let apiResult = null;
+    if (insRaw && catNo) {
+      try {
+        const r = await fetch(`/api/additives/check?ins=${encodeURIComponent(insRaw)}&cat=${encodeURIComponent(catNo)}`);
+        apiResult = await r.json();
+      } catch(e) {}
+    }
+    results.push({ add, apiResult });
+  }
+
+  if (!results.length) {
+    container.innerHTML = '<div style="color:var(--text3);font-size:.8rem;">لم يتم اكتشاف مضافات محددة</div>';
+    return;
+  }
+
+  container.innerHTML = results.map(({ add, apiResult }) => {
+    const insDisplay = add.ins || apiResult?.ins || '—';
+    const nameDisplay = apiResult?.additive_name || add.name || 'غير معروف';
+
+    if (!apiResult || apiResult.verdict === 'NOT_FOUND') {
+      // ما في رقم INS أو ما لاقاه — تنبيه فقط
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;background:rgba(74,90,122,.1);border:1px solid rgba(74,90,122,.2);border-radius:6px;margin-bottom:.4rem;">
+        <span style="font-size:.82rem;">${nameDisplay}${insDisplay !== '—' ? ' (INS '+insDisplay+')' : ''}</span>
+        <span style="font-size:.75rem;padding:2px 8px;border-radius:4px;background:rgba(74,90,122,.2);color:var(--text2);">⚠️ غير موجود في قاعدة البيانات</span>
+      </div>`;
+    }
+
+    const isPass = apiResult.verdict === 'PASS';
+    const bg = isPass ? 'rgba(46,213,115,.07)' : 'rgba(255,71,87,.07)';
+    const border = isPass ? 'rgba(46,213,115,.2)' : 'rgba(255,71,87,.2)';
+    const badgeBg = isPass ? 'rgba(46,213,115,.2)' : 'rgba(255,71,87,.2)';
+    const badgeColor = isPass ? 'var(--success)' : 'var(--danger)';
+    const badgeText = isPass ? '✅ مسموح' : '❌ غير مسموح';
+    const maxLevel = apiResult.max_level ? ` · الحد: ${apiResult.max_level}` : '';
+    const subCat = apiResult.message_ar?.includes('الفرعية') ?
+      `<div style="font-size:.7rem;color:var(--text3);margin-top:2px;">${apiResult.message_ar}</div>` : '';
+
+    return `<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;padding:.4rem .6rem;background:${bg};border:1px solid ${border};border-radius:6px;margin-bottom:.4rem;">
+      <div>
+        <span style="font-size:.82rem;font-weight:600;">${nameDisplay}</span>
+        <span style="font-size:.75rem;color:var(--text3);"> INS ${apiResult.ins || insDisplay}${maxLevel}</span>
+        ${subCat}
+      </div>
+      <span style="font-size:.75rem;padding:2px 8px;border-radius:4px;background:${badgeBg};color:${badgeColor};white-space:nowrap;flex-shrink:0;">${badgeText}</span>
+    </div>`;
+  }).join('');
 }
 
 // ============================================================
