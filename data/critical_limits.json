@@ -1,0 +1,702 @@
+{
+  "metadata": {
+    "title_en": "Critical Limits Library — FoodCheck Jordan",
+    "title_ar": "مكتبة الحدود الحرجة — فودتشك الأردن",
+    "version": "2.0",
+    "generated": "2026-05-06",
+    "design_rules": [
+      "No generic limit without scientific basis",
+      "Product-specific limits may vary by category and process",
+      "Distinguish legal contaminant limits from operational HACCP limits",
+      "Validation required for shelf life, cleaning, and challenge studies",
+      "Evidence mandatory — no CCP decision valid without monitoring evidence",
+      "Country overlay — Jordan / Codex / EU / FDA may differ"
+    ],
+    "standards": [
+      "Codex CXC 1-1969",
+      "Codex CXS 193-1995",
+      "EU 2073/2005",
+      "EU 1881/2006",
+      "EU 396/2005",
+      "EU 37/2010",
+      "FDA Food Code 2022",
+      "FDA 21 CFR 113/114/120",
+      "ICMSF Books 1-6",
+      "Jordan JS Standards"
+    ]
+  },
+  "critical_limits": [
+    {
+      "id": "CL-001",
+      "category_en": "Hot Holding",
+      "category_ar": "الحفظ الساخن",
+      "step_en": "Holding",
+      "step_ar": "الحفظ",
+      "hazard_en": "Pathogen growth",
+      "hazard_ar": "نمو مسببات الأمراض",
+      "hazard_type": "Biological",
+      "sector": [
+        "All"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "≥57°C continuous",
+      "critical_limit_ar": "≥57°C مستمر",
+      "unit": "°C",
+      "limit_type": "Operational",
+      "country_overlay": {
+        "Jordan": "≥60°C (JS 9 recommendation)",
+        "Codex": "≥60°C (CXC 1-1969)",
+        "EU": "≥63°C (Regulation 852/2004)",
+        "FDA": "≥57°C (FDA Food Code 2022)"
+      },
+      "applies_when": "Ready-to-eat hot foods during service/holding",
+      "applies_when_ar": "الأغذية الجاهزة للأكل الساخنة أثناء الخدمة/الحفظ",
+      "evidence_required": "Continuous temperature log",
+      "evidence_required_ar": "سجل حرارة مستمر",
+      "monitoring": "Calibrated probe thermometer every 2 hours minimum",
+      "monitoring_ar": "مقياس حرارة معاير كل ساعتين كحد أدنى",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "FDA Food Code 2022 Chapter 3",
+        "Codex CXC 1-1969",
+        "EU 852/2004"
+      ],
+      "notes": "Continuous monitoring preferred; drop below limit triggers hold assessment"
+    },
+    {
+      "id": "CL-002",
+      "category_en": "Cold Holding",
+      "category_ar": "الحفظ البارد",
+      "step_en": "Cold Storage",
+      "step_ar": "التخزين البارد",
+      "hazard_en": "Pathogen growth",
+      "hazard_ar": "نمو مسببات الأمراض",
+      "hazard_type": "Biological",
+      "sector": [
+        "All"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "≤5°C (chilled); ≤-18°C (frozen)",
+      "critical_limit_ar": "≤5°C (مبرد)؛ ≤-18°C (مجمد)",
+      "unit": "°C",
+      "limit_type": "Operational",
+      "country_overlay": {
+        "Jordan": "≤5°C chilled / ≤-18°C frozen (Jordan JS)",
+        "Codex": "≤5°C (CXC 1-1969)",
+        "EU": "≤5°C chilled / ≤-18°C frozen (EU 853/2004)",
+        "FDA": "≤5°C (41°F) chilled (FDA Food Code)"
+      },
+      "applies_when": "All chilled and frozen food products",
+      "applies_when_ar": "جميع منتجات الغذاء المبردة والمجمدة",
+      "evidence_required": "Temperature monitoring records; data logger",
+      "evidence_required_ar": "سجلات مراقبة الحرارة؛ مسجل بيانات",
+      "monitoring": "Continuous data logger or min/max checked ≥2x daily",
+      "monitoring_ar": "مسجل بيانات مستمر أو قراءة الحد الأدنى/الأقصى مرتين يومياً",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "FDA Food Code 2022",
+        "EU 853/2004",
+        "Codex CXC 1-1969"
+      ],
+      "notes": "Risk-based verification required; frozen chain must not be broken"
+    },
+    {
+      "id": "CL-003",
+      "category_en": "Reheating",
+      "category_ar": "إعادة التسخين",
+      "step_en": "Reheating",
+      "step_ar": "إعادة التسخين",
+      "hazard_en": "Pathogen survival",
+      "hazard_ar": "بقاء مسببات الأمراض",
+      "hazard_type": "Biological",
+      "sector": [
+        "RTE",
+        "Meat-Poultry"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "≥74°C for ≥15 seconds (internal product temperature)",
+      "critical_limit_ar": "≥74°C لمدة ≥15 ثانية (درجة الحرارة الداخلية للمنتج)",
+      "unit": "°C",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "≥74°C (aligned with Codex)",
+        "Codex": "≥74°C (CXC 1-1969)",
+        "EU": "≥75°C (some member states)",
+        "FDA": "≥74°C (FDA Food Code 2022)"
+      },
+      "applies_when": "Cooked food reheating for service",
+      "applies_when_ar": "إعادة تسخين الأغذية المطبوخة للخدمة",
+      "evidence_required": "Cooking/reheating temperature record",
+      "evidence_required_ar": "سجل درجة حرارة الطبخ/إعادة التسخين",
+      "monitoring": "Calibrated probe at coldest point of product",
+      "monitoring_ar": "مسبار معاير عند أبرد نقطة في المنتج",
+      "decision_if_failed": "REJECT/HOLD",
+      "decision_if_failed_ar": "رفض/حجز",
+      "references": [
+        "FDA Food Code 2022",
+        "Codex CXC 1-1969"
+      ],
+      "notes": "Applies to reheated foods only; single reheat permitted"
+    },
+    {
+      "id": "CL-004",
+      "category_en": "Pasteurization (Milk)",
+      "category_ar": "بسترة الحليب",
+      "step_en": "Heat Treatment",
+      "step_ar": "المعالجة الحرارية",
+      "hazard_en": "Pathogen survival — Mycobacterium, Salmonella, Listeria, Coxiella",
+      "hazard_ar": "بقاء الممرضات — الميكوباكتيريوم والسالمونيلا والليستيريا والكوكسيلا",
+      "hazard_type": "Biological",
+      "sector": [
+        "Dairy"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "HTST: ≥72°C for ≥15 seconds OR LTLT: ≥63°C for ≥30 minutes",
+      "critical_limit_ar": "بسترة سريعة: ≥72°C لـ ≥15 ثانية أو بسترة بطيئة: ≥63°C لـ ≥30 دقيقة",
+      "unit": "°C/sec",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "≥72°C/15s HTST (JS 286 — Milk Standard)",
+        "Codex": "≥72°C/15s HTST (Codex CXS 206-1999)",
+        "EU": "≥72°C/15s or ≥63°C/30min (EU 853/2004 Annex III)",
+        "FDA": "≥72°C/15s (FDA PMO Grade A)"
+      },
+      "applies_when": "Milk pasteurization — HTST or LTLT",
+      "applies_when_ar": "بسترة الحليب — بسترة سريعة أو بطيئة",
+      "evidence_required": "Continuous pasteurizer chart; flow diversion valve records",
+      "evidence_required_ar": "مخطط جهاز البسترة المستمر؛ سجلات صمام تحويل التدفق",
+      "monitoring": "Continuous temperature/time recording; automated flow diversion",
+      "monitoring_ar": "تسجيل مستمر للحرارة والزمن؛ تحويل تدفق تلقائي",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "Codex CXS 206-1999",
+        "EU 853/2004",
+        "FDA PMO",
+        "Jordan JS 286"
+      ],
+      "notes": "Product-specific validation required; phosphatase test for verification"
+    },
+    {
+      "id": "CL-005",
+      "category_en": "Cooling after Cooking",
+      "category_ar": "التبريد بعد الطبخ",
+      "step_en": "Cooling",
+      "step_ar": "التبريد",
+      "hazard_en": "Pathogen growth / Toxin formation",
+      "hazard_ar": "نمو مسببات الأمراض / تكوّن السموم",
+      "hazard_type": "Biological",
+      "sector": [
+        "Meat-Poultry",
+        "Dairy",
+        "RTE",
+        "Composite"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "60°C → ≤21°C within 2 hours; AND ≤5°C within 6 hours total",
+      "critical_limit_ar": "من 60°C إلى ≤21°C خلال ساعتين؛ ومن 21°C إلى ≤5°C خلال 6 ساعات إجمالاً",
+      "unit": "°C/time",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "Codex-aligned (60→21°C / 2h; 21→5°C / 4h)",
+        "Codex": "Rapid cooling required (CXC 1-1969)",
+        "EU": "Rapid cooling to ≤10°C within defined time (852/2004)",
+        "FDA": "60°C→21°C in 2h; 21°C→5°C in 4h (FDA Food Code)"
+      },
+      "applies_when": "All cooked foods requiring cooling before service/packing",
+      "applies_when_ar": "جميع الأغذية المطبوخة التي تتطلب تبريداً قبل الخدمة/التعبئة",
+      "evidence_required": "Cooling curve records; probe temperature logs",
+      "evidence_required_ar": "سجلات منحنى التبريد؛ سجلات مسبار الحرارة",
+      "monitoring": "Probe at center every 30 minutes during cooling",
+      "monitoring_ar": "مسبار في مركز المنتج كل 30 دقيقة أثناء التبريد",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "FDA Food Code 2022",
+        "USDA FSIS Appendix B",
+        "Codex CXC 1-1969",
+        "ICMSF Book 2"
+      ],
+      "notes": "Validated cooling curve required; target organism: Clostridium perfringens, B. cereus"
+    },
+    {
+      "id": "CL-006",
+      "category_en": "Listeria in RTE Foods",
+      "category_ar": "الليستيريا في الأغذية الجاهزة للأكل",
+      "step_en": "Finished Product",
+      "step_ar": "المنتج النهائي",
+      "hazard_en": "Listeria monocytogenes",
+      "hazard_ar": "الليستيريا أحادية الخلية",
+      "hazard_type": "Biological/Microbiological",
+      "sector": [
+        "RTE",
+        "Dairy",
+        "Meat-Poultry",
+        "Fish"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "Category 1 (vulnerable/shelf life favours growth): Absent in 25g | Category 2: <100 CFU/g throughout shelf life",
+      "critical_limit_ar": "الفئة 1 (ضعيفو المناعة / مدة صلاحية تدعم النمو): غائبة في 25 جرام | الفئة 2: <100 وحدة/جرام طوال الصلاحية",
+      "unit": "CFU/g",
+      "limit_type": "Microbiological",
+      "country_overlay": {
+        "Jordan": "Absent in 25g (JS 286 + food safety law)",
+        "Codex": "Codex CXC 61-2005 (L. monocytogenes in RTE)",
+        "EU": "EU 2073/2005 Annex I Chapter 1 (1.2 & 1.3)",
+        "FDA": "FDA zero tolerance for RTE in interstate commerce"
+      },
+      "applies_when": "RTE foods — especially post-lethality step products",
+      "applies_when_ar": "الأغذية الجاهزة للأكل — خاصة المنتجات بعد خطوة القتل الحراري",
+      "evidence_required": "End-product microbiological analysis; EMP swab results",
+      "evidence_required_ar": "تحليل ميكروبيولوجي للمنتج النهائي؛ نتائج مسحات الرصد البيئي",
+      "monitoring": "End-product testing per sampling plan; environmental monitoring",
+      "monitoring_ar": "فحص المنتج النهائي وفق خطة أخذ عينات؛ رصد بيئي",
+      "decision_if_failed": "RECALL/HOLD",
+      "decision_if_failed_ar": "استدعاء/حجز",
+      "references": [
+        "EU 2073/2005",
+        "Codex CXC 61-2005",
+        "FDA CPG 690.800",
+        "WHO/FAO 2004"
+      ],
+      "notes": "Category depends on product pH, aw, and shelf life — product-specific assessment required"
+    },
+    {
+      "id": "CL-006b",
+      "category_en": "Salmonella in RTE",
+      "category_ar": "السالمونيلا في الأغذية الجاهزة للأكل",
+      "step_en": "Finished Product",
+      "step_ar": "المنتج النهائي",
+      "hazard_en": "Salmonella spp.",
+      "hazard_ar": "السالمونيلا",
+      "hazard_type": "Biological/Microbiological",
+      "sector": [
+        "RTE",
+        "Meat-Poultry",
+        "Dairy",
+        "Grain-Dry"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "Absent in 25g",
+      "critical_limit_ar": "غائبة في 25 جرام",
+      "unit": "Presence/Absence",
+      "limit_type": "Microbiological",
+      "country_overlay": {
+        "Jordan": "Absent in 25g (Jordan food safety law)",
+        "Codex": "Absent in 25g (Codex CXC 1-1969)",
+        "EU": "Absent in 25g (EU 2073/2005 Chapter 1)",
+        "FDA": "Zero tolerance (FDA BAM Chapter 5)"
+      },
+      "applies_when": "All RTE products and processed foods",
+      "applies_when_ar": "جميع منتجات الجاهز للأكل والأغذية المصنّعة",
+      "evidence_required": "End-product microbiological testing",
+      "evidence_required_ar": "اختبار ميكروبيولوجي للمنتج النهائي",
+      "monitoring": "End-product testing per defined sampling plan",
+      "monitoring_ar": "فحص المنتج النهائي وفق خطة أخذ عينات محددة",
+      "decision_if_failed": "RECALL",
+      "decision_if_failed_ar": "استدعاء",
+      "references": [
+        "EU 2073/2005",
+        "FDA BAM Chapter 5",
+        "USDA FSIS Zero Tolerance"
+      ],
+      "notes": "Zero tolerance — any positive triggers immediate hold and recall assessment"
+    },
+    {
+      "id": "CL-007",
+      "category_en": "Canned / Thermal Process",
+      "category_ar": "المعلبات / المعالجة الحرارية",
+      "step_en": "Thermal Processing / Retort",
+      "step_ar": "المعالجة الحرارية / الأوتوكلاف",
+      "hazard_en": "Clostridium botulinum spore survival",
+      "hazard_ar": "بقاء أبواغ المطثية الوشيقية",
+      "hazard_type": "Biological",
+      "sector": [
+        "Canned-Thermal"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "Minimum Fo ≥3 min at 121.1°C (12D reduction); Validated scheduled process — NO generic value permitted",
+      "critical_limit_ar": "قيمة Fo ≥3 دقيقة عند 121.1°C (تخفيض 12D)؛ عملية مجدولة مثبتة — لا يُسمح بقيمة عامة",
+      "unit": "Fo (min)",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "Process authority validation required (aligned with Codex)",
+        "Codex": "Codex CAC/RCP 23-1979 (Canned Fruits and Vegetables)",
+        "EU": "EU 853/2004; member state process authorities",
+        "FDA": "FDA 21 CFR 113 (Low-Acid Canned Foods) — mandatory process filing"
+      },
+      "applies_when": "Low-acid canned foods (pH>4.6, aw>0.85)",
+      "applies_when_ar": "المعلبات منخفضة الحموضة (pH>4.6 و aw>0.85)",
+      "evidence_required": "Thermal process validation by process authority; retort charts per batch",
+      "evidence_required_ar": "تحقق من العملية الحرارية من جهة تقنية متخصصة؛ مخططات الأوتوكلاف لكل دفعة",
+      "monitoring": "Continuous retort temperature/pressure recording; Fo calculation per cycle",
+      "monitoring_ar": "تسجيل مستمر لحرارة/ضغط الأوتوكلاف؛ حساب قيمة Fo لكل دورة",
+      "decision_if_failed": "REJECT",
+      "decision_if_failed_ar": "رفض",
+      "references": [
+        "FDA 21 CFR 113",
+        "Codex CAC/RCP 23-1979",
+        "NFPA Bulletin 26-L",
+        "ICMSF Book 3"
+      ],
+      "notes": "NO generic Fo value — product-specific validation mandatory; process authority letter required"
+    },
+    {
+      "id": "CL-008",
+      "category_en": "Aflatoxin M1 — Raw Milk",
+      "category_ar": "الأفلاتوكسين M1 — الحليب الخام",
+      "step_en": "Receiving",
+      "step_ar": "الاستلام",
+      "hazard_en": "Aflatoxin M1 (carcinogen — IARC Group 1)",
+      "hazard_ar": "الأفلاتوكسين M1 (مادة مسرطنة — المجموعة 1 IARC)",
+      "hazard_type": "Chemical/Mycotoxin",
+      "sector": [
+        "Dairy"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "EU: ≤0.05 μg/kg; Codex: ≤0.5 μg/kg; Jordan: aligned with Codex (≤0.5 μg/kg)",
+      "critical_limit_ar": "الاتحاد الأوروبي: ≤0.05 ميكروغرام/كجم؛ كودكس: ≤0.5 ميكروغرام/كجم؛ الأردن: متوافق مع كودكس (≤0.5 ميكروغرام/كجم)",
+      "unit": "μg/kg",
+      "limit_type": "Chemical",
+      "country_overlay": {
+        "Jordan": "≤0.5 μg/kg (Jordan JS 286 — aligned Codex)",
+        "Codex": "≤0.5 μg/kg (Codex CXS 193-1995)",
+        "EU": "≤0.05 μg/kg (EU 1881/2006 — strictest globally)",
+        "FDA": "≤0.5 μg/kg (FDA CPG 527.400)"
+      },
+      "applies_when": "Raw milk receiving; dairy products",
+      "applies_when_ar": "استلام الحليب الخام؛ منتجات الألبان",
+      "evidence_required": "COA with M1 result; ELISA screening per lot; HPLC confirmation on positive",
+      "evidence_required_ar": "شهادة تحليل مع نتيجة M1؛ فحص ELISA لكل دفعة؛ تأكيد HPLC عند النتيجة الإيجابية",
+      "monitoring": "ELISA per tanker/lot; HPLC confirmation",
+      "monitoring_ar": "ELISA لكل صهريج/دفعة؛ تأكيد HPLC",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "EU 1881/2006",
+        "Codex CXS 193-1995",
+        "IARC Monograph Vol 100F",
+        "Jordan JS 286"
+      ],
+      "notes": "Apply strictest applicable limit — if exporting to EU use ≤0.05 μg/kg"
+    },
+    {
+      "id": "CL-008b",
+      "category_en": "Aflatoxin B1 — Grains/Nuts/Spices",
+      "category_ar": "الأفلاتوكسين B1 — الحبوب والمكسرات والتوابل",
+      "step_en": "Receiving / Storage",
+      "step_ar": "الاستلام / التخزين",
+      "hazard_en": "Aflatoxin B1/B2/G1/G2 (IARC Group 1 carcinogen)",
+      "hazard_ar": "أفلاتوكسينات B1/B2/G1/G2 (مادة مسرطنة — المجموعة 1 IARC)",
+      "hazard_type": "Chemical/Mycotoxin",
+      "sector": [
+        "Grain-Dry",
+        "Composite"
+      ],
+      "classification": "OPRP/CCP",
+      "critical_limit_en": "B1: ≤2 μg/kg (EU food); Total aflatoxins ≤4 μg/kg (EU); B1 ≤10 μg/kg (Codex/Jordan)",
+      "critical_limit_ar": "B1: ≤2 ميكروغرام/كجم (الاتحاد الأوروبي)؛ مجموع الأفلاتوكسينات ≤4 ميكروغرام/كجم (الاتحاد الأوروبي)؛ B1 ≤10 ميكروغرام/كجم (كودكس/الأردن)",
+      "unit": "μg/kg",
+      "limit_type": "Chemical",
+      "country_overlay": {
+        "Jordan": "B1 ≤10 μg/kg (Jordan JS + Codex aligned)",
+        "Codex": "B1 ≤10 μg/kg; Total ≤15 μg/kg (CXS 193-1995)",
+        "EU": "B1 ≤2 μg/kg; Total ≤4 μg/kg (EU 1881/2006)",
+        "FDA": "Total ≤20 μg/kg (FDA CPG 527.400)"
+      },
+      "applies_when": "Grains, nuts, spices, dried figs, dried fruits at receiving and storage",
+      "applies_when_ar": "الحبوب والمكسرات والتوابل والتين المجفف والفواكه المجففة عند الاستلام والتخزين",
+      "evidence_required": "HPLC or ELISA lot testing; COA from supplier; visual mold damage assessment",
+      "evidence_required_ar": "فحص الدفعات بـ HPLC أو ELISA؛ شهادة تحليل من المورد؛ تقييم بصري لأضرار العفن",
+      "monitoring": "ELISA rapid test each lot; HPLC confirmation on borderline/positive",
+      "monitoring_ar": "اختبار ELISA السريع لكل دفعة؛ تأكيد HPLC للحالات الحدية/الإيجابية",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "EU 1881/2006",
+        "Codex CXS 193-1995",
+        "IARC Monograph Vol 100F",
+        "Jordan JS 1769"
+      ],
+      "notes": "Apply strictest limit per target market — Jordan domestic vs EU export differ significantly"
+    },
+    {
+      "id": "CL-009",
+      "category_en": "Potable Water",
+      "category_ar": "المياه الصالحة للشرب",
+      "step_en": "Water Supply / Food Contact Water",
+      "step_ar": "إمداد المياه / المياه الملامسة للغذاء",
+      "hazard_en": "Microbial and chemical contamination",
+      "hazard_ar": "التلوث الميكروبي والكيميائي",
+      "hazard_type": "Biological/Chemical",
+      "sector": [
+        "All"
+      ],
+      "classification": "OPRP",
+      "critical_limit_en": "E. coli/Total coliforms: Absent in 100mL; Turbidity ≤1 NTU (treated); Chlorine residual 0.2-0.5 mg/L",
+      "critical_limit_ar": "الإيكولاي/الكوليفورم الكلي: غائب في 100 مل؛ العكارة ≤1 NTU (معالج)؛ كلور متبقي 0.2-0.5 مجم/لتر",
+      "unit": "Various",
+      "limit_type": "Operational",
+      "country_overlay": {
+        "Jordan": "Jordan Standard JS 286 + WHO Guidelines 4th Ed",
+        "Codex": "WHO Guidelines for Drinking Water Quality 4th Ed (2011)",
+        "EU": "EU Directive 2020/2184 (Drinking Water)",
+        "FDA": "EPA Safe Drinking Water Act standards"
+      },
+      "applies_when": "All food contact water — processing, cleaning, ice, steam generation",
+      "applies_when_ar": "جميع المياه الملامسة للغذاء — التصنيع والتنظيف والثلج وتوليد البخار",
+      "evidence_required": "Periodic water analysis certificate; chlorine monitoring records",
+      "evidence_required_ar": "شهادة تحليل مياه دورية؛ سجلات مراقبة الكلور",
+      "monitoring": "Daily chlorine residual check; quarterly full microbiological analysis",
+      "monitoring_ar": "فحص الكلور المتبقي يومياً؛ تحليل ميكروبيولوجي كامل ربع سنوي",
+      "decision_if_failed": "STOP USE",
+      "decision_if_failed_ar": "إيقاف الاستخدام",
+      "references": [
+        "WHO Guidelines 4th Ed",
+        "Jordan JS Water Standard",
+        "EU 2020/2184"
+      ],
+      "notes": "Periodic testing required; frequency based on risk and supply source"
+    },
+    {
+      "id": "CL-010",
+      "category_en": "Allergen Label Verification",
+      "category_ar": "التحقق من بطاقة مسببات الحساسية",
+      "step_en": "Labeling / Packing",
+      "step_ar": "الوسم / التعبئة",
+      "hazard_en": "Undeclared allergen — wrong label",
+      "hazard_ar": "مسبب حساسية غير معلن — بطاقة خاطئة",
+      "hazard_type": "Allergen",
+      "sector": [
+        "All"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "100% correct allergen declaration — ZERO tolerance for incorrect allergen label",
+      "critical_limit_ar": "تصريح حساسية صحيح 100% — عدم التسامح المطلق مع بطاقة الحساسية الخاطئة",
+      "unit": "Compliance (Pass/Fail)",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "14 allergens per JS 9:2025 (aligned EU)",
+        "Codex": "Codex CXS 1-1985 Annex (8 allergen groups)",
+        "EU": "14 allergens per EU 1169/2011 Annex II",
+        "FDA": "9 major allergens per FDA FASTER Act 2023 (sesame added)"
+      },
+      "applies_when": "All allergen-containing products; shared line production",
+      "applies_when_ar": "جميع المنتجات التي تحتوي مسببات حساسية؛ إنتاج الخطوط المشتركة",
+      "evidence_required": "Label verification log; line clearance record; allergen changeover record",
+      "evidence_required_ar": "سجل التحقق من البطاقة؛ سجل تفريغ الخط؛ سجل تبديل منتج مسبب الحساسية",
+      "monitoring": "100% check at line start + after each changeover + every 60 min",
+      "monitoring_ar": "فحص 100% عند بداية الخط + بعد كل تبديل + كل 60 دقيقة",
+      "decision_if_failed": "RECALL",
+      "decision_if_failed_ar": "استدعاء",
+      "references": [
+        "EU 1169/2011 Annex II",
+        "FDA FASTER Act 2023",
+        "Codex CXS 1-1985",
+        "Jordan JS 9:2025"
+      ],
+      "notes": "No tolerance — incorrect allergen label is a mandatory recall trigger in all jurisdictions"
+    },
+    {
+      "id": "CL-011",
+      "category_en": "UHT Treatment",
+      "category_ar": "المعالجة فائقة الحرارة (UHT)",
+      "step_en": "Heat Treatment",
+      "step_ar": "المعالجة الحرارية",
+      "hazard_en": "All vegetative pathogens + thermophilic spores",
+      "hazard_ar": "جميع مسببات الأمراض الخضرية + الأبواغ الحرارية",
+      "hazard_type": "Biological",
+      "sector": [
+        "Dairy",
+        "Beverage"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "≥135°C for ≥2 seconds (direct/indirect UHT) — Commercial sterility",
+      "critical_limit_ar": "≥135°C لمدة ≥2 ثانية (UHT مباشر/غير مباشر) — التعقيم التجاري",
+      "unit": "°C/sec",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "≥135°C/2s (aligned with Codex/EU)",
+        "Codex": "≥135°C/2s (Codex CXS 207-1999)",
+        "EU": "≥135°C/2s (EU Directive 92/46/EEC)",
+        "FDA": "≥135°C/2s (FDA 21 CFR 113)"
+      },
+      "applies_when": "UHT milk and liquid dairy/beverage products",
+      "applies_when_ar": "الحليب UHT والألبان السائلة/المشروبات",
+      "evidence_required": "Continuous UHT chart; commercial sterility testing; flow diversion validation",
+      "evidence_required_ar": "مخطط UHT المستمر؛ اختبار التعقيم التجاري؛ التحقق من تحويل التدفق",
+      "monitoring": "Continuous temperature/time recording + automatic flow diversion valve",
+      "monitoring_ar": "تسجيل مستمر للحرارة والزمن + صمام تحويل التدفق التلقائي",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "Codex CXS 207-1999",
+        "EU 92/46/EEC",
+        "IDF Bulletin 133",
+        "FDA 21 CFR 113"
+      ],
+      "notes": "Commercial sterility must be verified by incubation testing per batch protocol"
+    },
+    {
+      "id": "CL-012",
+      "category_en": "Histamine — Scombroid Fish",
+      "category_ar": "الهستامين — أسماك الاسكومبروئيد",
+      "step_en": "Receiving / Cold Chain",
+      "step_ar": "الاستلام / سلسلة التبريد",
+      "hazard_en": "Histamine (Scombrotoxin fish poisoning)",
+      "hazard_ar": "الهستامين (تسمم سمك الاسكومبروئيد)",
+      "hazard_type": "Chemical/Biogenic Amine",
+      "sector": [
+        "Fish"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "≤100 mg/kg (not enzyme-ripened); ≤200 mg/kg (enzyme-ripened); Reject ≥200 mg/kg",
+      "critical_limit_ar": "≤100 مجم/كجم (غير مخمّر بالإنزيمات)؛ ≤200 مجم/كجم (مخمّر)؛ الرفض عند ≥200 مجم/كجم",
+      "unit": "mg/kg",
+      "limit_type": "Chemical",
+      "country_overlay": {
+        "Jordan": "≤100 mg/kg (aligned with EU/Codex)",
+        "Codex": "Codex CXS 193-1995 (histamine provisions)",
+        "EU": "≤100 mg/kg (EU 2073/2005 Chapter 1, 1.26-1.27)",
+        "FDA": "≤50 mg/kg (defect action level) — stricter than EU"
+      },
+      "applies_when": "Tuna, mackerel, sardine, anchovy, herring and related species at receiving",
+      "applies_when_ar": "التونة والماكريل والسردين والأنشوفة والرنجة وما يماثلها عند الاستلام",
+      "evidence_required": "Temperature log at receiving; ELISA histamine strip test; HPLC confirmation",
+      "evidence_required_ar": "سجل الحرارة عند الاستلام؛ اختبار شريط ELISA للهستامين؛ تأكيد HPLC",
+      "monitoring": "Temperature check + histamine rapid test each lot",
+      "monitoring_ar": "فحص الحرارة + اختبار هستامين سريع لكل دفعة",
+      "decision_if_failed": "REJECT",
+      "decision_if_failed_ar": "رفض",
+      "references": [
+        "EU 2073/2005",
+        "FDA Scombrotoxin Guidance 2020",
+        "Codex CXC 52-2003",
+        "EFSA 2017"
+      ],
+      "notes": "Cannot be destroyed by cooking — prevention only through cold chain control"
+    },
+    {
+      "id": "CL-013",
+      "category_en": "Metal Detection",
+      "category_ar": "كشف المعادن",
+      "step_en": "Metal Detection / X-Ray",
+      "step_ar": "كشف المعادن / الأشعة السينية",
+      "hazard_en": "Metal fragment contamination",
+      "hazard_ar": "تلوث بشظايا المعادن",
+      "hazard_type": "Physical",
+      "sector": [
+        "All"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "Fe ≥2.0mm | Non-Fe ≥2.5mm | SS ≥3.0mm (standard — product-specific validation required)",
+      "critical_limit_ar": "حديد ≥2.0مم | غير حديدية ≥2.5مم | فولاذ مقاوم للصدأ ≥3.0مم (معياري — يلزم التحقق حسب المنتج)",
+      "unit": "mm",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "Aligned with BRCGS/IFS industry standard",
+        "Codex": "No specific value — risk-based per product",
+        "EU": "No regulatory value — industry standard (BRCGS/IFS)",
+        "FDA": "FDA CPG 555.425 — injury risk basis"
+      },
+      "applies_when": "All solid and semi-solid food products at final packaging stage",
+      "applies_when_ar": "جميع المنتجات الغذائية الصلبة وشبه الصلبة عند مرحلة التغليف النهائية",
+      "evidence_required": "Test piece challenge records start/end/every 30-60 min; reject verification records",
+      "evidence_required_ar": "سجلات اختبار قطع التحدي عند البداية/النهاية/كل 30-60 دقيقة؛ سجلات التحقق من الرفض",
+      "monitoring": "Test pieces at defined frequency; automatic reject verification",
+      "monitoring_ar": "قطع اختبار بالتكرار المحدد؛ التحقق من الرفض التلقائي",
+      "decision_if_failed": "HOLD",
+      "decision_if_failed_ar": "حجز",
+      "references": [
+        "BRCGS Issue 9",
+        "IFS Food Version 8",
+        "FDA CPG 555.425",
+        "EHEDG Guidelines"
+      ],
+      "notes": "Sensitivity must be validated for each product type and packaging — wet/foil products reduce sensitivity"
+    },
+    {
+      "id": "CL-014",
+      "category_en": "pH Control — Acidified Foods",
+      "category_ar": "ضبط درجة الحموضة — الأغذية المحمّضة",
+      "step_en": "Acidification / Formulation",
+      "step_ar": "التحميض / التركيبة",
+      "hazard_en": "C. botulinum toxin production in low-acid foods",
+      "hazard_ar": "إنتاج سم المطثية الوشيقية في الأغذية منخفضة الحموضة",
+      "hazard_type": "Biological/Process",
+      "sector": [
+        "Beverage",
+        "Canned-Thermal",
+        "Composite"
+      ],
+      "classification": "CCP",
+      "critical_limit_en": "pH ≤4.6 (C. botulinum control); pH ≤3.5 (additional safety margin for beverages)",
+      "critical_limit_ar": "درجة حموضة ≤4.6 (ضبط المطثية الوشيقية)؛ ≤3.5 (هامش أمان إضافي للمشروبات)",
+      "unit": "pH",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "pH ≤4.6 (aligned with Codex/FDA)",
+        "Codex": "pH ≤4.6 (Codex CXC 23-1979)",
+        "EU": "pH ≤4.6 (EU 852/2004 acidified foods)",
+        "FDA": "pH ≤4.6 (FDA 21 CFR 114 — Acidified Foods)"
+      },
+      "applies_when": "Acidified canned foods; acid-preserved beverages; pickled products",
+      "applies_when_ar": "المعلبات المحمّضة؛ المشروبات المحفوظة بالحمض؛ المخللات",
+      "evidence_required": "pH meter calibrated with NIST buffers; batch pH records",
+      "evidence_required_ar": "مقياس pH مُعاير بمحاليل مرجعية NIST؛ سجلات pH الدفعات",
+      "monitoring": "pH measurement each batch and continuous for critical products",
+      "monitoring_ar": "قياس pH لكل دفعة ومستمر للمنتجات الحرجة",
+      "decision_if_failed": "HOLD/REJECT",
+      "decision_if_failed_ar": "حجز/رفض",
+      "references": [
+        "FDA 21 CFR 114",
+        "Codex CXC 23-1979",
+        "FDA BAM Chapter 1"
+      ],
+      "notes": "pH 4.6 is the dividing line between high-acid (safe) and low-acid (botulinum risk) foods"
+    },
+    {
+      "id": "CL-015",
+      "category_en": "Water Activity (aw) Control",
+      "category_ar": "ضبط نشاط الماء (aw)",
+      "step_en": "Processing / Drying / Storage",
+      "step_ar": "التصنيع / التجفيف / التخزين",
+      "hazard_en": "Pathogen growth and mycotoxin production",
+      "hazard_ar": "نمو مسببات الأمراض وإنتاج السموم الفطرية",
+      "hazard_type": "Biological/Process",
+      "sector": [
+        "Grain-Dry",
+        "Composite",
+        "RTE"
+      ],
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "aw ≤0.85 (all major pathogens inhibited); aw ≤0.70 (mold/yeast growth prevented); aw ≤0.60 (no microbial growth)",
+      "critical_limit_ar": "نشاط الماء ≤0.85 (تثبيط جميع الممرضات الرئيسية)؛ ≤0.70 (منع نمو العفن/الخميرة)؛ ≤0.60 (لا نمو ميكروبي)",
+      "unit": "aw",
+      "limit_type": "Critical",
+      "country_overlay": {
+        "Jordan": "Codex-aligned; product-specific limits apply",
+        "Codex": "Codex CXC 1-1969 (aw as intrinsic factor)",
+        "EU": "EU 852/2004 (aw as safety hurdle)",
+        "FDA": "FDA BAM (aw reference values)"
+      },
+      "applies_when": "Dry/semi-dry products using aw as primary safety hurdle",
+      "applies_when_ar": "المنتجات الجافة/شبه الجافة التي تستخدم نشاط الماء كعائق سلامة أساسي",
+      "evidence_required": "Calibrated aw meter measurements; drying process records",
+      "evidence_required_ar": "قياسات مقياس نشاط الماء المعاير؛ سجلات عملية التجفيف",
+      "monitoring": "Calibrated aw meter on product samples per batch",
+      "monitoring_ar": "مقياس نشاط الماء المعاير على عينات المنتج لكل دفعة",
+      "decision_if_failed": "HOLD/REPROCESS",
+      "decision_if_failed_ar": "حجز/إعادة تصنيع",
+      "references": [
+        "ICMSF Book 1 (1980)",
+        "FDA BAM",
+        "Codex CXC 1-1969",
+        "Scott 1957 J.Appl.Bact."
+      ],
+      "notes": "aw 0.85 = S. aureus toxin limit; 0.92 = most pathogens; must validate for specific product formulation"
+    }
+  ]
+}
