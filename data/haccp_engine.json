@@ -1,0 +1,1216 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "title_en": "HACCP Engine — FoodCheck Jordan",
+    "title_ar": "محرك تحليل المخاطر ونقاط المراقبة الحرجة — فودتشك الأردن",
+    "generated": "2026-05-06",
+    "standards": [
+      "Codex CXC 1-1969 (HACCP Principles)",
+      "EU Regulation 852/2004",
+      "EU Regulation 178/2002",
+      "BRCGS Issue 9",
+      "IFS Food Version 8"
+    ],
+    "principles_covered": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "product_input_schema": [
+    {
+      "id": "PIN-001",
+      "field_en": "Product ID",
+      "field_ar": "رمز المنتج",
+      "type": "text",
+      "required": true,
+      "key": "product.id"
+    },
+    {
+      "id": "PIN-002",
+      "field_en": "Product Name",
+      "field_ar": "اسم المنتج",
+      "type": "text",
+      "required": true,
+      "key": "product.name"
+    },
+    {
+      "id": "PIN-003",
+      "field_en": "Sector",
+      "field_ar": "القطاع الغذائي",
+      "type": "dropdown",
+      "required": true,
+      "key": "product.sector",
+      "options_en": [
+        "Dairy",
+        "Meat-Poultry",
+        "Fish",
+        "Grain-Dry",
+        "Beverage",
+        "Canned-Thermal",
+        "RTE",
+        "Composite",
+        "Other"
+      ],
+      "options_ar": [
+        "ألبان",
+        "لحوم ودواجن",
+        "أسماك",
+        "حبوب وجاف",
+        "مشروبات",
+        "معلبات/معالجة حرارية",
+        "جاهز للأكل",
+        "مركب",
+        "أخرى"
+      ]
+    },
+    {
+      "id": "PIN-004",
+      "field_en": "Raw material type",
+      "field_ar": "نوع المواد الخام",
+      "type": "dropdown",
+      "required": true,
+      "key": "product.raw_material_type",
+      "options_en": [
+        "Animal origin",
+        "Plant origin",
+        "Mixed"
+      ],
+      "options_ar": [
+        "أصل حيواني",
+        "أصل نباتي",
+        "مختلط"
+      ]
+    },
+    {
+      "id": "PIN-005",
+      "field_en": "Ready-to-eat?",
+      "field_ar": "هل المنتج جاهز للأكل؟",
+      "type": "boolean",
+      "required": true,
+      "key": "product.rte"
+    },
+    {
+      "id": "PIN-006",
+      "field_en": "Allergens present?",
+      "field_ar": "هل يحتوي على مسببات حساسية؟",
+      "type": "boolean",
+      "required": true,
+      "key": "product.allergens.present"
+    },
+    {
+      "id": "PIN-007",
+      "field_en": "Heat treatment applied?",
+      "field_ar": "هل يوجد معالجة حرارية؟",
+      "type": "boolean",
+      "required": true,
+      "key": "process.heat_treatment"
+    },
+    {
+      "id": "PIN-008",
+      "field_en": "Cooling required?",
+      "field_ar": "هل يتطلب تبريداً؟",
+      "type": "boolean",
+      "required": true,
+      "key": "process.cooling"
+    },
+    {
+      "id": "PIN-009",
+      "field_en": "Temperature category",
+      "field_ar": "فئة الحرارة",
+      "type": "dropdown",
+      "required": true,
+      "key": "product.temperature_category",
+      "options_en": [
+        "Ambient",
+        "Chilled",
+        "Frozen",
+        "Hot-held"
+      ],
+      "options_ar": [
+        "درجة حرارة الغرفة",
+        "مبرد",
+        "مجمد",
+        "حفظ ساخن"
+      ]
+    },
+    {
+      "id": "PIN-010",
+      "field_en": "Rework used?",
+      "field_ar": "هل يستخدم إعادة التصنيع؟",
+      "type": "boolean",
+      "required": false,
+      "key": "process.rework"
+    },
+    {
+      "id": "PIN-011",
+      "field_en": "Multi-product line?",
+      "field_ar": "هل خط الإنتاج متعدد المنتجات؟",
+      "type": "boolean",
+      "required": false,
+      "key": "line.multi_product"
+    },
+    {
+      "id": "PIN-012",
+      "field_en": "Target consumer",
+      "field_ar": "الفئة المستهدفة",
+      "type": "dropdown",
+      "required": true,
+      "key": "product.target_consumer",
+      "options_en": [
+        "General public",
+        "Children",
+        "Elderly",
+        "Immunocompromised"
+      ],
+      "options_ar": [
+        "عامة الناس",
+        "أطفال",
+        "كبار السن",
+        "ضعيفو المناعة"
+      ]
+    },
+    {
+      "id": "PIN-013",
+      "field_en": "Intended use",
+      "field_ar": "الاستخدام المقصود",
+      "type": "dropdown",
+      "required": true,
+      "key": "product.intended_use",
+      "options_en": [
+        "Ready-to-eat",
+        "Cook before eating",
+        "Further processing"
+      ],
+      "options_ar": [
+        "جاهز للأكل",
+        "يطبخ قبل الأكل",
+        "لمزيد من التصنيع"
+      ]
+    }
+  ],
+  "process_steps": [
+    {
+      "id": "ST-01",
+      "step_en": "Receiving of raw materials",
+      "step_ar": "استلام المواد الخام",
+      "typical_hazard_types": [
+        "Biological",
+        "Chemical",
+        "Physical",
+        "Allergen"
+      ]
+    },
+    {
+      "id": "ST-02",
+      "step_en": "Storage (raw materials)",
+      "step_ar": "تخزين المواد الخام",
+      "typical_hazard_types": [
+        "Biological",
+        "Chemical"
+      ]
+    },
+    {
+      "id": "ST-03",
+      "step_en": "Preparation / Pre-processing",
+      "step_ar": "التحضير / المعالجة المسبقة",
+      "typical_hazard_types": [
+        "Biological",
+        "Physical",
+        "Allergen"
+      ]
+    },
+    {
+      "id": "ST-04",
+      "step_en": "Mixing / Formulation",
+      "step_ar": "الخلط / التركيبة",
+      "typical_hazard_types": [
+        "Allergen",
+        "Biological"
+      ]
+    },
+    {
+      "id": "ST-05",
+      "step_en": "Heat treatment / Cooking / Pasteurization",
+      "step_ar": "المعالجة الحرارية / الطبخ / البسترة",
+      "typical_hazard_types": [
+        "Biological"
+      ]
+    },
+    {
+      "id": "ST-06",
+      "step_en": "Cooling / Chilling",
+      "step_ar": "التبريد / التشديد",
+      "typical_hazard_types": [
+        "Biological"
+      ]
+    },
+    {
+      "id": "ST-07",
+      "step_en": "Post-lethality handling (RTE)",
+      "step_ar": "المناولة بعد خطوة القتل (جاهز للأكل)",
+      "typical_hazard_types": [
+        "Biological",
+        "Allergen"
+      ]
+    },
+    {
+      "id": "ST-08",
+      "step_en": "Labeling / Packing",
+      "step_ar": "الوسم / التعبئة",
+      "typical_hazard_types": [
+        "Allergen"
+      ]
+    },
+    {
+      "id": "ST-09",
+      "step_en": "Storage (finished product)",
+      "step_ar": "تخزين المنتج النهائي",
+      "typical_hazard_types": [
+        "Biological",
+        "Chemical"
+      ]
+    },
+    {
+      "id": "ST-10",
+      "step_en": "Distribution / Dispatch",
+      "step_ar": "التوزيع / الشحن",
+      "typical_hazard_types": [
+        "Biological"
+      ]
+    }
+  ],
+  "sector_hazards": [
+    {
+      "sector": "Dairy",
+      "hazard_en": "Aflatoxin M1 in raw milk",
+      "hazard_ar": "الأفلاتوكسين M1 في الحليب الخام",
+      "type": "Chemical/Mycotoxin",
+      "step_id": "ST-01",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-CHE-002"
+    },
+    {
+      "sector": "Dairy",
+      "hazard_en": "Antibiotic residues in raw milk",
+      "hazard_ar": "بقايا المضادات الحيوية في الحليب الخام",
+      "type": "Chemical/Veterinary",
+      "step_id": "ST-01",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-CHE-008"
+    },
+    {
+      "sector": "Dairy",
+      "hazard_en": "Pathogen survival after inadequate pasteurization",
+      "hazard_ar": "بقاء الممرضات بسبب بسترة غير كافية",
+      "type": "Biological",
+      "step_id": "ST-05",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-001"
+    },
+    {
+      "sector": "Dairy",
+      "hazard_en": "Pathogen growth during cooling",
+      "hazard_ar": "نمو الممرضات أثناء التبريد",
+      "type": "Biological",
+      "step_id": "ST-06",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-006"
+    },
+    {
+      "sector": "Dairy",
+      "hazard_en": "Listeria post-process contamination",
+      "hazard_ar": "تلوث الليستيريا بعد التصنيع",
+      "type": "Biological",
+      "step_id": "ST-07",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-BIO-008"
+    },
+    {
+      "sector": "Meat-Poultry",
+      "hazard_en": "Survival of Salmonella/E. coli/Campylobacter",
+      "hazard_ar": "بقاء السالمونيلا/الإيكولاي/الكامبيلوباكتر",
+      "type": "Biological",
+      "step_id": "ST-05",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-003"
+    },
+    {
+      "sector": "Meat-Poultry",
+      "hazard_en": "Raw-to-cooked cross-contamination",
+      "hazard_ar": "التلوث التبادلي من الخام إلى المطبوخ",
+      "type": "Biological",
+      "step_id": "ST-07",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-BIO-008"
+    },
+    {
+      "sector": "Meat-Poultry",
+      "hazard_en": "Pathogen growth during cooling",
+      "hazard_ar": "نمو الممرضات أثناء التبريد",
+      "type": "Biological",
+      "step_id": "ST-06",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-006"
+    },
+    {
+      "sector": "Fish",
+      "hazard_en": "Histamine formation (scombroid fish)",
+      "hazard_ar": "تكوّن الهستامين (أسماك الاسكومبروئيد)",
+      "type": "Chemical/Biogenic Amine",
+      "step_id": "ST-01",
+      "default_class": "CCP/OPRP",
+      "critical_limit_ref": "CL-CHE-010"
+    },
+    {
+      "sector": "Fish",
+      "hazard_en": "Cold chain break causing pathogen growth",
+      "hazard_ar": "انقطاع سلسلة التبريد ونمو مسببات الأمراض",
+      "type": "Biological",
+      "step_id": "ST-02",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-BIO-007"
+    },
+    {
+      "sector": "Fish",
+      "hazard_en": "Mercury/methylmercury accumulation",
+      "hazard_ar": "تراكم الزئبق/الزئبق الميثيلي",
+      "type": "Chemical/Heavy Metal",
+      "step_id": "ST-01",
+      "default_class": "OPRP",
+      "critical_limit_ref": "CL-CHE-007"
+    },
+    {
+      "sector": "Grain-Dry",
+      "hazard_en": "Mycotoxins (aflatoxins, OTA, DON)",
+      "hazard_ar": "السموم الفطرية (أفلاتوكسينات، OTA، DON)",
+      "type": "Chemical/Mycotoxin",
+      "step_id": "ST-01",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-CHE-001"
+    },
+    {
+      "sector": "Grain-Dry",
+      "hazard_en": "Stored-product insects and pest contamination",
+      "hazard_ar": "حشرات المنتجات المخزونة وتلوث الآفات",
+      "type": "Physical/Biological",
+      "step_id": "ST-02",
+      "default_class": "OPRP",
+      "critical_limit_ref": null
+    },
+    {
+      "sector": "Grain-Dry",
+      "hazard_en": "Heavy metals (lead, cadmium)",
+      "hazard_ar": "المعادن الثقيلة (رصاص، كادميوم)",
+      "type": "Chemical/Heavy Metal",
+      "step_id": "ST-01",
+      "default_class": "OPRP",
+      "critical_limit_ref": "CL-CHE-005"
+    },
+    {
+      "sector": "Beverage",
+      "hazard_en": "Pathogen survival — inadequate pasteurization",
+      "hazard_ar": "بقاء الممرضات — بسترة غير كافية",
+      "type": "Biological",
+      "step_id": "ST-05",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-005"
+    },
+    {
+      "sector": "Beverage",
+      "hazard_en": "Water contamination (biological/chemical)",
+      "hazard_ar": "تلوث المياه (حيوي/كيميائي)",
+      "type": "Biological/Chemical",
+      "step_id": "ST-03",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": null
+    },
+    {
+      "sector": "Beverage",
+      "hazard_en": "Ochratoxin A in grape-based beverages",
+      "hazard_ar": "الأوكراتوكسين A في المشروبات المستندة للعنب",
+      "type": "Chemical/Mycotoxin",
+      "step_id": "ST-01",
+      "default_class": "OPRP",
+      "critical_limit_ref": "CL-CHE-003"
+    },
+    {
+      "sector": "Canned-Thermal",
+      "hazard_en": "Survival of spores — C. botulinum",
+      "hazard_ar": "بقاء الأبواغ — المطثية الوشيقية",
+      "type": "Biological",
+      "step_id": "ST-05",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-004"
+    },
+    {
+      "sector": "Canned-Thermal",
+      "hazard_en": "Container closure failure",
+      "hazard_ar": "فشل إغلاق العبوة",
+      "type": "Biological/Physical",
+      "step_id": "ST-08",
+      "default_class": "CCP",
+      "critical_limit_ref": null
+    },
+    {
+      "sector": "Canned-Thermal",
+      "hazard_en": "Post-process recontamination from cooling water",
+      "hazard_ar": "إعادة التلوث بعد التصنيع من مياه التبريد",
+      "type": "Biological",
+      "step_id": "ST-06",
+      "default_class": "OPRP",
+      "critical_limit_ref": null
+    },
+    {
+      "sector": "RTE",
+      "hazard_en": "Listeria monocytogenes post-process contamination",
+      "hazard_ar": "تلوث الليستيريا بعد التصنيع",
+      "type": "Biological",
+      "step_id": "ST-07",
+      "default_class": "OPRP/CCP",
+      "critical_limit_ref": "CL-BIO-008"
+    },
+    {
+      "sector": "RTE",
+      "hazard_en": "Salmonella in finished RTE product",
+      "hazard_ar": "السالمونيلا في المنتج الجاهز للأكل",
+      "type": "Biological",
+      "step_id": "ST-09",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-BIO-009"
+    },
+    {
+      "sector": "Composite",
+      "hazard_en": "Animal-origin ingredient hazards",
+      "hazard_ar": "مخاطر مكونات ذات أصل حيواني",
+      "type": "Biological/Chemical",
+      "step_id": "ST-01",
+      "default_class": "OPRP",
+      "critical_limit_ref": null
+    },
+    {
+      "sector": "All",
+      "hazard_en": "Undeclared allergen — wrong label",
+      "hazard_ar": "مسبب حساسية غير مصرح — بطاقة خاطئة",
+      "type": "Allergen",
+      "step_id": "ST-08",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-ALL-001"
+    },
+    {
+      "sector": "All",
+      "hazard_en": "Allergen cross-contact during production",
+      "hazard_ar": "تلوث تبادلي بمسبب حساسية أثناء الإنتاج",
+      "type": "Allergen",
+      "step_id": "ST-03",
+      "default_class": "OPRP",
+      "critical_limit_ref": "CL-ALL-002"
+    },
+    {
+      "sector": "All",
+      "hazard_en": "Metal contamination",
+      "hazard_ar": "تلوث بالمعادن",
+      "type": "Physical",
+      "step_id": "ST-08",
+      "default_class": "CCP",
+      "critical_limit_ref": "CL-PHY-001"
+    },
+    {
+      "sector": "All",
+      "hazard_en": "Glass and hard plastic contamination",
+      "hazard_ar": "تلوث الزجاج والبلاستيك الصلب",
+      "type": "Physical",
+      "step_id": "ST-03",
+      "default_class": "CCP/OPRP",
+      "critical_limit_ref": "CL-PHY-002"
+    }
+  ],
+  "gmp_triggers": [
+    {
+      "module": "M01",
+      "trigger_en": "Supplier not approved or raw material evidence missing",
+      "trigger_ar": "المورد غير معتمد أو دليل المادة الخام مفقود",
+      "effect_en": "Increase raw material hazard likelihood",
+      "effect_ar": "رفع احتمالية خطر المادة الخام",
+      "risk_adjustment": "Likelihood +1",
+      "action_en": "Hold raw material; assess supplier",
+      "action_ar": "حجز المادة الخام؛ تقييم المورد",
+      "key": "haccp.gmp.m01_supplier"
+    },
+    {
+      "module": "M02",
+      "trigger_en": "Poor zoning or facility flow",
+      "trigger_ar": "ضعف تقسيم المناطق أو مسار المنشأة",
+      "effect_en": "Increase cross-contamination hazard",
+      "effect_ar": "زيادة خطر التلوث التبادلي",
+      "risk_adjustment": "Likelihood +1",
+      "action_en": "Restrict operation; hold exposed product",
+      "action_ar": "تقييد التشغيل؛ حجز المنتج المكشوف",
+      "key": "haccp.gmp.m02_zoning"
+    },
+    {
+      "module": "M03",
+      "trigger_en": "Food-contact cleaning failure",
+      "trigger_ar": "فشل تنظيف سطح ملامس للغذاء",
+      "effect_en": "Generate contamination hazard",
+      "effect_ar": "توليد خطر تلوث",
+      "risk_adjustment": "Likelihood +1",
+      "action_en": "Hold affected batch",
+      "action_ar": "حجز الدفعة المتأثرة",
+      "key": "haccp.gmp.m03_cleaning"
+    },
+    {
+      "module": "M03",
+      "trigger_en": "Allergen cleaning failure after allergen product",
+      "trigger_ar": "فشل تنظيف مسببات الحساسية بعد منتج يحتوي حساسية",
+      "effect_en": "Allergen residue carryover risk",
+      "effect_ar": "خطر انتقال بقايا مسبب الحساسية",
+      "risk_adjustment": "OPRP→CCP",
+      "action_en": "Hold product until cleaning verification passed",
+      "action_ar": "حجز المنتج لحين اجتياز التحقق من التنظيف",
+      "key": "haccp.gmp.m03_allergen"
+    },
+    {
+      "module": "M04",
+      "trigger_en": "Pest evidence in food area",
+      "trigger_ar": "وجود دليل آفات في منطقة غذاء",
+      "effect_en": "Generate biological/physical contamination event",
+      "effect_ar": "توليد حادث تلوث حيوي/فيزيائي",
+      "risk_adjustment": "Likelihood +1",
+      "action_en": "Hold affected product; assess contamination scope",
+      "action_ar": "حجز المنتج المتأثر؛ تقييم نطاق التلوث",
+      "key": "haccp.gmp.m04_pest"
+    },
+    {
+      "module": "M05",
+      "trigger_en": "Ill worker handled RTE or open product",
+      "trigger_ar": "عامل مريض تعامل مع منتج جاهز أو مكشوف",
+      "effect_en": "Generate personnel contamination hazard",
+      "effect_ar": "توليد خطر تلوث من العاملين",
+      "risk_adjustment": "Likelihood +1",
+      "action_en": "Hold affected batch; trace worker involvement",
+      "action_ar": "حجز الدفعة المتأثرة؛ تتبع مشاركة العامل",
+      "key": "haccp.gmp.m05_worker"
+    },
+    {
+      "module": "M06",
+      "trigger_en": "Critical process parameter deviation",
+      "trigger_ar": "انحراف حرج في معاملات العملية",
+      "effect_en": "CCP deviation activated",
+      "effect_ar": "تفعيل انحراف نقطة التحكم الحرجة",
+      "risk_adjustment": "Critical active",
+      "action_en": "Stop; hold batch; assess disposition",
+      "action_ar": "إيقاف؛ حجز الدفعة؛ تقييم قرار التصرف",
+      "key": "haccp.gmp.m06_deviation"
+    },
+    {
+      "module": "M07",
+      "trigger_en": "Critical evidence missing for a control point",
+      "trigger_ar": "دليل حرج مفقود لنقطة تحكم",
+      "effect_en": "Control cannot be verified; release blocked",
+      "effect_ar": "لا يمكن التحقق من التحكم؛ حجب الإفراج",
+      "risk_adjustment": "Evidence failure",
+      "action_en": "Block product release until evidence valid",
+      "action_ar": "منع إفراج المنتج حتى صلاحية الدليل",
+      "key": "haccp.gmp.m07_evidence"
+    },
+    {
+      "module": "M08",
+      "trigger_en": "Traceability scope unknown after incident",
+      "trigger_ar": "النطاق المتأثر غير معروف بعد الحادث",
+      "effect_en": "Affected product cannot be bounded",
+      "effect_ar": "لا يمكن حصر المنتج المتأثر",
+      "risk_adjustment": "Scope uncertainty",
+      "action_en": "Apply broad hold; initiate recall review",
+      "action_ar": "تطبيق حجز واسع؛ بدء مراجعة الاستدعاء",
+      "key": "haccp.gmp.m08_trace"
+    }
+  ],
+  "decision_tree": [
+    {
+      "q_id": "Q1",
+      "question_en": "Is the hazard reasonably expected at this step?",
+      "question_ar": "هل من المتوقع حدوث الخطر بشكل معقول في هذه الخطوة؟",
+      "yes_next": "Q2",
+      "no_result": "Not significant — PRP",
+      "key": "haccp.decision.expected"
+    },
+    {
+      "q_id": "Q2",
+      "question_en": "Is severity High?",
+      "question_ar": "هل شدة الخطر عالية؟",
+      "yes_next": "Q3",
+      "no_result": "Low risk — PRP",
+      "key": "haccp.decision.severity"
+    },
+    {
+      "q_id": "Q3",
+      "question_en": "Is likelihood Medium or High after GMP controls?",
+      "question_ar": "هل الاحتمالية متوسطة أو عالية بعد ضوابط GMP؟",
+      "yes_next": "Q4",
+      "no_result": "PRP — monitor and review",
+      "key": "haccp.decision.likelihood"
+    },
+    {
+      "q_id": "Q4",
+      "question_en": "Is this step specifically designed to eliminate or reduce the hazard to acceptable level?",
+      "question_ar": "هل صُممت هذه الخطوة تحديداً لإزالة الخطر أو تخفيضه إلى مستوى مقبول؟",
+      "yes_next": "CCP",
+      "no_next": "Q5",
+      "key": "haccp.decision.eliminate_step"
+    },
+    {
+      "q_id": "Q5",
+      "question_en": "Is there a later validated control step that will eliminate or reduce the hazard?",
+      "question_ar": "هل يوجد خطوة تحكم لاحقة مثبتة ستزيل الخطر أو تخفضه؟",
+      "yes_result": "OPRP at current step",
+      "no_next": "Q6",
+      "key": "haccp.decision.later_control"
+    },
+    {
+      "q_id": "Q6",
+      "question_en": "Can loss of control at this step lead to unsafe product with no subsequent correction?",
+      "question_ar": "هل يمكن لفقدان التحكم في هذه الخطوة أن يؤدي إلى منتج غير آمن دون تصحيح لاحق؟",
+      "yes_result": "CCP",
+      "no_result": "OPRP",
+      "key": "haccp.decision.loss_control"
+    }
+  ],
+  "haccp_plan_templates": [
+    {
+      "id": "HAC-001",
+      "step_id": "ST-01",
+      "step_en": "Receiving",
+      "step_ar": "الاستلام",
+      "hazard_en": "Aflatoxin M1 in raw milk",
+      "hazard_ar": "الأفلاتوكسين M1 في الحليب الخام",
+      "hazard_type": "Chemical/Mycotoxin",
+      "sector": [
+        "Dairy"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "OPRP/CCP",
+      "critical_limit_en": "Lot result ≤0.05 μg/kg AND accepted COA/release status",
+      "critical_limit_ar": "نتيجة الدفعة ≤0.05 ميكروغرام/كيلوغرام وشهادة تحليل/حالة إفراج مقبولة",
+      "critical_limit_ref": "CL-CHE-002",
+      "monitoring_en": "Each lot COA review + ELISA screening",
+      "monitoring_ar": "مراجعة شهادة تحليل كل دفعة + فحص ELISA",
+      "monitoring_frequency_en": "Each delivery",
+      "monitoring_frequency_ar": "كل عملية تسليم",
+      "corrective_action_en": "Hold/reject lot if missing or failed; investigate supplier",
+      "corrective_action_ar": "حجز/رفض الدفعة إذا فشل أو غاب الدليل؛ التحقيق مع المورد",
+      "verification_en": "Quarterly HPLC confirmation; annual supplier audit",
+      "verification_ar": "تأكيد HPLC ربع سنوي؛ تدقيق سنوي على المورد",
+      "records_en": "Lot Release Evidence Record; COA File; Rejection Log",
+      "records_ar": "سجل دليل الإفراج عن الدفعة؛ ملف شهادات التحليل؛ سجل الرفض",
+      "product_decision_en": "Hold raw material if evidence missing or non-compliant",
+      "product_decision_ar": "حجز المادة الخام إذا غاب الدليل أو عدم المطابقة",
+      "gmp_link": [
+        "M01",
+        "M06",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-002",
+      "step_id": "ST-05",
+      "step_en": "Pasteurization / Cooking",
+      "step_ar": "البسترة / الطبخ",
+      "hazard_en": "Pathogen survival after inadequate heat treatment",
+      "hazard_ar": "بقاء الممرضات بسبب معالجة حرارية غير كافية",
+      "hazard_type": "Biological",
+      "sector": [
+        "Dairy",
+        "Meat-Poultry",
+        "Beverage",
+        "RTE"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "CCP",
+      "critical_limit_en": "Dairy: ≥72°C for ≥15s (HTST) | Poultry: ≥74°C internal | Meat: ≥71°C internal",
+      "critical_limit_ar": "ألبان: ≥72°C لمدة ≥15 ثانية | دواجن: ≥74°C داخلي | لحوم: ≥71°C داخلي",
+      "critical_limit_ref": "CL-BIO-001",
+      "monitoring_en": "Continuous temperature/time recording on pasteurizer; probe at coldest point",
+      "monitoring_ar": "تسجيل مستمر لدرجة الحرارة/الزمن على جهاز البسترة؛ مسبار عند أبرد نقطة",
+      "monitoring_frequency_en": "Continuous (pasteurizer) / Each batch (cooking)",
+      "monitoring_frequency_ar": "مستمر (جهاز البسترة) / كل دفعة (الطبخ)",
+      "corrective_action_en": "Stop process; hold affected batch; evaluate reprocess or reject; investigate deviation",
+      "corrective_action_ar": "إيقاف العملية؛ حجز الدفعة المتأثرة؛ تقييم إعادة التشغيل أو الرفض؛ التحقيق في الانحراف",
+      "verification_en": "Daily calibration of temperature probes; monthly validation review; annual challenge study",
+      "verification_ar": "معايرة يومية لمجسات الحرارة؛ مراجعة تحقق شهرية؛ دراسة تحدي سنوية",
+      "records_en": "Heat Treatment Log; Pasteurizer Chart; Deviation Report",
+      "records_ar": "سجل المعالجة الحرارية؛ مخطط جهاز البسترة؛ تقرير الانحراف",
+      "product_decision_en": "Hold and assess affected batch; reprocess only if validated; otherwise reject",
+      "product_decision_ar": "حجز وتقييم الدفعة المتأثرة؛ إعادة التشغيل فقط إذا كانت مثبتة؛ وإلا الرفض",
+      "gmp_link": [
+        "M06",
+        "M07",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-003",
+      "step_id": "ST-06",
+      "step_en": "Cooling",
+      "step_ar": "التبريد",
+      "hazard_en": "Pathogen growth during cooling",
+      "hazard_ar": "نمو الممرضات أثناء التبريد",
+      "hazard_type": "Biological",
+      "sector": [
+        "Dairy",
+        "Meat-Poultry",
+        "RTE",
+        "Composite"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "60°C → ≤21°C within 2 hours AND ≤5°C within 6 hours total",
+      "critical_limit_ar": "من 60°C إلى ≤21°C خلال ساعتين ومن 21°C إلى ≤5°C خلال 6 ساعات إجمالاً",
+      "critical_limit_ref": "CL-BIO-006",
+      "monitoring_en": "Temperature probe at center of product every 30 minutes during cooling",
+      "monitoring_ar": "مقياس حرارة في مركز المنتج كل 30 دقيقة أثناء التبريد",
+      "monitoring_frequency_en": "Each batch",
+      "monitoring_frequency_ar": "كل دفعة",
+      "corrective_action_en": "Hold batch if cooling criteria not met; assess for reprocess/reject based on time-temperature exposure",
+      "corrective_action_ar": "حجز الدفعة إذا لم تتحقق معايير التبريد؛ تقييم إعادة التشغيل/الرفض بناءً على التعرض الزمني/الحراري",
+      "verification_en": "Monthly cooling curve validation; calibration of probes",
+      "verification_ar": "التحقق من منحنى التبريد شهرياً؛ معايرة المجسات",
+      "records_en": "Cooling Log; Batch Temperature Record",
+      "records_ar": "سجل التبريد؛ سجل حرارة الدفعة",
+      "product_decision_en": "Hold/release with justification/reject based on time-temperature assessment",
+      "product_decision_ar": "حجز/إفراج بمبرر/رفض بناءً على تقييم الزمن/الحرارة",
+      "gmp_link": [
+        "M06",
+        "M07",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-004",
+      "step_id": "ST-05",
+      "step_en": "Thermal / Retort Processing",
+      "step_ar": "المعالجة الحرارية / الأوتوكلاف",
+      "hazard_en": "Survival of Clostridium botulinum spores",
+      "hazard_ar": "بقاء أبواغ المطثية الوشيقية",
+      "hazard_type": "Biological",
+      "sector": [
+        "Canned-Thermal"
+      ],
+      "severity": "High",
+      "likelihood": "Low",
+      "classification": "CCP",
+      "critical_limit_en": "Minimum Fo ≥3 min at 121.1°C; validated scheduled process per product",
+      "critical_limit_ar": "قيمة Fo ≥3 دقيقة عند 121.1°C كحد أدنى؛ عملية مجدولة مثبتة حسب المنتج",
+      "critical_limit_ref": "CL-BIO-004",
+      "monitoring_en": "Continuous retort temperature/pressure recording; Fo calculation per batch",
+      "monitoring_ar": "تسجيل مستمر لحرارة/ضغط الأوتوكلاف؛ حساب قيمة Fo لكل دفعة",
+      "monitoring_frequency_en": "Each retort cycle",
+      "monitoring_frequency_ar": "كل دورة أوتوكلاف",
+      "corrective_action_en": "Stop and hold all product from non-compliant retort cycle; full reprocess or reject",
+      "corrective_action_ar": "إيقاف وحجز جميع المنتجات من دورة الأوتوكلاف غير المطابقة؛ إعادة تشغيل كامل أو رفض",
+      "verification_en": "Annual process validation with process authority; regular calibration of thermocouples",
+      "verification_ar": "تحقق سنوي من العملية مع جهة تقنية متخصصة؛ معايرة منتظمة للمزدوجات الحرارية",
+      "records_en": "Retort Chart; Fo Calculation Log; Process Authority Letter",
+      "records_ar": "مخطط الأوتوكلاف؛ سجل حساب Fo؛ خطاب جهة التحقق التقنية",
+      "product_decision_en": "Hold all product from failed cycle; full reprocess to validated Fo or destroy",
+      "product_decision_ar": "حجز جميع المنتجات من الدورة الفاشلة؛ إعادة تشغيل كاملة لقيمة Fo مثبتة أو إتلاف",
+      "gmp_link": [
+        "M06",
+        "M07",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-005",
+      "step_id": "ST-07",
+      "step_en": "Post-lethality handling (RTE)",
+      "step_ar": "المناولة بعد خطوة القتل (جاهز للأكل)",
+      "hazard_en": "Listeria monocytogenes post-process contamination",
+      "hazard_ar": "تلوث الليستيريا بعد التصنيع",
+      "hazard_type": "Biological",
+      "sector": [
+        "RTE",
+        "Dairy",
+        "Meat-Poultry"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "OPRP/CCP",
+      "critical_limit_en": "High hygiene controls met + EMP active + L. monocytogenes absent in 25g (Category 1) OR <100 CFU/g shelf life (Category 2)",
+      "critical_limit_ar": "تطبيق ضوابط نظافة عالية + رصد بيئي فعّال + غياب الليستيريا في 25 جرام (الفئة 1) أو <100 وحدة/جرام (الفئة 2)",
+      "critical_limit_ref": "CL-BIO-008",
+      "monitoring_en": "Pre-op hygiene verification; Environmental monitoring swabs (food-contact + near-food zones); end-product testing",
+      "monitoring_ar": "التحقق من النظافة قبل التشغيل؛ مسحات الرصد البيئي (مناطق ملامسة الغذاء + القريبة منه)؛ فحص المنتج النهائي",
+      "monitoring_frequency_en": "Pre-op daily; EMP weekly/monthly by zone; end-product per lot",
+      "monitoring_frequency_ar": "يومياً قبل التشغيل؛ رصد بيئي أسبوعياً/شهرياً حسب المنطقة؛ فحص المنتج النهائي لكل دفعة",
+      "corrective_action_en": "Hold product if breach detected; assess traceability scope; intensify EMP; investigate source",
+      "corrective_action_ar": "حجز المنتج عند اكتشاف خلل؛ تقييم نطاق التتبع؛ تكثيف الرصد البيئي؛ التحقيق في المصدر",
+      "verification_en": "Monthly EMP trend review; quarterly product testing; annual program validation",
+      "verification_ar": "مراجعة شهرية لاتجاهات الرصد البيئي؛ فحص المنتج ربع سنوي؛ تحقق سنوي من البرنامج",
+      "records_en": "RTE Exposure Control Record; EMP Log; End-product Testing Record",
+      "records_ar": "سجل ضبط تعرض منتج جاهز للأكل؛ سجل الرصد البيئي؛ سجل فحص المنتج النهائي",
+      "product_decision_en": "Hold affected scope and assess; recall review if distributed",
+      "product_decision_ar": "حجز النطاق المتأثر وتقييمه؛ مراجعة سحب إذا تم التوزيع",
+      "gmp_link": [
+        "M03",
+        "M05",
+        "M06",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-006",
+      "step_id": "ST-08",
+      "step_en": "Labeling / Packing",
+      "step_ar": "الوسم / التعبئة",
+      "hazard_en": "Wrong label / undeclared allergen",
+      "hazard_ar": "بطاقة خاطئة / مسبب حساسية غير مصرح به",
+      "hazard_type": "Allergen/Labeling",
+      "sector": [
+        "All"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "CCP",
+      "critical_limit_en": "100% correct allergen declaration — zero tolerance for wrong label",
+      "critical_limit_ar": "تصريح حساسية صحيح 100% — عدم التسامح مطلقاً مع البطاقة الخاطئة",
+      "critical_limit_ref": "CL-ALL-001",
+      "monitoring_en": "100% label check at line start, after each changeover, and every 60 min; barcode scan verification",
+      "monitoring_ar": "فحص 100% للبطاقة عند بداية الخط وبعد كل تبديل وكل 60 دقيقة؛ التحقق بمسح الباركود",
+      "monitoring_frequency_en": "Start/changeover/hourly",
+      "monitoring_frequency_ar": "البداية/التبديل/كل ساعة",
+      "corrective_action_en": "Stop line; hold all product from last compliant check; sort/relabel/reject; trace to distribution",
+      "corrective_action_ar": "إيقاف الخط؛ حجز جميع المنتجات من آخر فحص مطابق؛ فرز/إعادة وسم/رفض؛ تتبع التوزيع",
+      "verification_en": "Weekly label reconciliation; monthly mock allergen audit; annual allergen risk review",
+      "verification_ar": "تسوية أسبوعية للبطاقات؛ تدقيق وهمي شهري لمسببات الحساسية؛ مراجعة سنوية لمخاطر مسببات الحساسية",
+      "records_en": "Label Verification Log; Line Clearance Record; Allergen Changeover Record",
+      "records_ar": "سجل التحقق من بطاقة البيان؛ سجل تفريغ الخط؛ سجل تبديل منتجات مسببات الحساسية",
+      "product_decision_en": "Hold/relabel/reject; recall review if distributed with wrong allergen declaration",
+      "product_decision_ar": "حجز/إعادة وسم/رفض؛ مراجعة سحب إذا وُزع مع تصريح حساسية خاطئ",
+      "gmp_link": [
+        "M06",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-007",
+      "step_id": "ST-01",
+      "step_en": "Receiving (fish)",
+      "step_ar": "الاستلام (أسماك)",
+      "hazard_en": "Histamine formation in scombroid fish",
+      "hazard_ar": "تكوّن الهستامين في أسماك الاسكومبروئيد",
+      "hazard_type": "Chemical/Biogenic Amine",
+      "sector": [
+        "Fish"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "CCP/OPRP",
+      "critical_limit_en": "≤100 mg/kg histamine; Temperature ≤4°C at receiving",
+      "critical_limit_ar": "≤100 مجم/كجم هستامين؛ درجة الحرارة ≤4°C عند الاستلام",
+      "critical_limit_ref": "CL-CHE-010",
+      "monitoring_en": "Temperature check at receiving; ELISA histamine strip test on representative sample",
+      "monitoring_ar": "فحص درجة الحرارة عند الاستلام؛ اختبار شريط ELISA للهستامين على عينة تمثيلية",
+      "monitoring_frequency_en": "Each delivery",
+      "monitoring_frequency_ar": "كل عملية تسليم",
+      "corrective_action_en": "Reject lot if temperature or histamine exceeds limit; hold and test if borderline",
+      "corrective_action_ar": "رفض الدفعة إذا تجاوزت درجة الحرارة أو الهستامين الحد؛ حجز واختبار في الحالات الحدية",
+      "verification_en": "HPLC confirmation on positive strip tests; supplier cold chain verification",
+      "verification_ar": "تأكيد HPLC على اختبارات الشريط الإيجابية؛ التحقق من سلسلة التبريد لدى المورد",
+      "records_en": "Receiving Temperature Log; Histamine Test Record; Rejection Log",
+      "records_ar": "سجل حرارة الاستلام؛ سجل فحص الهستامين؛ سجل الرفض",
+      "product_decision_en": "Reject if non-compliant; hold if borderline pending HPLC confirmation",
+      "product_decision_ar": "رفض إذا كان غير مطابق؛ حجز في الحالات الحدية انتظاراً لتأكيد HPLC",
+      "gmp_link": [
+        "M01",
+        "M06",
+        "M08"
+      ]
+    },
+    {
+      "id": "HAC-008",
+      "step_id": "ST-01",
+      "step_en": "Receiving (grains/nuts)",
+      "step_ar": "الاستلام (حبوب/مكسرات)",
+      "hazard_en": "Mycotoxins (aflatoxins B1/B2/G1/G2, OTA, DON)",
+      "hazard_ar": "السموم الفطرية (أفلاتوكسينات B1/B2/G1/G2 وOTA وDON)",
+      "hazard_type": "Chemical/Mycotoxin",
+      "sector": [
+        "Grain-Dry",
+        "Composite"
+      ],
+      "severity": "High",
+      "likelihood": "Medium",
+      "classification": "OPRP/CCP",
+      "critical_limit_en": "Aflatoxin B1 ≤2 μg/kg; Total aflatoxins ≤4 μg/kg (EU); OTA ≤3 μg/kg (processed); DON ≤750 μg/kg",
+      "critical_limit_ar": "أفلاتوكسين B1 ≤2 ميكروغرام/كجم؛ مجموع أفلاتوكسينات ≤4 ميكروغرام/كجم (الاتحاد الأوروبي)؛ OTA ≤3 ميكروغرام/كجم؛ DON ≤750 ميكروغرام/كجم",
+      "critical_limit_ref": "CL-CHE-001",
+      "monitoring_en": "COA review from approved supplier; ELISA rapid test per lot; visual inspection for mold damage",
+      "monitoring_ar": "مراجعة شهادة تحليل من مورد معتمد؛ اختبار ELISA سريع لكل دفعة؛ فحص بصري لأضرار العفن",
+      "monitoring_frequency_en": "Each lot at receiving",
+      "monitoring_frequency_ar": "كل دفعة عند الاستلام",
+      "corrective_action_en": "Reject lot if above limit; hold borderline for HPLC confirmation; review supplier",
+      "corrective_action_ar": "رفض الدفعة إذا تجاوزت الحد؛ حجز الحالات الحدية لتأكيد HPLC؛ مراجعة المورد",
+      "verification_en": "Quarterly HPLC verification testing; annual supplier mycotoxin risk review",
+      "verification_ar": "اختبار تحقق HPLC ربع سنوي؛ مراجعة سنوية لمخاطر السموم الفطرية عند المورد",
+      "records_en": "Mycotoxin Test Record; COA File; Lot Release Log",
+      "records_ar": "سجل فحص السموم الفطرية؛ ملف شهادات التحليل؛ سجل إفراج الدفعات",
+      "product_decision_en": "Reject if non-compliant; hold pending HPLC if borderline",
+      "product_decision_ar": "رفض إذا كان غير مطابق؛ حجز انتظاراً لـ HPLC في الحالات الحدية",
+      "gmp_link": [
+        "M01",
+        "M02",
+        "M06",
+        "M08"
+      ]
+    }
+  ],
+  "deviation_decisions": [
+    {
+      "type_en": "Critical limit not met",
+      "type_ar": "عدم تحقق الحد الحرج",
+      "applies_to": "CCP",
+      "immediate_action_en": "Stop process; hold all product from deviation window",
+      "immediate_action_ar": "إيقاف العملية؛ حجز جميع المنتجات من نافذة الانحراف",
+      "product_decision_en": "HOLD until disposition; rework only if validated process exists",
+      "product_decision_ar": "حجز لحين قرار التصرف؛ إعادة التشغيل فقط إذا وجدت عملية مثبتة",
+      "evidence_en": "Deviation log; impact window; QA authorization",
+      "evidence_ar": "سجل الانحراف؛ نافذة التأثير؛ تصريح ضمان الجودة",
+      "traceability_en": "Identify batch/line/machine/time window; trace to customers if shipped",
+      "traceability_ar": "تحديد الدفعة/الخط/المعدات/النافذة الزمنية؛ تتبع العملاء إذا شُحن",
+      "recall_trigger_en": "If distributed and unsafe cannot be excluded",
+      "recall_trigger_ar": "إذا وُزع المنتج ولا يمكن استبعاد عدم السلامة"
+    },
+    {
+      "type_en": "Action criteria not met",
+      "type_ar": "عدم تحقق معيار الإجراء",
+      "applies_to": "OPRP",
+      "immediate_action_en": "Restore control; assess affected product",
+      "immediate_action_ar": "استعادة التحكم؛ تقييم المنتج المتأثر",
+      "product_decision_en": "HOLD if product exposure possible",
+      "product_decision_ar": "حجز إذا كان تعرض المنتج ممكناً",
+      "evidence_en": "OPRP record; verification result; CAPA",
+      "evidence_ar": "سجل OPRP؛ نتيجة التحقق؛ إجراء تصحيحي",
+      "traceability_en": "Identify affected batch and time window",
+      "traceability_ar": "تحديد الدفعة المتأثرة والنافذة الزمنية",
+      "recall_trigger_en": "If product distributed and risk assessed as high",
+      "recall_trigger_ar": "إذا وُزع المنتج وقُيّم الخطر كعالٍ"
+    },
+    {
+      "type_en": "Allergen label error after dispatch",
+      "type_ar": "خطأ بطاقة مسبب حساسية بعد الشحن",
+      "applies_to": "CCP",
+      "immediate_action_en": "Activate recall/withdrawal assessment immediately",
+      "immediate_action_ar": "تفعيل تقييم الاستدعاء/السحب فوراً",
+      "product_decision_en": "RECALL/WITHDRAWAL REVIEW",
+      "product_decision_ar": "مراجعة استدعاء/سحب",
+      "evidence_en": "Customer list; shipment quantities; risk classification",
+      "evidence_ar": "قائمة العملاء؛ كميات الشحن؛ تصنيف المخاطر",
+      "traceability_en": "Generate recall customer list from M08 records",
+      "traceability_ar": "توليد قائمة عملاء الاستدعاء من سجلات M08",
+      "recall_trigger_en": "Yes — mandatory recall review",
+      "recall_trigger_ar": "نعم — مراجعة استدعاء إلزامية"
+    },
+    {
+      "type_en": "CCP evidence missing",
+      "type_ar": "غياب دليل نقطة التحكم الحرجة",
+      "applies_to": "CCP Evidence",
+      "immediate_action_en": "Block product release; investigate",
+      "immediate_action_ar": "منع إفراج المنتج؛ التحقيق",
+      "product_decision_en": "HOLD — Fail release gate",
+      "product_decision_ar": "حجز — فشل بوابة الإفراج",
+      "evidence_en": "M07 evidence review; audit trail",
+      "evidence_ar": "مراجعة دليل M07؛ مسار التدقيق",
+      "traceability_en": "Trace affected batch and period",
+      "traceability_ar": "تتبع الدفعة المتأثرة والفترة",
+      "recall_trigger_en": "If released product cannot be verified retroactively",
+      "recall_trigger_ar": "إذا لا يمكن التحقق من المنتج المفرج عنه بأثر رجعي"
+    },
+    {
+      "type_en": "Traceability gap after incident",
+      "type_ar": "فجوة في التتبع بعد حادث",
+      "applies_to": "Any",
+      "immediate_action_en": "Expand scope conservatively from last verified safe point",
+      "immediate_action_ar": "توسيع النطاق بشكل تحفظي من آخر نقطة آمنة مثبتة",
+      "product_decision_en": "BROAD HOLD",
+      "product_decision_ar": "حجز واسع",
+      "evidence_en": "Traceability gap assessment records",
+      "evidence_ar": "سجلات تقييم فجوة التتبع",
+      "traceability_en": "Work backward from last confirmed safe batch",
+      "traceability_ar": "العمل للخلف من آخر دفعة آمنة مؤكدة",
+      "recall_trigger_en": "Possible recall if distributed product cannot be scoped",
+      "recall_trigger_ar": "سحب محتمل إذا لا يمكن تحديد نطاق المنتج الموزع"
+    }
+  ],
+  "verification_programme": [
+    {
+      "area_en": "Hazard Analysis Review",
+      "area_ar": "مراجعة تحليل المخاطر",
+      "question_en": "Are generated hazards relevant and complete for the product/process?",
+      "question_ar": "هل المخاطر المولدة مناسبة وكاملة للمنتج/العملية؟",
+      "evidence_en": "Sector overlay review + product/process documentation",
+      "evidence_ar": "مراجعة طبقة القطاع + توثيق المنتج/العملية",
+      "frequency_en": "Each HACCP creation or significant change",
+      "frequency_ar": "عند إنشاء خطة الهاسب أو أي تغيير جوهري",
+      "responsible": "HACCP Team"
+    },
+    {
+      "area_en": "CCP/OPRP Classification",
+      "area_ar": "تصنيف نقاط التحكم الحرجة والبرامج المتطلبة",
+      "question_en": "Is CCP/OPRP/PRP classification justified with documented rationale?",
+      "question_ar": "هل التصنيف مبرر بمبررات موثقة؟",
+      "evidence_en": "Decision tree completed; rationale documented",
+      "evidence_ar": "شجرة القرار مكتملة؛ المبررات موثقة",
+      "frequency_en": "Each HACCP review (minimum annual)",
+      "frequency_ar": "كل مراجعة للهاسب (سنوياً كحد أدنى)",
+      "responsible": "QA/Food Safety Manager"
+    },
+    {
+      "area_en": "Critical Limits Validation",
+      "area_ar": "التحقق من صحة الحدود الحرجة",
+      "question_en": "Are critical limits scientifically valid and product-specific?",
+      "question_ar": "هل الحدود الحرجة مثبتة علمياً ومخصصة للمنتج؟",
+      "evidence_en": "Validation study / scientific literature / regulatory standard",
+      "evidence_ar": "دراسة تحقق / مراجع علمية / معيار تنظيمي",
+      "frequency_en": "Before implementation and after any process change",
+      "frequency_ar": "قبل التطبيق وبعد أي تغيير في العملية",
+      "responsible": "Technical/QA"
+    },
+    {
+      "area_en": "Monitoring System Calibration",
+      "area_ar": "معايرة نظام المراقبة",
+      "question_en": "Are monitoring instruments calibrated and fit for purpose?",
+      "question_ar": "هل أجهزة المراقبة معايَرة ومناسبة للغرض؟",
+      "evidence_en": "Calibration records traceable to national/international standard",
+      "evidence_ar": "سجلات معايرة قابلة للتتبع إلى معيار وطني/دولي",
+      "frequency_en": "Per schedule (daily/weekly/monthly per instrument)",
+      "frequency_ar": "حسب الجدول (يومياً/أسبوعياً/شهرياً حسب الجهاز)",
+      "responsible": "QA/Maintenance"
+    },
+    {
+      "area_en": "Corrective Action Effectiveness",
+      "area_ar": "فعالية الإجراء التصحيحي",
+      "question_en": "Have corrective actions prevented recurrence?",
+      "question_ar": "هل منعت الإجراءات التصحيحية تكرار الحادثة؟",
+      "evidence_en": "Trend data; CAPA closure records; repeat deviation frequency",
+      "evidence_ar": "بيانات الاتجاهات؛ سجلات إغلاق CAPA؛ تكرار الانحرافات",
+      "frequency_en": "Monthly trend review; closure at defined timeframe",
+      "frequency_ar": "مراجعة شهرية للاتجاهات؛ إغلاق ضمن إطار زمني محدد",
+      "responsible": "QA Manager"
+    },
+    {
+      "area_en": "Allergen Control Verification",
+      "area_ar": "التحقق من ضبط مسببات الحساسية",
+      "question_en": "Are allergens mapped from ingredients through process to label?",
+      "question_ar": "هل تم ربط مسببات الحساسية من المكونات عبر العملية إلى البطاقة؟",
+      "evidence_en": "Allergen matrix; label approval records; cleaning validation results",
+      "evidence_ar": "مصفوفة مسببات الحساسية؛ سجلات اعتماد البطاقة؛ نتائج التحقق من التنظيف",
+      "frequency_en": "Every ingredient or label change; annual full review",
+      "frequency_ar": "كل تغيير في المكون أو البطاقة؛ مراجعة سنوية شاملة",
+      "responsible": "QA/Label Team"
+    },
+    {
+      "area_en": "Traceability & Recall Readiness",
+      "area_ar": "جاهزية التتبع والاستدعاء",
+      "question_en": "Can CCP failure identify affected batches and customers within defined timeframe?",
+      "question_ar": "هل يمكن لفشل نقطة التحكم الحرجة تحديد الدفعات والعملاء المتأثرين ضمن الإطار الزمني المحدد؟",
+      "evidence_en": "Mock trace/recall test results; completion within 4 hours",
+      "evidence_ar": "نتائج اختبار تتبع/استدعاء وهمي؛ الإتمام خلال 4 ساعات",
+      "frequency_en": "Minimum annual; after significant incident",
+      "frequency_ar": "سنوياً كحد أدنى؛ بعد أي حادث مهم",
+      "responsible": "Recall Team/QA"
+    },
+    {
+      "area_en": "HACCP System Audit",
+      "area_ar": "تدقيق نظام الهاسب",
+      "question_en": "Is the HACCP system effectively implemented and maintained?",
+      "question_ar": "هل نظام الهاسب منفذ وصيان بفعالية؟",
+      "evidence_en": "Internal audit records; observations; CAPA raised and closed",
+      "evidence_ar": "سجلات التدقيق الداخلي؛ الملاحظات؛ إجراءات CAPA المرفوعة والمغلقة",
+      "frequency_en": "Annual minimum; triggered by incidents or significant changes",
+      "frequency_ar": "سنوياً كحد أدنى؛ تُطلق بالحوادث أو التغييرات الجوهرية",
+      "responsible": "Senior QA/Management"
+    }
+  ],
+  "required_records": [
+    {
+      "id": "REC-001",
+      "record_en": "HACCP Plan Table",
+      "record_ar": "جدول خطة الهاسب",
+      "contains_en": "All CCPs/OPRPs with limits, monitoring, corrective action, verification, records",
+      "contains_ar": "جميع نقاط التحكم الحرجة والبرامج مع الحدود والمراقبة والإجراء التصحيحي والتحقق والسجلات",
+      "retention_en": "Shelf life + 1 year minimum; 5 years for high-risk",
+      "retention_ar": "عمر المنتج + سنة كحد أدنى؛ 5 سنوات للمنتجات عالية المخاطر"
+    },
+    {
+      "id": "REC-002",
+      "record_en": "CCP Monitoring Logs",
+      "record_ar": "سجلات مراقبة نقاط التحكم الحرجة",
+      "contains_en": "Date/time/batch/line/operator/value/limit/result/action",
+      "contains_ar": "التاريخ/الوقت/الدفعة/الخط/المشغل/القيمة/الحد/النتيجة/الإجراء",
+      "retention_en": "Shelf life + 6 months minimum",
+      "retention_ar": "عمر المنتج + 6 أشهر كحد أدنى"
+    },
+    {
+      "id": "REC-003",
+      "record_en": "Deviation and Corrective Action Reports",
+      "record_ar": "تقارير الانحرافات والإجراءات التصحيحية",
+      "contains_en": "Deviation details; affected product; root cause; corrective action; verification",
+      "contains_ar": "تفاصيل الانحراف؛ المنتج المتأثر؛ السبب الجذري؛ الإجراء التصحيحي؛ التحقق",
+      "retention_en": "3 years minimum",
+      "retention_ar": "3 سنوات كحد أدنى"
+    },
+    {
+      "id": "REC-004",
+      "record_en": "Calibration Records",
+      "record_ar": "سجلات المعايرة",
+      "contains_en": "Instrument ID; calibration date; standard used; result; next due",
+      "contains_ar": "معرّف الجهاز؛ تاريخ المعايرة؛ المعيار المستخدم؛ النتيجة؛ الموعد القادم",
+      "retention_en": "Life of equipment + 1 year",
+      "retention_ar": "عمر المعدة + سنة"
+    },
+    {
+      "id": "REC-005",
+      "record_en": "Verification Records",
+      "record_ar": "سجلات التحقق",
+      "contains_en": "Audit findings; testing results; review outcomes; CAPA raised",
+      "contains_ar": "نتائج التدقيق؛ نتائج الاختبار؛ مخرجات المراجعة؛ إجراءات CAPA المرفوعة",
+      "retention_en": "3 years minimum",
+      "retention_ar": "3 سنوات كحد أدنى"
+    },
+    {
+      "id": "REC-006",
+      "record_en": "Hazard Analysis Documentation",
+      "record_ar": "وثائق تحليل المخاطر",
+      "contains_en": "Product description; intended use; process flow; hazard identification; decision tree rationale",
+      "contains_ar": "وصف المنتج؛ الاستخدام المقصود؛ مسار العملية؛ تحديد المخاطر؛ مبررات شجرة القرار",
+      "retention_en": "Valid while HACCP plan in use + 1 year",
+      "retention_ar": "صالح طوال استخدام خطة الهاسب + سنة"
+    },
+    {
+      "id": "REC-007",
+      "record_en": "End-Product Testing Records",
+      "record_ar": "سجلات فحص المنتج النهائي",
+      "contains_en": "Batch ID; test date; parameters; results; pass/fail; disposition",
+      "contains_ar": "معرّف الدفعة؛ تاريخ الفحص؛ المعاملات؛ النتائج؛ قبول/رفض؛ قرار التصرف",
+      "retention_en": "Shelf life + 6 months",
+      "retention_ar": "عمر المنتج + 6 أشهر"
+    },
+    {
+      "id": "REC-008",
+      "record_en": "Recall and Traceability Exercise Records",
+      "record_ar": "سجلات تمارين الاستدعاء والتتبع",
+      "contains_en": "Exercise date; scope tested; time to complete; gaps identified; CAPA raised",
+      "contains_ar": "تاريخ التمرين؛ النطاق المختبر؛ وقت الإتمام؛ الثغرات المحددة؛ إجراءات CAPA",
+      "retention_en": "3 years",
+      "retention_ar": "3 سنوات"
+    }
+  ]
+}
