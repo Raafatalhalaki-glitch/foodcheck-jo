@@ -682,6 +682,107 @@ app.post('/api/analyze', async (req, res) => {
 });
 
 // الصفحة الرئيسية
+
+// ================================================================
+// ===== نظام HACCP =====
+// ================================================================
+let haccpEngine, criticalLimits;
+try {
+  haccpEngine = require('./data/haccp_engine.json');
+  console.log('✅ haccp_engine.json loaded');
+} catch(e) {
+  console.warn('⚠️ haccp_engine.json not loaded:', e.message);
+}
+try {
+  criticalLimits = require('./data/critical_limits.json');
+  console.log('✅ critical_limits.json loaded');
+} catch(e) {
+  console.warn('⚠️ critical_limits.json not loaded:', e.message);
+}
+
+// HACCP frontend
+app.get('/haccp', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'haccp', 'index.html'));
+});
+
+// GET /api/haccp/engine — metadata
+app.get('/api/haccp/engine', (req, res) => {
+  if (!haccpEngine) return res.status(503).json({ error: 'HACCP engine not loaded' });
+  res.json({
+    metadata: haccpEngine.metadata,
+    sectors: haccpEngine.product_input_schema?.find(f => f.id === 'PIN-003')?.options_en || [],
+    sectors_ar: haccpEngine.product_input_schema?.find(f => f.id === 'PIN-003')?.options_ar || [],
+    process_steps: haccpEngine.process_steps,
+    principles_covered: haccpEngine.metadata.principles_covered
+  });
+});
+
+// POST /api/haccp/analyze — generate hazards from product profile
+app.post('/api/haccp/analyze', (req, res) => {
+  if (!haccpEngine) return res.status(503).json({ error: 'HACCP engine not loaded' });
+
+  const { sector, rte, heat_treatment, allergens, raw_material_type, temperature_category } = req.body;
+
+  // Filter sector hazards
+  const sectorHazards = haccpEngine.sector_hazards.filter(h => {
+    return h.sector.includes(sector) || h.sector.includes('All');
+  });
+
+  // Get GMP triggers
+  const gmpTriggers = haccpEngine.gmp_triggers || [];
+
+  // Get relevant HACCP plan templates
+  const haccpTemplates = haccpEngine.haccp_plan_templates.filter(t => {
+    return t.sector.includes(sector) || t.sector.includes('All');
+  });
+
+  // Match critical limits
+  const matchedLimits = (criticalLimits?.critical_limits || []).filter(cl => {
+    return cl.sector.includes(sector) || cl.sector.includes('All');
+  });
+
+  // Add RTE-specific
+  if (rte && !sectorHazards.find(h => h.sector.includes('RTE'))) {
+    const rteHazards = haccpEngine.sector_hazards.filter(h => h.sector.includes('RTE'));
+    sectorHazards.push(...rteHazards);
+  }
+
+  // Decision tree
+  const decisionTree = haccpEngine.decision_tree;
+
+  res.json({
+    sector,
+    inputs: req.body,
+    hazards: sectorHazards,
+    haccp_plan_templates: haccpTemplates,
+    critical_limits: matchedLimits,
+    gmp_triggers: gmpTriggers,
+    decision_tree: decisionTree,
+    principles: haccpEngine.metadata.principles_covered,
+    verification: haccpEngine.verification_programme,
+    required_records: haccpEngine.required_records
+  });
+});
+
+// GET /api/haccp/critical-limits — full library
+app.get('/api/haccp/critical-limits', (req, res) => {
+  if (!criticalLimits) return res.status(503).json({ error: 'Critical limits not loaded' });
+  const { sector } = req.query;
+  if (sector) {
+    const filtered = criticalLimits.critical_limits.filter(cl =>
+      cl.sector.includes(sector) || cl.sector.includes('All')
+    );
+    return res.json({ critical_limits: filtered, metadata: criticalLimits.metadata });
+  }
+  res.json(criticalLimits);
+});
+
+// GET /api/haccp/decision-tree
+app.get('/api/haccp/decision-tree', (req, res) => {
+  if (!haccpEngine) return res.status(503).json({ error: 'HACCP engine not loaded' });
+  res.json({ decision_tree: haccpEngine.decision_tree });
+});
+
 app.get('*', (req, res) => {
   if (req.path.includes('.')) return res.status(404).send('Not found');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
