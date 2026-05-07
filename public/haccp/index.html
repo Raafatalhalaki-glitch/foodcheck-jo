@@ -527,6 +527,55 @@ body { font-family:'Tajawal',sans-serif; background:var(--navy); color:var(--tex
 
 <script>
 // ── STATE ──
+// ── قراءة نتائج GMP من localStorage ──
+function loadGMPScores() {
+  try {
+    const raw = localStorage.getItem('foodcheck_gmp_scores');
+    if (!raw) return null;
+    const scores = JSON.parse(raw);
+    // تحقق من إن النتائج حديثة (أقل من 24 ساعة)
+    const entries = Object.values(scores).filter(v => v && v.timestamp);
+    if (entries.length === 0) return null;
+    const latest = Math.max(...entries.map(e => e.timestamp));
+    if (Date.now() - latest > 86400000) return null; // أقدم من 24 ساعة
+    return scores;
+  } catch(e) { return null; }
+}
+
+// ── تحليل تأثير GMP على HACCP ──
+function analyzeGMPImpact(gmpScores) {
+  if (!gmpScores) return [];
+  const warnings = [];
+
+  const checks = [
+    { module: 'M01', threshold: 75, hazard_ar: 'مخاطر المواد الخام مرتفعة', hazard_en: 'Raw material hazard elevated', icon: '⚠️' },
+    { module: 'M02', threshold: 75, hazard_ar: 'ضعف البنية التحتية يزيد خطر التلوث', hazard_en: 'Poor infrastructure increases contamination risk', icon: '🏭' },
+    { module: 'M03', threshold: 75, hazard_ar: 'ضعف التنظيف يرفع خطر الليستيريا والتلوث البيئي', hazard_en: 'Poor cleaning elevates Listeria and environmental contamination risk', icon: '🧹' },
+    { module: 'M04', threshold: 75, hazard_ar: 'مخاطر تلوث الآفات مرتفعة', hazard_en: 'Pest contamination risk elevated', icon: '🐛' },
+    { module: 'M05', threshold: 75, hazard_ar: 'ممارسات النظافة الشخصية ضعيفة — خطر تلوث من العمال', hazard_en: 'Poor personnel hygiene — worker contamination risk', icon: '👤' },
+    { module: 'M06', threshold: 80, hazard_ar: 'ضوابط التشغيل ضعيفة — خطر انحراف نقاط التحكم الحرجة', hazard_en: 'Weak operational controls — CCP deviation risk', icon: '⚙️' },
+    { module: 'M07', threshold: 75, hazard_ar: 'توثيق ناقص — لا يمكن التحقق من السيطرة على المخاطر', hazard_en: 'Incomplete documentation — hazard control cannot be verified', icon: '📋' },
+    { module: 'M08', threshold: 75, hazard_ar: 'ضعف نظام التتبع — نطاق الاستدعاء غير محدد', hazard_en: 'Weak traceability — recall scope undefined', icon: '🔍' },
+  ];
+
+  checks.forEach(c => {
+    const s = gmpScores[c.module];
+    if (s && s.score < c.threshold) {
+      warnings.push({
+        module: c.module,
+        score: s.score,
+        criticalFail: s.criticalFail,
+        hazard_ar: c.hazard_ar,
+        hazard_en: c.hazard_en,
+        icon: c.icon,
+        severity: s.criticalFail ? 'Critical' : (s.score < 60 ? 'High' : 'Medium')
+      });
+    }
+  });
+
+  return warnings;
+}
+
 const STATE = {
   sector: null,
   inputs: {},
@@ -614,6 +663,41 @@ function renderHazards(data) {
     <div><strong>برامج متطلبات تشغيلية (OPRP):</strong> <span style="color:var(--amber)">${oprp.length}</span></div>
     <div><strong>حدود حرجة مرجعية ذات صلة:</strong> ${limits.length}</div>
   `;
+
+  // ── عرض تأثير GMP على HACCP ──
+  const gmpScores = loadGMPScores();
+  const gmpWarnings = analyzeGMPImpact(gmpScores);
+
+  if (gmpWarnings.length > 0) {
+    const gmpBanner = document.createElement('div');
+    gmpBanner.style.cssText = 'background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.4);border-radius:14px;padding:16px 20px;margin-bottom:20px;';
+    gmpBanner.innerHTML = `
+      <div style="font-size:13px;font-weight:700;color:#f59e0b;margin-bottom:10px;">
+        ⚠️ تحذيرات مبنية على نتائج GMP لديك
+      </div>
+      <div style="font-size:12px;color:#94a3b8;margin-bottom:12px;">
+        النتائج الضعيفة في GMP ترفع مستوى المخاطر في HACCP
+      </div>
+      ${gmpWarnings.map(w => `
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:8px;margin-bottom:6px;">
+          <span style="font-size:18px;">${w.icon}</span>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:${w.severity==='Critical'?'#ef4444':'#f59e0b'};">${w.module} — ${w.score}% ${w.criticalFail?'⚠ إشكالية حرجة':''}</div>
+            <div style="font-size:11px;color:#94a3b8;">${w.hazard_ar}</div>
+          </div>
+        </div>
+      `).join('')}
+      <div style="margin-top:10px;font-size:11px;color:#64748b;">
+        <a href="/gmp" style="color:#00d4a8;text-decoration:none;">← عدّل نتائج GMP لتحسين هذا التحليل</a>
+      </div>
+    `;
+    document.getElementById('hazard-results-container').before(gmpBanner);
+  } else if (gmpScores) {
+    const okBanner = document.createElement('div');
+    okBanner.style.cssText = 'background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);border-radius:14px;padding:12px 20px;margin-bottom:16px;font-size:12px;color:#10b981;';
+    okBanner.innerHTML = '✅ نتائج GMP جيدة — مستوى المخاطر الأساسية منخفض';
+    document.getElementById('hazard-results-container').before(okBanner);
+  }
 
   // Render hazard cards
   const container = document.getElementById('hazard-results-container');
