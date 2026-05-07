@@ -1431,6 +1431,21 @@ async function saveAnswers() {
 
 function updateSidebarScore(moduleId, score) {
   STATE.scores[moduleId] = score;
+
+  // حفظ نتائج GMP في localStorage للربط مع HACCP
+  try {
+    const existing = JSON.parse(localStorage.getItem('foodcheck_gmp_scores') || '{}');
+    existing[moduleId] = {
+      score: score.score,
+      criticalFail: score.criticalFail,
+      decision: score.decision,
+      timestamp: Date.now()
+    };
+    existing['_org'] = STATE.assessmentId || '';
+    existing['_sector'] = STATE.sectors ? STATE.sectors[0] : '';
+    localStorage.setItem('foodcheck_gmp_scores', JSON.stringify(existing));
+  } catch(e) {}
+
   const nav = document.getElementById('nav-' + moduleId);
   if (!nav) return;
 
