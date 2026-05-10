@@ -294,7 +294,7 @@ select option{background:var(--surface);}
 
           <div class="tipbox" style="margin-top:13px">
             <strong>🔬 مصدر البيانات</strong>
-            القيم الغذائية من USDA FoodData Central — أكبر قاعدة بيانات غذائية مجانية في العالم (300,000+ مادة).
+            القيم الغذائية من USDA FoodData Central — قاعدة بيانات غذائية معتمدة دولياً تضم 300,000+ مادة غذائية.
           </div>
         </div>
       </div>
@@ -507,17 +507,17 @@ function renderRestLbl(s,name,ss){
 <div id="registerModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem;">
   <div style="background:#111827;border:1px solid #1e2d47;border-radius:20px;padding:2rem;max-width:420px;width:100%;position:relative;direction:rtl;">
     <div style="text-align:center;font-size:2.5rem;margin-bottom:1rem;">🔓</div>
-    <h3 style="text-align:center;font-size:1.2rem;font-weight:800;margin-bottom:.5rem;color:#e8edf5;">احسب أكثر — مجاناً</h3>
+    <h3 style="text-align:center;font-size:1.2rem;font-weight:800;margin-bottom:.5rem;color:#e8edf5;">احسب أكثر — سجّل الآن</h3>
     <p style="text-align:center;color:#8899bb;font-size:.88rem;margin-bottom:1.5rem;line-height:1.65;">
-      سجّل اسمك وبريدك واحصل على <strong style="color:#00d4a8;">30 حساباً/شهر مجاناً</strong><br>
-      بدلاً من حساب واحد فقط
+      سجّل اسمك وبريدك واحصل على <strong style="color:#00d4a8;">30 حساباً/شهر</strong><br>
+      بدلاً من حساب تجريبي واحد
     </p>
     <div style="display:flex;flex-direction:column;gap:.75rem;">
       <input type="text" id="nutRegName" placeholder="الاسم الكامل *" style="background:#0a0e1a;border:1px solid #1e2d47;border-radius:8px;padding:.75rem 1rem;color:#e8edf5;font-family:'Tajawal',sans-serif;font-size:.9rem;outline:none;width:100%;transition:border .2s;direction:rtl;" onfocus="this.style.borderColor='#00d4a8'" onblur="this.style.borderColor='#1e2d47'">
       <input type="email" id="nutRegEmail" placeholder="البريد الإلكتروني *" style="background:#0a0e1a;border:1px solid #1e2d47;border-radius:8px;padding:.75rem 1rem;color:#e8edf5;font-family:'Tajawal',sans-serif;font-size:.9rem;outline:none;width:100%;transition:border .2s;direction:ltr;text-align:right;" onfocus="this.style.borderColor='#00d4a8'" onblur="this.style.borderColor='#1e2d47'">
       <input type="text" id="nutRegCompany" placeholder="اسم الشركة أو المنشأة (اختياري)" style="background:#0a0e1a;border:1px solid #1e2d47;border-radius:8px;padding:.75rem 1rem;color:#e8edf5;font-family:'Tajawal',sans-serif;font-size:.9rem;outline:none;width:100%;transition:border .2s;direction:rtl;" onfocus="this.style.borderColor='#00d4a8'" onblur="this.style.borderColor='#1e2d47'">
       <button onclick="submitNutReg()" style="background:#00d4a8;color:#0a0e1a;border:none;padding:.85rem;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-        سجّل واحصل على 30 حساباً مجاناً ←
+        سجّل واحصل على 30 حساباً/شهر ←
       </button>
       <div id="nutRegError" style="display:none;color:#ff4757;font-size:.83rem;text-align:center;"></div>
       <div id="nutRegSuccess" style="display:none;color:#2ed573;font-size:.88rem;text-align:center;font-weight:700;"></div>
