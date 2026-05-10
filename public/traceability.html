@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traceability Engine — FoodCheck Jordan</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0f1e; --navy2:#0d1528; --teal:#00c9b1; --teal-dim:rgba(0,201,177,.12);
+  --red:#ff4d6d; --red-dim:rgba(255,77,109,.13); --amber:#f5a623; --amber-dim:rgba(245,166,35,.12);
+  --green:#00e096; --green-dim:rgba(0,224,150,.11); --blue:#60a5fa; --purple:#a78bfa;
+  --text:#e2e8f0; --muted:#64748b; --border:rgba(255,255,255,.07); --card:rgba(255,255,255,.04);
+  --mono:'IBM Plex Mono',monospace; --sans:'Tajawal',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--navy);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,201,177,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,201,177,.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,15,30,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;}
+.nav-logo{font-family:var(--mono);font-size:.82rem;color:var(--teal);letter-spacing:.06em;}
+.nav-links{display:flex;gap:1.5rem;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--teal);}
+.lang-btn{background:var(--card);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.72rem;padding:5px 12px;border-radius:4px;cursor:pointer;transition:.2s;}
+.lang-btn:hover{color:var(--teal);border-color:rgba(0,201,177,.4);}
+main{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:2.5rem 2rem 5rem;}
+.page-hdr{margin-bottom:2rem;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(0,201,177,.22);padding:4px 12px;border-radius:4px;margin-bottom:.9rem;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-size:1.9rem;font-weight:700;line-height:1.2;}
+h1 span{color:var(--teal);}
+.page-sub{color:var(--muted);font-family:var(--mono);font-size:.78rem;margin-top:.4rem;}
+.j-bar{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem;}
+.jp{font-family:var(--mono);font-size:.65rem;letter-spacing:.07em;padding:3px 10px;border-radius:20px;border:1px solid;}
+.jp.jo{color:var(--amber);border-color:rgba(245,166,35,.35);background:rgba(245,166,35,.07);}
+.jp.eu{color:var(--blue);border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07);}
+.jp.us{color:var(--purple);border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.07);}
+.stepper{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2.5rem;}
+.s-tab{flex:1;padding:12px 14px;background:var(--card);border:none;cursor:pointer;color:var(--muted);font-family:var(--sans);font-size:.78rem;display:flex;align-items:center;gap:7px;transition:all .2s;border-right:1px solid var(--border);}
+.s-tab:last-child{border-right:none;}
+.s-tab.active{background:var(--teal-dim);color:var(--teal);}
+.s-tab.done{color:var(--green);}
+.s-tab:hover:not(.active):not(.done){background:rgba(255,255,255,.04);color:var(--text);}
+.s-num{width:20px;height:20px;border-radius:50%;background:var(--border);font-family:var(--mono);font-size:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s-tab.active .s-num{background:var(--teal);color:var(--navy);}
+.s-tab.done .s-num{background:var(--green);color:var(--navy);}
+.panel{display:none;}
+.panel.active{display:block;animation:fu .25s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slabel{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--teal);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border);}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:1rem;margin-bottom:1.3rem;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:.73rem;color:var(--muted);font-family:var(--mono);letter-spacing:.03em;}
+.req{color:var(--red);margin-left:2px;}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.8rem;padding:9px 12px;transition:border-color .2s,background .2s;outline:none;width:100%;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--teal);background:rgba(0,201,177,.05);}
+.fg select option{background:var(--navy2);}
+.fg.has-err input,.fg.has-err select{border-color:var(--red);}
+.emsg{font-size:.68rem;color:var(--red);font-family:var(--mono);display:none;}
+.fg.has-err .emsg{display:block;}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.3rem;}
+.scard-title{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--teal);margin-bottom:1rem;}
+.lot-card{background:rgba(0,0,0,.18);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;margin-bottom:.8rem;}
+.lot-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;}
+.lot-num{font-family:var(--mono);font-size:.67rem;color:var(--teal);letter-spacing:.08em;}
+.btn-rm{background:var(--red-dim);border:1px solid rgba(255,77,109,.3);color:var(--red);border-radius:4px;padding:3px 10px;cursor:pointer;font-size:.7rem;font-family:var(--mono);}
+.btn-add{background:var(--teal-dim);border:1px solid rgba(0,201,177,.25);color:var(--teal);border-radius:6px;padding:8px 16px;cursor:pointer;font-family:var(--mono);font-size:.75rem;transition:.2s;}
+.btn-add:hover{background:rgba(0,201,177,.2);}
+.allergen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.6rem;margin-bottom:1rem;}
+.a-item{background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:6px;padding:.7rem .9rem;}
+.a-name{font-size:.75rem;margin-bottom:.5rem;font-weight:500;}
+.a-row{display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;}
+.a-row label{font-size:.68rem;color:var(--muted);font-family:var(--mono);cursor:pointer;}
+.a-row input[type=checkbox]{accent-color:var(--teal);cursor:pointer;}
+.a-ppm{width:100%;margin-top:.35rem;font-size:.72rem !important;padding:4px 8px !important;}
+.arow{display:flex;gap:.9rem;align-items:center;margin-top:1.5rem;flex-wrap:wrap;}
+.btn-primary{background:var(--teal);color:var(--navy);font-family:var(--mono);font-size:.82rem;font-weight:600;padding:11px 24px;border-radius:6px;border:none;cursor:pointer;letter-spacing:.04em;transition:all .2s;}
+.btn-primary:hover{background:#00b09c;transform:translateY(-1px);}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.8rem;padding:11px 18px;border-radius:6px;cursor:pointer;transition:.2s;}
+.btn-secondary:hover{border-color:rgba(255,255,255,.2);color:var(--text);}
+.verdict{border-radius:10px;padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;border:1px solid;}
+.verdict.compliant{background:var(--green-dim);border-color:rgba(0,224,150,.3);}
+.verdict.non-compliant{background:var(--red-dim);border-color:rgba(255,77,109,.3);}
+.verdict.warning{background:var(--amber-dim);border-color:rgba(245,166,35,.3);}
+.v-icon{font-size:1.8rem;flex-shrink:0;}
+.v-title{font-size:.95rem;font-weight:700;}
+.v-sub{font-size:.75rem;font-family:var(--mono);color:var(--muted);margin-top:3px;}
+.score-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;}
+.score-lbl{font-family:var(--mono);font-size:.73rem;color:var(--muted);white-space:nowrap;min-width:130px;}
+.score-track{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+.score-fill{height:100%;border-radius:3px;transition:width .9s cubic-bezier(.4,0,.2,1);}
+.score-val{font-family:var(--mono);font-size:.88rem;font-weight:600;white-space:nowrap;}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem;margin-bottom:1.4rem;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.9rem;text-align:center;}
+.stat-n{font-family:var(--mono);font-size:1.5rem;font-weight:700;}
+.stat-l{font-size:.67rem;color:var(--muted);margin-top:3px;}
+.trace-chain{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.5rem;align-items:center;margin-bottom:1.4rem;}
+.tbox{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.9rem;text-align:center;}
+.tbox.hl{border-color:rgba(0,201,177,.4);background:var(--teal-dim);}
+.t-icon{font-size:1.3rem;margin-bottom:.35rem;}
+.t-lbl{font-family:var(--mono);font-size:.63rem;color:var(--teal);letter-spacing:.08em;}
+.t-val{font-size:.8rem;margin-top:.3rem;font-weight:600;}
+.t-sub{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.t-arr{color:var(--teal);font-size:1.1rem;text-align:center;}
+.issue-list{margin-bottom:1.3rem;}
+.issue-item{display:flex;gap:.7rem;align-items:flex-start;padding:.65rem 1rem;border-radius:6px;margin-bottom:.4rem;font-size:.8rem;}
+.issue-item.fail{background:var(--red-dim);border:1px solid rgba(255,77,109,.2);}
+.issue-item.warn{background:var(--amber-dim);border:1px solid rgba(245,166,35,.2);}
+.issue-item.ok{background:var(--green-dim);border:1px solid rgba(0,224,150,.2);}
+.i-icon{flex-shrink:0;}
+.kde-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:.8rem;margin-bottom:1.4rem;}
+.kde-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;display:flex;align-items:flex-start;gap:.65rem;}
+.kde-card.ok{border-color:rgba(0,224,150,.2);}
+.kde-card.fail{border-color:rgba(255,77,109,.25);background:var(--red-dim);}
+.kde-card.warn{border-color:rgba(245,166,35,.25);background:var(--amber-dim);}
+.kde-icon{flex-shrink:0;font-size:.85rem;margin-top:2px;}
+.kde-name{font-size:.7rem;color:var(--muted);font-family:var(--mono);}
+.kde-val{font-size:.8rem;margin-top:3px;word-break:break-all;}
+.rtable-wrap{overflow-x:auto;margin-bottom:1.4rem;}
+table{width:100%;border-collapse:collapse;font-size:.78rem;}
+thead th{background:rgba(255,255,255,.04);padding:9px 12px;text-align:left;font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:hover{background:rgba(255,255,255,.025);}
+tbody td{padding:9px 12px;vertical-align:middle;}
+.bs{display:inline-block;padding:3px 9px;border-radius:4px;font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;}
+.bs.pass{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,224,150,.3);}
+.bs.fail{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,.3);}
+.bs.warn{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,.3);}
+.sla-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.75rem;margin-bottom:1.4rem;}
+.sla-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.9rem;}
+.sla-card.critical{border-color:rgba(255,77,109,.3);}
+.sla-type{font-family:var(--mono);font-size:.68rem;color:var(--teal);margin-bottom:.6rem;letter-spacing:.06em;}
+.sla-row{display:flex;justify-content:space-between;font-size:.73rem;margin-bottom:.25rem;}
+.sla-row span{color:var(--muted);font-family:var(--mono);}
+.sla-row strong{font-family:var(--mono);}
+.exp-row{display:flex;gap:.7rem;flex-wrap:wrap;}
+.btn-exp{background:var(--card);border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.7rem;padding:7px 14px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:.2s;}
+.btn-exp:hover{border-color:var(--teal);color:var(--teal);}
+.empty{text-align:center;padding:4rem 2rem;color:var(--muted);}
+.empty .e-icon{font-size:2.5rem;margin-bottom:.8rem;opacity:.35;}
+.empty p{font-family:var(--mono);font-size:.8rem;}
+footer{text-align:center;padding:1.8rem;font-family:var(--mono);font-size:.67rem;color:var(--muted);border-top:1px solid var(--border);margin-top:3rem;position:relative;z-index:1;line-height:1.8;}
+@media(max-width:720px){.stats{grid-template-columns:repeat(3,1fr);}.trace-chain{grid-template-columns:1fr;}.t-arr{transform:rotate(90deg);}.stepper{flex-direction:column;}.s-tab{border-right:none;border-bottom:1px solid var(--border);}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="nav-logo">FC// TRACEABILITY ENGINE v2.0</span>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/additives.html">Additives</a>
+      <a href="/shelf-life.html">Shelf Life</a>
+      <a href="#" class="active">Traceability</a>
+      <a href="/eu-compliance.html">EU Compliance</a>
+    </div>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">عربي</button>
+  </div>
+</nav>
+
+<main>
+  <div class="page-hdr">
+    <div class="badge"><span class="dot"></span> TRACEABILITY ENGINE v2.0 — FULL EU COVERAGE</div>
+    <h1>Batch <span>Traceability</span> Check</h1>
+    <p class="page-sub">One step back · Production details · One step forward · All EU regulations from workbook</p>
+    <div class="j-bar">
+      <span class="jp jo">🇯🇴 JS / JFDA</span>
+      <span class="jp eu">🇪🇺 EU 178/2002 Art.18 &amp; 19</span>
+      <span class="jp eu">🇪🇺 EU 852/2004 HACCP</span>
+      <span class="jp eu">🇪🇺 EU 1169/2011 Allergens (14)</span>
+      <span class="jp eu">🇪🇺 EU 2073/2005 Microbiology</span>
+      <span class="jp eu">🇪🇺 EU 1935/2004 FCM</span>
+      <span class="jp us">🇺🇸 FSMA 204 CTE/KDE</span>
+    </div>
+  </div>
+
+  <div class="stepper">
+    <button class="s-tab active" onclick="goStep(0)" id="tab0"><span class="s-num">1</span>Batch Info</button>
+    <button class="s-tab" onclick="goStep(1)" id="tab1"><span class="s-num">2</span>Input Lots ←</button>
+    <button class="s-tab" onclick="goStep(2)" id="tab2"><span class="s-num">3</span>Allergens</button>
+    <button class="s-tab" onclick="goStep(3)" id="tab3"><span class="s-num">4</span>Microbiology</button>
+    <button class="s-tab" onclick="goStep(4)" id="tab4"><span class="s-num">5</span>Shipping →</button>
+    <button class="s-tab" onclick="goStep(5)" id="tab5"><span class="s-num">6</span>Results</button>
+  </div>
+
+  <!-- PANEL 0 -->
+  <div class="panel active" id="panel0">
+    <div class="slabel">Production Batch Details</div>
+    <div class="fgrid">
+      <div class="fg" id="fg-batch_id"><label>Batch / Lot ID <span class="req">*</span></label><input id="batch_id" placeholder="e.g. BATCH-0001"><span class="emsg">Required</span></div>
+      <div class="fg" id="fg-product_name"><label>Product Name <span class="req">*</span></label><input id="product_name" placeholder="e.g. Chili Sauce 500ml"><span class="emsg">Required</span></div>
+      <div class="fg" id="fg-product_category"><label>Product Category <span class="req">*</span></label>
+        <select id="product_category">
+          <option value="">— Select —</option>
+          <option value="rte_poultry">RTE Poultry</option>
+          <option value="rte_other">RTE Other</option>
+          <option value="acidified">Acidified / Fermented</option>
+          <option value="frozen">Frozen Products</option>
+          <option value="dairy">Dairy Products</option>
+          <option value="dry">Dry Goods / Shelf-stable</option>
+          <option value="bakery">Bakery &amp; Confectionery</option>
+          <option value="sauces">Sauces &amp; Condiments</option>
+          <option value="meat">Meat &amp; Poultry</option>
+          <option value="seafood">Seafood</option>
+          <option value="produce">Fresh Produce</option>
+          <option value="other">Other</option>
+        </select><span class="emsg">Required</span>
+      </div>
+      <div class="fg"><label>Risk Level</label>
+        <select id="risk_level">
+          <option value="auto">Auto-detect from category</option>
+          <option value="HIGH">HIGH — RTE / Allergen-sensitive</option>
+          <option value="MEDIUM">MEDIUM — Acidified / Fermented</option>
+          <option value="LOW">LOW — Shelf-stable</option>
+        </select>
+      </div>
+      <div class="fg" id="fg-production_date"><label>Production Date <span class="req">*</span></label><input type="date" id="production_date"><span class="emsg">Required</span></div>
+      <div class="fg" id="fg-bom_version"><label>BOM / Recipe Version <span class="req">*</span></label><input id="bom_version" placeholder="e.g. BOM-01-v2"><span class="emsg">Required</span></div>
+      <div class="fg"><label>Production Line</label><input id="production_line" placeholder="e.g. LINE-1"></div>
+      <div class="fg" id="fg-planned_qty"><label>Planned Qty <span class="req">*</span></label><input type="number" id="planned_qty" placeholder="1000"><span class="emsg">Required</span></div>
+      <div class="fg" id="fg-actual_qty"><label>Actual Qty <span class="req">*</span></label><input type="number" id="actual_qty" placeholder="980"><span class="emsg">Required</span></div>
+      <div class="fg"><label>Unit</label><select id="uom"><option>kg</option><option>L</option><option>pcs</option><option>g</option><option>units</option></select></div>
+      <div class="fg" id="fg-output_lot"><label>Output Lot / TLC Code <span class="req">*</span></label><input id="output_lot" placeholder="e.g. SAU-250509-01"><span class="emsg">Required</span></div>
+      <div class="fg"><label>Storage Location</label><input id="storage_location" placeholder="e.g. WH-FG-01"></div>
+    </div>
+    <div class="slabel">Quality Controls</div>
+    <div class="fgrid">
+      <div class="fg"><label>HACCP / CCP Records (EU 852/2004)</label>
+        <select id="haccp_records"><option value="yes">Yes — All documented</option><option value="partial">Partial</option><option value="no">No</option></select>
+      </div>
+      <div class="fg"><label>Approved Label Version (EU 1169)</label>
+        <select id="label_version"><option value="yes">Yes — Approved</option><option value="no">No — Unapproved</option><option value="na">N/A</option></select>
+      </div>
+      <div class="fg"><label>QA Release Status</label>
+        <select id="qa_status"><option value="released">Released ✅</option><option value="hold">HOLD ⛔</option><option value="rejected">Rejected ❌</option><option value="pending">Pending QA</option></select>
+      </div>
+      <div class="fg"><label>Shelf Life (days)</label><input type="number" id="shelf_life" placeholder="180"></div>
+    </div>
+    <div class="arow"><button class="btn-primary" onclick="goStep(1)">Next: Input Lots →</button></div>
+  </div>
+
+  <!-- PANEL 1 -->
+  <div class="panel" id="panel1">
+    <div class="slabel">← One Step Back — Input Lots &amp; Suppliers (EU 178/2002 Art.18)</div>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.1rem;">Add all raw material, ingredient, and packaging lots. EU Art.18 requires identification of every supplier and lot.</p>
+    <div id="lots-container"></div>
+    <button class="btn-add" onclick="addLot()">+ Add Input Lot</button>
+    <div style="margin-top:1.5rem;">
+      <div class="slabel">Supplier &amp; Document Verification</div>
+      <div class="fgrid">
+        <div class="fg"><label>All Suppliers Approved? (EU 178/2002)</label>
+          <select id="suppliers_approved"><option value="yes">Yes — All approved</option><option value="partial">Partial</option><option value="no">No — Unapproved used</option></select>
+        </div>
+        <div class="fg"><label>COA / Supplier Documents</label>
+          <select id="coa_present"><option value="yes">Yes — All present</option><option value="partial">Partial</option><option value="no">No — Missing</option></select>
+        </div>
+        <div class="fg"><label>Food Contact Material DoC (EU 1935/2004)</label>
+          <select id="fcm_declaration"><option value="yes">Yes — DoC present</option><option value="partial">Partial</option><option value="no">No — Missing</option><option value="na">N/A</option></select>
+        </div>
+        <div class="fg"><label>FCM Declaration Expiry</label>
+          <select id="fcm_expiry"><option value="valid">Valid</option><option value="expired">Expired ⚠️</option><option value="na">N/A</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-secondary" onclick="goStep(0)">← Back</button>
+      <button class="btn-primary" onclick="goStep(2)">Next: Allergens →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div class="panel" id="panel2">
+    <div class="slabel">Allergen Control Matrix — EU 1169/2011 (14 Major Allergens)</div>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.1rem;">EU 1169/2011 mandates clear declaration of 14 allergens. Mark status and threshold ppm for "May Contain" cases.</p>
+    <div class="allergen-grid" id="allergen-grid"></div>
+    <div class="slabel" style="margin-top:1rem;">Allergen Management Controls</div>
+    <div class="fgrid">
+      <div class="fg"><label>Allergen Cleaning Verified?</label>
+        <select id="allergen_cleaning"><option value="yes">Yes — Verified</option><option value="no">No</option><option value="na">N/A — Dedicated line</option></select>
+      </div>
+      <div class="fg"><label>Allergen Testing Performed?</label>
+        <select id="allergen_testing"><option value="yes">Yes — Results on file</option><option value="no">No</option><option value="na">N/A</option></select>
+      </div>
+      <div class="fg"><label>Label Allergens Match Recipe?</label>
+        <select id="allergen_label_match"><option value="yes">Yes — Verified</option><option value="no">No — Mismatch</option><option value="not_checked">Not checked</option></select>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-secondary" onclick="goStep(1)">← Back</button>
+      <button class="btn-primary" onclick="goStep(3)">Next: Microbiology →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3 -->
+  <div class="panel" id="panel3">
+    <div class="slabel">Microbiological Criteria — EU 2073/2005</div>
+    <div class="scard">
+      <div class="scard-title">🦠 FOOD SAFETY CRITERIA — RTE PRODUCTS</div>
+      <div class="fgrid">
+        <div class="fg"><label>Listeria monocytogenes (limit: 0 CFU/25g)</label>
+          <select id="micro_listeria"><option value="absent">Absent — PASS ✅</option><option value="detected">Detected — FAIL ❌</option><option value="not_tested">Not tested</option><option value="na">N/A</option></select>
+        </div>
+        <div class="fg"><label>Salmonella spp. (limit: Absent /25g)</label>
+          <select id="micro_salmonella"><option value="absent">Absent — PASS ✅</option><option value="detected">Detected — FAIL ❌</option><option value="not_tested">Not tested</option><option value="na">N/A</option></select>
+        </div>
+        <div class="fg"><label>S. aureus (limit: &lt;100 CFU/g)</label>
+          <select id="micro_staph"><option value="pass">Pass &lt;100 CFU/g ✅</option><option value="fail">Fail ≥100 CFU/g ❌</option><option value="not_tested">Not tested</option><option value="na">N/A</option></select>
+        </div>
+        <div class="fg"><label>E. coli (process hygiene)</label>
+          <select id="micro_ecoli"><option value="pass">Pass ✅</option><option value="fail">Fail ❌</option><option value="not_tested">Not tested</option><option value="na">N/A</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="scard">
+      <div class="scard-title">⚗️ CHEMICAL CRITERIA — ACIDIFIED PRODUCTS (Botulinum)</div>
+      <div class="fgrid">
+        <div class="fg"><label>pH Value (accept: 3.5–4.5 for acidified)</label><input type="number" id="ph_value" step="0.1" min="0" max="14" placeholder="e.g. 4.1"></div>
+        <div class="fg"><label>pH Method</label>
+          <select id="ph_method"><option value="calibrated">Calibrated pH meter</option><option value="strips">pH strips ⚠️</option><option value="lab">External lab</option><option value="na">N/A</option></select>
+        </div>
+        <div class="fg"><label>Water Activity (aw)</label><input type="number" id="aw_value" step="0.01" min="0" max="1" placeholder="e.g. 0.94"></div>
+        <div class="fg"><label>Lab Report Reference</label><input id="lab_ref" placeholder="e.g. LAB-2026-0089"></div>
+      </div>
+    </div>
+    <div class="scard">
+      <div class="scard-title">📋 SHELF LIFE VALIDATION (EU 2073/2005)</div>
+      <div class="fgrid">
+        <div class="fg"><label>Shelf Life Study Conducted?</label>
+          <select id="shelf_life_study"><option value="yes">Yes — Study on file</option><option value="no">No</option><option value="na">N/A</option></select>
+        </div>
+        <div class="fg"><label>Storage Condition Validated?</label>
+          <select id="storage_validated"><option value="yes">Yes</option><option value="no">No</option><option value="na">N/A</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-secondary" onclick="goStep(2)">← Back</button>
+      <button class="btn-primary" onclick="goStep(4)">Next: Shipping →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 4 -->
+  <div class="panel" id="panel4">
+    <div class="slabel">→ One Step Forward — Shipment &amp; Customer (EU 178/2002 Art.18.3)</div>
+    <div class="fgrid">
+      <div class="fg" id="fg-customer_id"><label>Customer ID <span class="req">*</span></label><input id="customer_id" placeholder="CUS-001"><span class="emsg">Required</span></div>
+      <div class="fg" id="fg-customer_name"><label>Customer Name <span class="req">*</span></label><input id="customer_name" placeholder="e.g. Al-Rashid Trading"><span class="emsg">Required</span></div>
+      <div class="fg"><label>Customer Address</label><input id="customer_address" placeholder="e.g. Frankfurt, Germany"></div>
+      <div class="fg" id="fg-destination_country"><label>Destination <span class="req">*</span></label>
+        <select id="destination_country">
+          <option value="">— Select —</option>
+          <option value="JO">🇯🇴 Jordan</option>
+          <option value="SA">🇸🇦 Saudi Arabia</option>
+          <option value="AE">🇦🇪 UAE</option>
+          <option value="KW">🇰🇼 Kuwait</option>
+          <option value="QA">🇶🇦 Qatar</option>
+          <option value="IQ">🇮🇶 Iraq</option>
+          <option value="EU-DE">🇩🇪 EU — Germany</option>
+          <option value="EU-FR">🇫🇷 EU — France</option>
+          <option value="EU-NL">🇳🇱 EU — Netherlands</option>
+          <option value="EU-BE">🇧🇪 EU — Belgium</option>
+          <option value="EU-IT">🇮🇹 EU — Italy</option>
+          <option value="EU-OTHER">🇪🇺 EU — Other</option>
+          <option value="US">🇺🇸 USA</option>
+          <option value="UK">🇬🇧 UK</option>
+          <option value="OTHER">Other</option>
+        </select><span class="emsg">Required</span>
+      </div>
+      <div class="fg" id="fg-shipment_date"><label>Shipment Date <span class="req">*</span></label><input type="date" id="shipment_date"><span class="emsg">Required</span></div>
+      <div class="fg" id="fg-shipped_qty"><label>Shipped Qty <span class="req">*</span></label><input type="number" id="shipped_qty" placeholder="400"><span class="emsg">Required</span></div>
+      <div class="fg"><label>Transport Condition</label>
+        <select id="transport_condition"><option value="chilled">Chilled 2–6°C (RTE)</option><option value="frozen">Frozen ≤−18°C</option><option value="ambient">Ambient 15–25°C</option><option value="cold">Cold 0–4°C</option></select>
+      </div>
+      <div class="fg"><label>Temperature Logger?</label>
+        <select id="temp_monitoring"><option value="yes">Yes — Logger attached</option><option value="no">No</option><option value="na">N/A</option></select>
+      </div>
+      <div class="fg"><label>Shipment Document No.</label><input id="shipment_doc" placeholder="INV-2026-0411"></div>
+      <div class="fg"><label>Vehicle / Container ID</label><input id="vehicle_id" placeholder="TRK-44B"></div>
+    </div>
+    <div class="slabel">Authority Readiness (EU 178/2002 Art.19)</div>
+    <div class="fgrid">
+      <div class="fg"><label>Records Exportable to Authority?</label>
+        <select id="records_exportable"><option value="yes">Yes — Electronic format</option><option value="partial">Partial</option><option value="no">No — Paper only</option></select>
+      </div>
+      <div class="fg"><label>Recall SOP in Place?</label>
+        <select id="recall_procedure"><option value="yes">Yes — Documented</option><option value="no">No</option></select>
+      </div>
+    </div>
+    <div class="arow">
+      <button class="btn-secondary" onclick="goStep(3)">← Back</button>
+      <button class="btn-primary" onclick="runEngine()">⚡ Run Full Compliance Check</button>
+    </div>
+  </div>
+
+  <!-- PANEL 5 -->
+  <div class="panel" id="panel5">
+    <div id="results-content"><div class="empty"><div class="e-icon">🔍</div><p>Complete all steps to see results.</p></div></div>
+  </div>
+</main>
+
+<footer>
+  FoodCheck Jordan · Traceability Engine v2.0<br>
+  EU 178/2002 · EU 852/2004 · EU 1169/2011 · EU 2073/2005 · EU 1935/2004 · US FSMA 204 · JS / JFDA<br>
+  Reference only — final legal verification must be against official current legislation.
+</footer>
+
+<script>
+const EU_ALLERGENS=['Gluten (Wheat/Rye/Barley)','Crustaceans','Eggs','Fish','Peanuts','Soybeans','Milk (Lactose)','Tree Nuts','Celery','Mustard','Sesame seeds','Sulphur dioxide/Sulphites','Lupin','Molluscs'];
+const RISK_MAP={rte_poultry:'HIGH',rte_other:'HIGH',meat:'HIGH',seafood:'HIGH',acidified:'MEDIUM',dairy:'MEDIUM',frozen:'MEDIUM',dry:'LOW',bakery:'LOW',sauces:'MEDIUM',produce:'MEDIUM',other:'MEDIUM'};
+const SLA_DATA={'Receiving':{eu:24,us:24,brcgs:4},'Production':{eu:24,us:24,brcgs:4},'Shipping':{eu:12,us:24,brcgs:2},'Recall / Withdrawal':{eu:4,us:24,brcgs:2},'Quality Release':{eu:24,us:24,brcgs:4},'Inventory Adjust':{eu:24,us:24,brcgs:4}};
+const MICRO_LIMITS=[{param:'Listeria monocytogenes',limit:'0 CFU/25g',reg:'EU 2073/2005 Cat.1.1',applies:'RTE'},{param:'Salmonella spp.',limit:'Absent /25g',reg:'EU 2073/2005 Cat.1.11',applies:'RTE'},{param:'S. aureus',limit:'<100 CFU/g',reg:'EU 2073/2005 Cat.2.2',applies:'RTE/Dairy'},{param:'E. coli',limit:'Process hygiene',reg:'EU 2073/2005 Cat.2.1',applies:'All'}];
+const REG_MATRIX=[
+  {id:'EU-178-18-01',reg:'EU 178/2002 Art.18',j:'eu',req:'One-step-back: all input lots identified with supplier'},
+  {id:'EU-178-18-02',reg:'EU 178/2002 Art.18',j:'eu',req:'Supplier identification mandatory for every material'},
+  {id:'EU-178-18-03',reg:'EU 178/2002 Art.18',j:'eu',req:'One-step-forward: customer + destination recorded'},
+  {id:'EU-178-19-01',reg:'EU 178/2002 Art.19',j:'eu',req:'Withdrawal capability: output lot uniquely identifiable'},
+  {id:'EU-178-19-02',reg:'EU 178/2002 Art.19',j:'eu',req:'Records available to authority in electronic format'},
+  {id:'EU-852-HACCP', reg:'EU 852/2004 Art.5', j:'eu',req:'HACCP/CCP records linked to production batch'},
+  {id:'EU-852-HYG',   reg:'EU 852/2004 Ann.II',j:'eu',req:'Hygiene and cleaning records documented'},
+  {id:'EU-1169-ALG',  reg:'EU 1169/2011',      j:'eu',req:'14 EU allergens declared; label matches recipe'},
+  {id:'EU-1169-LBL',  reg:'EU 1169/2011',      j:'eu',req:'Approved label version linked to shipment lot'},
+  {id:'EU-2073-MICRO',reg:'EU 2073/2005',      j:'eu',req:'Microbiological criteria met (Listeria, Salmonella, S. aureus)'},
+  {id:'EU-2073-SHL',  reg:'EU 2073/2005',      j:'eu',req:'Shelf life study on file for RTE products'},
+  {id:'EU-1935-FCM',  reg:'EU 1935/2004',      j:'eu',req:'Food contact material DoC present and not expired'},
+  {id:'US-FSMA-TLC',  reg:'FSMA 204 / 21 CFR', j:'us',req:'Traceability Lot Code (TLC) assigned'},
+  {id:'US-FSMA-CTE',  reg:'FSMA 204 / 21 CFR', j:'us',req:'CTEs recorded: Receiving, Production, Shipping'},
+  {id:'US-FSMA-KDE',  reg:'FSMA 204 / 21 CFR', j:'us',req:'KDE completeness 100% for FTL shipment'},
+  {id:'US-FSMA-24H',  reg:'FSMA 204 / 21 CFR', j:'us',req:'Records available to FDA in sortable electronic format'},
+  {id:'JS-JFDA-01',   reg:'JS / JFDA',          j:'jo',req:'Batch lot code and production date documented'},
+  {id:'JS-JFDA-02',   reg:'JS / JFDA',          j:'jo',req:'BOM/recipe version recorded'},
+  {id:'JS-JFDA-03',   reg:'JS / JFDA',          j:'jo',req:'Approved label linked to lot'},
+];
+
+let inputLots=[], allergenData={}, isAR=false;
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const t=new Date().toISOString().slice(0,10);
+  document.getElementById('production_date').value=t;
+  document.getElementById('shipment_date').value=t;
+  addLot(); buildAllergenGrid();
+});
+
+function goStep(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.s-tab').forEach((t,i)=>{t.classList.remove('active','done');if(i<n)t.classList.add('done');if(i===n)t.classList.add('active');});
+  window.scrollTo({top:60,behavior:'smooth'});
+}
+
+function addLot(){inputLots.push({code:'',name:'',supplier:'',qty:'',type:'ingredient'});renderLots();}
+function removeLot(i){inputLots.splice(i,1);renderLots();}
+function renderLots(){
+  const c=document.getElementById('lots-container'); c.innerHTML='';
+  inputLots.forEach((lot,i)=>{
+    c.innerHTML+=`<div class="lot-card"><div class="lot-hdr"><span class="lot-num">INPUT LOT #${i+1}</span><button class="btn-rm" onclick="removeLot(${i})">Remove</button></div>
+    <div class="fgrid" style="margin-bottom:0;">
+      <div class="fg"><label>Lot / TLC Code <span class="req">*</span></label><input value="${lot.code}" placeholder="RMCH-25-001" onchange="inputLots[${i}].code=this.value"></div>
+      <div class="fg"><label>Material / Ingredient <span class="req">*</span></label><input value="${lot.name}" placeholder="Chili Powder" onchange="inputLots[${i}].name=this.value"></div>
+      <div class="fg"><label>Supplier <span class="req">*</span></label><input value="${lot.supplier}" placeholder="SUP-001" onchange="inputLots[${i}].supplier=this.value"></div>
+      <div class="fg"><label>Type</label><select onchange="inputLots[${i}].type=this.value"><option value="ingredient" ${lot.type==='ingredient'?'selected':''}>Ingredient</option><option value="packaging" ${lot.type==='packaging'?'selected':''}>Packaging (food contact)</option><option value="packaging_nc" ${lot.type==='packaging_nc'?'selected':''}>Packaging (non-contact)</option></select></div>
+      <div class="fg"><label>Qty Used</label><input type="number" value="${lot.qty}" placeholder="200" onchange="inputLots[${i}].qty=this.value"></div>
+    </div></div>`;
+  });
+}
+
+function buildAllergenGrid(){
+  const g=document.getElementById('allergen-grid'); g.innerHTML='';
+  EU_ALLERGENS.forEach(a=>{
+    allergenData[a]={contains:false,may_contain:false,ppm:''};
+    const safe=a.replace(/[^a-zA-Z0-9]/g,'_');
+    g.innerHTML+=`<div class="a-item"><div class="a-name">${a}</div>
+      <div class="a-row"><input type="checkbox" id="ac_${safe}" onchange="allergenData['${a}'].contains=this.checked"><label for="ac_${safe}">Contains</label></div>
+      <div class="a-row"><input type="checkbox" id="am_${safe}" onchange="allergenData['${a}'].may_contain=this.checked"><label for="am_${safe}">May contain</label></div>
+      <input class="fg input a-ppm" placeholder="Threshold ppm" onchange="allergenData['${a}'].ppm=this.value">
+    </div>`;
+  });
+}
+
+function validate(ids){
+  let ok=true;
+  ids.forEach(id=>{const el=document.getElementById(id);const fg=document.getElementById('fg-'+id);if(!el||!fg)return;if(!el.value.trim()){fg.classList.add('has-err');ok=false;}else fg.classList.remove('has-err');});
+  return ok;
+}
+
+const gv=id=>document.getElementById(id)?.value?.trim()||'';
+const gn=id=>parseFloat(document.getElementById(id)?.value)||0;
+
+function runEngine(){
+  if(!validate(['customer_id','customer_name','destination_country','shipment_date','shipped_qty']))return;
+  const issues=[],warnings=[],kdes=[];
+  const cat=gv('product_category');
+  let risk=gv('risk_level'); if(risk==='auto')risk=RISK_MAP[cat]||'MEDIUM';
+  const isRTE=['rte_poultry','rte_other','meat','seafood'].includes(cat);
+  const isAcidified=cat==='acidified';
+  const isUS=gv('destination_country')==='US';
+  const foodContactLots=inputLots.filter(l=>l.type==='packaging');
+
+  function chk(label,val,status,issArr){
+    kdes.push({label,val:val||'—',status});
+    if(status==='fail'&&issArr)issArr.push(label);
+  }
+
+  // BATCH KDEs
+  chk('Batch ID',gv('batch_id'),gv('batch_id')?'ok':'fail',issues);
+  chk('Product Name',gv('product_name'),gv('product_name')?'ok':'fail',issues);
+  chk('Output Lot / TLC',gv('output_lot'),gv('output_lot')?'ok':'fail',issues);
+  chk('Production Date',gv('production_date'),gv('production_date')?'ok':'fail',issues);
+  chk('BOM Version',gv('bom_version'),gv('bom_version')?'ok':'fail',issues);
+
+  // BACKWARD — EU 178/2002 Art.18
+  if(inputLots.length===0){
+    chk('Input Lots (backward)','None recorded','fail',null);
+    issues.push('EU 178/2002 Art.18: No input lots — one-step-back traceability missing');
+  } else {
+    const bad=inputLots.filter(l=>!l.code||!l.name||!l.supplier).length;
+    chk('Input Lots',`${inputLots.length} lots — ${bad} incomplete`,bad>0?'fail':'ok',bad>0?issues:null);
+    if(bad>0)issues.push(`${bad} input lot(s) missing required fields (EU 178/2002 Art.18)`);
+  }
+  const sa=gv('suppliers_approved');
+  if(sa==='no'){issues.push('Unapproved suppliers — EU 178/2002 Art.18 violation');chk('Suppliers Approved','No','fail',null);}
+  else if(sa==='partial'){warnings.push('Partial supplier approval — verify all before EU export');chk('Suppliers Approved','Partial','warn',null);}
+  else chk('Suppliers Approved','Yes ✓','ok',null);
+  const coa=gv('coa_present');
+  if(coa==='no'){issues.push('COA/supplier documents missing');chk('Supplier Documents','Missing','fail',null);}
+  else if(coa==='partial'){warnings.push('Partial supplier documents');chk('Supplier Documents','Partial','warn',null);}
+  else chk('Supplier Documents','Present ✓','ok',null);
+
+  // EU 1935/2004 — FCM
+  if(foodContactLots.length>0){
+    const fcm=gv('fcm_declaration'), exp=gv('fcm_expiry');
+    if(fcm==='no'){issues.push('EU 1935/2004: Food contact material Declaration of Conformity missing');chk('FCM DoC (EU 1935)','Missing','fail',null);}
+    else if(fcm==='partial'){warnings.push('EU 1935/2004: Some FCM declarations missing');chk('FCM DoC (EU 1935)','Partial','warn',null);}
+    else chk('FCM DoC (EU 1935)','Present ✓','ok',null);
+    if(exp==='expired'){issues.push('EU 1935/2004: FCM declaration expired');chk('FCM Expiry','Expired','fail',null);}
+    else chk('FCM Expiry',exp==='na'?'N/A':'Valid ✓','ok',null);
+  } else chk('FCM (EU 1935)','No food-contact packaging','ok',null);
+
+  // EU 852/2004 — HACCP
+  const haccp=gv('haccp_records');
+  if(haccp==='no'){issues.push('EU 852/2004 Art.5: HACCP/CCP records not documented — blocking violation');chk('HACCP Records','Not documented','fail',null);}
+  else if(haccp==='partial'){warnings.push('Partial HACCP records — complete before release');chk('HACCP Records','Partial','warn',null);}
+  else chk('HACCP Records','Documented ✓','ok',null);
+
+  // EU 1169/2011 — ALLERGENS
+  const containsAlg=EU_ALLERGENS.filter(a=>allergenData[a]?.contains);
+  const mayContainAlg=EU_ALLERGENS.filter(a=>allergenData[a]?.may_contain);
+  chk('EU Allergens Declared',containsAlg.length>0?containsAlg.length+' allergen(s)':'None','ok',null);
+  const alm=gv('allergen_label_match');
+  if(alm==='no'){issues.push('EU 1169/2011: Label allergen list does not match recipe — critical');chk('Allergen Label Match','Mismatch','fail',null);}
+  else if(alm==='not_checked'){warnings.push('Allergen label vs recipe match not verified');chk('Allergen Label Match','Not checked','warn',null);}
+  else chk('Allergen Label Match','Verified ✓','ok',null);
+  const lv=gv('label_version');
+  if(lv==='no'){issues.push('EU 1169/2011: Unapproved label — shipment blocked');chk('Label Version','Unapproved','fail',null);}
+  else chk('Label Version',lv==='yes'?'Approved ✓':'N/A','ok',null);
+
+  // EU 2073/2005 — MICROBIOLOGY
+  if(isRTE){
+    const ml=gv('micro_listeria'),ms=gv('micro_salmonella'),mst=gv('micro_staph');
+    if(ml==='detected'){issues.push('EU 2073/2005: Listeria DETECTED — product UNSAFE, recall required immediately');chk('Listeria monocytogenes','DETECTED — FAIL','fail',null);}
+    else if(ml==='not_tested'){issues.push('EU 2073/2005: Listeria testing mandatory for RTE — not performed');chk('Listeria monocytogenes','Not tested','fail',null);}
+    else chk('Listeria monocytogenes',ml==='absent'?'Absent ✓':'N/A','ok',null);
+    if(ms==='detected'){issues.push('EU 2073/2005: Salmonella DETECTED — immediate recall required');chk('Salmonella','DETECTED — FAIL','fail',null);}
+    else if(ms==='not_tested'){issues.push('EU 2073/2005: Salmonella testing mandatory for RTE');chk('Salmonella','Not tested','fail',null);}
+    else chk('Salmonella',ms==='absent'?'Absent ✓':'N/A','ok',null);
+    if(mst==='fail'){issues.push('EU 2073/2005: S. aureus ≥100 CFU/g — process hygiene failure');chk('S. aureus','FAIL ≥100 CFU/g','fail',null);}
+    else if(mst==='not_tested'){warnings.push('S. aureus testing recommended for RTE');chk('S. aureus','Not tested','warn',null);}
+    else chk('S. aureus',mst==='pass'?'Pass ✓':'N/A','ok',null);
+    const sls=gv('shelf_life_study');
+    if(sls==='no'){issues.push('EU 2073/2005: Shelf life study mandatory for RTE products');chk('Shelf Life Study','Missing','fail',null);}
+    else chk('Shelf Life Study',sls==='yes'?'On file ✓':'N/A','ok',null);
+  } else chk('Microbiology','N/A — not RTE category','ok',null);
+
+  if(isAcidified){
+    const ph=gn('ph_value');
+    if(!ph){issues.push('pH not recorded — required for acidified products (Botulinum prevention)');chk('pH Value','Missing','fail',null);}
+    else if(ph<3.5||ph>4.5){issues.push(`pH ${ph} out of range 3.5–4.5 for acidified products`);chk('pH Value',`${ph} — OUT OF RANGE`,'fail',null);}
+    else chk('pH Value',`${ph} ✓`,'ok',null);
+  }
+
+  // FORWARD — EU 178/2002 Art.18.3
+  chk('Customer',`${gv('customer_name')} (${gv('customer_id')})`,gv('customer_id')&&gv('customer_name')?'ok':'fail',issues);
+  chk('Destination',gv('destination_country'),gv('destination_country')?'ok':'fail',issues);
+  chk('Shipment Date',gv('shipment_date'),gv('shipment_date')?'ok':'fail',issues);
+  chk('Shipped Qty',gn('shipped_qty')>0?`${gn('shipped_qty')} ${gv('uom')}`:'',gn('shipped_qty')>0?'ok':'fail',issues);
+
+  // EU 178/2002 Art.19 — Recall readiness
+  const re=gv('records_exportable');
+  if(re==='no'){issues.push('EU 178/2002 Art.19: Records not electronic — authority access requirement');chk('Records Exportable','No — Paper only','fail',null);}
+  else chk('Records Exportable',re==='yes'?'Yes ✓':'Partial','ok',null);
+  if(gv('recall_procedure')==='no')warnings.push('No recall SOP — required for EU market compliance');
+  chk('Recall SOP',gv('recall_procedure')==='yes'?'Documented ✓':'Missing',gv('recall_procedure')==='yes'?'ok':'warn',null);
+
+  // QA STATUS
+  const qs=gv('qa_status');
+  if(qs==='hold'){issues.push('Batch on HOLD — shipment blocked');chk('QA Status','HOLD','fail',null);}
+  else if(qs==='rejected'){issues.push('Batch REJECTED — cannot ship');chk('QA Status','REJECTED','fail',null);}
+  else if(qs==='pending'){warnings.push('QA release pending');chk('QA Status','Pending','warn',null);}
+  else chk('QA Status','Released ✓','ok',null);
+
+  // TRANSPORT
+  const tc=gv('transport_condition');
+  if(isRTE&&tc==='ambient'){issues.push('RTE product requires chilled (2–6°C) — ambient transport not acceptable');chk('Transport Condition','Ambient — NOT OK for RTE','fail',null);}
+  else chk('Transport Condition',tc,'ok',null);
+  if((tc==='chilled'||tc==='frozen')&&gv('temp_monitoring')==='no')warnings.push('Temperature logger not used for cold chain — recommended');
+
+  // FSMA
+  if(isUS){
+    if(!gv('output_lot')){issues.push('FSMA 204: TLC missing — mandatory for US');chk('FSMA TLC','Missing','fail',null);}
+    else chk('FSMA TLC',gv('output_lot'),'ok',null);
+    chk('FSMA CTE-Shipping',gv('customer_id')&&gn('shipped_qty')>0&&gv('shipment_date')?'Complete ✓':'Incomplete',gv('customer_id')&&gn('shipped_qty')>0&&gv('shipment_date')?'ok':'fail',issues);
+  }
+
+  // YIELD
+  if(gn('planned_qty')>0&&gn('actual_qty')>0){
+    const y=(gn('actual_qty')/gn('planned_qty')*100).toFixed(1);
+    if(y<85)warnings.push(`Low yield: ${y}% — investigate production loss`);
+    chk('Yield',`${y}% (${gn('actual_qty')}/${gn('planned_qty')} ${gv('uom')})`,y<85?'warn':'ok',null);
+  }
+
+  // REG MATRIX STATUS
+  const rs={};
+  rs['EU-178-18-01']=inputLots.length>0&&sa!=='no'?'pass':'fail';
+  rs['EU-178-18-02']=sa==='yes'?'pass':sa==='partial'?'warn':'fail';
+  rs['EU-178-18-03']=gv('customer_id')&&gv('destination_country')?'pass':'fail';
+  rs['EU-178-19-01']=gv('output_lot')?'pass':'fail';
+  rs['EU-178-19-02']=re==='yes'?'pass':re==='partial'?'warn':'fail';
+  rs['EU-852-HACCP']=haccp==='yes'?'pass':haccp==='partial'?'warn':'fail';
+  rs['EU-852-HYG']=haccp!=='no'?'pass':'warn';
+  rs['EU-1169-ALG']=alm==='yes'?'pass':alm==='no'?'fail':'warn';
+  rs['EU-1169-LBL']=lv==='yes'?'pass':lv==='no'?'fail':'warn';
+  rs['EU-2073-MICRO']=isRTE?(gv('micro_listeria')==='absent'&&gv('micro_salmonella')==='absent'?'pass':'fail'):'pass';
+  rs['EU-2073-SHL']=isRTE?(gv('shelf_life_study')==='yes'?'pass':gv('shelf_life_study')==='no'?'fail':'warn'):'pass';
+  rs['EU-1935-FCM']=foodContactLots.length===0?'pass':gv('fcm_declaration')==='yes'&&gv('fcm_expiry')!=='expired'?'pass':gv('fcm_declaration')==='partial'||gv('fcm_expiry')==='expired'?'warn':'fail';
+  rs['US-FSMA-TLC']=gv('output_lot')?'pass':'fail';
+  rs['US-FSMA-CTE']=inputLots.length>0&&gv('customer_id')?'pass':'warn';
+  rs['US-FSMA-KDE']=gv('customer_id')&&gn('shipped_qty')>0&&gv('shipment_date')?'pass':'fail';
+  rs['US-FSMA-24H']=re==='yes'?'pass':'warn';
+  rs['JS-JFDA-01']=gv('batch_id')&&gv('output_lot')&&gv('production_date')?'pass':'fail';
+  rs['JS-JFDA-02']=gv('bom_version')?'pass':'fail';
+  rs['JS-JFDA-03']=lv==='yes'?'pass':lv==='no'?'fail':'warn';
+
+  const total=kdes.length, passed=kdes.filter(k=>k.status==='ok').length;
+  const score=Math.round(passed/total*100);
+  const pC=Object.values(rs).filter(s=>s==='pass').length;
+  const fC=Object.values(rs).filter(s=>s==='fail').length;
+  const wC=Object.values(rs).filter(s=>s==='warn').length;
+  const verdict=issues.length>0?'non-compliant':warnings.length>0?'warning':'compliant';
+  const riskColor=risk==='HIGH'?'var(--red)':risk==='MEDIUM'?'var(--amber)':'var(--green)';
+  const scoreColor=score>=90?'var(--green)':score>=70?'var(--amber)':'var(--red)';
+
+  goStep(5);
+  document.getElementById('results-content').innerHTML=`
+    <div class="verdict ${verdict}">
+      <span class="v-icon">${verdict==='compliant'?'✅':verdict==='non-compliant'?'❌':'⚠️'}</span>
+      <div>
+        <div class="v-title">${verdict==='compliant'?'COMPLIANT — All traceability requirements met':verdict==='non-compliant'?`NON-COMPLIANT — ${issues.length} critical violation(s)`:`CONDITIONAL — ${warnings.length} warning(s) require attention`}</div>
+        <div class="v-sub">Batch: ${gv('batch_id')} · ${gv('product_name')} · ${gv('production_date')} · Risk: <strong style="color:${riskColor}">${risk}</strong></div>
+      </div>
+    </div>
+    <div class="score-row"><span class="score-lbl">KDE Completeness</span><div class="score-track"><div class="score-fill" style="width:${score}%;background:${scoreColor};"></div></div><span class="score-val" style="color:${scoreColor};">${score}%</span></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n" style="color:var(--green);">${pC}</div><div class="stat-l">Regulations Passed</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--red);">${fC}</div><div class="stat-l">Violations</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--amber);">${wC}</div><div class="stat-l">Warnings</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--teal);">${passed}/${total}</div><div class="stat-l">KDEs Complete</div></div>
+      <div class="stat"><div class="stat-n" style="color:${riskColor};">${risk}</div><div class="stat-l">Risk Level</div></div>
+    </div>
+
+    <div class="slabel">Traceability Chain</div>
+    <div class="trace-chain">
+      <div class="tbox"><div class="t-icon">🏭</div><div class="t-lbl">← BACKWARD</div><div class="t-val">${inputLots.length} Input Lot(s)</div><div class="t-sub">${inputLots.map(l=>l.code||'?').slice(0,3).join(', ')||'—'}${inputLots.length>3?'…':''}</div></div>
+      <div class="t-arr">→</div>
+      <div class="tbox hl"><div class="t-icon">⚙️</div><div class="t-lbl">PRODUCTION BATCH</div><div class="t-val">${gv('batch_id')}</div><div class="t-sub">${gv('output_lot')} · ${gv('production_date')}</div></div>
+      <div class="t-arr">→</div>
+      <div class="tbox"><div class="t-icon">🚚</div><div class="t-lbl">FORWARD →</div><div class="t-val">${gv('customer_name')}</div><div class="t-sub">${gv('destination_country')} · ${gn('shipped_qty')} ${gv('uom')}</div></div>
+    </div>
+
+    ${issues.length>0?`<div class="slabel">Critical Violations (${issues.length})</div><div class="issue-list">${issues.map(i=>`<div class="issue-item fail"><span class="i-icon" style="color:var(--red);">✖</span>${i}</div>`).join('')}</div>`:''}
+    ${warnings.length>0?`<div class="slabel">Warnings (${warnings.length})</div><div class="issue-list">${warnings.map(w=>`<div class="issue-item warn"><span class="i-icon" style="color:var(--amber);">⚠</span>${w}</div>`).join('')}</div>`:''}
+    ${issues.length===0&&warnings.length===0?`<div class="issue-item ok" style="margin-bottom:1.3rem;"><span class="i-icon" style="color:var(--green);">✓</span>No violations or warnings. All traceability requirements met.</div>`:''}
+
+    <div class="slabel">Allergen Summary — EU 1169/2011</div>
+    <div class="scard" style="margin-bottom:1.3rem;">
+      <div style="font-size:.8rem;margin-bottom:.4rem;"><strong>Contains (14 EU allergens):</strong> ${EU_ALLERGENS.filter(a=>allergenData[a]?.contains).join(', ')||'None declared'}</div>
+      <div style="font-size:.8rem;"><strong>May contain:</strong> ${EU_ALLERGENS.filter(a=>allergenData[a]?.may_contain).join(', ')||'None'}</div>
+    </div>
+
+    ${isRTE?`<div class="slabel">Microbiological Criteria — EU 2073/2005</div>
+    <div class="rtable-wrap"><table>
+      <thead><tr><th>Parameter</th><th>Legal Limit</th><th>Regulation</th><th>Applies To</th><th>Result</th></tr></thead>
+      <tbody>${MICRO_LIMITS.map(m=>{
+        let st='warn';
+        if(m.param==='Listeria monocytogenes')st=gv('micro_listeria')==='absent'?'pass':gv('micro_listeria')==='detected'?'fail':'warn';
+        if(m.param==='Salmonella spp.')st=gv('micro_salmonella')==='absent'?'pass':gv('micro_salmonella')==='detected'?'fail':'warn';
+        if(m.param==='S. aureus')st=gv('micro_staph')==='pass'?'pass':gv('micro_staph')==='fail'?'fail':'warn';
+        if(m.param==='E. coli')st=gv('micro_ecoli')==='pass'?'pass':gv('micro_ecoli')==='fail'?'fail':'warn';
+        return `<tr><td style="font-family:var(--mono);font-size:.75rem;">${m.param}</td><td style="font-family:var(--mono);font-size:.72rem;">${m.limit}</td><td style="font-size:.72rem;color:var(--muted);">${m.reg}</td><td style="font-size:.72rem;">${m.applies}</td><td><span class="bs ${st}">${st.toUpperCase()}</span></td></tr>`;
+      }).join('')}</tbody>
+    </table></div>`:''}
+
+    <div class="slabel">Traceability SLA — Response Time Requirements</div>
+    <div class="sla-grid">${Object.entries(SLA_DATA).map(([type,sla])=>`
+      <div class="sla-card ${type==='Recall / Withdrawal'?'critical':''}">
+        <div class="sla-type">${type}</div>
+        <div class="sla-row"><span>EU SLA</span><strong style="color:${sla.eu<=4?'var(--red)':'var(--text)'};">${sla.eu}h</strong></div>
+        <div class="sla-row"><span>US FSMA</span><strong>${sla.us}h</strong></div>
+        <div class="sla-row"><span>BRCGS</span><strong>${sla.brcgs}h</strong></div>
+      </div>`).join('')}</div>
+
+    <div class="slabel">Full Regulatory Compliance Matrix (${REG_MATRIX.length} Requirements)</div>
+    <div class="rtable-wrap"><table>
+      <thead><tr><th>Req ID</th><th>Regulation</th><th>Jurisdiction</th><th>Requirement</th><th>Status</th></tr></thead>
+      <tbody>${REG_MATRIX.map(r=>{const st=rs[r.id]||'warn';return`<tr>
+        <td style="font-family:var(--mono);font-size:.68rem;color:var(--muted);">${r.id}</td>
+        <td style="font-family:var(--mono);font-size:.73rem;">${r.reg}</td>
+        <td><span class="jp ${r.j}" style="font-size:.62rem;">${r.j==='eu'?'🇪🇺 EU':r.j==='us'?'🇺🇸 US':'🇯🇴 JO'}</span></td>
+        <td style="font-size:.78rem;">${r.req}</td>
+        <td><span class="bs ${st}">${st.toUpperCase()}</span></td>
+      </tr>`;}).join('')}</tbody>
+    </table></div>
+
+    <div class="slabel">KDE Status — All Fields</div>
+    <div class="kde-grid">${kdes.map(k=>`<div class="kde-card ${k.status}"><span class="kde-icon">${k.status==='ok'?'✓':k.status==='fail'?'✖':'⚠'}</span><div><div class="kde-name">${k.label}</div><div class="kde-val">${k.val}</div></div></div>`).join('')}</div>
+
+    <div class="slabel">Export</div>
+    <div class="exp-row">
+      <button class="btn-exp" onclick="exportJSON()">📄 JSON Report</button>
+      <button class="btn-exp" onclick="exportCSV()">📊 CSV (FDA Sortable)</button>
+      <button class="btn-exp" onclick="window.print()">🖨 Print</button>
+    </div>
+    <div class="arow" style="margin-top:1.4rem;">
+      <button class="btn-secondary" onclick="resetForm()">← New Check</button>
+      <a href="/eu-compliance.html" style="text-decoration:none;"><button class="btn-secondary">🇪🇺 EU Reference Page</button></a>
+    </div>`;
+}
+
+function exportJSON(){const data={generated:new Date().toISOString(),batch_id:gv('batch_id'),product:gv('product_name'),output_lot:gv('output_lot'),input_lots:inputLots,allergens:allergenData,customer:gv('customer_name'),destination:gv('destination_country')};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`traceability_${gv('batch_id')||'batch'}.json`;a.click();}
+function exportCSV(){const rows=[['Field','Value'],['Batch ID',gv('batch_id')],['Product',gv('product_name')],['Production Date',gv('production_date')],['Output Lot',gv('output_lot')],['Customer',gv('customer_name')],['Destination',gv('destination_country')],['Shipment Date',gv('shipment_date')],['Shipped Qty',gn('shipped_qty')],...inputLots.map((l,i)=>[`Input Lot ${i+1}`,`${l.code}|${l.name}|${l.supplier}`])];const blob=new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`traceability_FDA_${gv('batch_id')||'batch'}.csv`;a.click();}
+function resetForm(){inputLots=[];allergenData={};goStep(0);document.querySelectorAll('input,select,textarea').forEach(el=>{if(el.type!=='checkbox')el.value='';else el.checked=false;});document.getElementById('production_date').value=new Date().toISOString().slice(0,10);document.getElementById('shipment_date').value=new Date().toISOString().slice(0,10);buildAllergenGrid();addLot();}
+function toggleLang(){isAR=!isAR;document.documentElement.setAttribute('dir',isAR?'rtl':'ltr');document.documentElement.setAttribute('lang',isAR?'ar':'en');document.getElementById('langBtn').textContent=isAR?'English':'عربي';}
+</script>
+</body>
+</html>

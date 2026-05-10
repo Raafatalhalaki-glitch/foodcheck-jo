@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EU Compliance Reference — FoodCheck Jordan</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a0f1e;--navy2:#0d1528;--teal:#00c9b1;--teal-dim:rgba(0,201,177,.1);
+  --red:#ff4d6d;--red-dim:rgba(255,77,109,.12);--amber:#f5a623;--amber-dim:rgba(245,166,35,.1);
+  --green:#00e096;--green-dim:rgba(0,224,150,.1);--blue:#60a5fa;--blue-dim:rgba(96,165,250,.1);
+  --purple:#a78bfa;--text:#e2e8f0;--muted:#64748b;--border:rgba(255,255,255,.07);--card:rgba(255,255,255,.04);
+  --mono:'IBM Plex Mono',monospace;--sans:'Tajawal',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--navy);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,201,177,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,201,177,.022) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,15,30,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;}
+.nav-logo{font-family:var(--mono);font-size:.82rem;color:var(--teal);letter-spacing:.06em;}
+.nav-links{display:flex;gap:1.5rem;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--teal);}
+
+/* HERO */
+.hero{position:relative;z-index:1;padding:4rem 2rem 3rem;max-width:1140px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:var(--blue);background:var(--blue-dim);border:1px solid rgba(96,165,250,.25);padding:5px 14px;border-radius:4px;margin-bottom:1.2rem;}
+.eu-flag{font-size:1rem;}
+.hero h1{font-size:2.6rem;font-weight:700;line-height:1.15;margin-bottom:.8rem;}
+.hero h1 .accent{color:var(--teal);}
+.hero h1 .eu-accent{color:var(--blue);}
+.hero-sub{font-family:var(--mono);font-size:.82rem;color:var(--muted);line-height:1.8;max-width:680px;margin-bottom:1.5rem;}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--muted);}
+.hero-meta span{display:flex;align-items:center;gap:5px;}
+.hero-meta span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);}
+
+/* SECTION */
+.section{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 2rem 3rem;}
+.sec-hdr{margin-bottom:2rem;}
+.sec-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin-bottom:.6rem;}
+.sec-title{font-size:1.5rem;font-weight:700;}
+.sec-sub{font-size:.85rem;color:var(--muted);margin-top:.4rem;line-height:1.7;}
+
+/* REG CARDS */
+.reg-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.2rem;margin-bottom:3rem;}
+.reg-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:border-color .2s,transform .2s;cursor:default;}
+.reg-card:hover{border-color:rgba(96,165,250,.3);transform:translateY(-2px);}
+.reg-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;margin-bottom:.9rem;}
+.reg-id{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--blue);background:var(--blue-dim);border:1px solid rgba(96,165,250,.2);padding:3px 10px;border-radius:4px;}
+.reg-scope{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
+.reg-title{font-size:.95rem;font-weight:700;margin-bottom:.5rem;}
+.reg-desc{font-size:.8rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;}
+.reg-articles{display:flex;flex-direction:column;gap:.4rem;}
+.reg-art{display:flex;align-items:flex-start;gap:.6rem;font-size:.78rem;padding:.5rem .7rem;background:rgba(0,0,0,.2);border-radius:6px;border:1px solid var(--border);}
+.art-num{font-family:var(--mono);font-size:.68rem;color:var(--teal);flex-shrink:0;min-width:60px;}
+.reg-card.critical{border-color:rgba(255,77,109,.2);}
+.reg-card.critical:hover{border-color:rgba(255,77,109,.4);}
+.reg-card .reg-id.critical-id{color:var(--red);background:var(--red-dim);border-color:rgba(255,77,109,.2);}
+
+/* ALLERGEN TABLE */
+.allergen-table-wrap{overflow-x:auto;margin-bottom:2rem;}
+.allergen-table-wrap table{width:100%;border-collapse:collapse;}
+.allergen-table-wrap thead th{background:rgba(255,255,255,.04);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:.67rem;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
+.allergen-table-wrap tbody tr{border-bottom:1px solid var(--border);}
+.allergen-table-wrap tbody tr:hover{background:rgba(255,255,255,.02);}
+.allergen-table-wrap tbody td{padding:9px 14px;font-size:.8rem;vertical-align:middle;}
+.allergen-num{font-family:var(--mono);font-size:.72rem;color:var(--muted);}
+
+/* MICRO TABLE */
+.micro-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:2rem;}
+.micro-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;}
+.micro-card.danger{border-color:rgba(255,77,109,.25);background:var(--red-dim);}
+.micro-card .mc-param{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-bottom:.4rem;}
+.micro-card .mc-limit{font-size:1.05rem;font-weight:700;margin-bottom:.3rem;}
+.micro-card .mc-limit.critical{color:var(--red);}
+.micro-card .mc-reg{font-family:var(--mono);font-size:.68rem;color:var(--muted);}
+.micro-card .mc-note{font-size:.75rem;color:var(--muted);margin-top:.5rem;line-height:1.6;}
+
+/* SLA SECTION */
+.sla-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.9rem;margin-bottom:2rem;}
+.sla-c{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem;}
+.sla-c.recall{border-color:rgba(255,77,109,.3);background:var(--red-dim);}
+.sla-c .sc-type{font-family:var(--mono);font-size:.7rem;color:var(--teal);letter-spacing:.07em;margin-bottom:.8rem;}
+.sla-c.recall .sc-type{color:var(--red);}
+.sla-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--border);}
+.sla-row:last-child{border-bottom:none;}
+.sla-row .sr-label{font-family:var(--mono);font-size:.68rem;color:var(--muted);}
+.sla-row .sr-val{font-family:var(--mono);font-size:.82rem;font-weight:600;}
+.sla-row .sr-val.urgent{color:var(--red);}
+
+/* RISK TABLE */
+.risk-table{margin-bottom:2rem;overflow-x:auto;}
+.risk-table table{width:100%;border-collapse:collapse;}
+.risk-table thead th{background:rgba(255,255,255,.04);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:.67rem;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
+.risk-table tbody tr{border-bottom:1px solid var(--border);}
+.risk-table tbody tr:hover{background:rgba(255,255,255,.02);}
+.risk-table tbody td{padding:9px 14px;font-size:.8rem;}
+.risk-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.67rem;font-weight:600;}
+.risk-badge.high{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,.3);}
+.risk-badge.medium{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,.3);}
+.risk-badge.low{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,224,150,.3);}
+
+/* ALERT RULES */
+.alert-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.9rem;margin-bottom:2rem;}
+.alert-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:.9rem;}
+.alert-card.critical-a{border-color:rgba(255,77,109,.25);}
+.alert-card.high-a{border-color:rgba(245,166,35,.2);}
+.a-sev{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.a-sev.critical-a{background:var(--red);}
+.a-sev.high-a{background:var(--amber);}
+.a-sev.medium-a{background:var(--blue);}
+.a-trigger{font-size:.82rem;margin-bottom:.35rem;}
+.a-meta{font-family:var(--mono);font-size:.68rem;color:var(--muted);}
+
+/* INCIDENT TABLE */
+.inc-table{margin-bottom:2rem;overflow-x:auto;}
+.inc-table table{width:100%;border-collapse:collapse;}
+.inc-table thead th{background:rgba(255,255,255,.04);padding:9px 13px;text-align:left;font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
+.inc-table tbody tr{border-bottom:1px solid var(--border);}
+.inc-table tbody tr:hover{background:rgba(255,255,255,.02);}
+.inc-table tbody td{padding:8px 13px;font-size:.78rem;font-family:var(--mono);}
+
+/* CTA SECTION */
+.cta-section{background:var(--teal-dim);border:1px solid rgba(0,201,177,.2);border-radius:14px;padding:2.5rem;text-align:center;margin:0 2rem 4rem;max-width:1100px;margin-left:auto;margin-right:auto;position:relative;z-index:1;}
+.cta-title{font-size:1.4rem;font-weight:700;margin-bottom:.6rem;}
+.cta-sub{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;font-family:var(--mono);}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-cta-primary{background:var(--teal);color:var(--navy);font-family:var(--mono);font-size:.82rem;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;transition:.2s;display:inline-block;}
+.btn-cta-primary:hover{background:#00b09c;}
+.btn-cta-secondary{background:transparent;border:1px solid rgba(0,201,177,.3);color:var(--teal);font-family:var(--mono);font-size:.82rem;padding:12px 24px;border-radius:6px;text-decoration:none;transition:.2s;display:inline-block;}
+.btn-cta-secondary:hover{border-color:var(--teal);background:var(--teal-dim);}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0;}
+
+/* TOC SIDEBAR */
+.layout{display:grid;grid-template-columns:220px 1fr;gap:2.5rem;align-items:start;}
+.toc{position:sticky;top:72px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;}
+.toc-title{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--teal);margin-bottom:.9rem;}
+.toc a{display:block;font-family:var(--mono);font-size:.72rem;color:var(--muted);text-decoration:none;padding:.4rem 0;border-bottom:1px solid var(--border);transition:color .2s;}
+.toc a:last-child{border-bottom:none;}
+.toc a:hover{color:var(--teal);}
+.toc-content{min-width:0;}
+
+footer{text-align:center;padding:2rem;font-family:var(--mono);font-size:.67rem;color:var(--muted);border-top:1px solid var(--border);position:relative;z-index:1;line-height:1.8;}
+@media(max-width:860px){.layout{grid-template-columns:1fr;}.toc{display:none;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">FC// EU COMPLIANCE REFERENCE</span>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/additives.html">Additives</a>
+    <a href="/traceability.html">Traceability Engine</a>
+    <a href="#" class="active">EU Compliance</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="eu-flag">🇪🇺</span> EU FOOD LAW REFERENCE — JORDAN EXPORT GUIDE</div>
+  <h1>EU Food Safety<br><span class="eu-accent">Compliance</span> <span class="accent">Reference</span></h1>
+  <p class="hero-sub">
+    A complete reference covering all EU food safety regulations applicable to Jordanian exporters.
+    Built on the official EU legislative framework: Regulations 178/2002, 852/2004, 1169/2011, 2073/2005, and 1935/2004.
+    All requirements are implemented in the FoodCheck Jordan Traceability Engine.
+  </p>
+  <div class="hero-meta">
+    <span>5 EU Regulations covered</span>
+    <span>19 compliance requirements</span>
+    <span>14 major allergens</span>
+    <span>4 microbiological criteria</span>
+    <span>Updated May 2026</span>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="section" style="padding-top:0;">
+<div class="layout">
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">CONTENTS</div>
+  <a href="#regulations">EU Regulations Overview</a>
+  <a href="#traceability">Traceability (178/2002)</a>
+  <a href="#haccp">HACCP (852/2004)</a>
+  <a href="#allergens">Allergens (1169/2011)</a>
+  <a href="#microbiology">Microbiology (2073/2005)</a>
+  <a href="#fcm">Food Contact (1935/2004)</a>
+  <a href="#risk">Risk Classification</a>
+  <a href="#sla">Response Times (SLA)</a>
+  <a href="#alerts">Alert System</a>
+  <a href="#incidents">Incident Response</a>
+  <a href="#jordan">Jordan–EU Bridge</a>
+</div>
+
+<div class="toc-content">
+
+<!-- REGULATIONS OVERVIEW -->
+<div id="regulations">
+  <div class="sec-hdr">
+    <div class="sec-label">EU Regulatory Framework</div>
+    <div class="sec-title">5 Regulations — Full Coverage</div>
+    <div class="sec-sub">Every regulation below is checked in real-time by the FoodCheck Traceability Engine. Click any card to view requirements.</div>
+  </div>
+  <div class="reg-cards">
+
+    <div class="reg-card critical" id="r178">
+      <div class="reg-card-top">
+        <span class="reg-id critical-id">EC 178/2002</span>
+        <span class="reg-scope">Traceability &amp; Recall</span>
+      </div>
+      <div class="reg-title">General Food Law</div>
+      <div class="reg-desc">The foundation of EU food law. Establishes one-step-back and one-step-forward traceability at all stages, and the operator's obligation to withdraw unsafe food.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">Art. 18</span><span>Food must be traceable at all stages. Operators identify every supplier and every business to which food is supplied.</span></div>
+        <div class="reg-art"><span class="art-num">Art. 19</span><span>Operators must initiate withdrawal and notify authorities if food is unsafe. Records must be available to authorities on request.</span></div>
+      </div>
+    </div>
+
+    <div class="reg-card">
+      <div class="reg-card-top">
+        <span class="reg-id">EC 852/2004</span>
+        <span class="reg-scope">HACCP &amp; Hygiene</span>
+      </div>
+      <div class="reg-title">Food Hygiene Regulation</div>
+      <div class="reg-desc">Requires food business operators to implement HACCP-based procedures and document all critical control points linked to each production batch.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">Art. 5</span><span>HACCP principles must be implemented, maintained, and reviewed. CCP records must be linked to batch release.</span></div>
+        <div class="reg-art"><span class="art-num">Ann. II</span><span>Hygiene controls — cleaning, sanitation, temperature, and personnel records linked to production batches.</span></div>
+      </div>
+    </div>
+
+    <div class="reg-card">
+      <div class="reg-card-top">
+        <span class="reg-id">EU 1169/2011</span>
+        <span class="reg-scope">Allergens &amp; Labels</span>
+      </div>
+      <div class="reg-title">Food Information to Consumers</div>
+      <div class="reg-desc">Mandates clear declaration of 14 major allergens in all food products. Label versions must be controlled and linked to each shipment lot.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">Art. 9</span><span>Mandatory food information including allergens must be accurate. Version-controlled labels linked to approved allergen profile.</span></div>
+        <div class="reg-art"><span class="art-num">Ann. II</span><span>14 substances causing allergies or intolerances — all must be declared where present or potentially present.</span></div>
+      </div>
+    </div>
+
+    <div class="reg-card critical">
+      <div class="reg-card-top">
+        <span class="reg-id critical-id">EC 2073/2005</span>
+        <span class="reg-scope">Microbiology</span>
+      </div>
+      <div class="reg-title">Microbiological Criteria</div>
+      <div class="reg-desc">Defines legally binding microbiological limits for food safety and process hygiene. RTE products must be tested before release. Non-compliance triggers mandatory recall.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">Cat. 1.1</span><span>Listeria monocytogenes: 0 CFU/25g in RTE products intended for infants and special medical purposes.</span></div>
+        <div class="reg-art"><span class="art-num">Cat. 1.11</span><span>Salmonella: Absent in 25g. All RTE products including poultry, meat products, cheese, sprouted seeds.</span></div>
+        <div class="reg-art"><span class="art-num">Cat. 2.2</span><span>S. aureus: &lt;100 CFU/g process hygiene criterion for cheese, milk powder, heat-treated meat.</span></div>
+        <div class="reg-art"><span class="art-num">Shelf life</span><span>Shelf life studies on file mandatory for RTE products — demonstrate safety for intended shelf life.</span></div>
+      </div>
+    </div>
+
+    <div class="reg-card">
+      <div class="reg-card-top">
+        <span class="reg-id">EC 1935/2004</span>
+        <span class="reg-scope">Packaging / FCM</span>
+      </div>
+      <div class="reg-title">Food Contact Materials</div>
+      <div class="reg-desc">Packaging and food-contact materials must be traceable. Suppliers must provide a Declaration of Conformity (DoC) confirming compliance with applicable migration limits.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">Art. 3</span><span>Materials shall not transfer components to food in quantities that could harm health or change composition.</span></div>
+        <div class="reg-art"><span class="art-num">Art. 17</span><span>Traceability of FCM at all stages — Declaration of Conformity required from supplier with each delivery.</span></div>
+      </div>
+    </div>
+
+    <div class="reg-card">
+      <div class="reg-card-top">
+        <span class="reg-id" style="color:var(--purple);background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25);">FSMA 204</span>
+        <span class="reg-scope">US Market</span>
+      </div>
+      <div class="reg-title">FDA Food Traceability Rule</div>
+      <div class="reg-desc">US FSMA Section 204 requires Critical Tracking Events (CTEs) and Key Data Elements (KDEs) for foods on the Food Traceability List. Records must be available to FDA within 24 hours.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">CTE</span><span>Critical Tracking Events: Receiving, Transformation, Shipping — each must be recorded with required KDEs.</span></div>
+        <div class="reg-art"><span class="art-num">KDE</span><span>Key Data Elements per CTE type: Traceability Lot Code (TLC), date, location, quantity, recipient mandatory.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ALLERGENS -->
+<div id="allergens">
+  <div class="sec-hdr">
+    <div class="sec-label">EU 1169/2011 — Annex II</div>
+    <div class="sec-title">14 Major Allergens — Mandatory Declaration</div>
+    <div class="sec-sub">All 14 substances below must be declared when present as an ingredient or processing aid. "May contain" traces must also be declared if cross-contamination risk exists.</div>
+  </div>
+  <div class="allergen-table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Allergen</th><th>Examples</th><th>EU Threshold</th><th>Declaration Required</th></tr></thead>
+      <tbody>
+        <tr><td class="allergen-num">01</td><td><strong>Gluten</strong></td><td>Wheat, rye, barley, oats, spelt, kamut</td><td>&lt;20 ppm for "gluten-free" claim</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">02</td><td><strong>Crustaceans</strong></td><td>Shrimp, crab, lobster, crayfish</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">03</td><td><strong>Eggs</strong></td><td>Egg powder, lysozyme, albumin</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">04</td><td><strong>Fish</strong></td><td>All fish species and derivatives</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">05</td><td><strong>Peanuts</strong></td><td>Groundnuts, peanut oil, flour</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">06</td><td><strong>Soybeans</strong></td><td>Soy flour, protein, oil, lecithin</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">07</td><td><strong>Milk (Lactose)</strong></td><td>Butter, cheese, cream, whey, casein</td><td>&lt;10 mg/100g for "lactose-free"</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">08</td><td><strong>Tree Nuts</strong></td><td>Almonds, hazelnuts, walnuts, cashews, pistachios, macadamia</td><td>No established threshold</td><td>Mandatory — each nut separately</td></tr>
+        <tr><td class="allergen-num">09</td><td><strong>Celery</strong></td><td>Celeriac, celery seeds, celery salt</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">10</td><td><strong>Mustard</strong></td><td>Mustard seeds, powder, leaves</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">11</td><td><strong>Sesame seeds</strong></td><td>Sesame oil, tahini, sesame flour</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">12</td><td><strong>Sulphur dioxide / Sulphites</strong></td><td>Wine, dried fruits, vinegar, preserved vegetables</td><td>&gt;10 mg/kg or mg/L (SO₂ equivalent)</td><td>Mandatory above 10 ppm</td></tr>
+        <tr><td class="allergen-num">13</td><td><strong>Lupin</strong></td><td>Lupin flour, seeds, protein</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+        <tr><td class="allergen-num">14</td><td><strong>Molluscs</strong></td><td>Squid, octopus, mussels, oysters, snails</td><td>No established threshold</td><td>Mandatory if present</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- MICROBIOLOGY -->
+<div id="microbiology">
+  <div class="sec-hdr">
+    <div class="sec-label">EU 2073/2005</div>
+    <div class="sec-title">Microbiological Criteria — Food Safety &amp; Process Hygiene</div>
+    <div class="sec-sub">These limits are legally binding. Exceeding any food safety criterion requires immediate withdrawal and authority notification. Results must be on file before lot release for RTE products.</div>
+  </div>
+  <div class="micro-cards">
+    <div class="micro-card danger">
+      <div class="mc-param">Listeria monocytogenes — Cat. 1.1</div>
+      <div class="mc-limit critical">0 CFU / 25g</div>
+      <div class="mc-reg">EU 2073/2005 · Food Safety Criterion</div>
+      <div class="mc-note">Applies to all RTE foods intended for infants and special medical purposes. Any detection = immediate batch recall. Zero tolerance.</div>
+    </div>
+    <div class="micro-card danger">
+      <div class="mc-param">Salmonella spp. — Cat. 1.11</div>
+      <div class="mc-limit critical">Absent / 25g</div>
+      <div class="mc-reg">EU 2073/2005 · Food Safety Criterion</div>
+      <div class="mc-note">Applies to RTE meat, poultry, cheese, egg products, sprouted seeds. Any detection = mandatory withdrawal and RASFF notification.</div>
+    </div>
+    <div class="micro-card">
+      <div class="mc-param">Staphylococcus aureus — Cat. 2.2</div>
+      <div class="mc-limit">&lt; 100 CFU/g</div>
+      <div class="mc-reg">EU 2073/2005 · Process Hygiene Criterion</div>
+      <div class="mc-note">Process hygiene criterion for cheese, milk powder, heat-treated meat. Exceeding triggers process review and corrective action.</div>
+    </div>
+    <div class="micro-card">
+      <div class="mc-param">E. coli — Cat. 2.1</div>
+      <div class="mc-limit">Process hygiene</div>
+      <div class="mc-reg">EU 2073/2005 · Process Hygiene Criterion</div>
+      <div class="mc-note">Process hygiene indicator for minced meat, meat preparations. Exceeding indicates inadequate hygiene controls — review required.</div>
+    </div>
+    <div class="micro-card">
+      <div class="mc-param">pH — Acidified Products</div>
+      <div class="mc-limit">3.5 – 4.5</div>
+      <div class="mc-reg">Botulinum prevention standard</div>
+      <div class="mc-note">Critical for acidified vegetables, garlic-in-oil, pickled products. pH &gt;4.6 creates Botulinum toxin risk. Calibrated meter required.</div>
+    </div>
+    <div class="micro-card">
+      <div class="mc-param">Shelf Life Study</div>
+      <div class="mc-limit">Mandatory — RTE</div>
+      <div class="mc-reg">EU 2073/2005 + EU 852/2004</div>
+      <div class="mc-note">Challenge testing or predictive modelling required for all RTE products. Study must cover worst-case storage conditions for full declared shelf life.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- RISK CLASSIFICATION -->
+<div id="risk">
+  <div class="sec-hdr">
+    <div class="sec-label">EU Risk Framework</div>
+    <div class="sec-title">Product Risk Classification</div>
+    <div class="sec-sub">Risk level determines mandatory controls, testing frequency, recall speed requirements, and audit frequency. Applies per EU 178/2002 and 852/2004 risk-based approach.</div>
+  </div>
+  <div class="risk-table">
+    <table>
+      <thead><tr><th>Risk Level</th><th>Micro Testing</th><th>Shelf Life Study</th><th>Allergen Control</th><th>Recall Speed</th><th>Audit Frequency</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="risk-badge high">HIGH</span><br><small style="color:var(--muted);font-size:.72rem;">RTE · Poultry · Allergen-sensitive</small></td>
+          <td><strong>Mandatory</strong> — each batch</td>
+          <td><strong>Mandatory</strong></td>
+          <td><strong>Mandatory</strong> — full matrix</td>
+          <td style="color:var(--red);font-family:var(--mono);"><strong>2 hours</strong></td>
+          <td>Quarterly</td>
+        </tr>
+        <tr>
+          <td><span class="risk-badge medium">MEDIUM</span><br><small style="color:var(--muted);font-size:.72rem;">Acidified · Fermented · Dairy</small></td>
+          <td>Conditional</td>
+          <td>Conditional</td>
+          <td><strong>Mandatory</strong></td>
+          <td style="color:var(--amber);font-family:var(--mono);"><strong>4 hours</strong></td>
+          <td>Semi-annual</td>
+        </tr>
+        <tr>
+          <td><span class="risk-badge low">LOW</span><br><small style="color:var(--muted);font-size:.72rem;">Shelf-stable · Dry goods</small></td>
+          <td>Optional — annual</td>
+          <td>Optional</td>
+          <td>Conditional</td>
+          <td style="color:var(--green);font-family:var(--mono);"><strong>8 hours</strong></td>
+          <td>Annual</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SLA -->
+<div id="sla">
+  <div class="sec-hdr">
+    <div class="sec-label">Traceability SLA</div>
+    <div class="sec-title">Response Time Requirements by Event Type</div>
+    <div class="sec-sub">Maximum time allowed to complete traceability records per Critical Tracking Event. Recall/Withdrawal has the strictest SLA — 4 hours under EU law.</div>
+  </div>
+  <div class="sla-cards">
+    <div class="sla-c">
+      <div class="sc-type">RECEIVING</div>
+      <div class="sla-row"><span class="sr-label">EU SLA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">US FSMA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">BRCGS</span><span class="sr-val">4 hours</span></div>
+    </div>
+    <div class="sla-c">
+      <div class="sc-type">PRODUCTION</div>
+      <div class="sla-row"><span class="sr-label">EU SLA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">US FSMA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">BRCGS</span><span class="sr-val">4 hours</span></div>
+    </div>
+    <div class="sla-c">
+      <div class="sc-type">SHIPPING</div>
+      <div class="sla-row"><span class="sr-label">EU SLA</span><span class="sr-val">12 hours</span></div>
+      <div class="sla-row"><span class="sr-label">US FSMA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">BRCGS</span><span class="sr-val">2 hours</span></div>
+    </div>
+    <div class="sla-c recall">
+      <div class="sc-type">⚠ RECALL / WITHDRAWAL</div>
+      <div class="sla-row"><span class="sr-label">EU SLA</span><span class="sr-val urgent">4 hours</span></div>
+      <div class="sla-row"><span class="sr-label">US FSMA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">BRCGS</span><span class="sr-val urgent">2 hours</span></div>
+    </div>
+    <div class="sla-c">
+      <div class="sc-type">QUALITY RELEASE</div>
+      <div class="sla-row"><span class="sr-label">EU SLA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">US FSMA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">BRCGS</span><span class="sr-val">4 hours</span></div>
+    </div>
+    <div class="sla-c">
+      <div class="sc-type">INVENTORY ADJUSTMENT</div>
+      <div class="sla-row"><span class="sr-label">EU SLA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">US FSMA</span><span class="sr-val">24 hours</span></div>
+      <div class="sla-row"><span class="sr-label">BRCGS</span><span class="sr-val">4 hours</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ALERTS -->
+<div id="alerts">
+  <div class="sec-hdr">
+    <div class="sec-label">Alert System</div>
+    <div class="sec-title">Automated Alert Rules — Critical Events</div>
+    <div class="sec-sub">These alert rules are embedded in the FoodCheck engine based on EU regulatory triggers. Critical alerts require immediate response.</div>
+  </div>
+  <div class="alert-cards">
+    <div class="alert-card critical-a"><div class="a-sev critical-a"></div><div><div class="a-trigger">Temperature &gt; 8°C during cold chain transport</div><div class="a-meta">CRITICAL · SMS + Email · QA Manager · SLA: 15 min</div></div></div>
+    <div class="alert-card critical-a"><div class="a-sev critical-a"></div><div><div class="a-trigger">Traceability SLA exceeded for any CTE</div><div class="a-meta">CRITICAL · SMS + Email · Food Safety Manager · SLA: 30 min</div></div></div>
+    <div class="alert-card critical-a"><div class="a-sev critical-a"></div><div><div class="a-trigger">Allergen test result FAILED</div><div class="a-meta">CRITICAL · SMS + Email · QA Manager · SLA: 15 min</div></div></div>
+    <div class="alert-card high-a"><div class="a-sev high-a"></div><div><div class="a-trigger">Batch on HOLD for &gt;24 hours</div><div class="a-meta">HIGH · Email · Production Manager · SLA: 60 min</div></div></div>
+    <div class="alert-card"><div class="a-sev medium-a"></div><div><div class="a-trigger">Supplier document expired or missing</div><div class="a-meta">MEDIUM · Email · Procurement · SLA: 1440 min (24h)</div></div></div>
+    <div class="alert-card critical-a"><div class="a-sev critical-a"></div><div><div class="a-trigger">Pathogen detected (Listeria / Salmonella)</div><div class="a-meta">CRITICAL · Immediate recall initiation required · EU Art.19</div></div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- INCIDENT RESPONSE -->
+<div id="incidents">
+  <div class="sec-hdr">
+    <div class="sec-label">EU 178/2002 Art.19</div>
+    <div class="sec-title">Incident Response Plan — Response Times</div>
+    <div class="sec-sub">Maximum response times from discovery to notification and recall completion per incident type. Based on EU 178/2002 Art.19 withdrawal obligations.</div>
+  </div>
+  <div class="inc-table">
+    <table>
+      <thead><tr><th>Incident Type</th><th>Discovery → Notification</th><th>Notification → Recall</th><th>Recall → Completion</th><th>Responsible</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--red);">Pathogen detected</td><td style="color:var(--red);">2 hours</td><td style="color:var(--red);">4 hours</td><td>24 hours</td><td>QA + Regulatory</td></tr>
+        <tr><td style="color:var(--red);">Allergen contamination</td><td style="color:var(--red);">1 hour</td><td style="color:var(--red);">2 hours</td><td>12 hours</td><td>QA + Regulatory</td></tr>
+        <tr><td style="color:var(--amber);">Foreign object</td><td style="color:var(--amber);">4 hours</td><td style="color:var(--amber);">8 hours</td><td>48 hours</td><td>QA + Operations</td></tr>
+        <tr><td>Labeling error</td><td>24 hours</td><td>24 hours</td><td>72 hours</td><td>Regulatory + Marketing</td></tr>
+        <tr><td style="color:var(--amber);">Temperature abuse</td><td style="color:var(--amber);">2 hours</td><td style="color:var(--amber);">4 hours</td><td>24 hours</td><td>QA + Logistics</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- JORDAN-EU BRIDGE -->
+<div id="jordan">
+  <div class="sec-hdr">
+    <div class="sec-label">Jordan → EU Export</div>
+    <div class="sec-title">JS / JFDA — EU Alignment</div>
+    <div class="sec-sub">FoodCheck Jordan bridges Jordanian standards (JS) with EU requirements. The engine checks both simultaneously, identifying any gaps before export.</div>
+  </div>
+  <div class="reg-cards">
+    <div class="reg-card">
+      <div class="reg-card-top"><span class="reg-id" style="color:var(--amber);background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.25);">JS / JFDA</span><span class="reg-scope">Jordanian Standards</span></div>
+      <div class="reg-title">Jordanian Food Law Alignment</div>
+      <div class="reg-desc">FoodCheck covers 28+ Jordanian Standards (JS) including JS 9:2025 food labelling, allergen requirements, and JFDA registration requirements. All checked alongside EU law.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">JS 9:2025</span><span>Jordanian food labelling standard — 110 compliance rules covering mandatory fields, allergens, nutrition information.</span></div>
+        <div class="reg-art"><span class="art-num">JFDA Reg.</span><span>Supplier approval, product registration, and import requirements for the Jordanian market.</span></div>
+      </div>
+    </div>
+    <div class="reg-card">
+      <div class="reg-card-top"><span class="reg-id" style="color:var(--green);background:rgba(0,224,150,.1);border-color:rgba(0,224,150,.25);">BRCGS / IFS</span><span class="reg-scope">Private Standards</span></div>
+      <div class="reg-title">Audit Scheme Alignment</div>
+      <div class="reg-desc">FoodCheck SLA requirements align with BRCGS and IFS audit expectations for traceability tests, mass balance, and mock recall procedures.</div>
+      <div class="reg-articles">
+        <div class="reg-art"><span class="art-num">Trace test</span><span>BRCGS requires traceability drills completed within defined time — FoodCheck SLA engine tracks compliance.</span></div>
+        <div class="reg-art"><span class="art-num">Mass balance</span><span>Quantity reconciliation between input lots and output lots — variance flagged automatically.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end toc-content -->
+</div><!-- end layout -->
+</div><!-- end section -->
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-title">Ready to check your batch against all 5 EU regulations?</div>
+  <div class="cta-sub">The FoodCheck Traceability Engine checks all requirements on this page in real-time — free, no registration required.</div>
+  <div class="cta-btns">
+    <a href="/traceability.html" class="btn-cta-primary">⚡ Open Traceability Engine</a>
+    <a href="/" class="btn-cta-secondary">← Back to FoodCheck Home</a>
+  </div>
+</div>
+
+<footer>
+  FoodCheck Jordan · EU Compliance Reference · tpc-foodcheck.com<br>
+  EU 178/2002 · EU 852/2004 · EU 1169/2011 · EU 2073/2005 · EU 1935/2004 · US FSMA 204 · JS / JFDA<br>
+  For reference only. Final legal verification must be against official current EU legislation at eur-lex.europa.eu.
+</footer>
+
+</body>
+</html>
