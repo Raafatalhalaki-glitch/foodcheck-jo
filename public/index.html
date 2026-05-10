@@ -396,24 +396,20 @@ footer span { color: var(--accent); }
   <div class="logo">
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
-    <a id="nav-shelf-btn" href="shelf-life.html" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;text-decoration:none;">مدد الصلاحية</a>
-    <a id="nav-additives-btn" href="additives.html" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;text-decoration:none;">المضافات</a>
-    <a id="nav-restaurant-btn" href="restaurant-shelf-life.html" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;text-decoration:none;">🏪 صلاحية المطاعم</a>
-    <a id="nav-gmp-btn" href="/gmp" style="background:rgba(0,212,168,.18);border:1.5px solid rgba(0,212,168,.6);color:var(--accent);padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;text-decoration:none;">🏭 نظام GMP</a>
-    <a id="nav-haccp-btn" href="/haccp" style="background:rgba(139,92,246,.2);border:1.5px solid rgba(139,92,246,.6);color:#a78bfa;padding:4px 12px;border-radius:100px;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;text-decoration:none;">⚗ HACCP جديد</a>
-    <button id="langBtn" onclick="toggleLang()" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 12px;border-radius:100px;cursor:pointer;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;">EN</button>
   </div>
-  <nav>
+  <nav style="margin-right:auto;">
     <a href="#tool" id="nav-tool">التدقيق</a>
     <a href="#about" id="nav-about">عن النظام</a>
   </nav>
+  <button id="langBtn" onclick="toggleLang()" style="background:rgba(0,212,168,.1);border:1.5px solid rgba(0,212,168,.4);color:var(--accent);padding:4px 14px;border-radius:100px;cursor:pointer;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;">EN</button>
 </header>
 
 <section class="hero" style="min-height:auto;padding:5.5rem 1.5rem 2rem;">
   <div class="hero-badge" id="hero-badge">
-    <span>●</span> مدعوم بالذكاء الاصطناعي · JS 9:2025 · المواصفات الأردنية JS · الكودكس CXS 192
+    <span>●</span> مساعدك الذكي في الامتثال الغذائي — من البطاقة إلى المختبر
   </div>
-  <h1 id="hero-h1" style="margin-bottom:.6rem;">FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات</h1>
+  <h1 id="hero-h1" style="margin-bottom:.6rem;">حلول متكاملة لسلامة وجودة الغذاء</h1>
+  <p id="hero-p1" style="font-size:1rem;color:var(--text2);max-width:520px;margin:0 auto .8rem;line-height:1.7;">منصة متخصصة للمصانع والمطاعم والمتخصصين — تدقيق فوري وفق المواصفات الأردنية والدولية</p>
   <div class="hero-stats" style="margin-bottom:1.5rem;">
     <div class="stat"><div class="stat-num">✔ 53</div><div class="stat-label" id="stat1">مواصفة أردنية JS</div></div>
     <div class="stat"><div class="stat-num">✔ 110</div><div class="stat-label" id="stat2">قاعدة JS 9:2025</div></div>
@@ -548,7 +544,7 @@ footer span { color: var(--accent); }
   </div>
 
   <button class="analyze-btn" id="analyzeBtn" onclick="analyze()" disabled>
-    <span class="btn-text">🔍 ابدأ الفحص مجاناً</span>
+    <span class="btn-text">🔍 ابدأ الفحص الآن</span>
     <span class="loading-dots">
       <span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span>
       جاري تحليل البطاقة... قد يستغرق 20-30 ثانية
@@ -679,6 +675,79 @@ footer span { color: var(--accent); }
 
   </div>
 </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════ -->
+<!-- قسم الأدوات المتكاملة -->
+<!-- ═══════════════════════════════════════ -->
+<section style="padding:2rem 1.5rem 1rem;max-width:700px;margin:0 auto;">
+
+  <p id="tools-section-title" style="text-align:center;font-size:.8rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;justify-content:center;">
+    <span style="flex:1;height:1px;background:var(--border);display:inline-block;"></span>
+    أدوات متخصصة
+    <span style="flex:1;height:1px;background:var(--border);display:inline-block;"></span>
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+
+    <!-- المضافات -->
+    <a href="additives.html" style="background:var(--surface);border:1px solid rgba(0,212,168,.2);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,212,168,.5)'" onmouseout="this.style.borderColor='rgba(0,212,168,.2)'">
+      <div style="font-size:1.3rem;margin-bottom:6px;">⚗️</div>
+      <div id="tool-additives-name" style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:4px;">المضافات الغذائية</div>
+      <div id="tool-additives-desc" style="font-size:.75rem;color:var(--text2);line-height:1.5;">تأكد من سلامة مضافاتك قبل طرح منتجك في السوق</div>
+      <span style="display:inline-block;margin-top:6px;font-size:.68rem;font-weight:700;background:rgba(46,213,115,.1);color:#2ed573;padding:1px 7px;border-radius:4px;">CXS 192</span>
+    </a>
+
+    <!-- مدد الصلاحية -->
+    <a href="shelf-life.html" style="background:var(--surface);border:1px solid rgba(245,166,35,.2);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(245,166,35,.5)'" onmouseout="this.style.borderColor='rgba(245,166,35,.2)'">
+      <div style="font-size:1.3rem;margin-bottom:6px;">⏱️</div>
+      <div id="tool-shelf-name" style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:4px;">مدد الصلاحية</div>
+      <div id="tool-shelf-desc" style="font-size:.75rem;color:var(--text2);line-height:1.5;">مدد الصلاحية الإلزامية للمواد الغذائية وفق JS 288</div>
+      <span style="display:inline-block;margin-top:6px;font-size:.68rem;font-weight:700;background:rgba(245,166,35,.1);color:#f5a623;padding:1px 7px;border-radius:4px;">JS 288</span>
+    </a>
+
+    <!-- GMP -->
+    <a href="/gmp" style="background:var(--surface);border:1px solid rgba(0,212,168,.2);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,212,168,.5)'" onmouseout="this.style.borderColor='rgba(0,212,168,.2)'">
+      <div style="font-size:1.3rem;margin-bottom:6px;">🏭</div>
+      <div id="tool-gmp-name" style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:4px;">نظام GMP</div>
+      <div id="tool-gmp-desc" style="font-size:.75rem;color:var(--text2);line-height:1.5;">تدقيق ممارسات التصنيع الجيدة — 506 سؤال M01–M08</div>
+      <span style="display:inline-block;margin-top:6px;font-size:.68rem;font-weight:700;background:rgba(0,212,168,.1);color:var(--accent);padding:1px 7px;border-radius:4px;">إلزامي</span>
+    </a>
+
+    <!-- HACCP -->
+    <a href="/haccp" style="background:var(--surface);border:1px solid rgba(139,92,246,.2);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(139,92,246,.5)'" onmouseout="this.style.borderColor='rgba(139,92,246,.2)'">
+      <div style="font-size:1.3rem;margin-bottom:6px;">⚠️</div>
+      <div id="tool-haccp-name" style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:4px;">نظام HACCP</div>
+      <div id="tool-haccp-desc" style="font-size:.75rem;color:var(--text2);line-height:1.5;">تحليل المخاطر ونقاط التحكم الحرجة للمنشأة</div>
+      <span style="display:inline-block;margin-top:6px;font-size:.68rem;font-weight:700;background:rgba(139,92,246,.12);color:#a78bfa;padding:1px 7px;border-radius:4px;">جديد</span>
+    </a>
+
+  </div>
+
+  <!-- الدراسة الثباتية -->
+  <a href="restaurant-shelf-life.html" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;text-decoration:none;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,212,168,.3)'" onmouseout="this.style.borderColor='var(--border)'">
+    <span style="font-size:1.4rem;flex-shrink:0;">🍽️</span>
+    <div style="flex:1;">
+      <div id="tool-restaurant-name" style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:2px;">دراسة ثباتية — أغذية المطاعم والفنادق</div>
+      <div id="tool-restaurant-desc" style="font-size:.75rem;color:var(--text2);">توثيق صلاحية الوجبات وتقرير رسمي جاهز للتقديم لـ JFDA</div>
+    </div>
+    <span style="color:var(--text3);font-size:1.2rem;flex-shrink:0;">›</span>
+  </a>
+
+  <!-- حاسبة الحقائق التغذوية -->
+  <a href="nutrition-calculator.html" style="background:var(--surface);border:1px solid rgba(0,212,168,.25);border-radius:12px;padding:13px 16px;text-decoration:none;display:flex;align-items:center;gap:12px;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,212,168,.5)'" onmouseout="this.style.borderColor='rgba(0,212,168,.25)'">
+    <span style="font-size:1.4rem;flex-shrink:0;">🧪</span>
+    <div style="flex:1;">
+      <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:2px;">
+        <span id="tool-nutrition-name">حاسبة الحقائق التغذوية</span>
+        <span id="tool-nutrition-badge" style="font-size:.65rem;font-weight:700;background:rgba(0,212,168,.12);color:var(--accent);padding:1px 7px;border-radius:4px;border:1px solid rgba(0,212,168,.2);margin-right:4px;">جديد</span>
+      </div>
+      <div id="tool-nutrition-desc" style="font-size:.75rem;color:var(--text2);">جدول تغذوي رسمي — أردني JS 1473 · أوروبي EU · أمريكي FDA · بحث USDA تلقائي</div>
+    </div>
+    <span style="color:var(--text3);font-size:1.2rem;flex-shrink:0;">›</span>
+  </a>
+
 </section>
 
 <section id="about" style="padding:4rem 1rem;border-top:1px solid var(--border);">
@@ -2315,7 +2384,7 @@ function updateUsageDisplay(usage) {
     const btn = document.getElementById('analyzeBtn');
     if (btn) {
       btn.disabled = true;
-      btn.querySelector('.btn-text').textContent = '🔒 سجّل مجاناً للمزيد من الفحوصات';
+      btn.querySelector('.btn-text').textContent = '🔒 سجّل للمزيد من الفحوصات';
       btn.onclick = (e) => { e.preventDefault(); showRegisterModal(); };
     }
   }
@@ -2847,7 +2916,7 @@ function hideRegisterModal() {
 
 function skipRegistration() {
   hideRegisterModal();
-  showToast('يمكنك التسجيل في أي وقت للحصول على 30 فحص/شهر');
+  showToast('يمكنك التسجيل في أي وقت للحصول على 30 فحصاً شهرياً');
 }
 
 async function submitRegistration() {
@@ -2966,11 +3035,11 @@ async function submitRegistration() {
     <!-- أيقونة القفل -->
     <div style="text-align:center;font-size:2.5rem;margin-bottom:1rem;">🔓</div>
     <h3 style="text-align:center;font-size:1.3rem;font-weight:800;margin-bottom:.5rem;">
-      استمر مجاناً
+      سجّل للمتابعة
     </h3>
     <p style="text-align:center;color:var(--text2);font-size:.88rem;margin-bottom:1.5rem;line-height:1.6;">
-      سجّل اسمك وبريدك واحصل على <strong style="color:var(--accent);">30 فحص/شهر مجاناً</strong>
-      بدلاً من 5 فحوصات يومية
+      سجّل اسمك وبريدك واحصل على <strong style="color:var(--accent);">30 فحص/شهر</strong>
+      بدلاً من الحد التجريبي
     </p>
 
     <!-- النموذج -->
@@ -3003,7 +3072,7 @@ async function submitRegistration() {
         cursor:pointer;transition:all .2s;margin-top:.25rem;
       " onmouseover="this.style.transform='translateY(-2px)'"
          onmouseout="this.style.transform='none'">
-        سجّل واحصل على 30 فحص مجاناً ←
+        سجّل واحصل على 30 فحصاً شهرياً ←
       </button>
 
       <div id="regError" style="display:none;color:var(--danger);font-size:.83rem;text-align:center;"></div>
@@ -3032,16 +3101,23 @@ const T = {
     h1:'FoodCheck Jordan — تدقيق بطاقة بيان منتجك الغذائي في لحظات',
     p1:'افحص المكونات والمضافات خلال ثواني وتأكد من مطابقتها للمواصفات الأردنية و Codex Alimentarius Commission',
     p2:'تجنب رفض الشحنات بسبب أخطاء بطاقة البيان — احصل على تقرير واضح: مسموح · يحتاج تعديل · غير مطابق',
-    cta:'ابدأ الفحص مجاناً ←', cta2:'⚗️ محرك بحث المضافات CXS 192',
+    cta:'ابدأ الفحص الآن ←', cta2:'⚗️ محرك بحث المضافات CXS 192',
     stat1:'مواصفة أردنية JS', stat2:'قاعدة JS 9:2025', stat3:'مادة حساسية JS 9:2025', stat4:'الكودكس الدولي',
     hintAr:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
     hintEn:'Capture or upload your food label image — AI will audit it in 30 seconds',
     uploadSubP:'📷 التقط صورة مباشرة · أو اسحب · أو انقر للتصفح',
     navTool:'التدقيق', navShelf:'مدد الصلاحية', navAdditives:'المضافات', navAbout:'عن النظام', langBtn:'EN',
+    toolsSectionTitle:'أدوات متخصصة',
+    toolAdditivesName:'المضافات الغذائية', toolAdditivesDesc:'تأكد من سلامة مضافاتك قبل طرح منتجك في السوق',
+    toolShelfName:'مدد الصلاحية', toolShelfDesc:'مدد الصلاحية الإلزامية للمواد الغذائية وفق JS 288',
+    toolGmpName:'نظام GMP', toolGmpDesc:'تدقيق ممارسات التصنيع الجيدة — 506 سؤال M01–M08',
+    toolHaccpName:'نظام HACCP', toolHaccpDesc:'تحليل المخاطر ونقاط التحكم الحرجة للمنشأة',
+    toolRestaurantName:'دراسة ثباتية — أغذية المطاعم والفنادق', toolRestaurantDesc:'توثيق صلاحية الوجبات وتقرير رسمي جاهز للتقديم لـ JFDA',
+    toolNutritionName:'حاسبة الحقائق التغذوية', toolNutritionDesc:'جدول تغذوي رسمي — أردني JS 1473 · أوروبي EU · أمريكي FDA · بحث USDA تلقائي', toolNutritionBadge:'جديد',
     toolTitle:'رفع وتدقيق بطاقة البيان',
     toolSub:'ارفع صورة واضحة للبطاقة — سيقوم الذكاء الاصطناعي بقراءتها وتدقيقها تلقائياً',
     uploadH3:'اسحب صور بطاقة البيان هنا',
-    analyzeBtn:'🔍 ابدأ الفحص مجاناً',
+    analyzeBtn:'🔍 ابدأ الفحص الآن',
     labelProductType:'نوع المنتج', labelOrigin:'المنشأ', labelStrictness:'مستوى التدقيق',
     optGeneral:'عام', optDairy:'منتجات ألبان', optProcessedCheese:'جبن مطبوخ (JS 185)',
     optSoftCheese:'أجبان طرية (JS 246)', optFlavoredMilk:'حليب منكه (JS 805)',
@@ -3104,20 +3180,27 @@ const T = {
   en: {
     dir:'ltr', lang:'en',
     title:'Food Label Compliance Checker | FoodCheck Jordan',
-    badge:'AI-Powered · JS 9:2025 · Jordanian JS Standards · Codex CXS 192',
-    h1:'FoodCheck Jordan — Food Label Compliance in Moments',
-    p1:'Audit ingredients and additives in seconds — verify compliance with Jordanian JS specifications and the Codex Alimentarius Commission.',
+    badge:'Your Smart Compliance Assistant — From Label to Lab',
+    h1:'Integrated Solutions for Food Safety and Quality',
+    p1:'Specialized platform for manufacturers, restaurants, and food professionals — instant auditing per Jordanian and international standards.',
     p2:'Avoid shipment rejections due to labeling errors — get a clear report: Compliant · Needs Revision · Non-Compliant',
-    cta:'Start Free Audit →', cta2:'⚗️ Additives Search Engine CXS 192',
+    cta:'Start Audit Now →', cta2:'⚗️ Additives Search Engine CXS 192',
     stat1:'Jordanian JS Specifications', stat2:'JS 9:2025 Rules', stat3:'JS 9:2025 Allergens', stat4:'International Codex',
     hintAr:'Capture or upload your food label image — AI will audit it in 30 seconds',
     hintEn:'صوّر بطاقة البيان أو ارفع صورتها — سيفحصها الذكاء الاصطناعي خلال 30 ثانية',
     uploadSubP:'📷 Capture directly · or drag · or click to browse',
     navTool:'Audit Tool', navShelf:'Shelf Lives', navAdditives:'Additives', navAbout:'About', langBtn:'AR',
+    toolsSectionTitle:'Specialized Tools',
+    toolAdditivesName:'Food Additives', toolAdditivesDesc:'Verify the safety of your additives before launching your product',
+    toolShelfName:'Shelf Lives', toolShelfDesc:'Mandatory shelf life periods per JS 288',
+    toolGmpName:'GMP System', toolGmpDesc:'Good Manufacturing Practices audit — 506 questions M01–M08',
+    toolHaccpName:'HACCP System', toolHaccpDesc:'Hazard Analysis and Critical Control Points for your facility',
+    toolRestaurantName:'Stability Study — Restaurant & Hotel Foods', toolRestaurantDesc:'Document meal shelf life with an official JFDA-ready report',
+    toolNutritionName:'Nutrition Facts Calculator', toolNutritionDesc:'Official nutrition table — Jordanian JS 1473 · EU 1169 · FDA · Auto USDA search', toolNutritionBadge:'New',
     toolTitle:'Upload & Audit Food Label',
     toolSub:'Upload a clear photo of your label — AI will read and audit it automatically',
     uploadH3:'Drag food label images here',
-    analyzeBtn:'🔍 Start Free Audit',
+    analyzeBtn:'🔍 Start Audit Now',
     labelProductType:'Product Type', labelOrigin:'Origin', labelStrictness:'Audit Level',
     optGeneral:'General', optDairy:'Dairy Products', optProcessedCheese:'Processed Cheese (JS 185)',
     optSoftCheese:'Soft Cheese (JS 246)', optFlavoredMilk:'Flavored Milk (JS 805)',
@@ -3209,6 +3292,20 @@ function applyLang(lang) {
   if(el('nav-shelf-btn')) el('nav-shelf-btn').textContent = t.navShelf;
   if(el('nav-additives-btn')) el('nav-additives-btn').textContent = t.navAdditives;
   if(el('nav-about')) el('nav-about').textContent = t.navAbout;
+  if(el('tools-section-title')) el('tools-section-title').innerHTML = '<span style="flex:1;height:1px;background:var(--border);display:inline-block;"></span>' + t.toolsSectionTitle + '<span style="flex:1;height:1px;background:var(--border);display:inline-block;"></span>';
+  if(el('tool-additives-name')) el('tool-additives-name').textContent = t.toolAdditivesName;
+  if(el('tool-additives-desc')) el('tool-additives-desc').textContent = t.toolAdditivesDesc;
+  if(el('tool-shelf-name')) el('tool-shelf-name').textContent = t.toolShelfName;
+  if(el('tool-shelf-desc')) el('tool-shelf-desc').textContent = t.toolShelfDesc;
+  if(el('tool-gmp-name')) el('tool-gmp-name').textContent = t.toolGmpName;
+  if(el('tool-gmp-desc')) el('tool-gmp-desc').textContent = t.toolGmpDesc;
+  if(el('tool-haccp-name')) el('tool-haccp-name').textContent = t.toolHaccpName;
+  if(el('tool-haccp-desc')) el('tool-haccp-desc').textContent = t.toolHaccpDesc;
+  if(el('tool-restaurant-name')) el('tool-restaurant-name').textContent = t.toolRestaurantName;
+  if(el('tool-restaurant-desc')) el('tool-restaurant-desc').textContent = t.toolRestaurantDesc;
+  if(el('tool-nutrition-name')) el('tool-nutrition-name').textContent = t.toolNutritionName;
+  if(el('tool-nutrition-desc')) el('tool-nutrition-desc').textContent = t.toolNutritionDesc;
+  if(el('tool-nutrition-badge')) el('tool-nutrition-badge').textContent = t.toolNutritionBadge;
   if(el('langBtn')) el('langBtn').textContent = t.langBtn;
   if(el('tool-title')) el('tool-title').textContent = t.toolTitle;
   if(el('tool-sub')) el('tool-sub').textContent = t.toolSub;
