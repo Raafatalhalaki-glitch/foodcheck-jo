@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة الحقائق التغذوية | FoodCheck Jordan</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:#1e2d47;--accent:#00d4a8;--danger:#ff4757;--warn:#ffa502;--success:#2ed573;--text:#e8edf5;--text2:#8899bb;--text3:#4a5a7a;--gold:#f5a623;--font:'Tajawal',sans-serif;--mono:'IBM Plex Mono',monospace;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;direction:rtl;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;height:56px;position:sticky;top:0;z-index:100;}
+.logo{font-family:var(--mono);color:var(--accent);font-size:13px;font-weight:600;letter-spacing:1px;text-decoration:none;}
+.hsep{color:var(--border);margin:0 12px;font-size:18px;}
+.hpage{font-size:13px;color:var(--text2);}
+.hback{margin-right:auto;}
+.backbtn{font-size:12px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;border:1px solid var(--border);transition:all .2s;}
+.backbtn:hover{color:var(--accent);border-color:var(--accent);}
+.hero{max-width:960px;margin:0 auto;padding:32px 24px 20px;}
+.hero h1{font-size:25px;font-weight:900;line-height:1.3;}
+.hero h1 em{color:var(--accent);font-style:normal;}
+.hero p{margin-top:7px;color:var(--text2);font-size:14px;line-height:1.7;}
+.tabwrap{max-width:960px;margin:0 auto;padding:0 24px 20px;}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.tabbtn{padding:13px 20px;background:transparent;border:none;cursor:pointer;color:var(--text2);font-family:var(--font);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;border-bottom:2px solid transparent;}
+.tabbtn.active{background:rgba(0,212,168,.07);color:var(--accent);border-bottom-color:var(--accent);}
+.tabbtn:not(.active):hover{color:var(--text);background:rgba(255,255,255,.03);}
+.tabsub{font-size:11px;font-weight:400;color:var(--text3);display:block;margin-top:2px;}
+.tabbtn.active .tabsub{color:rgba(0,212,168,.6);}
+.main{max-width:960px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 355px;gap:20px;align-items:start;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;}
+.chead{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.chead h3{font-size:13px;font-weight:700;color:var(--accent);}
+.stepn{background:var(--accent);color:var(--bg);font-size:11px;font-weight:900;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cbody{padding:18px;}
+.frow{display:grid;gap:12px;margin-bottom:14px;}
+.c2{grid-template-columns:1fr 1fr;}.c1{grid-template-columns:1fr;}
+.flbl{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.flbl .req{color:var(--accent);}
+input[type=text],input[type=number],select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:14px;padding:9px 12px;outline:none;transition:border-color .2s;direction:rtl;}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,168,.08);}
+select option{background:var(--surface);}
+.mktgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.mktbtn{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 6px;cursor:pointer;text-align:center;transition:all .2s;color:var(--text2);font-family:var(--font);font-size:12px;font-weight:700;}
+.mktbtn.active{border-color:var(--accent);background:rgba(0,212,168,.08);color:var(--accent);}
+.mktbtn:hover:not(.active){border-color:var(--text3);color:var(--text);}
+.mktflag{font-size:20px;display:block;margin-bottom:3px;}
+.mktstd{font-size:10px;opacity:.6;font-weight:400;display:block;margin-top:2px;}
+/* Tooltip */
+.tipbtn{width:16px;height:16px;border-radius:50%;background:rgba(136,153,187,.12);border:1px solid rgba(136,153,187,.25);color:var(--text2);font-size:9px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);transition:all .2s;flex-shrink:0;user-select:none;position:relative;}
+.tipbtn:hover,.tipbtn.open{background:rgba(0,212,168,.12);border-color:var(--accent);color:var(--accent);}
+.tippop{display:none;position:absolute;top:calc(100% + 8px);right:0;background:#1a2a3a;border:1px solid rgba(0,212,168,.2);border-radius:10px;padding:12px 14px;width:230px;font-size:12px;color:var(--text);line-height:1.65;z-index:999;box-shadow:0 8px 28px rgba(0,0,0,.5);direction:rtl;font-family:var(--font);font-weight:400;text-transform:none;letter-spacing:0;}
+.tippop::before{content:'';position:absolute;top:-5px;right:16px;width:9px;height:9px;background:#1a2a3a;border-top:1px solid rgba(0,212,168,.2);border-right:1px solid rgba(0,212,168,.2);transform:rotate(-45deg);}
+.tipex{margin-top:8px;padding:6px 10px;background:rgba(0,212,168,.08);border-radius:6px;border-right:2px solid var(--accent);font-size:11px;color:var(--accent);}
+.tipbtn.open+.tippop{display:block;}
+/* USDA Search */
+.search3{display:grid;grid-template-columns:1fr 85px auto;gap:8px;align-items:end;}
+.spinner{display:none;position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg);}}
+.usdadrop{display:none;position:absolute;top:calc(100% + 4px);right:0;left:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.4);max-height:230px;overflow-y:auto;}
+.uitem{padding:9px 13px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--border);font-size:12px;}
+.uitem:last-child{border-bottom:none;}
+.uitem:hover{background:rgba(0,212,168,.07);}
+.uname{color:var(--text);font-weight:600;}
+.umeta{font-size:10px;color:var(--text2);margin-top:2px;font-family:var(--mono);}
+.ucal{color:var(--accent);font-weight:700;}
+.unone{padding:13px;text-align:center;color:var(--text2);font-size:12px;}
+/* Ingredient rows */
+.inglist{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+.ingrow{display:grid;grid-template-columns:1fr 75px 70px 30px;gap:7px;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 11px;transition:border-color .2s;}
+.ingrow:hover{border-color:rgba(0,212,168,.2);}
+.iname{font-size:12px;color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.iwt{font-family:var(--mono);font-size:12px;color:var(--accent);text-align:center;}
+.ical{font-family:var(--mono);font-size:11px;color:var(--text2);text-align:center;}
+.idel{width:26px;height:26px;background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.2);border-radius:6px;color:var(--danger);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.idel:hover{background:rgba(255,71,87,.2);}
+.batchbar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg);border-radius:8px;border:1px solid rgba(0,212,168,.12);margin-bottom:12px;font-size:12px;}
+.btnadd{background:rgba(0,212,168,.1);border:1px solid rgba(0,212,168,.2);border-radius:8px;color:var(--accent);font-family:var(--font);font-size:13px;font-weight:700;padding:9px 15px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btnadd:hover{background:rgba(0,212,168,.18);}
+.selinfo{display:none;margin-top:9px;padding:8px 11px;background:rgba(0,212,168,.07);border-radius:7px;border:1px solid rgba(0,212,168,.15);font-size:12px;color:var(--accent);}
+.note{font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5;}
+.tipbox{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--gold);line-height:1.6;}
+.tipbox strong{display:block;margin-bottom:3px;}
+.btncalc{width:100%;background:var(--accent);color:var(--bg);border:none;border-radius:10px;padding:14px;font-family:var(--font);font-size:16px;font-weight:900;cursor:pointer;transition:all .2s;margin-top:2px;}
+.btncalc:hover{background:#00edc0;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,168,.28);}
+.btncalc:active{transform:none;}
+/* Result */
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:sticky;top:68px;}
+.rhead{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.rhead h3{font-size:13px;font-weight:700;color:var(--accent);}
+.fmtbtns{display:flex;gap:5px;}
+.fmtbtn{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-family:var(--font);font-size:11px;font-weight:700;padding:4px 10px;cursor:pointer;transition:all .2s;}
+.fmtbtn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,168,.08);}
+.rbody{padding:16px;}
+.ph{text-align:center;padding:38px 20px;color:var(--text2);}
+.phico{font-size:34px;opacity:.35;margin-bottom:11px;}
+.ph p{font-size:13px;line-height:1.7;}
+.sumgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:13px;}
+.sitem{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 5px;text-align:center;}
+.sval{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--accent);}
+.slbl{font-size:10px;color:var(--text2);margin-top:2px;font-weight:700;}
+/* Arabic label */
+.arlbl{background:#fff;color:#000;border-radius:10px;padding:13px;direction:rtl;font-family:var(--font);}
+.arttl{font-size:17px;font-weight:900;border-bottom:4px solid #000;padding-bottom:6px;margin-bottom:5px;text-align:center;}
+.arrow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #e0e0e0;font-size:12px;}
+.arrow.thick{border-bottom:3px solid #000;}
+.arrow.calrow{padding:7px 0;border-bottom:3px solid #000;}
+.arv{font-weight:700;font-family:var(--mono);font-size:11px;}
+.arb{font-weight:900;font-size:13px;}
+.arcal{font-size:30px;font-weight:900;}
+.arind{padding-right:14px;font-size:11px;}
+.arfn{font-size:8px;color:#444;margin-top:5px;line-height:1.5;}
+.arstd{font-size:9px;color:#777;margin-top:3px;font-style:italic;direction:ltr;text-align:left;}
+/* FDA */
+.fdalbll{background:#fff;color:#000;border-radius:10px;overflow:hidden;direction:ltr;font-family:'Franklin Gothic Medium','Arial Narrow',Arial,sans-serif;}
+.fdahead{padding:5px 8px 3px;border-bottom:7px solid #000;}
+.fdatitle{font-size:25px;font-weight:900;line-height:1;}
+.fdaservpkg{font-size:9px;}
+.fdaservsize{font-size:12px;font-weight:700;border-bottom:3px solid #000;padding-bottom:2px;margin-top:2px;}
+.fdacalrow{display:flex;justify-content:space-between;align-items:flex-end;padding:2px 8px;border-bottom:7px solid #000;}
+.fdacallbl{font-size:9px;font-weight:700;}
+.fdacalval{font-size:37px;font-weight:900;line-height:1;}
+.fdadvhdr{font-size:8px;font-weight:700;text-align:left;padding:2px 8px;border-bottom:3px solid #000;}
+.fdarow{display:flex;justify-content:space-between;padding:2px 8px;border-bottom:1px solid #ccc;font-size:10px;}
+.fdarow.thick{border-bottom:3px solid #000;}
+.fdarow.ind{padding-left:18px;}
+.fdarow.ind2{padding-left:26px;}
+.fdab{font-weight:900;}.fdadv{font-weight:700;}
+.fdafoot{padding:3px 8px 5px;font-size:7px;border-top:3px solid #000;line-height:1.4;color:#333;}
+/* EU */
+.eulbl{background:#fff;color:#000;border-radius:10px;overflow:hidden;direction:ltr;font-family:Arial,sans-serif;}
+.euhead{padding:8px 10px;border-bottom:2px solid #000;}
+.euttl{font-size:14px;font-weight:900;}
+.eubasis{font-size:10px;color:#333;margin-top:2px;}
+.eutable{width:100%;font-size:10px;border-collapse:collapse;}
+.eutable th{background:#f4f4f4;padding:4px 8px;text-align:left;font-size:9px;border-bottom:1px solid #000;}
+.eutable td{padding:4px 8px;border-bottom:1px solid #ddd;}
+.eutable td:not(:first-child){text-align:center;font-weight:700;}
+.eutable tr.ind td:first-child{padding-left:18px;color:#333;}
+.eufoot{padding:3px 8px 5px;font-size:8px;color:#555;border-top:1px solid #000;}
+.btndl{width:100%;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:var(--font);font-size:13px;font-weight:700;padding:10px;cursor:pointer;margin-top:10px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.btndl:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,168,.06);}
+.confbox{background:rgba(46,213,115,.07);border:1px solid rgba(46,213,115,.2);border-radius:8px;padding:10px 13px;margin-top:12px;font-size:11px;color:var(--success);line-height:1.6;}
+.confbox strong{display:block;margin-bottom:2px;}
+#rest-panel{display:none;}
+@media(max-width:720px){.main{grid-template-columns:1fr;}.rcard{position:static;}.c2{grid-template-columns:1fr;}.sumgrid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">FOODCHECK</a>
+  <span class="hsep">›</span>
+  <span class="hpage">حاسبة الحقائق التغذوية</span>
+  <div class="hback"><a href="/" class="backbtn">← الرئيسية</a></div>
+</header>
+
+<div class="hero">
+  <h1>احسب <em>الحقائق التغذوية</em> لمنتجك</h1>
+  <p>اكتب اسم أي مكوّن — سيبحث النظام تلقائياً في قاعدة بيانات USDA ويجلب قيمه الغذائية، ثم يولّد الجدول الرسمي للسوق المستهدف.</p>
+</div>
+
+<div class="tabwrap">
+  <div class="tabs">
+    <button class="tabbtn active" onclick="switchTab('pkg',this)">
+      <span style="font-size:20px">🏭</span>
+      <span>مواد غذائية معبأة<span class="tabsub">مصانع — مستوردون — موزعون</span></span>
+    </button>
+    <button class="tabbtn" onclick="switchTab('rest',this)">
+      <span style="font-size:20px">🍽️</span>
+      <span>مطاعم وفنادق<span class="tabsub">وجبات — قوائم طعام — حصص</span></span>
+    </button>
+  </div>
+</div>
+
+<div class="main">
+  <div>
+
+    <!-- ══ PACKAGED ══ -->
+    <div id="pkg-panel">
+
+      <!-- 1. Market -->
+      <div class="card">
+        <div class="chead"><div class="stepn">١</div><h3>السوق المستهدف</h3></div>
+        <div class="cbody">
+          <div class="mktgrid">
+            <button class="mktbtn active" onclick="pickMkt(this,'jo')"><span class="mktflag">🇯🇴</span>أردني<span class="mktstd">JS 1473:2022</span></button>
+            <button class="mktbtn" onclick="pickMkt(this,'eu')"><span class="mktflag">🇪🇺</span>أوروبي<span class="mktstd">EU 1169/2011</span></button>
+            <button class="mktbtn" onclick="pickMkt(this,'us')"><span class="mktflag">🇺🇸</span>أمريكي<span class="mktstd">FDA 21 CFR</span></button>
+          </div>
+          <p class="note">💡 يمكنك تغيير السوق في أي وقت — الجدول سيُعاد تنسيقه تلقائياً.</p>
+        </div>
+      </div>
+
+      <!-- 2. Product info -->
+      <div class="card">
+        <div class="chead"><div class="stepn">٢</div><h3>معلومات المنتج</h3></div>
+        <div class="cbody">
+          <div class="frow c1"><div>
+            <div class="flbl"><span class="req">*</span>اسم المنتج</div>
+            <input type="text" id="prodName" placeholder="مثال: بسكويت الشوفان بالشوكولاتة">
+          </div></div>
+          <div class="frow c2">
+            <div>
+              <div class="flbl"><span class="req">*</span>فئة المنتج</div>
+              <select id="prodCat">
+                <option value="">— اختر —</option>
+                <option>مخبوزات وبسكويت</option><option>منتجات الألبان</option>
+                <option>مشروبات</option><option>حبوب ونشويات</option>
+                <option>لحوم ومنتجاتها</option><option>زيوت ودهون</option>
+                <option>مربيات وشوكولاتة</option><option>توابل وصلصات</option>
+                <option>وجبات جاهزة</option><option>مكملات غذائية</option><option>أخرى</option>
+              </select>
+            </div>
+            <div>
+              <div class="flbl">
+                حجم الحصة
+                <span class="tipbtn" onclick="toggleTip(this)">?<span class="tippop">
+                  <strong style="color:var(--accent);display:block;margin-bottom:4px">🍽️ شو هي الحصة؟</strong>
+                  الكمية اللي بياكلها شخص واحد من منتجك مرة وحدة.
+                  <div class="tipex">بسكويت → ٣٠ غ (٣ حبات)<br>عصير → ٢٤٠ مل (كوب)<br>شيبس → ٢٨ غ (حفنة)</div>
+                  تظهر على البطاقة: "لكل حصة ٣٠ غرام"
+                </span></span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 72px;gap:8px">
+                <input type="number" id="servSz" placeholder="30" min="1">
+                <select id="servUnit"><option>غرام</option><option>مل</option></select>
+              </div>
+            </div>
+          </div>
+          <div class="frow c2">
+            <div>
+              <div class="flbl">
+                <span class="req">*</span>وزن دفعة الإنتاج (غ)
+                <span class="tipbtn" onclick="toggleTip(this)">?<span class="tippop">
+                  <strong style="color:var(--accent);display:block;margin-bottom:4px">🏭 شو هي الدفعة؟</strong>
+                  مجموع وزن كل المكونات في وصفة وحدة قبل التصنيع.
+                  <div class="tipex">٥٠٠غ دقيق + ٢٠٠غ سكر + ٣٠٠غ زيت = دفعة ١٠٠٠ غ</div>
+                  المجموع في الخطوة التالية يجب أن يساويه.
+                </span></span>
+              </div>
+              <input type="number" id="batchW" placeholder="1000" min="1" value="1000" oninput="updateBatch()">
+            </div>
+            <div>
+              <div class="flbl">
+                وزن المنتج النهائي (غ)
+                <span class="tipbtn" onclick="toggleTip(this)">?<span class="tippop">
+                  <strong style="color:var(--accent);display:block;margin-bottom:4px">⚖️ ليش الوزن بيتغير؟</strong>
+                  أثناء الخبز أو الطهي المنتج يفقد رطوبة فيصير أخف.
+                  <div class="tipex">دفعة ١٠٠٠ غ → بعد الخبز ٩٢٠ غ<br>(٨٠ غ بخار طار أثناء الطهي)</div>
+                  لو ما في طهي → اكتب نفس وزن الدفعة.
+                </span></span>
+              </div>
+              <input type="number" id="finalW" placeholder="950" min="1" value="950">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Ingredients -->
+      <div class="card">
+        <div class="chead"><div class="stepn">٣</div><h3>المكونات — ابحث وأضف</h3></div>
+        <div class="cbody">
+          <p class="note" style="margin-bottom:13px">🔍 اكتب اسم أي مكوّن بالعربية أو الإنجليزية — سيظهر اقتراح من قاعدة بيانات USDA مع قيمه الغذائية.</p>
+
+          <div class="inglist" id="ingList"></div>
+
+          <div class="batchbar" id="batchBar">
+            <span style="color:var(--text2)">مجموع المكونات</span>
+            <span id="batchTot" style="font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700">0 غ</span>
+          </div>
+
+          <div style="background:var(--bg);border:1px dashed rgba(0,212,168,.2);border-radius:10px;padding:13px">
+            <div class="search3">
+              <div>
+                <div class="flbl">اسم المكوّن</div>
+                <div style="position:relative">
+                  <input type="text" id="searchQ" placeholder="مثال: دقيق قمح، سكر، زيت نباتي..." oninput="onSearch()" autocomplete="off">
+                  <div class="spinner" id="spinner"></div>
+                  <div class="usdadrop" id="usdaDrop"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flbl">الكمية (غ)</div>
+                <input type="number" id="ingW" placeholder="100" min="0">
+              </div>
+              <div>
+                <div class="flbl" style="visibility:hidden">+</div>
+                <button class="btnadd" onclick="addIng()">+ إضافة</button>
+              </div>
+            </div>
+            <div class="selinfo" id="selInfo"></div>
+          </div>
+
+          <div class="tipbox" style="margin-top:13px">
+            <strong>🔬 مصدر البيانات</strong>
+            القيم الغذائية من USDA FoodData Central — أكبر قاعدة بيانات غذائية مجانية في العالم (300,000+ مادة).
+          </div>
+        </div>
+      </div>
+
+      <button class="btncalc" onclick="calculate()">⚡ احسب الحقائق التغذوية الآن</button>
+    </div>
+
+    <!-- ══ RESTAURANT ══ -->
+    <div id="rest-panel">
+      <div class="card">
+        <div class="chead"><div class="stepn">١</div><h3>معلومات الوجبة</h3></div>
+        <div class="cbody">
+          <div class="frow c1"><div>
+            <div class="flbl"><span class="req">*</span>اسم الطبق</div>
+            <input type="text" id="dishName" placeholder="مثال: سلطة سيزر بالدجاج المشوي">
+          </div></div>
+          <div class="frow c2">
+            <div>
+              <div class="flbl">نوع الوجبة</div>
+              <select><option>طبق رئيسي</option><option>مقبلات</option><option>حلويات</option><option>مشروبات</option><option>وجبة إفطار</option><option>سناك</option></select>
+            </div>
+            <div>
+              <div class="flbl">
+                <span class="req">*</span>حجم الحصة (غ)
+                <span class="tipbtn" onclick="toggleTip(this)">?<span class="tippop">
+                  <strong style="color:var(--accent);display:block;margin-bottom:4px">🍽️ حجم الحصة للمطعم</strong>
+                  وزن الطبق الكامل اللي بيُقدَّم للزبون — بعد الطهي والتقديم.
+                  <div class="tipex">سلطة → ٣٠٠ غ<br>برغر → ٢٥٠ غ<br>شوربة → ٢٤٠ مل</div>
+                </span></span>
+              </div>
+              <input type="number" id="dishServ" placeholder="300" min="1" value="300">
+            </div>
+          </div>
+          <div class="frow c2">
+            <div>
+              <div class="flbl">طريقة الطهي</div>
+              <select><option>طازج/غير مطهو</option><option>مشوي</option><option>مقلي</option><option>مسلوق</option><option>مخبوز</option><option>بخار</option></select>
+            </div>
+            <div>
+              <div class="flbl">
+                عدد الحصص من الوصفة
+                <span class="tipbtn" onclick="toggleTip(this)">?<span class="tippop">
+                  <strong style="color:var(--accent);display:block;margin-bottom:4px">👥 عدد الحصص</strong>
+                  كم شخص بتكفيهم هذه الوصفة؟
+                  <div class="tipex">وصفة ١٢٠٠ غ ÷ ٤ أشخاص = ٣٠٠ غ للشخص</div>
+                </span></span>
+              </div>
+              <input type="number" id="dishPortions" placeholder="4" min="1" value="4">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chead"><div class="stepn">٢</div><h3>مكونات الوصفة</h3></div>
+        <div class="cbody">
+          <p class="note" style="margin-bottom:13px">🍳 أدخل كل مكوّن وكميته الخام (قبل الطهي) بالغرام.</p>
+          <div class="inglist" id="restIngList"></div>
+          <div style="background:var(--bg);border:1px dashed rgba(0,212,168,.2);border-radius:10px;padding:13px">
+            <div class="search3">
+              <div>
+                <div class="flbl">اسم المكوّن</div>
+                <div style="position:relative">
+                  <input type="text" id="restSearchQ" placeholder="مثال: صدر دجاج، خس، جبن..." oninput="onRestSearch()" autocomplete="off">
+                  <div class="usdadrop" id="restDrop"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flbl">الكمية (غ)</div>
+                <input type="number" id="restIngW" placeholder="100" min="0">
+              </div>
+              <div>
+                <div class="flbl" style="visibility:hidden">+</div>
+                <button class="btnadd" onclick="addRestIng()">+ إضافة</button>
+              </div>
+            </div>
+            <div class="selinfo" id="restSelInfo"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btncalc" onclick="calcRest()">🍽️ احسب القيمة التغذوية للوجبة</button>
+    </div>
+
+  </div><!-- end input -->
+
+  <!-- RESULT -->
+  <div>
+    <div class="rcard">
+      <div class="rhead">
+        <h3>النتيجة</h3>
+        <div class="fmtbtns" id="fmtBtns" style="display:none">
+          <button class="fmtbtn active" onclick="showFmt('ar',this)">عربي</button>
+          <button class="fmtbtn" onclick="showFmt('us',this)">FDA</button>
+          <button class="fmtbtn" onclick="showFmt('eu',this)">EU</button>
+        </div>
+      </div>
+      <div class="rbody" id="rBody">
+        <div class="ph"><div class="phico">🧪</div><p>أضف المكونات<br>واضغط احسب</p></div>
+      </div>
+    </div>
+    <div class="confbox" id="confBox" style="display:none">
+      <strong>🔬 مستوى الثقة: B</strong>
+      القيم من USDA FoodData Central. للمستوى A يلزم تحليل مخبري معتمد.
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY = 'RHrZhUcEhS6A3dOhzSdAadReiEGDKd9fCFuyCzEe';
+let market = 'jo';
+let ings = [], restIngs = [];
+let selFdc = null, restSelFdc = null;
+let calcData = null, curFmt = 'ar';
+let stimer = null, rtimer = null;
+
+const arMap = {'دقيق':'flour','دقيق قمح':'wheat flour','سكر':'sugar','زيت نباتي':'vegetable oil','زيت':'oil','زبدة':'butter','بيض':'egg','حليب':'milk','حليب مجفف':'milk powder nonfat','ملح':'salt','كاكاو':'cocoa powder','كاكاو بودرة':'cocoa powder','شوكولاتة':'chocolate','نشا':'starch','عسل':'honey','خميرة':'yeast','بيكنج بودر':'baking powder','فانيليا':'vanilla','دجاج':'chicken','صدر دجاج':'chicken breast','لحم':'beef','سمك':'fish','جبنة':'cheese','جبن':'cheese','طماطم':'tomato','بصل':'onion','ثوم':'garlic','خس':'lettuce','جزر':'carrot','بطاطا':'potato','أرز':'rice','معكرونة':'pasta','شوفان':'oats','زيت زيتون':'olive oil','زيت دوار الشمس':'sunflower oil','سكر بني':'brown sugar','لبن':'yogurt','قشطة':'cream','مايونيز':'mayonnaise','لوز':'almond','جوز':'walnut','فستق حلبي':'pistachio','كاجو':'cashew','حليب كامل الدسم':'whole milk','دقيق ذرة':'corn flour'};
+
+function tr(q){const l=q.trim().toLowerCase();for(const[a,e]of Object.entries(arMap)){if(l===a||l.includes(a))return e;}return q;}
+
+function toggleTip(el){const w=el.classList.contains('open');document.querySelectorAll('.tipbtn.open').forEach(t=>t.classList.remove('open'));if(!w)el.classList.add('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.tipbtn'))document.querySelectorAll('.tipbtn.open').forEach(t=>t.classList.remove('open'));});
+
+function switchTab(m,btn){document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('pkg-panel').style.display=m==='pkg'?'block':'none';document.getElementById('rest-panel').style.display=m==='rest'?'block':'none';reset();}
+function reset(){document.getElementById('rBody').innerHTML='<div class="ph"><div class="phico">🧪</div><p>أضف المكونات<br>واضغط احسب</p></div>';document.getElementById('fmtBtns').style.display='none';document.getElementById('confBox').style.display='none';}
+function pickMkt(btn,m){document.querySelectorAll('.mktbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');market=m;if(calcData)showFmtActive();}
+
+async function usdaSearch(q){const eq=tr(q);const url=`https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(eq)}&pageSize=10&api_key=${KEY}`;const r=await fetch(url);const d=await r.json();return d.foods||[];}
+function gn(food,name){const n=(food.foodNutrients||[]).find(x=>x.nutrientName&&x.nutrientName.toLowerCase().includes(name.toLowerCase()));return n?(n.value||0):0;}
+function mkNut(food){return{kcal:Math.round(gn(food,'energy')||gn(food,'Energy')),prot:+gn(food,'Protein').toFixed(2),carb:+gn(food,'Carbohydrate').toFixed(2),fat:+gn(food,'Total lipid').toFixed(2),satFat:+gn(food,'Fatty acids, total saturated').toFixed(2),transFat:+gn(food,'Fatty acids, total trans').toFixed(2),chol:Math.round(gn(food,'Cholesterol')),sodium:Math.round(gn(food,'Sodium')),fiber:+gn(food,'Fiber').toFixed(2),sugars:+gn(food,'Sugars, total').toFixed(2),addedSugar:+gn(food,'Sugars, added').toFixed(2)};}
+
+function renderDrop(foods,dropId,onSel){const box=document.getElementById(dropId);if(!foods.length){box.innerHTML='<div class="unone">لا نتائج — جرّب بالإنجليزي مثل: chicken</div>';box.style.display='block';return;}box.innerHTML=foods.slice(0,7).map((f,i)=>{const n=mkNut(f);return`<div class="uitem" onclick="pickItem(${i},'${dropId}')"><div class="uname">${f.description}</div><div class="umeta"><span class="ucal">${n.kcal} kcal</span> · prot ${n.prot}g · carb ${n.carb}g · fat ${n.fat}g</div></div>`;}).join('');box.style.display='block';box._foods=foods;}
+window.pickItem=function(i,dropId){const box=document.getElementById(dropId);const f=box._foods[i];const n=mkNut(f);if(dropId==='usdaDrop'){selFdc={name:f.description,nutrients:n};document.getElementById('searchQ').value=f.description;box.style.display='none';const si=document.getElementById('selInfo');si.style.display='block';si.innerHTML=`✓ <strong>${f.description}</strong> — لكل ١٠٠غ: <strong>${n.kcal} سعرة</strong> | بروتين ${n.prot}غ | كربوهيدرات ${n.carb}غ | دهون ${n.fat}غ`;}else{restSelFdc={name:f.description,nutrients:n};document.getElementById('restSearchQ').value=f.description;box.style.display='none';const si=document.getElementById('restSelInfo');si.style.display='block';si.innerHTML=`✓ <strong>${f.description}</strong> — لكل ١٠٠غ: <strong>${n.kcal} سعرة</strong> | بروتين ${n.prot}غ | دهون ${n.fat}غ`;}};
+
+function onSearch(){clearTimeout(stimer);const q=document.getElementById('searchQ').value.trim();selFdc=null;document.getElementById('selInfo').style.display='none';if(q.length<2){document.getElementById('usdaDrop').style.display='none';return;}document.getElementById('spinner').style.display='block';stimer=setTimeout(async()=>{try{const f=await usdaSearch(q);renderDrop(f,'usdaDrop',null);}finally{document.getElementById('spinner').style.display='none';}},420);}
+function onRestSearch(){clearTimeout(rtimer);const q=document.getElementById('restSearchQ').value.trim();restSelFdc=null;document.getElementById('restSelInfo').style.display='none';if(q.length<2){document.getElementById('restDrop').style.display='none';return;}rtimer=setTimeout(async()=>{try{const f=await usdaSearch(q);renderDrop(f,'restDrop',null);}catch(e){}},420);}
+
+document.addEventListener('click',e=>{if(!e.target.closest('#searchQ')&&!e.target.closest('#usdaDrop'))document.getElementById('usdaDrop').style.display='none';if(!e.target.closest('#restSearchQ')&&!e.target.closest('#restDrop'))document.getElementById('restDrop').style.display='none';});
+
+function addIng(){const w=parseFloat(document.getElementById('ingW').value);if(!selFdc||!w||w<=0){alert('اختر مكوناً من القائمة وأدخل الكمية بالغرام');return;}ings.push({...selFdc,weight:w});renderIngs();document.getElementById('searchQ').value='';document.getElementById('ingW').value='';document.getElementById('selInfo').style.display='none';selFdc=null;updateBatch();}
+function addRestIng(){const w=parseFloat(document.getElementById('restIngW').value);if(!restSelFdc||!w||w<=0){alert('اختر مكوناً من القائمة وأدخل الكمية بالغرام');return;}restIngs.push({...restSelFdc,weight:w});renderRestIngs();document.getElementById('restSearchQ').value='';document.getElementById('restIngW').value='';document.getElementById('restSelInfo').style.display='none';restSelFdc=null;}
+
+function renderIngs(){const l=document.getElementById('ingList');l.innerHTML=ings.map((x,i)=>`<div class="ingrow"><span class="iname" title="${x.name}">${x.name}</span><span class="iwt">${x.weight} غ</span><span class="ical">${Math.round(x.nutrients.kcal*x.weight/100)} kcal</span><button class="idel" onclick="rmIng(${i})">✕</button></div>`).join('');updateBatch();}
+function renderRestIngs(){const l=document.getElementById('restIngList');l.innerHTML=restIngs.map((x,i)=>`<div class="ingrow"><span class="iname" title="${x.name}">${x.name}</span><span class="iwt">${x.weight} غ</span><span class="ical">${Math.round(x.nutrients.kcal*x.weight/100)} kcal</span><button class="idel" onclick="rmRestIng(${i})">✕</button></div>`).join('');}
+function rmIng(i){ings.splice(i,1);renderIngs();}
+function rmRestIng(i){restIngs.splice(i,1);renderRestIngs();}
+function updateBatch(){const tot=ings.reduce((s,x)=>s+x.weight,0);const tgt=parseFloat(document.getElementById('batchW').value)||1000;const ok=Math.abs(tot-tgt)/Math.max(tgt,1)<0.04;const el=document.getElementById('batchTot');el.textContent=`${tot} غ ${ok?'✓':'⚠️'}`;el.style.color=ok?'var(--accent)':'var(--warn)';}
+
+function sumN(k){return ings.reduce((s,x)=>s+(x.nutrients[k]||0)*x.weight/100,0);}
+function rCal(v){if(v<5)return 0;if(v<=50)return Math.round(v/5)*5;return Math.round(v/10)*10;}
+function rMacro(v){if(v<=0.5)return 0;if(v<10)return Math.round(v*10)/10;return Math.round(v);}
+function rFat(v){if(v<=0.1)return 0;if(v<10)return Math.round(v*10)/10;return Math.round(v);}
+function rSod(v){if(v<5)return 0;if(v<=140)return Math.round(v/5)*5;return Math.round(v/10)*10;}
+
+function calculate(){
+  if(!ings.length){alert('أضف مكوناً واحداً على الأقل');return;}
+  const fw=parseFloat(document.getElementById('finalW').value)||parseFloat(document.getElementById('batchW').value)||1000;
+  const ss=parseFloat(document.getElementById('servSz').value)||100;
+  const f=100/fw;
+  const p={kcal:Math.round(sumN('kcal')*f),kj:Math.round(sumN('kcal')*f*4.184),prot:+(sumN('prot')*f).toFixed(1),carb:+(sumN('carb')*f).toFixed(1),fat:+(sumN('fat')*f).toFixed(1),satFat:+(sumN('satFat')*f).toFixed(1),transFat:+(sumN('transFat')*f).toFixed(2),chol:Math.round(sumN('chol')*f),sodium:Math.round(sumN('sodium')*f),fiber:+(sumN('fiber')*f).toFixed(1),sugars:+(sumN('sugars')*f).toFixed(1),addedSugar:+(sumN('addedSugar')*f).toFixed(1)};
+  p.salt=+(p.sodium/1000*2.5).toFixed(2);
+  const sf=ss/100;
+  const s={kcal:rCal(Math.round(p.kcal*sf)),kj:Math.round(p.kj*sf),prot:rMacro(+(p.prot*sf).toFixed(1)),carb:rMacro(+(p.carb*sf).toFixed(1)),fat:rMacro(+(p.fat*sf).toFixed(1)),satFat:rFat(+(p.satFat*sf).toFixed(1)),transFat:+(p.transFat*sf).toFixed(2),chol:Math.round(p.chol*sf),sodium:rSod(Math.round(p.sodium*sf)),fiber:rMacro(+(p.fiber*sf).toFixed(1)),sugars:rMacro(+(p.sugars*sf).toFixed(1)),addedSugar:rMacro(+(p.addedSugar*sf).toFixed(1)),salt:+(p.salt*sf).toFixed(2)};
+  calcData={name:document.getElementById('prodName').value||'المنتج',ss,market,p,s};
+  document.getElementById('fmtBtns').style.display='flex';document.getElementById('confBox').style.display='block';
+  curFmt='ar';document.querySelectorAll('.fmtbtn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  renderLbl(calcData,'ar');
+}
+
+function calcRest(){
+  if(!restIngs.length){alert('أضف مكوناً واحداً على الأقل');return;}
+  const portions=parseFloat(document.getElementById('dishPortions').value)||1;
+  const ss=parseFloat(document.getElementById('dishServ').value)||300;
+  const totW=restIngs.reduce((s,x)=>s+x.weight,0);
+  const factor=ss/(totW/portions);
+  function sr(k){return restIngs.reduce((s,x)=>s+(x.nutrients[k]||0)*x.weight/100/portions*factor,0);}
+  const s={kcal:Math.round(sr('kcal')),kj:Math.round(sr('kcal')*4.184),prot:+sr('prot').toFixed(1),carb:+sr('carb').toFixed(1),fat:+sr('fat').toFixed(1),satFat:+sr('satFat').toFixed(1),chol:Math.round(sr('chol')),sodium:Math.round(sr('sodium')),fiber:+sr('fiber').toFixed(1),sugars:+sr('sugars').toFixed(1)};
+  s.salt=+(s.sodium/1000*2.5).toFixed(2);
+  renderRestLbl(s,document.getElementById('dishName').value||'الوجبة',ss);
+  document.getElementById('confBox').style.display='block';document.getElementById('fmtBtns').style.display='none';
+}
+
+function showFmt(fmt,btn){document.querySelectorAll('.fmtbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');curFmt=fmt;if(calcData)renderLbl(calcData,fmt);}
+function showFmtActive(){if(calcData)renderLbl(calcData,curFmt);}
+
+function sumBar(s){return`<div class="sumgrid"><div class="sitem"><div class="sval">${s.kcal}</div><div class="slbl">سعرة</div></div><div class="sitem"><div class="sval">${s.prot}غ</div><div class="slbl">بروتين</div></div><div class="sitem"><div class="sval">${s.carb}غ</div><div class="slbl">كربوهيدرات</div></div><div class="sitem"><div class="sval">${s.fat}غ</div><div class="slbl">دهون</div></div></div>`;}
+
+function renderLbl(d,fmt){
+  const rb=document.getElementById('rBody');
+  const p=d.p,s=d.s;
+  const nrv={fat:70,satFat:20,chol:300,sodium:2300,carb:260,fiber:28,sugars:90,addedSugar:50,prot:50};
+  const dv=k=>Math.round((s[k]||0)/nrv[k]*100);
+  if(fmt==='ar'){
+    rb.innerHTML=sumBar(s)+`<div class="arlbl"><div class="arttl">حقائق غذائية</div><div style="font-size:11px;color:#333;margin-bottom:3px">عدد الحصص في العبوة: —</div><div style="font-size:13px;font-weight:700;border-bottom:3px solid #000;padding-bottom:5px;margin-bottom:3px">حجم الحصة: ${d.ss} غرام</div><div class="arrow calrow"><span class="arb">السعرات الحرارية</span><span class="arcal">${s.kcal}</span></div><div style="font-size:9px;text-align:left;border-bottom:2px solid #000;padding:2px 0;margin-bottom:1px">* % نسبة الاحتياج اليومي</div><div class="arrow"><span class="arb">الدهون الكلية</span><span class="arv">${s.fat} غ &nbsp; ${dv('fat')}%*</span></div><div class="arrow arind"><span>دهون مشبعة</span><span class="arv">${s.satFat} غ &nbsp; ${dv('satFat')}%</span></div><div class="arrow arind"><span>دهون متحولة</span><span class="arv">${s.transFat} غ</span></div><div class="arrow"><span class="arb">الكوليسترول</span><span class="arv">${s.chol} ملغ &nbsp; ${dv('chol')}%</span></div><div class="arrow"><span class="arb">الصوديوم</span><span class="arv">${s.sodium} ملغ &nbsp; ${dv('sodium')}%</span></div><div class="arrow"><span class="arb">الكربوهيدرات الكلية</span><span class="arv">${s.carb} غ &nbsp; ${dv('carb')}%</span></div><div class="arrow arind"><span>الألياف الغذائية</span><span class="arv">${s.fiber} غ &nbsp; ${dv('fiber')}%</span></div><div class="arrow arind"><span>سكريات كلية</span><span class="arv">${s.sugars} غ</span></div><div class="arrow arind" style="padding-right:22px"><span>يتضمن ${s.addedSugar} غ سكر مضاف</span><span class="arv">${dv('addedSugar')}%</span></div><div class="arrow thick"><span class="arb">البروتين</span><span class="arv">${s.prot} غ</span></div><div class="arfn">* تدل نسبة الاحتياج اليومي على العناصر الغذائية في الحصة الواحدة مبنية على نظام غذائي محتوٍ على 2000 سعرة حرارية.</div><div class="arstd">JS 1473:2022 — Jordanian Standard</div></div><button class="btndl">⬇ تحميل PDF جاهز للطباعة</button>`;
+  }else if(fmt==='us'){
+    const fn={fat:78,satFat:20,chol:300,sodium:2300,carb:275,fiber:28,addedSugar:50};
+    const fdv=(v,k)=>Math.round(v/fn[k]*100);
+    rb.innerHTML=sumBar(s)+`<div class="fdalbll"><div class="fdahead"><div class="fdatitle">Nutrition Facts</div><div class="fdaservpkg">— servings per container</div><div class="fdaservsize">Serving size ${d.ss}g</div></div><div class="fdacalrow"><div><div class="fdacallbl">Amount per serving</div><div class="fdacallbl" style="font-size:15px;font-weight:900">Calories</div></div><div class="fdacalval">${s.kcal}</div></div><div class="fdadvhdr">% Daily Value*</div><div class="fdarow thick"><span><span class="fdab">Total Fat</span> ${s.fat}g</span><span class="fdadv">${fdv(s.fat,'fat')}%</span></div><div class="fdarow ind"><span>Saturated Fat ${s.satFat}g</span><span class="fdadv">${fdv(s.satFat,'satFat')}%</span></div><div class="fdarow ind"><span><em>Trans</em> Fat ${s.transFat}g</span><span></span></div><div class="fdarow thick"><span><span class="fdab">Cholesterol</span> ${s.chol}mg</span><span class="fdadv">${fdv(s.chol,'chol')}%</span></div><div class="fdarow thick"><span><span class="fdab">Sodium</span> ${s.sodium}mg</span><span class="fdadv">${fdv(s.sodium,'sodium')}%</span></div><div class="fdarow"><span><span class="fdab">Total Carbohydrate</span> ${s.carb}g</span><span class="fdadv">${fdv(s.carb,'carb')}%</span></div><div class="fdarow ind"><span>Dietary Fiber ${s.fiber}g</span><span class="fdadv">${fdv(s.fiber,'fiber')}%</span></div><div class="fdarow ind"><span>Total Sugars ${s.sugars}g</span><span></span></div><div class="fdarow ind2"><span>Incl. ${s.addedSugar}g Added Sugars</span><span class="fdadv">${fdv(s.addedSugar,'addedSugar')}%</span></div><div class="fdarow thick"><span><span class="fdab">Protein</span> ${s.prot}g</span><span></span></div><div class="fdafoot">*The %DV tells you how much a nutrient in a serving contributes to a daily diet. 2,000 calories a day is used for general nutrition advice. — 21 CFR 101.9</div></div><button class="btndl">⬇ Download Print-Ready PDF</button>`;
+  }else{
+    rb.innerHTML=sumBar(s)+`<div class="eulbl"><div class="euhead"><div class="euttl">Nutrition Declaration</div><div class="eubasis">Per 100g &nbsp;|&nbsp; Per serving (${d.ss}g)</div></div><table class="eutable"><tr><th>Nutrient</th><th>Per 100g</th><th>Per ${d.ss}g</th></tr><tr><td>Energy</td><td>${p.kj} kJ / ${p.kcal} kcal</td><td>${s.kj} kJ / ${s.kcal} kcal</td></tr><tr><td>Fat</td><td>${p.fat} g</td><td>${s.fat} g</td></tr><tr class="ind"><td>of which saturates</td><td>${p.satFat} g</td><td>${s.satFat} g</td></tr><tr><td>Carbohydrate</td><td>${p.carb} g</td><td>${s.carb} g</td></tr><tr class="ind"><td>of which sugars</td><td>${p.sugars} g</td><td>${s.sugars} g</td></tr><tr><td>Fibre</td><td>${p.fiber} g</td><td>${s.fiber} g</td></tr><tr><td>Protein</td><td>${p.prot} g</td><td>${s.prot} g</td></tr><tr><td>Salt</td><td>${p.salt} g</td><td>${s.salt} g</td></tr></table><div class="eufoot">EU Regulation No 1169/2011</div></div><button class="btndl">⬇ Download Print-Ready PDF</button>`;
+  }
+}
+
+function renderRestLbl(s,name,ss){
+  document.getElementById('rBody').innerHTML=`<div style="text-align:center;margin-bottom:13px"><div style="font-size:13px;font-weight:700;color:var(--text)">${name}</div><div style="font-size:11px;color:var(--text2)">لكل حصة (${ss} غرام)</div></div>${sumBar(s)}<div class="arlbl" style="margin-top:8px"><div class="arttl" style="font-size:14px">تفاصيل القيمة التغذوية</div><div class="arrow"><span>طاقة</span><span class="arv">${s.kcal} kcal / ${s.kj} kJ</span></div><div class="arrow"><span>دهون مشبعة</span><span class="arv">${s.satFat} غ</span></div><div class="arrow"><span>الكوليسترول</span><span class="arv">${s.chol} ملغ</span></div><div class="arrow"><span>الصوديوم</span><span class="arv">${s.sodium} ملغ</span></div><div class="arrow"><span>السكريات الكلية</span><span class="arv">${s.sugars} غ</span></div><div class="arrow"><span>الألياف</span><span class="arv">${s.fiber} غ</span></div><div class="arrow"><span>الملح</span><span class="arv">${s.salt} غ</span></div></div><button class="btndl" style="margin-top:10px">⬇ تحميل لقائمة الطعام</button>`;
+}
+</script>
+</body>
+</html>
