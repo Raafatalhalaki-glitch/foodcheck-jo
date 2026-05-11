@@ -650,7 +650,7 @@ body { font-family:'Tajawal',sans-serif; background:var(--navy); color:var(--tex
           <input type="text" id="est-cert" placeholder="رقم الشهادة أو المؤهل إن وُجد">
         </div>
         <div class="form-group">
-          <label>تاريخ إعداد الدراسة</label>
+          <label>تاريخ تقديم الطلب (اختياري)</label>
           <input type="date" id="est-date">
         </div>
         <div class="form-group">
@@ -777,13 +777,13 @@ body { font-family:'Tajawal',sans-serif; background:var(--navy); color:var(--tex
     <div class="section-header">
       <div class="section-num">4</div>
       <div>
-        <div class="section-title">حالات إبطال مدة الصلاحية — إقرار ملزم</div>
+        <div class="section-title">حالات إلغاء تمديد الصلاحية — إقرار ملزم</div>
         <div class="section-sub">يُعتبر المنتج منتهي الصلاحية فوراً عند تحقق أي من الحالات التالية</div>
       </div>
     </div>
     <div class="section-body">
       <div class="nullification-box">
-        <div class="nullification-title">⛔ حالات الإبطال التلقائي لمدة الصلاحية</div>
+        <div class="nullification-title">⛔ حالات إلغاء التمديد التلقائي لمدة الصلاحية</div>
         <div class="null-items">
           <div class="null-item"><span class="null-bullet">■</span><span><strong>تجاوز درجة الحرارة:</strong> إذا تجاوزت درجة حرارة التخزين الحد المقرر للمنتج لأكثر من ساعتين متواصلتين — تُلغى مدة الصلاحية المعتمدة فوراً وتُطبَّق قاعدة "2 ساعة/4 ساعة" (Zone Abuse Rule)</span></div>
           <div class="null-item"><span class="null-bullet">■</span><span><strong>تغيير المكونات أو التركيبة:</strong> أي تغيير في نوع أو نسبة أي مكوّن رئيسي يُلغي الدراسة ويستوجب إعادتها من الصفر</span></div>
@@ -818,7 +818,7 @@ body { font-family:'Tajawal',sans-serif; background:var(--navy); color:var(--tex
 
 ثانياً — الالتزام بشروط الحفظ: نلتزم بالحفاظ على درجات حرارة التبريد المقررة لكل منتج وفق ما هو محدد في هذه الدراسة، وبتطبيق إجراءات التشغيل القياسية المرفقة (SOP-01 إلى SOP-04)، وبتوثيق جميع قراءات درجات الحرارة بصورة منتظمة.
 
-ثالثاً — الإبطال التلقائي: نُقرّ بأن مدة الصلاحية المعتمدة تُعتبر لاغية وكأنها لم تكن في حال الإخلال بأي من شروط الحفظ المقررة أو تغيير تركيبة المنتج أو طريقة تحضيره أو التعبئة أو أي حالة من حالات الإبطال المذكورة في هذه الوثيقة.
+ثالثاً — إلغاء التمديد التلقائي: نُقرّ بأن مدة الصلاحية المعتمدة تُعتبر لاغية وكأنها لم تكن في حال الإخلال بأي من شروط الحفظ المقررة أو تغيير تركيبة المنتج أو طريقة تحضيره أو التعبئة أو أي حالة من حالات إلغاء التمديد المذكورة في هذه الوثيقة.
 
 رابعاً — المسؤولية: تتحمل المنشأة المسؤولية الكاملة عن سلامة المنتج خلال مدة صلاحيته المعتمدة طالما التزمت بجميع الشروط المذكورة. وفي حال الإخلال بهذه الشروط، تتحمل المنشأة المسؤولية الكاملة دون الرجوع إلى أي جهة أخرى.
 
@@ -1494,7 +1494,7 @@ function generateReport() {
 
 <strong>ثانياً — الالتزام بشروط الحفظ:</strong> نلتزم بالحفاظ على درجات حرارة التبريد المقررة لكل منتج وفق ما هو محدد في هذه الدراسة، وبتطبيق إجراءات التشغيل القياسية المرفقة (SOP-01 إلى SOP-04)، وبتوثيق جميع قراءات درجات الحرارة بصورة منتظمة.
 
-<strong>ثالثاً — الإبطال التلقائي:</strong> نُقرّ بأن مدة الصلاحية المعتمدة تُعتبر لاغية في حال الإخلال بأي من شروط الحفظ المقررة أو تغيير تركيبة المنتج أو طريقة تحضيره أو أي حالة من حالات الإبطال المذكورة في هذه الوثيقة.
+<strong>ثالثاً — إلغاء التمديد التلقائي:</strong> نُقرّ بأن مدة الصلاحية المعتمدة تُعتبر لاغية في حال الإخلال بأي من شروط الحفظ المقررة أو تغيير تركيبة المنتج أو طريقة تحضيره أو أي حالة من حالات إلغاء التمديد المذكورة في هذه الوثيقة.
 
 <strong>رابعاً — المسؤولية:</strong> تتحمل المنشأة المسؤولية الكاملة عن سلامة المنتج خلال مدة صلاحيته المعتمدة طالما التزمت بجميع الشروط المذكورة. في حال الإخلال بهذه الشروط، تتحمل المنشأة المسؤولية الكاملة.
 
@@ -1527,9 +1527,9 @@ function generateReport() {
   // Nullification in report
   const nullHTML = `
     <div class="null-report">
-      <div class="null-report-title">⛔ حالات الإبطال التلقائي لمدة الصلاحية</div>
+      <div class="null-report-title">⛔ حالات إلغاء التمديد التلقائي لمدة الصلاحية</div>
       <div class="null-report-items">
-        <div class="null-report-item"><span>■</span><span><strong>تجاوز درجة الحرارة:</strong> إذا تجاوزت درجة حرارة التخزين الحد المقرر لأكثر من ساعتين متواصلتين → الإبطال فوري</span></div>
+        <div class="null-report-item"><span>■</span><span><strong>تجاوز درجة الحرارة:</strong> إذا تجاوزت درجة حرارة التخزين الحد المقرر لأكثر من ساعتين متواصلتين → إلغاء التمديد فوري</span></div>
         <div class="null-report-item"><span>■</span><span><strong>تغيير المكونات أو التركيبة:</strong> أي تغيير في نوع أو نسبة أي مكوّن رئيسي → يستوجب إعادة الدراسة كاملة</span></div>
         <div class="null-report-item"><span>■</span><span><strong>تغيير طريقة التحضير أو التعبئة:</strong> تغيير جوهري → دراسة جديدة</span></div>
         <div class="null-report-item"><span>■</span><span><strong>فشل فحص التحقق الدوري:</strong> أي نتيجة خارج حدود القبول → إيقاف فوري وإعادة تقييم</span></div>
@@ -1575,7 +1575,7 @@ function generateReport() {
     <div class="report-section-title">📋 إجراءات التشغيل القياسية (SOP)</div>
     ${sopReportHTML}
 
-    <div class="report-section-title">⛔ حالات إبطال مدة الصلاحية</div>
+    <div class="report-section-title">⛔ حالات إلغاء تمديد الصلاحية</div>
     ${nullHTML}
 
     <div class="report-section-title">📜 الإقرار الرسمي والتوقيع</div>
