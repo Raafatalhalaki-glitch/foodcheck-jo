@@ -8,13 +8,13 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0d1f35;--navy2:#152b47;--navy3:#1a3558;
-  --teal:#00d4a8;--teal2:#00b891;
-  --pass-bg:#071f14;--pass-border:#00d4a8;--pass-color:#00d4a8;
-  --fail-bg:#1e0808;--fail-border:#a32d2d;--fail-color:#f09595;
-  --cond-bg:#1a1000;--cond-border:#ba7517;--cond-color:#ef9f27;
-  --text:#e8edf2;--text2:#9ab0c8;--text3:#5a7a98;
-  --border:#ffffff12;--border2:#ffffff20;
+  --navy:#ffffff;--navy2:#f9fafb;--navy3:#f1f5f9;
+  --teal:#16a34a;--teal2:#15803d;
+  --pass-bg:#f0fdf4;--pass-border:#86efac;--pass-color:#15803d;
+  --fail-bg:#fef2f2;--fail-border:#fca5a5;--fail-color:#dc2626;
+  --cond-bg:#fffbeb;--cond-border:#fcd34d;--cond-color:#92400e;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;
+  --border:#e2e8f0;--border2:#cbd5e1;
 }
 body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;direction:rtl}
 
@@ -79,7 +79,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--navy);color:var(--text);m
 .verdict-card.PASS{background:var(--pass-bg);border-color:var(--pass-border)}
 .verdict-card.FAIL{background:var(--fail-bg);border-color:var(--fail-border)}
 .verdict-card.CONDITIONAL{background:var(--cond-bg);border-color:var(--cond-border)}
-.verdict-card.NOT_FOUND{background:#111827;border-color:var(--border2)}
+.verdict-card.NOT_FOUND{background:#f9fafb;border-color:var(--border2)}
 .vc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:12px}
 .vc-name{font-size:16px;font-weight:700;color:var(--text)}
 .vc-ins{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:3px}
