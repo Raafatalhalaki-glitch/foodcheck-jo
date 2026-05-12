@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodCheck Hospital | نظام سلامة الغذاء المستشفيات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a0f1e;
+    --navy2: #0f1628;
+    --navy3: #1a2340;
+    --teal: #00d4a8;
+    --teal2: #00b894;
+    --teal-dim: rgba(0,212,168,0.12);
+    --teal-glow: rgba(0,212,168,0.25);
+    --red: #ff4757;
+    --red-dim: rgba(255,71,87,0.12);
+    --amber: #ffa502;
+    --amber-dim: rgba(255,165,2,0.12);
+    --green: #2ed573;
+    --green-dim: rgba(46,213,115,0.12);
+    --white: #f0f4f8;
+    --white2: #b8c5d6;
+    --border: rgba(0,212,168,0.15);
+    --font: 'Tajawal', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top:0; left:0; right:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 0 2rem;
+    height: 60px;
+    background: rgba(10,15,30,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--teal);
+    letter-spacing: 0.05em;
+  }
+  .nav-logo span { color: var(--white2); }
+  .nav-lang {
+    display:flex; gap:0.5rem;
+  }
+  .lang-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--white2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-dim);
+  }
+
+  /* ─── VIEWS ─── */
+  .view { display:none; }
+  .view.active { display:block; }
+
+  /* ─── AUTH PAGE ─── */
+  #auth-view {
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 5rem 1rem 2rem;
+    position: relative;
+  }
+  .auth-bg {
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,168,0.08) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .auth-box {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 460px;
+    position:relative;
+    z-index:1;
+    box-shadow: 0 0 60px rgba(0,212,168,0.06);
+  }
+  .auth-header {
+    text-align:center;
+    margin-bottom: 2rem;
+  }
+  .auth-badge {
+    display: inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    background: var(--teal-dim);
+    border: 1px solid rgba(0,212,168,0.3);
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    font-family: var(--mono);
+  }
+  .auth-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .auth-title span { color: var(--teal); }
+  .auth-sub {
+    color: var(--white2);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  .auth-tabs {
+    display:flex;
+    background: var(--navy3);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 1.5rem;
+    gap: 4px;
+  }
+  .auth-tab {
+    flex:1;
+    padding: 0.6rem;
+    border:none;
+    background:none;
+    color: var(--white2);
+    font-family: var(--font);
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .auth-tab.active {
+    background: var(--teal);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label {
+    display:block;
+    font-size: 0.85rem;
+    color: var(--white2);
+    margin-bottom: 0.4rem;
+  }
+  .form-group input,
+  .form-group select {
+    width:100%;
+    background: var(--navy3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 0.95rem;
+    outline:none;
+    transition: border-color 0.2s;
+    direction: inherit;
+  }
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--teal);
+  }
+  .form-group select option { background: var(--navy2); }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .btn-primary {
+    width:100%;
+    background: var(--teal);
+    color: var(--navy);
+    border:none;
+    padding: 0.9rem;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor:pointer;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-primary:hover {
+    background: var(--teal2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0,212,168,0.3);
+  }
+  .auth-privacy {
+    text-align:center;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--white2);
+    opacity: 0.7;
+  }
+  .error-msg {
+    background: var(--red-dim);
+    border: 1px solid rgba(255,71,87,0.3);
+    color: var(--red);
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display:none;
+  }
+
+  /* ─── DASHBOARD ─── */
+  #dashboard-view {
+    padding-top: 60px;
+    min-height: 100vh;
+  }
+  .dash-hero {
+    padding: 3rem 2rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:2rem;
+    flex-wrap:wrap;
+  }
+  .dash-welcome h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+  .dash-welcome h1 span { color: var(--teal); }
+  .dash-welcome p {
+    color: var(--white2);
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+  }
+  .dash-actions {
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .btn-outline {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--white2);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  .btn-teal-sm {
+    background: var(--teal);
+    color: var(--navy);
+    border:none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .btn-teal-sm:hover { background: var(--teal2); }
+
+  /* ─── MODULES GRID ─── */
+  .modules-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+  .modules-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem;
+  }
+  .module-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor:pointer;
+    transition: all 0.25s;
+    position:relative;
+    overflow:hidden;
+  }
+  .module-card::before {
+    content:'';
+    position:absolute;
+    top:0; right:0;
+    width:80px; height:80px;
+    background: radial-gradient(circle, var(--teal-dim) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(20px,-20px);
+  }
+  .module-card:hover {
+    border-color: rgba(0,212,168,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,212,168,0.1);
+  }
+  .module-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .module-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .module-desc {
+    font-size: 0.85rem;
+    color: var(--white2);
+    line-height: 1.5;
+  }
+  .module-tag {
+    display:inline-block;
+    margin-top: 0.8rem;
+    background: var(--teal-dim);
+    color: var(--teal);
+    border-radius: 20px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.75rem;
+    font-family: var(--mono);
+  }
+  .module-tag.critical {
+    background: var(--red-dim);
+    color: var(--red);
+  }
+
+  /* ─── ASSESSMENT PAGE ─── */
+  #assessment-view {
+    padding-top: 60px;
+    min-height: 100vh;
+  }
+  .assessment-header {
+    background: var(--navy2);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--white2);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor:pointer;
+    font-family: var(--font);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .assessment-title-block h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .assessment-title-block p {
+    font-size: 0.8rem;
+    color: var(--white2);
+  }
+  .progress-bar-wrap {
+    flex:1;
+    min-width:200px;
+  }
+  .progress-info {
+    display:flex;
+    justify-content:space-between;
+    font-size: 0.78rem;
+    color: var(--white2);
+    margin-bottom: 0.4rem;
+    font-family: var(--mono);
+  }
+  .progress-bar {
+    height:4px;
+    background: var(--navy3);
+    border-radius: 2px;
+    overflow:hidden;
+  }
+  .progress-fill {
+    height:100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .assessment-body {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* Module tabs */
+  .module-tabs {
+    display:flex;
+    gap:0.4rem;
+    flex-wrap:wrap;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .module-tab-btn {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    color: var(--white2);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor:pointer;
+    font-family: var(--font);
+    font-size: 0.82rem;
+    white-space:nowrap;
+    transition: all 0.2s;
+    display:flex;
+    align-items:center;
+    gap:0.3rem;
+  }
+  .module-tab-btn.active {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-dim);
+  }
+  .module-tab-btn.completed {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+  .tab-dot {
+    width:6px; height:6px;
+    border-radius:50%;
+    background:currentColor;
+  }
+
+  /* Question card */
+  .question-block {
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(8px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .module-header-badge {
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .module-badge-icon { font-size: 2rem; }
+  .module-badge-info h3 { font-size: 1.1rem; font-weight: 700; }
+  .module-badge-info p { font-size: 0.82rem; color: var(--white2); }
+
+  .question-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+  }
+  .question-card:hover { border-color: rgba(0,212,168,0.3); }
+  .question-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .question-num {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--teal);
+    opacity: 0.7;
+    margin-bottom: 0.4rem;
+  }
+  .answer-options {
+    display:flex;
+    gap:0.6rem;
+    flex-wrap:wrap;
+  }
+  .answer-btn {
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--navy3);
+    color: var(--white2);
+    font-family: var(--font);
+    font-size: 0.88rem;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .answer-btn:hover { border-color: rgba(0,212,168,0.4); color: var(--white); }
+  .answer-btn.selected-yes {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 600;
+  }
+  .answer-btn.selected-no {
+    background: var(--red-dim);
+    border-color: var(--red);
+    color: var(--red);
+    font-weight: 600;
+  }
+  .answer-btn.selected-partial {
+    background: var(--amber-dim);
+    border-color: var(--amber);
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .answer-btn.selected-na {
+    background: var(--navy3);
+    border-color: rgba(184,197,214,0.4);
+    color: var(--white2);
+    font-weight: 600;
+  }
+
+  .nav-btns {
+    display:flex;
+    justify-content:space-between;
+    margin-top: 2rem;
+    gap:1rem;
+  }
+  .btn-next {
+    background: var(--teal);
+    color: var(--navy);
+    border:none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .btn-next:hover { background: var(--teal2); }
+  .btn-next:disabled {
+    opacity:0.4;
+    cursor:not-allowed;
+    transform:none;
+  }
+
+  /* ─── RESULTS PAGE ─── */
+  #results-view {
+    padding-top: 60px;
+    min-height: 100vh;
+  }
+  .results-body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .results-header {
+    text-align:center;
+    padding: 2rem 0 1rem;
+  }
+  .results-header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  .results-header p { color: var(--white2); }
+
+  .overall-score-card {
+    background: var(--navy2);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align:center;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+    position:relative;
+    overflow:hidden;
+  }
+  .overall-score-card::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,168,0.06) 0%, transparent 70%);
+  }
+  .score-ring {
+    width:120px; height:120px;
+    border-radius:50%;
+    border: 6px solid var(--navy3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin: 0 auto 1rem;
+    position:relative;
+    z-index:1;
+  }
+  .score-ring.critical { border-color: var(--red); box-shadow: 0 0 30px rgba(255,71,87,0.2); }
+  .score-ring.high { border-color: var(--amber); box-shadow: 0 0 30px rgba(255,165,2,0.2); }
+  .score-ring.medium { border-color: var(--teal); box-shadow: 0 0 30px rgba(0,212,168,0.2); }
+  .score-ring.low { border-color: var(--green); box-shadow: 0 0 30px rgba(46,213,115,0.2); }
+  .score-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    font-family: var(--mono);
+  }
+  .score-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    position:relative; z-index:1;
+  }
+  .score-desc {
+    font-size: 0.85rem;
+    color: var(--white2);
+    position:relative; z-index:1;
+  }
+
+  .module-scores-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap:1rem;
+    margin: 1.5rem 0;
+  }
+  .module-score-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+  }
+  .module-score-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom: 0.8rem;
+  }
+  .module-score-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+  }
+  .module-score-pct {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .mini-bar {
+    height:6px;
+    background: var(--navy3);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .mini-fill {
+    height:100%;
+    border-radius:3px;
+    transition: width 0.6s ease;
+  }
+  .fill-green { background: var(--green); }
+  .fill-teal { background: var(--teal); }
+  .fill-amber { background: var(--amber); }
+  .fill-red { background: var(--red); }
+
+  .findings-section { margin: 2rem 0; }
+  .findings-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .finding-item {
+    background: var(--navy2);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.6rem;
+    border-right: 3px solid transparent;
+    display:flex;
+    gap:1rem;
+    align-items:flex-start;
+  }
+  .finding-item.critical { border-color: var(--red); }
+  .finding-item.high { border-color: var(--amber); }
+  .finding-item.medium { border-color: var(--teal); }
+  .finding-dot {
+    width:8px; height:8px;
+    border-radius:50%;
+    margin-top: 6px;
+    flex-shrink:0;
+  }
+  .finding-dot.critical { background: var(--red); }
+  .finding-dot.high { background: var(--amber); }
+  .finding-dot.medium { background: var(--teal); }
+  .finding-text { font-size: 0.88rem; line-height: 1.5; }
+  .finding-action {
+    font-size: 0.8rem;
+    color: var(--teal);
+    margin-top: 0.3rem;
+  }
+
+  .results-actions {
+    display:flex;
+    gap:1rem;
+    justify-content:center;
+    margin-top: 2rem;
+    flex-wrap:wrap;
+  }
+  .btn-pdf {
+    background: var(--teal);
+    color: var(--navy);
+    border:none;
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor:pointer;
+    transition: all 0.2s;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .btn-pdf:hover { background: var(--teal2); transform:translateY(-1px); }
+
+  /* PRINT / PDF */
+  @media print {
+    nav, .results-actions { display:none !important; }
+    body { background:white; color:#111; }
+    .overall-score-card, .module-score-card, .finding-item { border:1px solid #ddd; }
+  }
+
+  /* ─── UTILITY ─── */
+  .hidden { display:none !important; }
+  .text-teal { color: var(--teal); }
+  .text-red { color: var(--red); }
+  .text-amber { color: var(--amber); }
+  .text-green { color: var(--green); }
+
+  /* RTL/LTR toggle */
+  [dir="ltr"] { font-family: 'IBM Plex Mono', 'Tajawal', sans-serif; }
+
+  @media (max-width:600px) {
+    .form-row { grid-template-columns:1fr; }
+    .dash-hero { padding: 2rem 1rem 1rem; }
+    .modules-section { padding: 0 1rem 2rem; }
+    .assessment-body { padding: 1rem; }
+    .results-body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">FoodCheck <span>/ Hospital</span></div>
+  <div class="nav-lang">
+    <button class="lang-btn active" onclick="setLang('ar')" id="btn-ar">عربي</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+    <button class="btn-outline" id="logout-btn" style="display:none" onclick="logout()"></button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     AUTH VIEW
+════════════════════════════════════════ -->
+<div id="auth-view" class="view active">
+  <div class="auth-bg"></div>
+  <div class="auth-box">
+    <div class="auth-header">
+      <div class="auth-badge">🏥 <span data-ar="نظام سلامة الغذاء" data-en="Food Safety System">نظام سلامة الغذاء</span></div>
+      <div class="auth-title" data-ar="FoodCheck <span class='text-teal'>Hospital</span>" data-en="FoodCheck <span class='text-teal'>Hospital</span>">FoodCheck <span class='text-teal'>Hospital</span></div>
+      <p class="auth-sub" data-ar="نظام تقييم HACCP المتكامل للمطابخ المستشفيية" data-en="Integrated HACCP assessment system for hospital kitchens">نظام تقييم HACCP المتكامل للمطابخ المستشفيية</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">
+        <span data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</span>
+      </button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">
+        <span data-ar="حساب جديد" data-en="Register">حساب جديد</span>
+      </button>
+    </div>
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <!-- LOGIN FORM -->
+    <div id="login-form">
+      <div class="form-group">
+        <label data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</label>
+        <input type="email" id="login-email" placeholder="example@hospital.com">
+      </div>
+      <div class="form-group">
+        <label data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
+        <input type="password" id="login-pass" placeholder="••••••••">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">
+        <span data-ar="دخول" data-en="Login">دخول</span>
+      </button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="register-form" class="hidden">
+      <div class="form-row">
+        <div class="form-group">
+          <label data-ar="الاسم الكامل" data-en="Full Name">الاسم الكامل</label>
+          <input type="text" id="reg-name" placeholder="">
+        </div>
+        <div class="form-group">
+          <label data-ar="الدولة" data-en="Country">الدولة</label>
+          <select id="reg-country">
+            <option value="" data-ar="اختر..." data-en="Select...">اختر...</option>
+            <option value="JO">الأردن</option>
+            <option value="SA">السعودية</option>
+            <option value="AE">الإمارات</option>
+            <option value="EG">مصر</option>
+            <option value="KW">الكويت</option>
+            <option value="QA">قطر</option>
+            <option value="BH">البحرين</option>
+            <option value="OM">عُمان</option>
+            <option value="LB">لبنان</option>
+            <option value="IQ">العراق</option>
+            <option value="OTHER" data-ar="دولة أخرى" data-en="Other">دولة أخرى</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-ar="نوع المنشأة" data-en="Facility Type">نوع المنشأة</label>
+        <select id="reg-facility">
+          <option value="" data-ar="اختر..." data-en="Select...">اختر...</option>
+          <option value="hospital" data-ar="مستشفى" data-en="Hospital">مستشفى</option>
+          <option value="university" data-ar="مستشفى جامعي" data-en="University Hospital">مستشفى جامعي</option>
+          <option value="clinic" data-ar="مركز صحي / عيادة" data-en="Health Center / Clinic">مركز صحي / عيادة</option>
+          <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-ar="الدور الوظيفي" data-en="Job Role">الدور الوظيفي</label>
+        <select id="reg-role">
+          <option value="" data-ar="اختر..." data-en="Select...">اختر...</option>
+          <option value="quality" data-ar="مدير/مشرف الجودة" data-en="Quality Manager/Supervisor">مدير/مشرف الجودة</option>
+          <option value="dietitian" data-ar="أخصائي تغذية" data-en="Dietitian">أخصائي تغذية</option>
+          <option value="kitchen" data-ar="مشرف المطبخ" data-en="Kitchen Supervisor">مشرف المطبخ</option>
+          <option value="ipc" data-ar="مسؤول مكافحة العدوى" data-en="IPC Officer">مسؤول مكافحة العدوى</option>
+          <option value="academic" data-ar="أكاديمي / باحث" data-en="Academic / Researcher">أكاديمي / باحث</option>
+          <option value="other" data-ar="أخرى" data-en="Other">أخرى</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</label>
+        <input type="email" id="reg-email" placeholder="example@hospital.com">
+      </div>
+      <div class="form-group">
+        <label data-ar="كلمة المرور" data-en="Password">كلمة المرور</label>
+        <input type="password" id="reg-pass" placeholder="8 أحرف على الأقل">
+      </div>
+      <button class="btn-primary" onclick="doRegister()">
+        <span data-ar="إنشاء حساب" data-en="Create Account">إنشاء حساب</span>
+      </button>
+    </div>
+
+    <p class="auth-privacy" data-ar="🔒 لا نطلب بيانات مرضى أو معلومات سرية للمنشأة" data-en="🔒 We do not collect patient data or confidential facility information">🔒 لا نطلب بيانات مرضى أو معلومات سرية للمنشأة</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DASHBOARD VIEW
+════════════════════════════════════════ -->
+<div id="dashboard-view" class="view">
+  <div class="dash-hero">
+    <div class="dash-welcome">
+      <h1 id="welcome-msg">مرحباً، <span class="text-teal">—</span></h1>
+      <p data-ar="اختر وحدة التقييم للبدء" data-en="Select an assessment module to begin">اختر وحدة التقييم للبدء</p>
+    </div>
+    <div class="dash-actions">
+      <button class="btn-outline" id="logout-btn2" onclick="logout()">
+        <span data-ar="خروج" data-en="Logout">خروج</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="modules-section">
+    <div class="section-label" data-ar="وحدات التقييم" data-en="Assessment Modules">وحدات التقييم</div>
+    <div class="modules-grid">
+
+      <div class="module-card" onclick="startAssessment('kitchen')">
+        <div class="module-icon">🍳</div>
+        <div class="module-title" data-ar="تقييم HACCP للمطبخ" data-en="Kitchen HACCP Assessment">تقييم HACCP للمطبخ</div>
+        <div class="module-desc" data-ar="تقييم شامل لجميع مراحل المطبخ: الاستلام، التخزين، الطهي، التبريد، التوزيع" data-en="Full assessment of all kitchen stages: receiving, storage, cooking, cooling, distribution">تقييم شامل لجميع مراحل المطبخ: الاستلام، التخزين، الطهي، التبريد، التوزيع</div>
+        <span class="module-tag">HACCP / GHP / OPRP</span>
+      </div>
+
+      <div class="module-card" onclick="startAssessment('diet')">
+        <div class="module-icon">🏥</div>
+        <div class="module-title" data-ar="التحقق من الحمية الغذائية" data-en="Diet Verification Engine">التحقق من الحمية الغذائية</div>
+        <div class="module-desc" data-ar="التحقق من تطابق الوجبة مع الحمية المعتمدة للمريض وضوابط الحميات الحرجة" data-en="Verify meal matches patient approved diet and critical diet controls">التحقق من تطابق الوجبة مع الحمية المعتمدة للمريض وضوابط الحميات الحرجة</div>
+        <span class="module-tag critical">Clinical Verification</span>
+      </div>
+
+      <div class="module-card" onclick="startAssessment('supplier')">
+        <div class="module-icon">🚚</div>
+        <div class="module-title" data-ar="مراقبة الموردين" data-en="Supplier Control">مراقبة الموردين</div>
+        <div class="module-desc" data-ar="تقييم اعتماد الموردين وضوابط استلام المواد الغذائية عالية المخاطر" data-en="Supplier approval assessment and high-risk food receiving controls">تقييم اعتماد الموردين وضوابط استلام المواد الغذائية عالية المخاطر</div>
+        <span class="module-tag">Supplier / PRP</span>
+      </div>
+
+      <div class="module-card" onclick="startAssessment('ipc')">
+        <div class="module-icon">🦠</div>
+        <div class="module-title" data-ar="تكامل مكافحة العدوى" data-en="IPC Integration">تكامل مكافحة العدوى</div>
+        <div class="module-desc" data-ar="ضوابط توزيع الوجبات على أجنحة العزل وإدارة العوائد" data-en="Meal delivery controls for isolation wards and tray return management">ضوابط توزيع الوجبات على أجنحة العزل وإدارة العوائد</div>
+        <span class="module-tag">IPC / Isolation</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     ASSESSMENT VIEW
+════════════════════════════════════════ -->
+<div id="assessment-view" class="view">
+  <div class="assessment-header">
+    <button class="back-btn" onclick="goToDashboard()">
+      <span data-ar="← رجوع" data-en="← Back">← رجوع</span>
+    </button>
+    <div class="assessment-title-block">
+      <h2 id="assess-title">—</h2>
+      <p id="assess-subtitle">—</p>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-info">
+        <span id="progress-text">0%</span>
+        <span id="progress-steps">0/0</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="assessment-body">
+    <div class="module-tabs" id="module-tabs"></div>
+    <div id="questions-container"></div>
+    <div class="nav-btns">
+      <button class="back-btn" id="prev-btn" onclick="prevModule()">
+        <span data-ar="→ السابق" data-en="→ Previous">→ السابق</span>
+      </button>
+      <button class="btn-next" id="next-btn" onclick="nextModule()">
+        <span data-ar="التالي ←" data-en="Next ←">التالي ←</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     RESULTS VIEW
+════════════════════════════════════════ -->
+<div id="results-view" class="view">
+  <div class="results-body">
+    <div class="results-header">
+      <h2 data-ar="نتائج التقييم" data-en="Assessment Results">نتائج التقييم</h2>
+      <p id="results-meta">—</p>
+    </div>
+
+    <div class="overall-score-card">
+      <div class="score-ring" id="score-ring">
+        <div class="score-number" id="score-number">—</div>
+      </div>
+      <div class="score-label" id="score-label">—</div>
+      <div class="score-desc" id="score-desc">—</div>
+    </div>
+
+    <div class="module-scores-grid" id="module-scores-grid"></div>
+
+    <div class="findings-section" id="findings-section"></div>
+
+    <div class="results-actions">
+      <button class="btn-pdf" onclick="downloadPDF()">
+        ⬇ <span data-ar="تحميل تقرير PDF" data-en="Download PDF Report">تحميل تقرير PDF</span>
+      </button>
+      <button class="btn-outline" onclick="goToDashboard()">
+        <span data-ar="تقييم جديد" data-en="New Assessment">تقييم جديد</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT ENGINE
+════════════════════════════════════════ -->
+<script>
+// ─── STATE ───────────────────────────────
+let lang = 'ar';
+let currentUser = null;
+let currentAssessmentType = null;
+let currentModuleIndex = 0;
+let answers = {};
+let assessmentModules = [];
+
+// ─── TRANSLATIONS ─────────────────────────
+const T = {
+  ar: {
+    logout: 'خروج',
+    welcome: 'مرحباً،',
+    yes: 'نعم',
+    no: 'لا',
+    partial: 'جزئي',
+    na: 'لا ينطبق',
+    next: 'التالي ←',
+    prev: '→ السابق',
+    finish: 'عرض النتائج',
+    critical: 'خطر حرج',
+    high: 'خطر عالٍ',
+    medium: 'خطر متوسط',
+    low: 'ممتاز',
+    criticalDesc: 'يتطلب تصحيحاً فورياً قبل استمرار العمل',
+    highDesc: 'يتطلب إجراء تصحيحي خلال 24 ساعة',
+    mediumDesc: 'يتطلب تحسيناً خلال أسبوع',
+    lowDesc: 'المطبخ يستوفي متطلبات HACCP الأساسية',
+    action: '← الإجراء المطلوب: ',
+    reportTitle: 'تقرير تقييم HACCP - مطبخ المستشفى',
+    assessDate: 'تاريخ التقييم: ',
+    assessBy: 'المُقيِّم: ',
+  },
+  en: {
+    logout: 'Logout',
+    welcome: 'Welcome,',
+    yes: 'Yes',
+    no: 'No',
+    partial: 'Partial',
+    na: 'N/A',
+    next: 'Next →',
+    prev: '← Previous',
+    finish: 'View Results',
+    critical: 'Critical Risk',
+    high: 'High Risk',
+    medium: 'Medium Risk',
+    low: 'Excellent',
+    criticalDesc: 'Immediate correction required before continuing',
+    highDesc: 'Corrective action required within 24 hours',
+    mediumDesc: 'Improvement required within one week',
+    lowDesc: 'Kitchen meets basic HACCP requirements',
+    action: '→ Required Action: ',
+    reportTitle: 'HACCP Assessment Report - Hospital Kitchen',
+    assessDate: 'Assessment Date: ',
+    assessBy: 'Assessed By: ',
+  }
+};
+
+// ─── ASSESSMENT DATA ───────────────────────
+const ASSESSMENTS = {
+
+  kitchen: {
+    title: { ar: 'تقييم HACCP للمطبخ', en: 'Kitchen HACCP Assessment' },
+    subtitle: { ar: 'GHP • OPRP • نقاط التحكم الحرجة', en: 'GHP • OPRP • Critical Control Points' },
+    modules: [
+      {
+        id: 'ghp', icon: '🧼',
+        title: { ar: 'الصحة الشخصية وNظافة المطبخ', en: 'Personal Hygiene & GHP' },
+        questions: [
+          { id:'ghp1', text:{ar:'هل يلتزم العمال بإعلان حالتهم الصحية قبل العمل مع الطعام؟', en:'Do workers declare health status before food handling?'}, weight:5 },
+          { id:'ghp2', text:{ar:'هل يتم غسل الأيدي في المواقع المطلوبة بالطريقة الصحيحة؟', en:'Is handwashing performed correctly at required points?'}, weight:4 },
+          { id:'ghp3', text:{ar:'هل يتم التحقق من نظافة الأسطح المخصصة للطعام قبل التحضير عالي المخاطر؟', en:'Are food contact surfaces verified clean before high-risk prep?'}, weight:5 },
+          { id:'ghp4', text:{ar:'هل يتم الفصل بين أدوات الطعام الحلال/غير الحلال والحمية الخاصة؟', en:'Are utensils segregated for allergen-free and special diet preparation?'}, weight:5 },
+          { id:'ghp5', text:{ar:'هل يرتدي العمال ملابس واقية مناسبة (قبعة، مريلة، قفازات عند الضرورة)؟', en:'Do workers wear appropriate PPE (hat, apron, gloves when required)?'}, weight:3 },
+        ]
+      },
+      {
+        id: 'receiving', icon: '📦',
+        title: { ar: 'استلام المواد الغذائية', en: 'Food Receiving' },
+        questions: [
+          { id:'rec1', text:{ar:'هل يتم التحقق من حرارة المواد المبردة/المجمدة عند الاستلام؟', en:'Are chilled/frozen product temperatures verified at receiving?'}, weight:5 },
+          { id:'rec2', text:{ar:'هل يتم التحقق من سلامة التغليف عند كل استلام؟', en:'Is packaging integrity checked at every receiving?'}, weight:4 },
+          { id:'rec3', text:{ar:'هل يتم توثيق أرقام الدفعات وبيانات التتبع لكل مادة عالية المخاطر؟', en:'Are batch/lot numbers documented for all high-risk items?'}, weight:4 },
+          { id:'rec4', text:{ar:'هل جميع الموردين الحاليين على قائمة الموردين المعتمدين؟', en:'Are all current suppliers on the approved supplier list?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'storage', icon: '🌡️',
+        title: { ar: 'التخزين', en: 'Storage' },
+        questions: [
+          { id:'sto1', text:{ar:'هل تُسجَّل درجة حرارة الثلاجات بصفة منتظمة؟', en:'Are chiller temperatures logged regularly?'}, weight:5 },
+          { id:'sto2', text:{ar:'هل يتم الفصل بين المواد الخام والجاهزة للأكل (RTE) في التخزين؟', en:'Are raw and RTE foods segregated in storage?'}, weight:5 },
+          { id:'sto3', text:{ar:'هل يتم تطبيق مبدأ FIFO في التخزين؟', en:'Is FIFO (First In First Out) applied in storage?'}, weight:3 },
+          { id:'sto4', text:{ar:'هل يتم تخزين مواد الحمية الخاصة (خالية من الجلوتين، خالية من المسببات) بشكل منفصل؟', en:'Are special diet items (gluten-free, allergen-free) stored separately?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'cooking', icon: '🔥',
+        title: { ar: 'الطهي — نقطة تحكم حرجة', en: 'Cooking — CCP' },
+        questions: [
+          { id:'cook1', text:{ar:'هل تُقاس الحرارة الداخلية للمنتجات عند الطهي وتُسجَّل؟', en:'Are core cooking temperatures measured and recorded?'}, weight:5 },
+          { id:'cook2', text:{ar:'هل يتم حجب إطلاق الدفعة عند عدم بلوغ الحد الحرج للحرارة؟', en:'Is batch release blocked when critical temperature limit is not met?'}, weight:5 },
+          { id:'cook3', text:{ar:'هل يتم معايرة مقاييس الحرارة بصفة دورية؟', en:'Are thermometers calibrated periodically?'}, weight:4 },
+        ]
+      },
+      {
+        id: 'cooling', icon: '❄️',
+        title: { ar: 'التبريد السريع', en: 'Rapid Cooling' },
+        questions: [
+          { id:'cool1', text:{ar:'هل يتم تبريد الطعام المطهو من 60°م إلى 21°م خلال ساعتين؟', en:'Is cooked food cooled from 60°C to 21°C within 2 hours?'}, weight:5 },
+          { id:'cool2', text:{ar:'هل يتم تسجيل منحنى التبريد لكل دفعة مبردة؟', en:'Is a cooling log recorded for each cooled batch?'}, weight:5 },
+          { id:'cool3', text:{ar:'هل يتم تجميد الدفعة أو إتلافها عند عدم استيفاء شرط التبريد؟', en:'Is the batch discarded or assessed by QA if cooling limits are exceeded?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'reheating', icon: '♨️',
+        title: { ar: 'إعادة التسخين — نقطة تحكم حرجة', en: 'Reheating — CCP' },
+        questions: [
+          { id:'reh1', text:{ar:'هل تصل الأطعمة المُعاد تسخينها إلى 74°م داخلياً؟', en:'Do reheated foods reach 74°C internally?'}, weight:5 },
+          { id:'reh2', text:{ar:'هل يُمنع تسخين الطعام أكثر من مرة واحدة؟', en:'Is reheating limited to one time per food item?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'holding', icon: '🍽️',
+        title: { ar: 'الحفظ والتوزيع', en: 'Holding & Distribution' },
+        questions: [
+          { id:'hold1', text:{ar:'هل يُحفظ الطعام الساخن فوق 63°م طوال فترة التقديم؟', en:'Is hot food held above 63°C throughout service?'}, weight:5 },
+          { id:'hold2', text:{ar:'هل يُحفظ الطعام البارد تحت 5°م أثناء التوزيع؟', en:'Is cold food held below 5°C during distribution?'}, weight:5 },
+          { id:'hold3', text:{ar:'هل يتم تسجيل وتوثيق درجة حرارة عربات التوزيع؟', en:'Are distribution trolley temperatures recorded and documented?'}, weight:4 },
+        ]
+      },
+    ]
+  },
+
+  diet: {
+    title: { ar: 'التحقق من الحمية الغذائية', en: 'Diet Verification Engine' },
+    subtitle: { ar: 'Clinical Verification • تحقق مزدوج • حميات حرجة', en: 'Clinical Verification • Double Check • Critical Diets' },
+    modules: [
+      {
+        id: 'diet_order', icon: '📋',
+        title: { ar: 'أوامر الحمية', en: 'Diet Orders' },
+        questions: [
+          { id:'do1', text:{ar:'هل يوجد نظام لاستيراد أوامر الحمية المعتمدة من المصدر الطبي؟', en:'Is there a system to import approved diet orders from the medical source?'}, weight:5 },
+          { id:'do2', text:{ar:'هل يتم حجب تجهيز الطبق عند غياب أمر الحمية المعتمد للمريض؟', en:'Is tray preparation blocked when no approved diet order exists for the patient?'}, weight:5 },
+          { id:'do3', text:{ar:'هل يتم التعامل مع تغيير الحمية بعد تجهيز الطبق (إلغاء الطبق القديم)؟', en:'Are diet order changes after tray preparation handled (old tray cancelled)?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'tray_match', icon: '✅',
+        title: { ar: 'مطابقة الطبق', en: 'Tray Matching' },
+        questions: [
+          { id:'tm1', text:{ar:'هل يتم التحقق من تطابق رمز حمية الطبق مع رمز حمية المريض المعتمد قبل الإرسال؟', en:'Is tray diet code verified against approved patient diet code before dispatch?'}, weight:5 },
+          { id:'tm2', text:{ar:'هل يتم توثيق عملية التحقق واسم المتحقق في كل طبق؟', en:'Is the verification process and verifier name documented for each tray?'}, weight:4 },
+          { id:'tm3', text:{ar:'هل هناك ملصق واضح على كل طبق يوضح نوع الحمية ومعرف المريض؟', en:'Is there a clear label on each tray showing diet type and patient ID?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'high_risk_diets', icon: '⚠️',
+        title: { ar: 'الحميات الحرجة', en: 'Critical Diets' },
+        questions: [
+          { id:'hr1', text:{ar:'هل تتطلب حمية الحساسية (ALLERGY) تحققاً من شخصين قبل الإرسال؟', en:'Does allergen diet (ALLERGY) require second-person verification before dispatch?'}, weight:5 },
+          { id:'hr2', text:{ar:'هل يتم حجب إرسال الطعام للمرضى الذين يحملون أمر NPO بشكل تلقائي؟', en:'Is meal dispatch automatically blocked for patients with active NPO orders?'}, weight:5 },
+          { id:'hr3', text:{ar:'هل تتطلب حمية القوام المعدّل (TEXTURE) تحققاً مزدوجاً ومراجعة القوام؟', en:'Does texture-modified diet (TEXTURE) require double verification and texture review?'}, weight:5 },
+          { id:'hr4', text:{ar:'هل يتم تطبيق قائمة الأطعمة الممنوعة على حمية مرضى نقص المناعة (NEUTRO)؟', en:'Is a restricted food list applied for neutropenic/immunocompromised diet (NEUTRO)?'}, weight:5 },
+        ]
+      },
+    ]
+  },
+
+  supplier: {
+    title: { ar: 'مراقبة الموردين', en: 'Supplier Control' },
+    subtitle: { ar: 'اعتماد الموردين • التسلسل الغذائي • السحب', en: 'Supplier Approval • Food Chain • Recall Readiness' },
+    modules: [
+      {
+        id: 'supplier_approval', icon: '📝',
+        title: { ar: 'اعتماد الموردين', en: 'Supplier Approval' },
+        questions: [
+          { id:'sa1', text:{ar:'هل يوجد قائمة موردين معتمدين محدّثة؟', en:'Is there an up-to-date approved supplier list?'}, weight:5 },
+          { id:'sa2', text:{ar:'هل يُمنع استلام أي مادة غذائية من مورد غير معتمد؟', en:'Is receiving from unapproved suppliers blocked?'}, weight:5 },
+          { id:'sa3', text:{ar:'هل يملك الموردون الرئيسيون شهادات سلامة غذائية معتمدة؟', en:'Do main suppliers hold valid food safety certifications?'}, weight:4 },
+          { id:'sa4', text:{ar:'هل يتم مراجعة الموردين بصفة دورية؟', en:'Are suppliers reviewed periodically?'}, weight:3 },
+        ]
+      },
+      {
+        id: 'receiving_controls', icon: '🔍',
+        title: { ar: 'ضوابط الاستلام', en: 'Receiving Controls' },
+        questions: [
+          { id:'rc1', text:{ar:'هل يتم فحص الحرارة والتغليف والتتبع في كل استلام عالي المخاطر؟', en:'Are temperature, packaging, and traceability checked at every high-risk receiving?'}, weight:5 },
+          { id:'rc2', text:{ar:'هل يتم توثيق المخالفات عند الاستلام ورفع تقرير للجودة؟', en:'Are receiving nonconformances documented and reported to QA?'}, weight:4 },
+          { id:'rc3', text:{ar:'هل يوجد إجراء واضح للتصرف عند رفض مادة غذائية؟', en:'Is there a clear procedure for rejected items?'}, weight:4 },
+        ]
+      },
+    ]
+  },
+
+  ipc: {
+    title: { ar: 'تكامل مكافحة العدوى', en: 'IPC Integration' },
+    subtitle: { ar: 'عزل • توزيع • عوائد', en: 'Isolation • Delivery • Returns' },
+    modules: [
+      {
+        id: 'isolation_delivery', icon: '🚪',
+        title: { ar: 'توزيع العزل', en: 'Isolation Delivery' },
+        questions: [
+          { id:'iso1', text:{ar:'هل يوجد مسار توزيع معدّل لأجنحة العزل؟', en:'Is there a modified delivery route for isolation wards?'}, weight:5 },
+          { id:'iso2', text:{ar:'هل يتم توثيق توصيل الوجبات لأجنحة العزل بشكل منفصل؟', en:'Is meal delivery to isolation wards documented separately?'}, weight:4 },
+          { id:'iso3', text:{ar:'هل يتم تطبيق ضوابط التغليف/الحماية المطلوبة من قسم مكافحة العدوى؟', en:'Are IPC-required packaging/protection controls applied?'}, weight:5 },
+        ]
+      },
+      {
+        id: 'tray_return', icon: '♻️',
+        title: { ar: 'إدارة عوائد الأطباق', en: 'Tray Return Management' },
+        questions: [
+          { id:'tr1', text:{ar:'هل يتم فصل الأطباق العائدة من العزل عن الأطباق العادية؟', en:'Are trays returned from isolation areas separated from regular trays?'}, weight:5 },
+          { id:'tr2', text:{ar:'هل يوجد مسار واضح لإزالة التلوث من أدوات المطبخ العائدة من العزل؟', en:'Is there a clear decontamination route for kitchen items returning from isolation?'}, weight:5 },
+          { id:'tr3', text:{ar:'هل يتم توثيق كل عملية إرجاع من أجنحة العزل؟', en:'Is every return from isolation wards documented?'}, weight:4 },
+        ]
+      },
+    ]
+  }
+
+};
+
+// ─── FINDINGS DATABASE ────────────────────
+const FINDINGS = {
+  ghp1: { level:'critical', ar:'عدم الإفصاح عن الحالة الصحية يمثل خطر حرج لتلوث الطعام', en:'Failure to declare health status is a critical contamination risk', action:{ar:'تطبيق إجراء إلزامي لإعلان الحالة الصحية يومياً', en:'Implement mandatory daily health declaration procedure'} },
+  ghp2: { level:'high', ar:'غسيل الأيدي غير صحيح مصدر رئيسي للتلوث', en:'Improper handwashing is a primary contamination source', action:{ar:'تدريب وتركيب ملصقات إرشادية عند أحواض الغسيل', en:'Train staff and install guidance posters at sinks'} },
+  ghp3: { level:'critical', ar:'عدم التحقق من نظافة الأسطح قبل التحضير عالي المخاطر', en:'Food contact surfaces not verified clean before high-risk preparation', action:{ar:'إلزامية استكمال سجل التعقيم قبل بدء التحضير', en:'Make sanitation log mandatory before prep begins'} },
+  ghp4: { level:'critical', ar:'خطر التلوث المتبادل عبر الأدوات المشتركة للحميات الخاصة', en:'Cross-contamination risk through shared utensils for special diets', action:{ar:'تطبيق نظام ترميز لوني للأدوات حسب نوع الحمية', en:'Implement color-coded utensil system by diet type'} },
+  rec1: { level:'critical', ar:'عدم قياس حرارة الاستلام يُفقد السيطرة على السلسلة الباردة', en:'No receiving temperature check loses control of cold chain', action:{ar:'تخصيص مقياس حرارة للاستلام وتسجيل إلزامي لكل استلام', en:'Assign receiving thermometer and mandatory log for every delivery'} },
+  rec4: { level:'critical', ar:'استخدام موردين غير معتمدين خطر منهجي', en:'Using unapproved suppliers is a systemic risk', action:{ar:'إيقاف الشراء فوراً وتحديث قائمة الموردين المعتمدين', en:'Stop purchasing immediately and update approved supplier list'} },
+  sto2: { level:'critical', ar:'عدم الفصل بين الخام والجاهز للأكل خطر حرج بالتلوث', en:'No raw/RTE segregation is a critical cross-contamination risk', action:{ar:'تطبيق نظام مناطق منفصلة وترميز مرئي واضح', en:'Apply separate zones and clear visual coding system'} },
+  cook1: { level:'critical', ar:'عدم قياس حرارة الطهي يُبطل نقطة التحكم الحرجة للطهي', en:'No cooking temperature measurement invalidates the cooking CCP', action:{ar:'قياس وتسجيل الحرارة إلزامي لكل دفعة قبل الإطلاق', en:'Mandatory temperature measurement and logging for every batch before release'} },
+  cook2: { level:'critical', ar:'إطلاق الدفعة بدون بلوغ الحد الحرج يُعرّض المرضى للخطر', en:'Batch release without meeting critical limit endangers patients', action:{ar:'منع الإطلاق حتى يتم بلوغ الحد الحرج وتوثيقه', en:'Block release until critical limit is met and documented'} },
+  cool1: { level:'critical', ar:'عدم التبريد السريع يُسرِّع نمو البكتيريا المسببة للتسمم', en:'Inadequate rapid cooling accelerates pathogenic bacterial growth', action:{ar:'استخدام خزانات التبريد السريع وتسجيل المنحنى الزمني', en:'Use blast chillers and record time-temperature cooling curve'} },
+  cool3: { level:'critical', ar:'الاحتفاظ بدفعات تجاوزت حدود التبريد خطر حرج', en:'Retaining batches that exceeded cooling limits is a critical risk', action:{ar:'إتلاف أي دفعة تجاوزت حدود التبريد فوراً', en:'Immediately discard any batch that exceeded cooling limits'} },
+  reh1: { level:'critical', ar:'إعادة التسخين دون بلوغ 74°م لا تُحقق التعقيم الكافي', en:'Reheating below 74°C does not achieve adequate pasteurization', action:{ar:'قياس وتوثيق الحرارة الداخلية بعد كل عملية تسخين', en:'Measure and document internal temperature after every reheating'} },
+  reh2: { level:'high', ar:'التسخين المتكرر يزيد خطر النمو البكتيري', en:'Repeated reheating increases bacterial growth risk', action:{ar:'سياسة صريحة: يُسخَّن الطعام مرة واحدة فقط', en:'Explicit policy: food is reheated once only'} },
+  hold1: { level:'critical', ar:'الطعام الساخن تحت 63°م منطقة خطر للنمو البكتيري', en:'Hot food below 63°C is in bacterial danger zone', action:{ar:'ضبط معدات الحفظ الحار ومراقبة منتظمة', en:'Adjust hot holding equipment and monitor regularly'} },
+  do2: { level:'critical', ar:'تجهيز طبق بدون أمر حمية معتمد خطر حرج لخطأ الحمية', en:'Preparing tray without approved diet order is a critical wrong-diet risk', action:{ar:'إلزامية وجود أمر حمية معتمد قبل بدء التجهيز', en:'Mandatory approved diet order before tray preparation begins'} },
+  do3: { level:'high', ar:'تغيير الحمية بعد التجهيز يتطلب إلغاء الطبق القديم', en:'Diet change after preparation requires cancellation of old tray', action:{ar:'ربط النظام بتواريخ الطلبات والتنبيه الفوري عند التغيير', en:'Link system to order timestamps with immediate change alerts'} },
+  tm1: { level:'critical', ar:'عدم التحقق من تطابق الحمية الخطر الرئيسي للحوادث المستشفيية', en:'No diet code matching is the primary risk for hospital diet incidents', action:{ar:'التحقق الإلزامي من تطابق رمز الحمية قبل كل إرسال', en:'Mandatory diet code matching verification before every dispatch'} },
+  hr1: { level:'critical', ar:'حمية الحساسية بدون تحقق مزدوج خطر حرج على حياة المريض', en:'Allergen diet without double verification is life-threatening', action:{ar:'تطبيق إلزامي للتحقق من شخصين لكل طبق حمية حساسية', en:'Mandatory two-person verification for every allergen diet tray'} },
+  hr2: { level:'critical', ar:'إرسال طعام لمريض يحمل أمر NPO خطر طبي حرج', en:'Sending food to NPO patient is a critical medical risk', action:{ar:'حجب تلقائي لأي طبق مرتبط بمريض يحمل أمر NPO نشط', en:'Automatic block for any tray linked to patient with active NPO order'} },
+  iso1: { level:'high', ar:'غياب مسار توزيع معدّل لأجنحة العزل يُعرّض مرضى آخرين للخطر', en:'No modified delivery route for isolation wards risks cross-infection', action:{ar:'تنسيق مع قسم مكافحة العدوى لتحديد مسار التوزيع المعتمد', en:'Coordinate with IPC team to define approved delivery route'} },
+  tr1: { level:'critical', ar:'خلط الأطباق العائدة من العزل مع الأطباق العادية خطر حرج', en:'Mixing isolation returns with regular trays is a critical IPC risk', action:{ar:'تحديد مسار وحاويات منفصلة للعوائد من أجنحة العزل', en:'Define separate route and containers for returns from isolation wards'} },
+  sa1: { level:'high', ar:'غياب قائمة موردين معتمدين يفتح الباب أمام مواد غذائية غير خاضعة للرقابة', en:'No approved supplier list opens the door to uncontrolled food materials', action:{ar:'إعداد وتحديث قائمة موردين معتمدين بالمواصفات المطلوبة', en:'Prepare and maintain approved supplier list with required specifications'} },
+  sa2: { level:'critical', ar:'الاستلام من موردين غير معتمدين خطر منهجي على سلامة الغذاء', en:'Receiving from unapproved suppliers is a systemic food safety risk', action:{ar:'إيقاف فوري وإعداد إجراء منع الاستلام غير المعتمد', en:'Immediate stop and establish unapproved receiving prevention procedure'} },
+};
+
+// ─── AUTH ─────────────────────────────────
+function switchAuthTab(tab) {
+  document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  hideError();
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() {
+  document.getElementById('error-msg').style.display = 'none';
+}
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!email || !pass) { showError(lang==='ar'?'يرجى تعبئة جميع الحقول':'Please fill all fields'); return; }
+  const users = JSON.parse(localStorage.getItem('hx_users')||'{}');
+  if (!users[email] || users[email].pass !== btoa(pass)) {
+    showError(lang==='ar'?'البريد الإلكتروني أو كلمة المرور غير صحيحة':'Incorrect email or password');
+    return;
+  }
+  currentUser = users[email];
+  currentUser.email = email;
+  enterDashboard();
+}
+
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const country = document.getElementById('reg-country').value;
+  const facility = document.getElementById('reg-facility').value;
+  const role = document.getElementById('reg-role').value;
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if (!name||!country||!facility||!role||!email||!pass) {
+    showError(lang==='ar'?'يرجى تعبئة جميع الحقول':'Please fill all fields'); return;
+  }
+  if (pass.length < 8) { showError(lang==='ar'?'كلمة المرور 8 أحرف على الأقل':'Password must be at least 8 characters'); return; }
+  const users = JSON.parse(localStorage.getItem('hx_users')||'{}');
+  if (users[email]) { showError(lang==='ar'?'هذا البريد مسجل مسبقاً':'Email already registered'); return; }
+  users[email] = { name, country, facility, role, pass: btoa(pass) };
+  localStorage.setItem('hx_users', JSON.stringify(users));
+  currentUser = { name, country, facility, role, email };
+  enterDashboard();
+}
+
+function enterDashboard() {
+  showView('dashboard-view');
+  const welcomeEl = document.getElementById('welcome-msg');
+  const firstName = currentUser.name.split(' ')[0];
+  welcomeEl.innerHTML = `${T[lang].welcome} <span class="text-teal">${firstName}</span>`;
+}
+
+function logout() {
+  currentUser = null;
+  showView('auth-view');
+}
+
+// ─── VIEWS ────────────────────────────────
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToDashboard() {
+  showView('dashboard-view');
+  answers = {};
+  currentModuleIndex = 0;
+}
+
+// ─── ASSESSMENT ENGINE ────────────────────
+function startAssessment(type) {
+  currentAssessmentType = type;
+  currentModuleIndex = 0;
+  answers = {};
+  assessmentModules = ASSESSMENTS[type].modules;
+
+  const data = ASSESSMENTS[type];
+  document.getElementById('assess-title').textContent = data.title[lang];
+  document.getElementById('assess-subtitle').textContent = data.subtitle[lang];
+
+  renderModuleTabs();
+  renderCurrentModule();
+  showView('assessment-view');
+}
+
+function renderModuleTabs() {
+  const container = document.getElementById('module-tabs');
+  container.innerHTML = '';
+  assessmentModules.forEach((mod, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'module-tab-btn' + (i===currentModuleIndex?' active':'');
+    // check if completed
+    const modAnswers = assessmentModules[i].questions.map(q => answers[q.id]);
+    if (modAnswers.every(a => a !== undefined) && i !== currentModuleIndex) btn.classList.add('completed');
+    btn.innerHTML = `<span class="tab-dot"></span>${mod.icon} ${mod.title[lang]}`;
+    btn.onclick = () => { currentModuleIndex = i; renderModuleTabs(); renderCurrentModule(); };
+    container.appendChild(btn);
+  });
+}
+
+function renderCurrentModule() {
+  const mod = assessmentModules[currentModuleIndex];
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+
+  const block = document.createElement('div');
+  block.className = 'question-block';
+
+  // module header
+  block.innerHTML = `
+    <div class="module-header-badge">
+      <div class="module-badge-icon">${mod.icon}</div>
+      <div class="module-badge-info">
+        <h3>${mod.title[lang]}</h3>
+        <p>${lang==='ar'?`${mod.questions.length} سؤال`:`${mod.questions.length} questions`}</p>
+      </div>
+    </div>
+  `;
+
+  mod.questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    const current = answers[q.id];
+
+    card.innerHTML = `
+      <div class="question-num">${lang==='ar'?`سؤال ${qi+1}`:`Question ${qi+1}`} — ${lang==='ar'?'الوزن':'Weight'}: ${q.weight}/5</div>
+      <div class="question-text">${q.text[lang]}</div>
+      <div class="answer-options">
+        <button class="answer-btn ${current==='yes'?'selected-yes':''}" onclick="setAnswer('${q.id}','yes',this)">${T[lang].yes}</button>
+        <button class="answer-btn ${current==='partial'?'selected-partial':''}" onclick="setAnswer('${q.id}','partial',this)">${T[lang].partial}</button>
+        <button class="answer-btn ${current==='no'?'selected-no':''}" onclick="setAnswer('${q.id}','no',this)">${T[lang].no}</button>
+        <button class="answer-btn ${current==='na'?'selected-na':''}" onclick="setAnswer('${q.id}','na',this)">${T[lang].na}</button>
+      </div>
+    `;
+    block.appendChild(card);
+  });
+
+  container.appendChild(block);
+  updateProgress();
+  updateNavBtns();
+}
+
+function setAnswer(qid, val, btn) {
+  answers[qid] = val;
+  const card = btn.closest('.answer-options');
+  card.querySelectorAll('.answer-btn').forEach(b => {
+    b.classList.remove('selected-yes','selected-no','selected-partial','selected-na');
+  });
+  btn.classList.add(`selected-${val}`);
+  updateProgress();
+  updateNavBtns();
+}
+
+function updateProgress() {
+  const allQ = assessmentModules.flatMap(m => m.questions);
+  const answered = allQ.filter(q => answers[q.id] !== undefined).length;
+  const pct = Math.round((answered/allQ.length)*100);
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-text').textContent = pct+'%';
+  document.getElementById('progress-steps').textContent = `${answered}/${allQ.length}`;
+}
+
+function updateNavBtns() {
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  prevBtn.style.visibility = currentModuleIndex === 0 ? 'hidden' : 'visible';
+  const isLast = currentModuleIndex === assessmentModules.length - 1;
+  const allQ = assessmentModules.flatMap(m => m.questions);
+  const allAnswered = allQ.every(q => answers[q.id] !== undefined);
+  if (isLast) {
+    nextBtn.querySelector('span').setAttribute('data-ar', T.ar.finish);
+    nextBtn.querySelector('span').setAttribute('data-en', T.en.finish);
+    nextBtn.querySelector('span').textContent = T[lang].finish;
+    nextBtn.disabled = !allAnswered;
+  } else {
+    nextBtn.querySelector('span').setAttribute('data-ar', T.ar.next);
+    nextBtn.querySelector('span').setAttribute('data-en', T.en.next);
+    nextBtn.querySelector('span').textContent = T[lang].next;
+    nextBtn.disabled = false;
+  }
+}
+
+function nextModule() {
+  if (currentModuleIndex < assessmentModules.length - 1) {
+    currentModuleIndex++;
+    renderModuleTabs();
+    renderCurrentModule();
+  } else {
+    showResults();
+  }
+}
+
+function prevModule() {
+  if (currentModuleIndex > 0) {
+    currentModuleIndex--;
+    renderModuleTabs();
+    renderCurrentModule();
+  }
+}
+
+// ─── SCORING ENGINE ───────────────────────
+function calcScore() {
+  let totalWeight = 0, totalScore = 0;
+  const moduleScores = [];
+
+  assessmentModules.forEach(mod => {
+    let mW = 0, mS = 0;
+    mod.questions.forEach(q => {
+      const a = answers[q.id];
+      if (a === 'na') return;
+      const pts = a==='yes' ? q.weight : a==='partial' ? q.weight*0.5 : 0;
+      mW += q.weight; mS += pts;
+      totalWeight += q.weight; totalScore += pts;
+    });
+    moduleScores.push({ mod, pct: mW>0 ? Math.round((mS/mW)*100) : 100 });
+  });
+
+  const overall = totalWeight > 0 ? Math.round((totalScore/totalWeight)*100) : 100;
+  return { overall, moduleScores };
+}
+
+function getRiskLevel(pct) {
+  if (pct < 50) return 'critical';
+  if (pct < 70) return 'high';
+  if (pct < 85) return 'medium';
+  return 'low';
+}
+
+function showResults() {
+  const { overall, moduleScores } = calcScore();
+  const risk = getRiskLevel(overall);
+
+  // overall card
+  const ring = document.getElementById('score-ring');
+  ring.className = 'score-ring ' + risk;
+  document.getElementById('score-number').textContent = overall + '%';
+  document.getElementById('score-label').textContent = T[lang][risk];
+  document.getElementById('score-desc').textContent = T[lang][risk+'Desc'];
+
+  // meta
+  document.getElementById('results-meta').textContent =
+    `${T[lang].assessDate}${new Date().toLocaleDateString(lang==='ar'?'ar-JO':'en-GB')} | ${T[lang].assessBy}${currentUser?.name||'—'}`;
+
+  // module scores
+  const grid = document.getElementById('module-scores-grid');
+  grid.innerHTML = '';
+  moduleScores.forEach(({mod, pct}) => {
+    const r = getRiskLevel(pct);
+    const fillClass = r==='critical'?'fill-red':r==='high'?'fill-amber':r==='medium'?'fill-teal':'fill-green';
+    const colorClass = r==='critical'?'text-red':r==='high'?'text-amber':r==='medium'?'text-teal':'text-green';
+    grid.innerHTML += `
+      <div class="module-score-card">
+        <div class="module-score-header">
+          <div class="module-score-name">${mod.icon} ${mod.title[lang]}</div>
+          <div class="module-score-pct ${colorClass}">${pct}%</div>
+        </div>
+        <div class="mini-bar"><div class="mini-fill ${fillClass}" style="width:${pct}%"></div></div>
+      </div>
+    `;
+  });
+
+  // findings
+  const findingsEl = document.getElementById('findings-section');
+  const criticals = [], highs = [], mediums = [];
+
+  Object.entries(answers).forEach(([qid, val]) => {
+    if (val === 'no' || val === 'partial') {
+      const f = FINDINGS[qid];
+      if (!f) return;
+      const item = { qid, val, ...f };
+      if (f.level==='critical') criticals.push(item);
+      else if (f.level==='high') highs.push(item);
+      else mediums.push(item);
+    }
+  });
+
+  let html = '';
+  if (criticals.length > 0) {
+    html += `<div class="findings-section"><h3>🔴 ${lang==='ar'?'نتائج حرجة':'Critical Findings'} (${criticals.length})</h3>`;
+    criticals.forEach(f => {
+      html += `<div class="finding-item critical"><div class="finding-dot critical"></div><div><div class="finding-text">${f[lang]}</div><div class="finding-action">${T[lang].action}${f.action[lang]}</div></div></div>`;
+    });
+    html += '</div>';
+  }
+  if (highs.length > 0) {
+    html += `<div class="findings-section"><h3>🟠 ${lang==='ar'?'نتائج عالية المخاطر':'High Risk Findings'} (${highs.length})</h3>`;
+    highs.forEach(f => {
+      html += `<div class="finding-item high"><div class="finding-dot high"></div><div><div class="finding-text">${f[lang]}</div><div class="finding-action">${T[lang].action}${f.action[lang]}</div></div></div>`;
+    });
+    html += '</div>';
+  }
+  if (mediums.length > 0) {
+    html += `<div class="findings-section"><h3>🟡 ${lang==='ar'?'نتائج متوسطة':'Medium Risk Findings'} (${mediums.length})</h3>`;
+    mediums.forEach(f => {
+      html += `<div class="finding-item medium"><div class="finding-dot medium"></div><div><div class="finding-text">${f[lang]}</div><div class="finding-action">${T[lang].action}${f.action[lang]}</div></div></div>`;
+    });
+    html += '</div>';
+  }
+  if (!criticals.length && !highs.length && !mediums.length) {
+    html = `<div style="text-align:center;padding:2rem;color:var(--green)">✅ ${lang==='ar'?'لا توجد نتائج سلبية — المطبخ يستوفي جميع المتطلبات':'No negative findings — kitchen meets all requirements'}</div>`;
+  }
+  findingsEl.innerHTML = html;
+
+  showView('results-view');
+}
+
+// ─── PDF EXPORT ───────────────────────────
+function downloadPDF() {
+  const { overall, moduleScores } = calcScore();
+  const risk = getRiskLevel(overall);
+  const riskColors = { critical:'#ff4757', high:'#ffa502', medium:'#00d4a8', low:'#2ed573' };
+  const date = new Date().toLocaleDateString(lang==='ar'?'ar-JO':'en-GB');
+
+  const criticals=[], highs=[], mediums=[];
+  Object.entries(answers).forEach(([qid,val])=>{
+    if(val==='no'||val==='partial'){const f=FINDINGS[qid];if(!f)return;
+      if(f.level==='critical')criticals.push({...f,qid,val});
+      else if(f.level==='high')highs.push({...f,qid,val});
+      else mediums.push({...f,qid,val});
+    }
+  });
+
+  const moduleRows = moduleScores.map(({mod,pct})=>`
+    <tr>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee">${mod.icon} ${mod.title[lang]}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee;color:${riskColors[getRiskLevel(pct)]};font-weight:700;font-family:monospace">${pct}%</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee">${T[lang][getRiskLevel(pct)]}</td>
+    </tr>
+  `).join('');
+
+  const findingRows = [...criticals,...highs,...mediums].map(f=>`
+    <tr style="border-bottom:1px solid #eee">
+      <td style="padding:8px 12px;border-right:4px solid ${riskColors[f.level]}">${f[lang]}</td>
+      <td style="padding:8px 12px;color:#555;font-size:13px">${f.action[lang]}</td>
+      <td style="padding:8px 12px;color:${riskColors[f.level]};font-weight:700;font-size:12px">${T[lang][f.level]}</td>
+    </tr>
+  `).join('');
+
+  const html = `<!DOCTYPE html><html dir="${lang==='ar'?'rtl':'ltr'}">
+<head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'Tajawal',sans-serif;margin:0;padding:40px;color:#111;background:#fff}
+  .header{background:#0a0f1e;color:#fff;padding:30px 40px;border-radius:12px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center}
+  .logo{font-family:monospace;color:#00d4a8;font-size:1.2rem}
+  .header h1{font-size:1.4rem;margin:8px 0 4px}
+  .header p{font-size:0.85rem;color:#b8c5d6;margin:0}
+  .score-box{background:#f8f9fa;border:2px solid ${riskColors[risk]};border-radius:12px;padding:20px 30px;text-align:center;display:inline-block}
+  .score-big{font-size:3rem;font-weight:800;color:${riskColors[risk]};font-family:monospace}
+  .score-lbl{font-size:1rem;font-weight:700;color:${riskColors[risk]}}
+  table{width:100%;border-collapse:collapse;margin-bottom:24px}
+  th{background:#f0f4f8;padding:10px 12px;text-align:${lang==='ar'?'right':'left'};font-size:0.85rem;color:#555}
+  .section-title{font-size:1rem;font-weight:700;margin:24px 0 8px;padding-bottom:4px;border-bottom:2px solid #eee}
+  .footer{text-align:center;margin-top:40px;font-size:0.78rem;color:#888;border-top:1px solid #eee;padding-top:16px}
+</style></head>
+<body>
+<div class="header">
+  <div>
+    <div class="logo">FoodCheck / Hospital</div>
+    <h1>${T[lang].reportTitle}</h1>
+    <p>${T[lang].assessDate}${date} | ${T[lang].assessBy}${currentUser?.name||'—'} | ${currentUser?.facility||''}</p>
+  </div>
+  <div class="score-box">
+    <div class="score-big">${overall}%</div>
+    <div class="score-lbl">${T[lang][risk]}</div>
+  </div>
+</div>
+
+<div class="section-title">📊 ${lang==='ar'?'نتائج الوحدات':'Module Results'}</div>
+<table><thead><tr>
+  <th>${lang==='ar'?'الوحدة':'Module'}</th>
+  <th>${lang==='ar'?'النتيجة':'Score'}</th>
+  <th>${lang==='ar'?'مستوى المخاطر':'Risk Level'}</th>
+</tr></thead><tbody>${moduleRows}</tbody></table>
+
+${(criticals.length+highs.length+mediums.length)>0?`
+<div class="section-title">⚠️ ${lang==='ar'?'النتائج والإجراءات المطلوبة':'Findings & Required Actions'}</div>
+<table><thead><tr>
+  <th>${lang==='ar'?'النتيجة':'Finding'}</th>
+  <th>${lang==='ar'?'الإجراء المطلوب':'Required Action'}</th>
+  <th>${lang==='ar'?'المستوى':'Level'}</th>
+</tr></thead><tbody>${findingRows}</tbody></table>`:''}
+
+<div class="footer">
+  FoodCheck Hospital | tpc-foodcheck.com | ${lang==='ar'?'نظام تقييم سلامة غذاء المستشفيات':'Hospital Food Safety Assessment System'}
+</div>
+</body></html>`;
+
+  const w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+  setTimeout(()=>{ w.print(); }, 800);
+}
+
+// ─── LANGUAGE ─────────────────────────────
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l==='ar'?'rtl':'ltr';
+  document.getElementById('btn-ar').classList.toggle('active', l==='ar');
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+
+  // update all data-ar / data-en elements
+  document.querySelectorAll('[data-ar]').forEach(el => {
+    if (l==='ar') el.innerHTML = el.getAttribute('data-ar');
+    else el.innerHTML = el.getAttribute('data-en');
+  });
+
+  // re-render if in assessment
+  if (document.getElementById('assessment-view').classList.contains('active')) {
+    document.getElementById('assess-title').textContent = ASSESSMENTS[currentAssessmentType].title[lang];
+    document.getElementById('assess-subtitle').textContent = ASSESSMENTS[currentAssessmentType].subtitle[lang];
+    renderModuleTabs();
+    renderCurrentModule();
+  }
+}
+
+// init
+setLang('ar');
+</script>
+</body>
+</html>
