@@ -1053,6 +1053,19 @@ footer span { color: var(--accent); }
 
   </div>
 
+  <!-- HACCP المستشفيات -->
+  <a href="hospital-haccp.html" style="background:var(--surface);border:1px solid rgba(0,180,255,.2);border-radius:12px;padding:13px 16px;text-decoration:none;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,180,255,.5)'" onmouseout="this.style.borderColor='rgba(0,180,255,.2)'">
+    <span style="font-size:1.4rem;flex-shrink:0;">🏥</span>
+    <div style="flex:1;">
+      <div style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:2px;">
+        <span id="tool-hospital-name">HACCP المستشفيات</span>
+        <span id="tool-hospital-badge" style="font-size:.65rem;font-weight:700;background:rgba(0,180,255,.12);color:#38bdf8;padding:1px 7px;border-radius:4px;border:1px solid rgba(0,180,255,.2);margin-right:4px;">جديد</span>
+      </div>
+      <div id="tool-hospital-desc" style="font-size:.75rem;color:var(--text2);">تقييم HACCP متكامل لمطابخ المستشفيات — التحقق من الحمية · مكافحة العدوى · تقرير PDF</div>
+    </div>
+    <span style="color:var(--text3);font-size:1.2rem;flex-shrink:0;">›</span>
+  </a>
+
   <!-- الدراسة الثباتية -->
   <a href="restaurant-shelf-life.html" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;text-decoration:none;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,212,168,.3)'" onmouseout="this.style.borderColor='var(--border)'">
     <span style="font-size:1.4rem;flex-shrink:0;">🍽️</span>
@@ -3498,6 +3511,7 @@ const T = {
     toolShelfName:'مدد الصلاحية', toolShelfDesc:'مدد الصلاحية الإلزامية للمواد الغذائية وفق JS 288',
     toolGmpName:'نظام GMP', toolGmpDesc:'تدقيق ممارسات التصنيع الجيدة — 506 سؤال M01–M08',
     toolHaccpName:'نظام HACCP', toolHaccpDesc:'تحليل المخاطر ونقاط التحكم الحرجة للمنشأة',
+    toolHospitalName:'HACCP المستشفيات', toolHospitalDesc:'تقييم HACCP متكامل لمطابخ المستشفيات — التحقق من الحمية · مكافحة العدوى · تقرير PDF', toolHospitalBadge:'جديد',
     toolRestaurantName:'دراسة ثباتية — أغذية المطاعم والفنادق', toolRestaurantDesc:'توثيق صلاحية الوجبات وتقرير رسمي جاهز للتقديم لـ JFDA',
     toolNutritionName:'حاسبة الحقائق التغذوية', toolNutritionDesc:'جدول تغذوي رسمي — أردني JS 1473 · أوروبي EU · أمريكي FDA · بحث USDA تلقائي', toolNutritionBadge:'جديد',
     toolTitle:'رفع وتدقيق بطاقة البيان',
@@ -3581,6 +3595,7 @@ const T = {
     toolShelfName:'Shelf Lives', toolShelfDesc:'Mandatory shelf life periods per JS 288',
     toolGmpName:'GMP System', toolGmpDesc:'Good Manufacturing Practices audit — 506 questions M01–M08',
     toolHaccpName:'HACCP System', toolHaccpDesc:'Hazard Analysis and Critical Control Points for your facility',
+    toolHospitalName:'Hospital HACCP', toolHospitalDesc:'Integrated HACCP assessment for hospital kitchens — Diet verification · IPC · PDF report', toolHospitalBadge:'New',
     toolRestaurantName:'Stability Study — Restaurant & Hotel Foods', toolRestaurantDesc:'Document meal shelf life with an official JFDA-ready report',
     toolNutritionName:'Nutrition Facts Calculator', toolNutritionDesc:'Official nutrition table — Jordanian JS 1473 · EU 1169 · FDA · Auto USDA search', toolNutritionBadge:'New',
     toolTitle:'Upload & Audit Food Label',
@@ -3687,6 +3702,9 @@ function applyLang(lang) {
   if(el('tool-gmp-desc')) el('tool-gmp-desc').textContent = t.toolGmpDesc;
   if(el('tool-haccp-name')) el('tool-haccp-name').textContent = t.toolHaccpName;
   if(el('tool-haccp-desc')) el('tool-haccp-desc').textContent = t.toolHaccpDesc;
+  if(el('tool-hospital-name')) el('tool-hospital-name').textContent = t.toolHospitalName;
+  if(el('tool-hospital-desc')) el('tool-hospital-desc').textContent = t.toolHospitalDesc;
+  if(el('tool-hospital-badge')) el('tool-hospital-badge').textContent = t.toolHospitalBadge;
   if(el('tool-restaurant-name')) el('tool-restaurant-name').textContent = t.toolRestaurantName;
   if(el('tool-restaurant-desc')) el('tool-restaurant-desc').textContent = t.toolRestaurantDesc;
   if(el('tool-nutrition-name')) el('tool-nutrition-name').textContent = t.toolNutritionName;
