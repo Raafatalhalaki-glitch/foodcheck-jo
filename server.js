@@ -330,9 +330,8 @@ function checkAdditive(ins, catNo) {
   // ════════════════════════════════
   let t1 = null;
   for (const cat of catHierarchy) {
-    t1 = additivesDB.prepare(
-      'SELECT * FROM table1 WHERE ins=? AND cat_no=?'
-    ).get(ins, cat);
+    t1 = additivesDB.prepare('SELECT * FROM table1 WHERE ins=? AND cat_no=?').get(ins, cat)
+      || additivesDB.prepare('SELECT * FROM table1 WHERE ins=? AND cat_no=?').get(ins + '(i)', cat);
     if (t1) break;
   }
   result.steps.table1 = t1 || null;
