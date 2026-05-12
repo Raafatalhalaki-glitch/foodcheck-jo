@@ -2558,6 +2558,13 @@ ${allergensText}
     ز. القيم المرجعية اليومية (NRV): طاقة=2000kcal، بروتين=50g، دهون=70g، دهون مشبعة=20g، كربوهيدرات=260g، سكريات=90g، سكر مضاف=50g، صوديوم (ملح=6g)، ألياف=28g، كوليسترول=300mg
     ح. استخراج القيم إلزامي — حتى لو الجدول بسيط أو يحتوي 4 عناصر فقط — استخرج ما هو موجود وضع present:false للغائب
     ط. الطاقة يجب ذكرها بـ kcal وكذلك kJ — غياب kJ = تنبيه حتى لو kcal موجودة
+19. المحليات الصناعية — تطبّق على جميع المنتجات:
+    أ. إذا وُجد أي محلي صناعي (أسبارتام/Aspartame INS 951، أسيسولفام-K/Acesulfame-K INS 950، سكرالوز/Sucralose INS 955، ساكارين/Saccharin INS 954، سيكلامات/Cyclamate INS 952، نيوتام/Neotame INS 961، أدفانتام/Advantame INS 969، ستيفيول/Steviol glycosides INS 960) في المكونات:
+       - يجب ذكر اسم المحلي ونسبته (الكمية) في العبوة = مخالفة جسيمة إذا غابت النسبة
+       - الحد اليومي المقبول (ADI) لا يُشترط ذكره في التشريع الأردني — النسبة تكفي
+       - إذا كان المنتج يحتوي أسبارتام: يجب تحذير "يحتوي على فينيل ألانين" = مخالفة جسيمة إذا غاب
+    ب. إذا وُجد محلي صناعي بدون ذكر نسبته — أعطِ مخالفة جسيمة برمز JS9-SWEET-01
+    ج. وجود كلمة "دايت" أو "Diet" أو "Sugar Free" أو "خالٍ من السكر" بدون ذكر المحلي البديل = مخالفة جسيمة
 19. منطق PASS/FAIL الصحيح — قواعد ذهبية لا تُخالَف:
     • JS994-1: نسبة العصير ≥10% أو مذكور "لا تقل عن 10%" = PASS تام — ليس مخالفة وليس تنبيهاً
     • JS994-4: أي ذكر لنسبة العصير (رقم أو عبارة) = PASS — المخالفة فقط عند الغياب الكامل
@@ -2611,8 +2618,9 @@ ${allergensText}
   ],
   "additives": [
     {
-      "name": "اسم المضاف",
-      "ins": "رقم INS بالأرقام فقط بدون حرف E",
+      "name": "اسم المضاف كما هو مكتوب على البطاقة",
+      "name_en": "MANDATORY: translate the additive name to English (e.g. حمض الستريك → Citric Acid, كربونات الصوديوم → Sodium Carbonate)",
+      "ins": "MANDATORY: INS number digits only, no E prefix (e.g. Citric Acid → 330, Sodium Carbonate → 500). Use your knowledge of Codex INS numbers.",
       "declared": true,
       "note": "ملاحظة"
     }
@@ -2909,6 +2917,22 @@ function displayResults(data, productType) {
   }
 }
 
+// ── مساعد: البحث عن INS بالاسم الإنجليزي ──
+function findINSByName(nameEn) {
+  if (!CODEX || !nameEn) return null;
+  const q = nameEn.toUpperCase().trim();
+  // Table 1
+  for (const [ins, data] of Object.entries(CODEX.table1 || {})) {
+    if (data.name && data.name.toUpperCase().includes(q.substring(0,6))) return ins;
+    if (q.includes(data.name?.toUpperCase()?.substring(0,6) || '@@')) return ins;
+  }
+  // Table 3
+  for (const [ins, data] of Object.entries(CODEX.table3 || {})) {
+    if (data.name && data.name.toUpperCase().includes(q.substring(0,6))) return ins;
+  }
+  return null;
+}
+
 // ── فحص المضافات عبر /api/additives/check ──
 async function checkAdditivesViaAPI(additives, catNo) {
   const container = document.getElementById('additives-api-result');
@@ -2923,10 +2947,20 @@ async function checkAdditivesViaAPI(additives, catNo) {
 
     // ابحث بالرقم أولاً، ثم بالاسم
     let apiResult = null;
-    if (insRaw && catNo) {
+    const nameEn = (add.name_en || '').trim();
+    // حاول تجيب INS من الاسم الإنجليزي لو ما في رقم
+    let resolvedINS = insRaw;
+    if (!resolvedINS && nameEn && CODEX) {
+      resolvedINS = findINSByName(nameEn) || '';
+    }
+    if (resolvedINS) {
       try {
-        const r = await fetch(`/api/additives/check?ins=${encodeURIComponent(insRaw)}&cat=${encodeURIComponent(catNo)}`);
+        const url = catNo
+          ? `/api/additives/check?ins=${encodeURIComponent(resolvedINS)}&cat=${encodeURIComponent(catNo)}`
+          : `/api/additives/check?ins=${encodeURIComponent(resolvedINS)}`;
+        const r = await fetch(url);
         apiResult = await r.json();
+        if (apiResult) apiResult._resolvedINS = resolvedINS;
       } catch(e) {}
     }
     results.push({ add, apiResult });
