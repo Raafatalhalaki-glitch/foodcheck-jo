@@ -276,13 +276,20 @@ function checkAdditive(ins, catNo) {
   };
 
   // ── معلومات المضاف الأساسية ──
-  const ai = additivesDB.prepare(
-    'SELECT name, functional_class FROM additive_info WHERE ins=?'
-  ).get(ins);
+  // جرب INS مباشرة، ثم INS(i)، ثم INS LIKE
+  function getAdditiveInfo(insVal) {
+    return additivesDB.prepare("SELECT name, functional_class FROM additive_info WHERE ins=?").get(insVal)
+      || additivesDB.prepare("SELECT name, functional_class FROM additive_info WHERE ins=?").get(insVal + '(i)')
+      || additivesDB.prepare("SELECT name, functional_class FROM additive_info WHERE ins LIKE ?").get(insVal + '%');
+  }
+  function getT3Info(insVal) {
+    return additivesDB.prepare("SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?").get(insVal)
+      || additivesDB.prepare("SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?").get(insVal + '(i)')
+      || additivesDB.prepare("SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins LIKE ?").get(insVal + '%');
+  }
 
-  const t3info = additivesDB.prepare(
-    'SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?'
-  ).get(ins);
+  const ai = getAdditiveInfo(ins);
+  const t3info = getT3Info(ins);
 
   if (!ai && !t3info) {
     result.verdict = 'NOT_FOUND';
