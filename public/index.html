@@ -53,7 +53,7 @@ header {
   display: flex; align-items: center;
   padding: 0 1.5rem; height: 64px;
   overflow-x: auto; -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; gap: 8px;
+  scrollbar-width: none; gap: 8px; direction: rtl;
 }
 header::-webkit-scrollbar { display: none; }
 .logo { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; flex-shrink: 0; margin-left: 1rem; }
@@ -63,6 +63,16 @@ header::-webkit-scrollbar { display: none; }
 nav { display: flex; gap: 1rem; align-items: center; flex-shrink: 0; margin-right: auto; }
 nav a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; white-space: nowrap; }
 nav a:hover { color: var(--accent); }
+.login-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 30px; padding: 5px 16px; border-radius: 100px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  border: 1.5px solid rgba(0,212,168,.45); color: #06121f;
+  box-shadow: 0 6px 18px rgba(0,212,168,.18);
+  font-family: var(--font); font-size: .78rem; font-weight: 800;
+  text-decoration: none; transition: all .2s; white-space: nowrap; flex-shrink: 0;
+}
+.login-btn:hover { color: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,168,.28); }
 #langBtn {
   background: rgba(0,212,168,.1); border: 1.5px solid rgba(0,212,168,.4);
   color: var(--accent); padding: 4px 14px; border-radius: 100px;
@@ -295,6 +305,11 @@ footer span { color: var(--accent); }
 
 /* RESPONSIVE */
 @media (max-width: 600px) {
+  header { padding: 0 .75rem; gap: 6px; }
+  .logo { font-size: .95rem; margin-left: .4rem; }
+  nav { gap: .7rem; }
+  nav a { font-size: .78rem; }
+  .login-btn, #langBtn { min-height: 28px; padding: 4px 10px; font-size: .72rem; }
   .hero h1 { font-size: 1.8rem; }
   .hero-stats { gap: 1rem; }
   .api-card { flex-direction: column; }
@@ -411,15 +426,16 @@ footer span { color: var(--accent); }
 
 
 <header>
+  <a href="/login" class="login-btn" id="nav-login">Login</a>
   <div class="logo">
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
   </div>
-  <nav style="margin-right:auto;">
+  <nav>
     <a href="#tool" id="nav-tool">التدقيق</a>
     <a href="#about" id="nav-about">عن النظام</a>
   </nav>
-  <button id="langBtn" onclick="toggleLang()" style="background:rgba(22,163,74,.08);border:1.5px solid rgba(22,163,74,.3);color:#16a34a;padding:4px 14px;border-radius:100px;cursor:pointer;font-family:var(--font);font-size:.78rem;font-weight:700;transition:all .2s;flex-shrink:0;white-space:nowrap;">EN</button>
+  <button id="langBtn" onclick="toggleLang()">EN</button>
 </header>
 
 <!-- ===== HERO V2 ===== -->

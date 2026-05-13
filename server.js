@@ -504,6 +504,9 @@ app.get('/report.html', (req, res) => {
 app.get('/codex_data.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'codex_data.json'));
 });
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
 
 // ================================================================
 // ===== قاعدة بيانات المستخدمين — SQLite (دائمة) =====
