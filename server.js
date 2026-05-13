@@ -265,7 +265,6 @@ app.get('/gmp', (req, res) => {
 // ================================================================
 // ===== Rule Engine — 4-step decision (FIXED) =====
 // ================================================================
-// Rule Engine — 4-step decision (FIXED)
 function checkAdditive(ins, catNo) {
   const result = {
     ins, cat_no: catNo,
@@ -275,21 +274,13 @@ function checkAdditive(ins, catNo) {
     steps: { table1: null, table2: null, table3: null, annex3: false }
   };
 
-  // ── معلومات المضاف الأساسية ──
-  // جرب INS مباشرة، ثم INS(i)، ثم INS LIKE
-  function getAdditiveInfo(insVal) {
-    return additivesDB.prepare("SELECT name, functional_class FROM additive_info WHERE ins=?").get(insVal)
-      || additivesDB.prepare("SELECT name, functional_class FROM additive_info WHERE ins=?").get(insVal + '(i)')
-      || additivesDB.prepare("SELECT name, functional_class FROM additive_info WHERE ins LIKE ?").get(insVal + '%');
-  }
-  function getT3Info(insVal) {
-    return additivesDB.prepare("SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?").get(insVal)
-      || additivesDB.prepare("SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?").get(insVal + '(i)')
-      || additivesDB.prepare("SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins LIKE ?").get(insVal + '%');
-  }
+  const ai = additivesDB.prepare(
+    'SELECT name, functional_class FROM additive_info WHERE ins=?'
+  ).get(ins);
 
-  const ai = getAdditiveInfo(ins);
-  const t3info = getT3Info(ins);
+  const t3info = additivesDB.prepare(
+    'SELECT name, functional_class, max_level, specific_allowance FROM table3 WHERE ins=?'
+  ).get(ins);
 
   if (!ai && !t3info) {
     result.verdict = 'NOT_FOUND';
@@ -300,7 +291,6 @@ function checkAdditive(ins, catNo) {
   result.additive_name  = ai ? ai.name           : t3info.name;
   result.functional_class = ai ? ai.functional_class : (t3info ? t3info.functional_class : '');
 
-  // ── دالة استخراج ملاحظات ──
   function resolveNotes(str) {
     if (!str) return [];
     return str.split(/[,&\s]+/)
@@ -312,8 +302,6 @@ function checkAdditive(ins, catNo) {
       }).filter(Boolean);
   }
 
-  // ── بناء قائمة الفئات الأعلى (hierarchy) ──
-  // مثال: 14.1.4.1 → ['14.1.4.1', '14.1.4', '14.1', '14']
   function getParentCats(cat) {
     const parts = cat.split('.');
     const cats = [];
@@ -325,13 +313,12 @@ function checkAdditive(ins, catNo) {
 
   const catHierarchy = getParentCats(catNo);
 
-  // ════════════════════════════════
-  // STEP 1: Table 1 — المضاف مسموح صراحةً في هذه الفئة أو أي فئة أعلى؟
-  // ════════════════════════════════
+  // STEP 1: Table 1
   let t1 = null;
   for (const cat of catHierarchy) {
-    t1 = additivesDB.prepare('SELECT * FROM table1 WHERE ins=? AND cat_no=?').get(ins, cat)
-      || additivesDB.prepare('SELECT * FROM table1 WHERE ins=? AND cat_no=?').get(ins + '(i)', cat);
+    t1 = additivesDB.prepare(
+      'SELECT * FROM table1 WHERE ins=? AND cat_no=?'
+    ).get(ins, cat);
     if (t1) break;
   }
   result.steps.table1 = t1 || null;
@@ -343,13 +330,11 @@ function checkAdditive(ins, catNo) {
     result.verdict    = 'PASS';
     result.message_ar = `مسموح — Table 1 — الفئة: ${t1.cat_no} — الحد: ${t1.max_level}`;
     result.steps.table3 = t3info || null;
-    result.steps.annex3 = false; // لا يهم — Table 1 يتغلب
+    result.steps.annex3 = false;
     return result;
   }
 
-  // ════════════════════════════════
-  // STEP 2: Table 2 — carry-over أو إذن بالنقل؟
-  // ════════════════════════════════
+  // STEP 2: Table 2
   let t2 = null;
   for (const cat of catHierarchy) {
     t2 = additivesDB.prepare(
@@ -370,12 +355,9 @@ function checkAdditive(ins, catNo) {
     return result;
   }
 
-  // ════════════════════════════════
-  // STEP 3: Table 3 (GMP) — لكن هل الفئة مستثناة في Annex 3؟
-  // ════════════════════════════════
+  // STEP 3: Table 3 (GMP)
   result.steps.table3 = t3info || null;
 
-  // فحص Annex 3 على الفئة الحالية والفئات الأعلى
   let annex = null;
   for (const cat of catHierarchy) {
     annex = additivesDB.prepare(
@@ -387,11 +369,9 @@ function checkAdditive(ins, catNo) {
 
   if (t3info) {
     if (annex) {
-      // الفئة مستثناة من GMP → المضاف غير مسموح
       result.verdict    = 'FAIL';
       result.message_ar = `غير مسموح — الفئة ${annex.cat_no} مستثناة في Annex 3 من شروط Table 3 (GMP)`;
     } else {
-      // GMP — مسموح بكميات تقنية ضرورية
       result.verdict    = 'PASS';
       result.max_level  = t3info.max_level || 'GMP';
       result.message_ar = `مسموح — Table 3 GMP — الفئة غير مستثناة`;
@@ -399,9 +379,7 @@ function checkAdditive(ins, catNo) {
     return result;
   }
 
-  // ════════════════════════════════
-  // STEP 4: غير موجود في أي جدول
-  // ════════════════════════════════
+  // STEP 4: غير موجود
   result.verdict    = 'FAIL';
   result.message_ar = `غير مسموح — INS ${ins} غير مدرج في أي جدول لهذه الفئة الغذائية`;
   return result;
@@ -469,15 +447,32 @@ app.get('/codex_data.json', (req, res) => {
 });
 
 // ================================================================
+// ===== قاعدة بيانات المستخدمين — SQLite (دائمة) =====
+// ================================================================
+let usersDB;
+try {
+  const Database = require('better-sqlite3');
+  usersDB = new Database(path.join(__dirname, 'users.db'));
+  usersDB.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      company TEXT,
+      ip TEXT,
+      registered_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  console.log('✅ users.db loaded');
+} catch(e) {
+  console.warn('⚠️ users.db not loaded:', e.message);
+}
+
+// ================================================================
 // ===== نظام عداد الفحوصات =====
 // ================================================================
-
-// قاعدة بيانات بسيطة في الذاكرة
-// (تُعاد عند إعادة تشغيل السيرفر — كافية للمرحلة الحالية)
 const usageDB = {
-  // بالـ IP: { daily: [{timestamp}], total: number }
   byIP: {},
-  // إجماليات
   stats: {
     total_checks: 0,
     today_checks: 0,
@@ -485,16 +480,13 @@ const usageDB = {
   }
 };
 
-// الحد اليومي للزوار غير المسجلين
 const FREE_DAILY_LIMIT = 5;
 
-// دالة تنظيف الإحصائيات اليومية
 function resetDailyIfNeeded() {
   const today = new Date().toDateString();
   if (usageDB.stats.last_reset !== today) {
     usageDB.stats.today_checks = 0;
     usageDB.stats.last_reset = today;
-    // تنظيف السجلات القديمة لكل IP
     for (const ip in usageDB.byIP) {
       const now = Date.now();
       usageDB.byIP[ip].daily = usageDB.byIP[ip].daily.filter(
@@ -508,8 +500,6 @@ function resetDailyIfNeeded() {
 // ===== تسجيل المستخدمين =====
 // ================================================================
 
-const registeredUsers = []; // في الذاكرة — سنحوّله لـ DB لاحقاً
-
 app.post('/api/register', (req, res) => {
   const { name, email, company } = req.body;
   if (!name || !email) {
@@ -519,42 +509,40 @@ app.post('/api/register', (req, res) => {
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
            || req.socket.remoteAddress;
 
-  // تحقق إذا مسجل مسبقاً
-  const existing = registeredUsers.find(u => u.email === email);
-  if (existing) {
-    // منح فحوصات إضافية
-    if (usageDB.byIP[ip]) {
+  try {
+    // تحقق إذا مسجل مسبقاً
+    const existing = usersDB.prepare('SELECT * FROM users WHERE email=?').get(email);
+    if (existing) {
+      if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
       usageDB.byIP[ip].registered = true;
-      usageDB.byIP[ip].limit = 30; // 30 فحص/شهر للمسجلين
+      usageDB.byIP[ip].limit = 30;
+      return res.json({
+        success: true,
+        message: 'مرحباً بعودتك!',
+        limit: 30
+      });
     }
-    return res.json({
+
+    // تسجيل جديد
+    usersDB.prepare('INSERT INTO users (name, email, company, ip) VALUES (?,?,?,?)')
+      .run(name, email, company || '', ip);
+
+    if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
+    usageDB.byIP[ip].registered = true;
+    usageDB.byIP[ip].limit = 30;
+
+    const total = usersDB.prepare('SELECT COUNT(*) as count FROM users').get().count;
+    console.log(`✅ مستخدم جديد: ${name} | ${email} | ${company || 'غير محدد'}`);
+
+    res.json({
       success: true,
-      message: 'مرحباً بعودتك!',
-      limit: 30
+      message: 'تم التسجيل! حصلت على 30 فحص/شهر مجاناً',
+      limit: 30,
+      total_users: total
     });
+  } catch(e) {
+    res.status(500).json({ error: 'خطأ في التسجيل: ' + e.message });
   }
-
-  // تسجيل جديد
-  registeredUsers.push({
-    name, email,
-    company: company || '',
-    ip,
-    registered_at: new Date().toISOString()
-  });
-
-  // منح فحوصات إضافية
-  if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
-  usageDB.byIP[ip].registered = true;
-  usageDB.byIP[ip].limit = 30;
-
-  console.log(`✅ مستخدم جديد: ${name} | ${email} | ${company || 'غير محدد'}`);
-
-  res.json({
-    success: true,
-    message: 'تم التسجيل! حصلت على 30 فحص/شهر مجاناً',
-    limit: 30,
-    total_users: registeredUsers.length
-  });
 });
 
 // عرض المسجلين (للمطور فقط)
@@ -563,9 +551,10 @@ app.get('/api/admin/users', (req, res) => {
   if (key !== process.env.ADMIN_KEY) {
     return res.status(401).json({ error: 'غير مصرح' });
   }
+  const users = usersDB.prepare('SELECT * FROM users ORDER BY registered_at DESC').all();
   res.json({
-    total: registeredUsers.length,
-    users: registeredUsers
+    total: users.length,
+    users
   });
 });
 
@@ -589,7 +578,7 @@ app.get('/api/usage', (req, res) => {
   });
 });
 
-// API إحصائيات عامة (للـ dashboard لاحقاً)
+// API إحصائيات عامة
 app.get('/api/stats', (req, res) => {
   resetDailyIfNeeded();
   res.json({
@@ -612,7 +601,6 @@ app.use((req, res, next) => {
            || req.socket.remoteAddress;
   const now = Date.now();
 
-  // Rate limiting (10 طلبات/ساعة — للحماية من الاستخدام المفرط)
   if (!requests[ip]) requests[ip] = [];
   requests[ip] = requests[ip].filter(t => now - t < 60 * 60 * 1000);
   if (requests[ip].length >= 10) {
@@ -622,7 +610,6 @@ app.use((req, res, next) => {
     });
   }
 
-  // عداد الفحوصات اليومية
   resetDailyIfNeeded();
   if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
 
@@ -643,7 +630,6 @@ app.use((req, res, next) => {
     });
   }
 
-  // تسجيل الطلب
   requests[ip].push(now);
   req._ip = ip;
   next();
@@ -670,7 +656,6 @@ app.post('/api/analyze', async (req, res) => {
 
     const data = await response.json();
 
-    // تسجيل الاستخدام بعد نجاح التحليل
     if (response.ok && req._ip) {
       const ip = req._ip;
       const now = Date.now();
@@ -679,7 +664,6 @@ app.post('/api/analyze', async (req, res) => {
       usageDB.stats.total_checks++;
       usageDB.stats.today_checks++;
 
-      // إضافة معلومات الاستخدام للرد
       const todayCount = usageDB.byIP[ip].daily.filter(
         t => now - t < 24 * 60 * 60 * 1000
       ).length;
@@ -695,8 +679,6 @@ app.post('/api/analyze', async (req, res) => {
     res.status(500).json({ error: 'خطأ في السيرفر: ' + err.message });
   }
 });
-
-// الصفحة الرئيسية
 
 // ================================================================
 // ===== نظام HACCP =====
@@ -715,12 +697,10 @@ try {
   console.warn('⚠️ critical_limits.json not loaded:', e.message);
 }
 
-// HACCP frontend
 app.get('/haccp', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'haccp', 'index.html'));
 });
 
-// GET /api/haccp/engine — metadata
 app.get('/api/haccp/engine', (req, res) => {
   if (!haccpEngine) return res.status(503).json({ error: 'HACCP engine not loaded' });
   res.json({
@@ -732,37 +712,30 @@ app.get('/api/haccp/engine', (req, res) => {
   });
 });
 
-// POST /api/haccp/analyze — generate hazards from product profile
 app.post('/api/haccp/analyze', (req, res) => {
   if (!haccpEngine) return res.status(503).json({ error: 'HACCP engine not loaded' });
 
   const { sector, rte, heat_treatment, allergens, raw_material_type, temperature_category } = req.body;
 
-  // Filter sector hazards
   const sectorHazards = haccpEngine.sector_hazards.filter(h => {
     return h.sector.includes(sector) || h.sector.includes('All');
   });
 
-  // Get GMP triggers
   const gmpTriggers = haccpEngine.gmp_triggers || [];
 
-  // Get relevant HACCP plan templates
   const haccpTemplates = haccpEngine.haccp_plan_templates.filter(t => {
     return t.sector.includes(sector) || t.sector.includes('All');
   });
 
-  // Match critical limits
   const matchedLimits = (criticalLimits?.critical_limits || []).filter(cl => {
     return cl.sector.includes(sector) || cl.sector.includes('All');
   });
 
-  // Add RTE-specific
   if (rte && !sectorHazards.find(h => h.sector.includes('RTE'))) {
     const rteHazards = haccpEngine.sector_hazards.filter(h => h.sector.includes('RTE'));
     sectorHazards.push(...rteHazards);
   }
 
-  // Decision tree
   const decisionTree = haccpEngine.decision_tree;
 
   res.json({
@@ -779,7 +752,6 @@ app.post('/api/haccp/analyze', (req, res) => {
   });
 });
 
-// GET /api/haccp/critical-limits — full library
 app.get('/api/haccp/critical-limits', (req, res) => {
   if (!criticalLimits) return res.status(503).json({ error: 'Critical limits not loaded' });
   const { sector } = req.query;
@@ -792,7 +764,6 @@ app.get('/api/haccp/critical-limits', (req, res) => {
   res.json(criticalLimits);
 });
 
-// GET /api/haccp/decision-tree
 app.get('/api/haccp/decision-tree', (req, res) => {
   if (!haccpEngine) return res.status(503).json({ error: 'HACCP engine not loaded' });
   res.json({ decision_tree: haccpEngine.decision_tree });
