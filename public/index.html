@@ -64,7 +64,7 @@ nav { display: flex; gap: 1rem; align-items: center; flex-shrink: 0; margin-righ
 nav a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; white-space: nowrap; }
 nav a:hover { color: var(--accent); }
 .login-btn {
-  display: inline-flex; align-items: center; justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   min-height: 30px; padding: 5px 16px; border-radius: 100px;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
   border: 1.5px solid rgba(0,212,168,.45); color: #06121f;
@@ -72,6 +72,7 @@ nav a:hover { color: var(--accent); }
   font-family: var(--font); font-size: .78rem; font-weight: 800;
   text-decoration: none; transition: all .2s; white-space: nowrap; flex-shrink: 0;
 }
+.login-icon { width: 14px; height: 14px; flex-shrink: 0; }
 .login-btn:hover { color: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,168,.28); }
 #langBtn {
   background: rgba(0,212,168,.1); border: 1.5px solid rgba(0,212,168,.4);
@@ -310,6 +311,7 @@ footer span { color: var(--accent); }
   nav { gap: .7rem; }
   nav a { font-size: .78rem; }
   .login-btn, #langBtn { min-height: 28px; padding: 4px 10px; font-size: .72rem; }
+  .login-icon { width: 13px; height: 13px; }
   .hero h1 { font-size: 1.8rem; }
   .hero-stats { gap: 1rem; }
   .api-card { flex-direction: column; }
@@ -426,7 +428,13 @@ footer span { color: var(--accent); }
 
 
 <header>
-  <a href="/login" class="login-btn" id="nav-login">Login</a>
+  <a href="/login" class="login-btn" id="nav-login" aria-label="Login">
+    <svg class="login-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+      <path d="M12 12a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2"/>
+      <path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>Login</span>
+  </a>
   <div class="logo">
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
