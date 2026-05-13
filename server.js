@@ -385,6 +385,65 @@ function checkAdditive(ins, catNo) {
   return result;
 }
 
+// ================================================================
+// ===== PRODUCT → Codex Category Map =====
+// ================================================================
+const PRODUCT_CAT_MAP = {
+  dairy: '01.0', processed_cheese: '01.6.2', soft_cheese: '01.6.1',
+  flavored_milk: '01.1.4', dried_milk: '01.5.1', evaporated_milk: '01.3',
+  filled_evaporated_milk: '01.3', filled_condensed_milk: '01.4.2',
+  filled_dried_milk: '01.5.1', yoghurt: '01.2', uht_milk: '01.1.1',
+  infant_formula: '13.1.1', fsmp_infant_formula: '13.1.1', cereal_infant: '13.1.3',
+  meat: '08.0', fish: '09.0', sardines: '09.2.1', tuna_bonito: '09.2.1',
+  frozen_fish: '09.2', cream: '01.2.1', bakery: '07.1', biscuit: '07.1.2',
+  noodles: '06.4.3', corn_chips: '15.1', chocolate: '05.1', candy: '05.2',
+  beverages: '14.1', energy_drink: '14.1.4', juice: '14.1.2.1',
+  fruit_syrup: '14.1.4', flavored_drink: '14.1.4', supplements: '13.6',
+  tomato_concentrate: '04.2.2.3', ghee: '02.2.2',
+  unshelled_pistachio: '04.2.3', peanuts: '04.2.3', decorticated_pine_nuts: '04.2.3',
+  quick_frozen_fries: '04.2.2.4', dates: '04.1.1.2', ice_cream: '03.0',
+  foul_medames: '06.1', pasta: '06.4', mayonnaise: '12.6',
+  table_olives: '04.2.2.3', jam: '04.1.2.3', vegetable_oil: '02.1',
+  claims_product: null, honey: '14.1.3.4', sugar: '11.1',
+  cinnamon: '12.2.1', black_pepper: '12.2.1', paprika: '12.2.1',
+  cumin: '12.2.1', turmeric: '12.2.1', labneh: '01.6.1',
+  butter: '02.2.1', condensed_milk: '01.4.2', cocoa_powder: '05.1.1',
+  general: null, auto: null,
+};
+
+// ================================================================
+// ===== Verify Additives via checkAdditive() =====
+// ================================================================
+function verifyAdditives(additives, productType) {
+  if (!additivesDB || !additives || !additives.length) return [];
+  const catNo = PRODUCT_CAT_MAP[productType] || null;
+  const results = [];
+  for (const add of additives) {
+    try {
+      const insRaw = (add.ins || '').toString().replace(/^E/i, '').trim();
+      if (!insRaw || !/^\d+$/.test(insRaw)) {
+        results.push({ ...add, verdict: 'NO_INS', catNo, message: 'رقم INS غير متاح — تحقق يدوياً' });
+        continue;
+      }
+      const result = checkAdditive(insRaw, catNo || '');
+      results.push({
+        name: add.name,
+        name_en: add.name_en || '',
+        ins: insRaw,
+        catNo,
+        verdict: result.verdict,
+        max_level: result.max_level,
+        additive_name: result.additive_name,
+        functional_class: result.functional_class,
+        message: result.message_ar,
+        notes_text: result.notes_text || [],
+      });
+    } catch (e) {
+      results.push({ ...add, verdict: 'ERROR', message: e.message });
+    }
+  }
+  return results;
+}
 
 // API Routes — المضافات
 app.get('/api/additives/check', (req, res) => {
@@ -510,7 +569,6 @@ app.post('/api/register', (req, res) => {
            || req.socket.remoteAddress;
 
   try {
-    // تحقق إذا مسجل مسبقاً
     const existing = usersDB.prepare('SELECT * FROM users WHERE email=?').get(email);
     if (existing) {
       if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
@@ -523,7 +581,6 @@ app.post('/api/register', (req, res) => {
       });
     }
 
-    // تسجيل جديد
     usersDB.prepare('INSERT INTO users (name, email, company, ip) VALUES (?,?,?,?)')
       .run(name, email, company || '', ip);
 
@@ -644,6 +701,10 @@ app.post('/api/analyze', async (req, res) => {
     const apiKey = process.env.CLAUDE_API_KEY;
     if (!apiKey) return res.status(500).json({ error: 'مفتاح API غير مضبوط' });
 
+    // استخرج productType واحذفه من body قبل الإرسال لـ Claude
+    const { _productType, ...claudeBody } = req.body;
+    const productType = _productType || 'general';
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -651,7 +712,7 @@ app.post('/api/analyze', async (req, res) => {
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify(claudeBody)
     });
 
     const data = await response.json();
@@ -672,6 +733,46 @@ app.post('/api/analyze', async (req, res) => {
         limit: FREE_DAILY_LIMIT,
         remaining: Math.max(0, FREE_DAILY_LIMIT - todayCount)
       };
+    }
+
+    // ── فحص المضافات عبر قاعدة البيانات ──
+    if (response.ok && data.content && data.content[0] && data.content[0].text) {
+      try {
+        const rawText = data.content[0].text;
+        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+
+          if (parsed.additives && parsed.additives.length > 0) {
+            const verified = verifyAdditives(parsed.additives, productType);
+            parsed.additives_verified = verified;
+
+            // أضف مخالفات للمضافات الممنوعة
+            const forbidden = verified.filter(v => v.verdict === 'FAIL');
+            if (forbidden.length > 0 && parsed.results) {
+              forbidden.forEach(f => {
+                parsed.results.push({
+                  code: `CXS192-${f.ins}`,
+                  rule: `مضاف غير مسموح: ${f.additive_name || f.name} (INS ${f.ins})`,
+                  category: 'مضافات',
+                  requirement: `INS ${f.ins} غير مسموح في الفئة ${f.catNo || 'غير محددة'} حسب Codex CXS 192`,
+                  status: 'critical',
+                  note: f.message || 'غير مسموح حسب جداول CXS 192',
+                  solution: `احذف المضاف INS ${f.ins} أو استبدله بمضاف مسموح في هذه الفئة الغذائية`
+                });
+              });
+            }
+
+            // أعد كتابة الـ JSON في النص
+            data.content[0].text = rawText.replace(
+              jsonMatch[0],
+              JSON.stringify(parsed)
+            );
+          }
+        }
+      } catch (parseErr) {
+        console.warn('⚠️ additives verify failed:', parseErr.message);
+      }
     }
 
     res.json(data);
