@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
 const app = express();
 app.use(express.json({ limit: '50mb' }));
 
@@ -524,10 +525,85 @@ try {
       ip TEXT,
       registered_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
+    CREATE TABLE IF NOT EXISTS sessions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      token_hash TEXT UNIQUE NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      expires_at TEXT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id)
+    );
   `);
   console.log('✅ users.db loaded');
 } catch(e) {
   console.warn('⚠️ users.db not loaded:', e.message);
+}
+
+const SESSION_COOKIE = 'foodcheck_session';
+const SESSION_DAY_MS = 24 * 60 * 60 * 1000;
+const SESSION_REMEMBER_MS = 30 * SESSION_DAY_MS;
+
+function normalizeEmail(email) {
+  return (email || '').trim().toLowerCase();
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function cookieValue(req, name) {
+  const cookies = (req.headers.cookie || '').split(';');
+  for (const cookie of cookies) {
+    const [rawKey, ...rawValue] = cookie.trim().split('=');
+    if (rawKey === name) return decodeURIComponent(rawValue.join('='));
+  }
+  return null;
+}
+
+function sessionCookieOptions(req, maxAge) {
+  const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https' || process.env.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isHttps,
+    sameSite: 'lax',
+    path: '/',
+    maxAge
+  };
+}
+
+function tokenHash(token) {
+  return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+function createSession(req, res, userId, remember) {
+  const maxAge = remember ? SESSION_REMEMBER_MS : SESSION_DAY_MS;
+  const token = crypto.randomBytes(32).toString('base64url');
+  const expiresAt = new Date(Date.now() + maxAge).toISOString();
+
+  usersDB.prepare('DELETE FROM sessions WHERE expires_at <= ?').run(new Date().toISOString());
+  usersDB.prepare('INSERT INTO sessions (user_id, token_hash, expires_at) VALUES (?,?,?)')
+    .run(userId, tokenHash(token), expiresAt);
+
+  res.cookie(SESSION_COOKIE, token, sessionCookieOptions(req, maxAge));
+}
+
+function clearSessionCookie(req, res) {
+  res.clearCookie(SESSION_COOKIE, sessionCookieOptions(req, 0));
+}
+
+function getSessionUser(req) {
+  if (!usersDB) return null;
+  const token = cookieValue(req, SESSION_COOKIE);
+  if (!token) return null;
+
+  const session = usersDB.prepare(`
+    SELECT sessions.id as session_id, users.id, users.email, users.name
+    FROM sessions
+    JOIN users ON users.id = sessions.user_id
+    WHERE sessions.token_hash = ? AND sessions.expires_at > ?
+  `).get(tokenHash(token), new Date().toISOString());
+
+  return session || null;
 }
 
 // ================================================================
@@ -603,6 +679,59 @@ app.post('/api/register', (req, res) => {
   } catch(e) {
     res.status(500).json({ error: 'خطأ في التسجيل: ' + e.message });
   }
+});
+
+// Email-only MVP auth: create user if needed, then start a session.
+app.post('/api/auth/email', (req, res) => {
+  if (!usersDB) return res.status(503).json({ error: 'قاعدة المستخدمين غير متاحة' });
+
+  const email = normalizeEmail(req.body.email);
+  const remember = !!req.body.remember;
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: 'بريد إلكتروني غير صالح' });
+  }
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
+           || req.socket.remoteAddress;
+
+  try {
+    let user = usersDB.prepare('SELECT id, name, email FROM users WHERE email=?').get(email);
+    let created = false;
+
+    if (!user) {
+      const fallbackName = email.split('@')[0] || 'FoodCheck User';
+      const result = usersDB.prepare('INSERT INTO users (name, email, company, ip) VALUES (?,?,?,?)')
+        .run(fallbackName, email, '', ip);
+      user = { id: result.lastInsertRowid, name: fallbackName, email };
+      created = true;
+    }
+
+    if (!usageDB.byIP[ip]) usageDB.byIP[ip] = { daily: [], total: 0 };
+    usageDB.byIP[ip].registered = true;
+    usageDB.byIP[ip].limit = 30;
+
+    createSession(req, res, user.id, remember);
+    res.json({ success: true, created, user: { email: user.email } });
+  } catch (e) {
+    res.status(500).json({ error: 'خطأ في تسجيل الدخول: ' + e.message });
+  }
+});
+
+app.get('/api/auth/session', (req, res) => {
+  const user = getSessionUser(req);
+  if (!user) return res.json({ authenticated: false });
+  res.json({ authenticated: true, user: { email: user.email } });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  if (usersDB) {
+    const token = cookieValue(req, SESSION_COOKIE);
+    if (token) {
+      usersDB.prepare('DELETE FROM sessions WHERE token_hash=?').run(tokenHash(token));
+    }
+  }
+  clearSessionCookie(req, res);
+  res.json({ success: true });
 });
 
 // عرض المسجلين (للمطور فقط)

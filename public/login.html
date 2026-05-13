@@ -16,6 +16,7 @@
   --accent2: #0099cc;
   --text: #e8edf5;
   --text2: #8899bb;
+  --text3: #4a5a7a;
   --font: 'Tajawal', sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,13 +24,23 @@ body {
   min-height: 100vh;
   font-family: var(--font);
   background:
-    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(0,212,168,.14) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(0,212,168,.16) 0%, transparent 70%),
+    radial-gradient(circle at 10% 80%, rgba(0,153,204,.12) 0%, transparent 32%),
     var(--bg);
   color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 2rem;
+}
+.page-shell {
+  width: min(100%, 1120px);
+  min-height: calc(100vh - 4rem);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  align-items: center;
+  gap: 3rem;
+}
+.intro {
+  max-width: 560px;
 }
 .login-card {
   width: min(100%, 440px);
@@ -38,7 +49,7 @@ body {
   border-radius: 24px;
   box-shadow: 0 24px 80px rgba(0,0,0,.32);
   padding: 2rem;
-  text-align: center;
+  backdrop-filter: blur(18px);
 }
 .logo {
   display: inline-flex;
@@ -54,6 +65,7 @@ body {
   height: 8px;
   background: var(--accent);
   border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(0,212,168,.08);
 }
 .logo span { color: var(--text); font-weight: 300; }
 .badge {
@@ -68,31 +80,115 @@ body {
   margin-bottom: 1rem;
 }
 h1 {
-  font-size: clamp(1.9rem, 7vw, 2.5rem);
+  font-size: clamp(2.4rem, 7vw, 4.8rem);
   line-height: 1.15;
-  margin-bottom: .75rem;
+  letter-spacing: -1.5px;
+  margin-bottom: 1rem;
+}
+.login-card h1 {
+  font-size: clamp(1.8rem, 6vw, 2.35rem);
+  letter-spacing: -.6px;
+  margin-bottom: .5rem;
 }
 p {
   color: var(--text2);
   line-height: 1.7;
   margin-bottom: 1.5rem;
 }
-.actions {
-  display: flex;
-  gap: .75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+.feature-list {
+  display: grid;
+  gap: .85rem;
+  margin-top: 2rem;
 }
-.btn {
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  color: var(--text2);
+  font-weight: 600;
+}
+.feature-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,212,168,.1);
+  color: var(--accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+.field-group {
+  margin-bottom: 1rem;
+}
+.field-label {
+  display: block;
+  color: var(--text);
+  font-size: .86rem;
+  font-weight: 700;
+  margin-bottom: .45rem;
+}
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field-input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(10,14,26,.72);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: .95rem;
+  outline: none;
+  padding: 12px 14px;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.field-input::placeholder { color: var(--text3); }
+.field-input:focus {
+  background: rgba(10,14,26,.96);
+  border-color: rgba(0,212,168,.7);
+  box-shadow: 0 0 0 4px rgba(0,212,168,.08);
+}
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: .25rem 0 1.25rem;
+  color: var(--text2);
+  font-size: .86rem;
+}
+.remember {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.remember input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+.btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
   min-height: 42px;
   padding: 10px 18px;
   border-radius: 12px;
+  border: 0;
   font-weight: 800;
   text-decoration: none;
   transition: all .2s;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: .95rem;
 }
 .btn-primary {
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
@@ -106,27 +202,115 @@ p {
   background: var(--surface2);
 }
 .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.fine-print {
+  color: var(--text3);
+  font-size: .78rem;
+  line-height: 1.6;
+  text-align: center;
+  margin: 1.25rem 0 0;
+}
+.home-link {
+  display: inline-flex;
+  color: var(--text2);
+  text-decoration: none;
+  font-weight: 700;
+  margin-top: 1.25rem;
+}
+.home-link:hover { color: var(--accent); }
+@media (max-width: 900px) {
+  body { padding: 1.25rem; }
+  .page-shell {
+    min-height: calc(100vh - 2.5rem);
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .intro { text-align: center; margin: 0 auto; }
+  .feature-list { display: none; }
+  .login-card { margin: 0 auto; }
+}
 @media (max-width: 480px) {
   body { padding: 1rem; }
   .login-card { padding: 1.5rem; border-radius: 18px; }
-  .actions { flex-direction: column; }
-  .btn { width: 100%; }
+  .form-options { align-items: flex-start; flex-direction: column; gap: .75rem; }
 }
 </style>
 </head>
 <body>
-  <main class="login-card">
-    <div class="logo">
-      <div class="logo-dot"></div>
-      FoodCheck <span>Jordan</span>
-    </div>
-    <div class="badge">Login</div>
-    <h1>Login is coming soon</h1>
-    <p>This page is a placeholder for the FoodCheck account login experience.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="/">Back to homepage</a>
-      <a class="btn btn-secondary" href="/#tool">Start an audit</a>
-    </div>
+  <main class="page-shell">
+    <section class="intro" aria-label="FoodCheck login introduction">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        FoodCheck <span>Jordan</span>
+      </div>
+      <div class="badge">Secure workspace access</div>
+      <h1>Welcome back to FoodCheck</h1>
+      <p>Continue with your email to manage food label audits, compliance reports, and specialized FoodCheck tools from one modern workspace.</p>
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-dot">1</span> Email-only access for the MVP</div>
+        <div class="feature-item"><span class="feature-dot">2</span> Built around the current FoodCheck design system</div>
+        <div class="feature-item"><span class="feature-dot">3</span> A secure session keeps you signed in</div>
+      </div>
+    </section>
+
+    <section class="login-card" aria-label="Login form">
+      <div class="badge">Login or register</div>
+      <h1>Continue with email</h1>
+      <p>If your email already exists, we will log you in. If not, we will create your account first.</p>
+
+      <form id="loginForm" action="#" method="post">
+        <div class="field-group">
+          <label class="field-label" for="email">Email address</label>
+          <div class="input-wrap">
+            <input class="field-input" id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember" for="remember">
+            <input id="remember" name="remember" type="checkbox">
+            <span>Remember me</span>
+          </label>
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="loginSubmit">Continue with email</button>
+      </form>
+
+      <p class="fine-print" id="loginStatus" role="status" aria-live="polite"></p>
+      <p class="fine-print">No password is required for this MVP.</p>
+      <a class="home-link" href="/">Back to homepage</a>
+    </section>
   </main>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginStatus = document.getElementById('loginStatus');
+    const loginSubmit = document.getElementById('loginSubmit');
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      loginStatus.textContent = '';
+      loginSubmit.disabled = true;
+      loginSubmit.textContent = 'Continuing...';
+
+      try {
+        const response = await fetch('/api/auth/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            remember: document.getElementById('remember').checked
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to continue.');
+        loginStatus.textContent = data.created ? 'Account created. Redirecting...' : 'Signed in. Redirecting...';
+        window.location.href = '/';
+      } catch (error) {
+        loginStatus.textContent = error.message;
+        loginSubmit.disabled = false;
+        loginSubmit.textContent = 'Continue with email';
+      }
+    });
+  </script>
 </body>
 </html>

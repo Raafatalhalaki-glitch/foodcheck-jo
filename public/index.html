@@ -63,6 +63,7 @@ header::-webkit-scrollbar { display: none; }
 nav { display: flex; gap: 1rem; align-items: center; flex-shrink: 0; margin-right: auto; }
 nav a { color: var(--text2); text-decoration: none; font-size: 0.85rem; transition: color .2s; white-space: nowrap; }
 nav a:hover { color: var(--accent); }
+.auth-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .login-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   min-height: 30px; padding: 5px 16px; border-radius: 100px;
@@ -74,6 +75,23 @@ nav a:hover { color: var(--accent); }
 }
 .login-icon { width: 14px; height: 14px; flex-shrink: 0; }
 .login-btn:hover { color: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,168,.28); }
+.user-email {
+  display: none; align-items: center; max-width: 220px;
+  min-height: 30px; padding: 5px 12px; border-radius: 100px;
+  background: rgba(0,212,168,.08); border: 1px solid rgba(0,212,168,.28);
+  color: var(--accent); font-size: .78rem; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.logout-btn {
+  display: none; min-height: 30px; padding: 5px 12px; border-radius: 100px;
+  background: transparent; border: 1.5px solid rgba(232,237,245,.22);
+  color: var(--text2); cursor: pointer; font-family: var(--font);
+  font-size: .78rem; font-weight: 800; transition: all .2s; white-space: nowrap;
+}
+.logout-btn:hover { border-color: var(--accent); color: var(--accent); }
+.auth-actions.logged-in .login-btn { display: none; }
+.auth-actions.logged-in .user-email,
+.auth-actions.logged-in .logout-btn { display: inline-flex; }
 #langBtn {
   background: rgba(0,212,168,.1); border: 1.5px solid rgba(0,212,168,.4);
   color: var(--accent); padding: 4px 14px; border-radius: 100px;
@@ -312,6 +330,8 @@ footer span { color: var(--accent); }
   nav a { font-size: .78rem; }
   .login-btn, #langBtn { min-height: 28px; padding: 4px 10px; font-size: .72rem; }
   .login-icon { width: 13px; height: 13px; }
+  .user-email { max-width: 130px; min-height: 28px; padding: 4px 9px; font-size: .7rem; }
+  .logout-btn { min-height: 28px; padding: 4px 9px; font-size: .7rem; }
   .hero h1 { font-size: 1.8rem; }
   .hero-stats { gap: 1rem; }
   .api-card { flex-direction: column; }
@@ -428,13 +448,17 @@ footer span { color: var(--accent); }
 
 
 <header>
-  <a href="/login" class="login-btn" id="nav-login" aria-label="Login">
-    <svg class="login-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
-      <path d="M12 12a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2"/>
-      <path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <span>Login</span>
-  </a>
+  <div class="auth-actions" id="authActions">
+    <a href="/login" class="login-btn" id="nav-login" aria-label="Login">
+      <svg class="login-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+        <path d="M12 12a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2"/>
+        <path d="M4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Login</span>
+    </a>
+    <span class="user-email" id="nav-user-email"></span>
+    <button class="logout-btn" id="nav-logout" type="button">Logout</button>
+  </div>
   <div class="logo">
     <div class="logo-dot"></div>
     FoodCheck <span>Jordan</span>
@@ -3802,6 +3826,39 @@ function applyLang(lang) {
     const inp = el(id); if(inp && inp.dataset[lang]) inp.placeholder = inp.dataset[lang];
   });
 }
+
+async function refreshAuthNav() {
+  const authActions = document.getElementById('authActions');
+  const userEmail = document.getElementById('nav-user-email');
+  if (!authActions || !userEmail) return;
+
+  try {
+    const response = await fetch('/api/auth/session', { cache: 'no-store' });
+    const data = await response.json();
+    if (data.authenticated && data.user?.email) {
+      userEmail.textContent = data.user.email;
+      authActions.classList.add('logged-in');
+      return;
+    }
+  } catch (error) {
+    console.warn('Auth session check failed:', error.message);
+  }
+
+  userEmail.textContent = '';
+  authActions.classList.remove('logged-in');
+}
+
+const logoutBtn = document.getElementById('nav-logout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } finally {
+      refreshAuthNav();
+    }
+  });
+}
+refreshAuthNav();
 </script>
 </body>
 </html>
