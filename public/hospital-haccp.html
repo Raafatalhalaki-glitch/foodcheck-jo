@@ -68,6 +68,23 @@
   .nav-lang {
     display:flex; gap:0.5rem;
   }
+  .home-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--white2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-family: var(--font);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .home-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-dim);
+  }
   .lang-btn {
     background: none;
     border: 1px solid var(--border);
@@ -786,6 +803,7 @@
 <nav>
   <div class="nav-logo">FoodCheck <span>/ Hospital</span></div>
   <div class="nav-lang">
+    <a class="home-btn" href="/" data-ar="← الرئيسية" data-en="← Home">← الرئيسية</a>
     <button class="lang-btn active" onclick="setLang('ar')" id="btn-ar">عربي</button>
     <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
     <button class="btn-outline" id="logout-btn" style="display:none" onclick="logout()"></button>

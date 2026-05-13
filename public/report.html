@@ -15,6 +15,14 @@ body { font-family:'Tajawal',sans-serif; background:#f0f4f8; color:#1a2035; }
   position:sticky; top:0; z-index:100;
 }
 .screen-logo { color:#00d4a8; font-weight:800; font-size:1.1rem; }
+.screen-actions { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; }
+.home-btn {
+  background:transparent; color:#e8edf5; border:1px solid rgba(255,255,255,.18);
+  padding:.6rem 1.2rem; border-radius:8px; font-family:'Tajawal',sans-serif;
+  font-weight:700; font-size:.9rem; text-decoration:none;
+  display:flex; align-items:center; gap:.4rem; transition:all .2s;
+}
+.home-btn:hover { border-color:#00d4a8; color:#00d4a8; }
 .print-btn {
   background:#00d4a8; color:#000; border:none; padding:.6rem 1.5rem;
   border-radius:8px; font-family:'Tajawal',sans-serif; font-weight:700;
@@ -228,7 +236,7 @@ body { font-family:'Tajawal',sans-serif; background:#f0f4f8; color:#1a2035; }
 
 /* ===== PRINT STYLES ===== */
 @media print {
-  .screen-header, .screen-notice, .print-btn { display:none !important; }
+  .screen-header, .screen-notice, .print-btn, .home-btn { display:none !important; }
   body { background:#fff; }
   .page-wrapper { margin:0; padding:0; max-width:100%; }
   .report { box-shadow:none; border-radius:0; }
@@ -267,7 +275,10 @@ body { font-family:'Tajawal',sans-serif; background:#f0f4f8; color:#1a2035; }
 <!-- SCREEN HEADER -->
 <div class="screen-header">
   <div class="screen-logo">🧪 FoodCheck Jordan</div>
-  <button class="print-btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+  <div class="screen-actions">
+    <a class="home-btn" href="/">← الرئيسية</a>
+    <button class="print-btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+  </div>
 </div>
 <div class="screen-notice">
   💡 لحفظ كـ PDF: اضغط طباعة ← اختر "Save as PDF" أو "Microsoft Print to PDF"
