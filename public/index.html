@@ -2661,7 +2661,7 @@ ${allergensText}
 }`;
 
   try {
-    const requestBody = JSON.stringify({
+    const claudePayload = {
       model: 'claude-sonnet-4-20250514',
       max_tokens: 4000,
       messages: [{ role: 'user', content: [
@@ -2670,12 +2670,13 @@ ${allergensText}
           source: { type: 'base64', media_type: img.type, data: img.base64 }
         })),
         { type: 'text', text: prompt }
-      ]}]
-    });
+      ]}],
+      _productType: productType
+    };
     const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: requestBody
+      body: JSON.stringify(claudePayload)
     });
     if (!response.ok) {
       let m = 'خطأ في API';
