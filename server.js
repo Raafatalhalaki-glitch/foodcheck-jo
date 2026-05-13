@@ -912,6 +912,193 @@ app.post('/api/analyze', async (req, res) => {
     res.status(500).json({ error: 'خطأ في السيرفر: ' + err.message });
   }
 });
+// ================================================================
+// ================================================================
+// ============= PHASE 3 ARCHITECTURE — START =====================
+// ================================================================
+// ================================================================
+// This block adds the new /api/analyze-v2 endpoint that uses:
+//   - data/extraction-prompt.js (Claude extracts raw data only)
+//   - data/rules-additives.js (deterministic additives verification)
+//
+// The legacy /api/analyze endpoint above is UNTOUCHED.
+// Both endpoints run side-by-side for safe comparison.
+// ================================================================
+
+// Load Phase 3 modules (with safe fallback if files missing)
+let extractionPromptModule = null;
+let rulesAdditivesModule = null;
+try {
+  extractionPromptModule = require('./data/extraction-prompt.js');
+  console.log('✅ Phase 3: extraction-prompt.js loaded');
+} catch(e) {
+  console.warn('⚠️ Phase 3: extraction-prompt.js NOT loaded:', e.message);
+}
+try {
+  rulesAdditivesModule = require('./data/rules-additives.js');
+  console.log('✅ Phase 3: rules-additives.js loaded');
+} catch(e) {
+  console.warn('⚠️ Phase 3: rules-additives.js NOT loaded:', e.message);
+}
+
+// ================================================================
+// NEW ENDPOINT: /api/analyze-v2 (Phase 3 Architecture)
+// ================================================================
+app.post('/api/analyze-v2', async (req, res) => {
+  try {
+    // === Safety check: ensure Phase 3 modules loaded ===
+    if (!extractionPromptModule || !rulesAdditivesModule) {
+      return res.status(503).json({
+        error: 'Phase 3 modules not available',
+        message: 'نظام التحليل الجديد غير متاح حالياً'
+      });
+    }
+
+    const apiKey = process.env.CLAUDE_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'مفتاح API غير مضبوط' });
+    }
+
+    // === Extract product type and images from request ===
+    const { productType = 'auto', images = [] } = req.body;
+
+    if (!images || !images.length) {
+      return res.status(400).json({ error: 'لا توجد صور للتحليل' });
+    }
+
+    // === Build the simplified extraction prompt ===
+    const extractionPrompt = extractionPromptModule.buildExtractionPrompt(productType);
+
+    // === Call Claude API for data extraction ONLY ===
+    const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 4000,
+        messages: [{
+          role: 'user',
+          content: [
+            ...images.map(img => ({
+              type: 'image',
+              source: { type: 'base64', media_type: img.type, data: img.base64 }
+            })),
+            { type: 'text', text: extractionPrompt }
+          ]
+        }]
+      })
+    });
+
+    const claudeData = await claudeResponse.json();
+
+    if (!claudeResponse.ok) {
+      return res.status(claudeResponse.status).json({
+        error: 'فشل الاتصال بـ Claude API',
+        details: claudeData.error?.message || 'خطأ غير معروف'
+      });
+    }
+
+    // === Parse Claude's JSON response ===
+    let extracted;
+    try {
+      const rawText = claudeData.content[0].text;
+      const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('No JSON found in Claude response');
+      extracted = JSON.parse(jsonMatch[0]);
+    } catch (parseErr) {
+      return res.status(500).json({
+        error: 'فشل تحليل بيانات Claude',
+        details: parseErr.message,
+        raw_response: claudeData.content?.[0]?.text?.substring(0, 500)
+      });
+    }
+
+    // === Run Phase 3 deterministic checks ===
+
+    // 1. Additives verification (the main fix for the original problem)
+    const additivesResult = rulesAdditivesModule.verifyExtractedAdditives(
+      additivesDB,
+      extracted.additives || [],
+      productType
+    );
+
+    // === Build the v2 response ===
+    // For now, we return BOTH the raw extraction AND the additives verification.
+    // Future commits will add rules-js9.js and rules-nutrition.js to fill the rest.
+    const response = {
+      // Meta information
+      _meta: {
+        version: 'v2-phase3',
+        timestamp: new Date().toISOString(),
+        productType,
+        model_used: 'claude-sonnet-4-5'
+      },
+
+      // Raw extracted data (for inspection/debugging)
+      extracted_data: extracted,
+
+      // Phase 3 verified additives (the main fix!)
+      additives_verification: additivesResult,
+
+      // Backwards-compatible fields (for current frontend)
+      product_name: extracted.product_name?.ar || extracted.product_name?.en || '',
+      summary: `تم استخراج البيانات وفحص ${additivesResult.summary.total_found} مضاف`,
+      additives: extracted.additives || [],
+      additives_verified: additivesResult.verified_additives,
+      allergens: extracted.allergens_mentioned || [],
+      nutrition: extracted.nutrition_table || { hasTable: false },
+
+      // Compliance results (only additives for now — will expand later)
+      results: additivesResult.violations,
+
+      // Overall status based on additives only for now
+      overallStatus: additivesResult.summary.overall_status === 'FAIL' ? 'fail' :
+                     additivesResult.summary.overall_status === 'WARNING' ? 'warning' : 'pass',
+
+      score: additivesResult.summary.forbidden_count === 0 ? 85 : 40,
+
+      // Usage tracking (if applicable)
+      _usage: null  // Will be filled by the middleware if needed
+    };
+
+    res.json(response);
+
+  } catch (err) {
+    console.error('❌ /api/analyze-v2 error:', err);
+    res.status(500).json({
+      error: 'خطأ في السيرفر',
+      details: err.message
+    });
+  }
+});
+
+// ================================================================
+// DIAGNOSTIC ENDPOINT: Check if Phase 3 is loaded correctly
+// Useful for verifying the deployment before testing
+// ================================================================
+app.get('/api/analyze-v2/status', (req, res) => {
+  res.json({
+    phase3_ready: !!(extractionPromptModule && rulesAdditivesModule),
+    modules: {
+      extraction_prompt: !!extractionPromptModule,
+      rules_additives: !!rulesAdditivesModule,
+      additives_db: !!additivesDB
+    },
+    endpoints: [
+      'POST /api/analyze-v2 — main extraction + verification endpoint',
+      'GET /api/analyze-v2/status — this diagnostic endpoint'
+    ]
+  });
+});
+
+// ================================================================
+// ============= PHASE 3 ARCHITECTURE — END =======================
+// ================================================================
+
 
 // ================================================================
 // ===== نظام HACCP =====
