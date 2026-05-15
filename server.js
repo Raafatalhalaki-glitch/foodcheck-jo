@@ -1099,6 +1099,234 @@ app.get('/api/analyze-v2/status', (req, res) => {
 // ============= PHASE 3 ARCHITECTURE — END =======================
 // ================================================================
 
+// ================================================================
+// FoodCheck Jordan — Phase 3 Architecture
+// Classifier API Endpoint Patch
+// ================================================================
+//
+// PURPOSE:
+// إضافة endpoint مستقل لاختبار classifier-v3.js على منتجات حقيقية
+// بدون لمس /api/analyze أو /api/analyze-v2
+//
+// MOUNT INSTRUCTIONS:
+// 1. Open server.js
+// 2. Find this comment block:
+//      // ============= PHASE 3 ARCHITECTURE — END =======================
+// 3. Paste this entire file IMMEDIATELY AFTER that comment block
+// 4. Save & commit to phase-3-architecture branch
+//
+// ENDPOINTS ADDED:
+//   POST /api/classify           — Classify a product by name
+//   GET  /api/classify/status    — Diagnostic check
+//   POST /api/classify/batch     — Classify multiple products at once
+// ================================================================
+
+
+// ================================================================
+// Load classifier module (safe fallback if file missing)
+// ================================================================
+let classifierModule = null;
+try {
+  classifierModule = require('./data/classifier-v3.js');
+  console.log('✅ Phase 3: classifier-v3.js loaded');
+} catch(e) {
+  console.warn('⚠️ Phase 3: classifier-v3.js NOT loaded:', e.message);
+}
+
+
+// ================================================================
+// ENDPOINT 1: POST /api/classify
+// ================================================================
+//
+// REQUEST BODY:
+//   {
+//     "name_en": "American Garden Mayonnaise",  // optional
+//     "name_ar": "مايونيز أمريكان جاردن"        // optional
+//   }
+// (لازم على الأقل واحد من الاثنين)
+//
+// RESPONSE (success):
+//   {
+//     "classification": {
+//       "cat_no": "12.6.1",
+//       "confidence": "high",
+//       "method": "pattern_match",
+//       "matched_pattern": "mayonnaise",
+//       "reason": "Mayonnaise → emulsified sauce 12.6.1",
+//       "cxs": null,
+//       "alternatives": []
+//     },
+//     "product_name": "American Garden Mayonnaise",
+//     "_meta": {
+//       "endpoint": "/api/classify",
+//       "version": "v1",
+//       "timestamp": "2026-05-15T..."
+//     }
+//   }
+//
+// RESPONSE (unclassified):
+//   {
+//     "classification": {
+//       "cat_no": null,
+//       "confidence": "none",
+//       "method": "unclassified",
+//       "reason": "...",
+//       "suggestion": "..."
+//     },
+//     ...
+//   }
+// ================================================================
+app.post('/api/classify', (req, res) => {
+  if (!classifierModule) {
+    return res.status(503).json({
+      error: 'Classifier module not available',
+      message: 'محرك التصنيف غير متاح حالياً'
+    });
+  }
+
+  const { name_en, name_ar } = req.body || {};
+
+  if (!name_en && !name_ar) {
+    return res.status(400).json({
+      error: 'لازم على الأقل name_en أو name_ar',
+      example: { name_en: 'Mayonnaise', name_ar: 'مايونيز' }
+    });
+  }
+
+  try {
+    const result = classifierModule.classifyProduct({
+      name_en: name_en || '',
+      name_ar: name_ar || ''
+    });
+
+    res.json({
+      ...result,
+      _meta: {
+        endpoint: '/api/classify',
+        version: 'v1',
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (err) {
+    console.error('❌ /api/classify error:', err);
+    res.status(500).json({
+      error: 'خطأ في التصنيف',
+      details: err.message
+    });
+  }
+});
+
+
+// ================================================================
+// ENDPOINT 2: GET /api/classify/status
+// ================================================================
+// تشخيص سريع: هل الـ classifier محمّل؟ كم نمط فيه؟
+// ================================================================
+app.get('/api/classify/status', (req, res) => {
+  res.json({
+    classifier_ready: !!classifierModule,
+    total_patterns: classifierModule
+      ? classifierModule.KNOWN_PRODUCT_PATTERNS.length
+      : 0,
+    endpoints: [
+      'POST /api/classify         — تصنيف منتج واحد',
+      'GET  /api/classify/status  — تشخيص',
+      'POST /api/classify/batch   — تصنيف عدة منتجات'
+    ],
+    example_request: {
+      method: 'POST',
+      url: '/api/classify',
+      body: { name_en: 'Mayonnaise', name_ar: 'مايونيز' }
+    }
+  });
+});
+
+
+// ================================================================
+// ENDPOINT 3: POST /api/classify/batch
+// ================================================================
+//
+// REQUEST BODY:
+//   {
+//     "products": [
+//       { "name_en": "Mayonnaise" },
+//       { "name_ar": "زعتر بزيت زيتون" },
+//       { "name_en": "Tuna in Olive Oil", "name_ar": "تونة بزيت الزيتون" }
+//     ]
+//   }
+//
+// RESPONSE:
+//   {
+//     "total": 3,
+//     "classified": 2,
+//     "unclassified": 1,
+//     "results": [ ... ]
+//   }
+//
+// مفيد لما تختبر 30-50 منتج دفعة واحدة من Postman
+// ================================================================
+app.post('/api/classify/batch', (req, res) => {
+  if (!classifierModule) {
+    return res.status(503).json({
+      error: 'Classifier module not available'
+    });
+  }
+
+  const { products } = req.body || {};
+
+  if (!Array.isArray(products) || products.length === 0) {
+    return res.status(400).json({
+      error: 'لازم products array',
+      example: {
+        products: [
+          { name_en: 'Mayonnaise' },
+          { name_ar: 'كاتشب' }
+        ]
+      }
+    });
+  }
+
+  if (products.length > 100) {
+    return res.status(400).json({
+      error: 'الحد الأقصى 100 منتج في الطلب الواحد'
+    });
+  }
+
+  try {
+    const results = products.map((p, idx) => {
+      const out = classifierModule.classifyProduct({
+        name_en: (p && p.name_en) || '',
+        name_ar: (p && p.name_ar) || ''
+      });
+      return { index: idx, ...out };
+    });
+
+    const classified = results.filter(r => r.classification.cat_no !== null).length;
+    const unclassified = results.length - classified;
+
+    res.json({
+      total: results.length,
+      classified,
+      unclassified,
+      classification_rate: results.length > 0
+        ? Math.round((classified / results.length) * 100)
+        : 0,
+      results,
+      _meta: {
+        endpoint: '/api/classify/batch',
+        version: 'v1',
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (err) {
+    console.error('❌ /api/classify/batch error:', err);
+    res.status(500).json({
+      error: 'خطأ في التصنيف الجماعي',
+      details: err.message
+    });
+  }
+});
+
 
 // ================================================================
 // ===== نظام HACCP =====
