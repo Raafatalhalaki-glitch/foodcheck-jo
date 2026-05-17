@@ -43,62 +43,45 @@
 // PRODUCT TYPE → CODEX CATEGORY MAP
 // ================================================================
 const PRODUCT_CAT_MAP = {
-  // Dairy (Category 01)
-  dairy: '01.0', processed_cheese: '01.6.2', soft_cheese: '01.6.1',
-  flavored_milk: '01.1.4', dried_milk: '01.5.1', evaporated_milk: '01.3',
-  filled_evaporated_milk: '01.3', filled_condensed_milk: '01.4.2',
-  filled_dried_milk: '01.5.1', yoghurt: '01.2', uht_milk: '01.1.1',
-  cream: '01.2.1', labneh: '01.6.1', condensed_milk: '01.4.2',
-  butter: '02.2.1',
-  
-  // Fats and oils (Category 02)
+  dairy: '01.0', processed_cheese: '01.6.4', soft_cheese: '01.6.1',
+  flavored_milk: '01.1.4', dried_milk: '01.5.1',
+  evaporated_milk: '01.3.1', filled_evaporated_milk: '01.3.2',
+  filled_condensed_milk: '01.4.2', filled_dried_milk: '01.5.1',
+  yoghurt: '01.2.1.2', uht_milk: '01.1.1',
+  cream: '01.4.1', cream_analogue: '01.4.4',
+  labneh: '01.2.1.2', condensed_milk: '01.3.1', butter: '02.2.1',
   ghee: '02.2.2', vegetable_oil: '02.1',
-  
-  // Ice cream (Category 03)
   ice_cream: '03.0',
-  
-  // Fruits and vegetables (Category 04)
-  tomato_concentrate: '04.2.2.3', unshelled_pistachio: '04.2.3',
-  peanuts: '04.2.3', decorticated_pine_nuts: '04.2.3',
-  quick_frozen_fries: '04.2.2.4', dates: '04.1.1.2',
-  table_olives: '04.2.2.3', jam: '04.1.2.3',
-  
-  // Confectionery (Category 05)
-  chocolate: '05.1', candy: '05.2', cocoa_powder: '05.1.1',
-  
-  // Cereals (Category 06)
-  foul_medames: '06.1', pasta: '06.4', noodles: '06.4.3',
-  
-  // Bakery (Category 07)
-  bakery: '07.1', biscuit: '07.1.2',
-  
-  // Meat (Category 08)
-  meat: '08.0',
-  
-  // Fish (Category 09)
-  fish: '09.0', sardines: '09.2.1', tuna_bonito: '09.2.1',
-  frozen_fish: '09.2',
-  
-  // Sugar (Category 11)
-  sugar: '11.1',
-  
-  // Salts, spices, sauces (Category 12)
-  mayonnaise: '12.6', cinnamon: '12.2.1', black_pepper: '12.2.1',
-  paprika: '12.2.1', cumin: '12.2.1', turmeric: '12.2.1',
-  
-  // Special purpose foods (Category 13)
+  tomato_concentrate: '04.2.2.6', tomato_paste: '04.2.2.6',
+  unshelled_pistachio: '04.2.3', peanuts: '04.2.3',
+  decorticated_pine_nuts: '04.2.3', quick_frozen_fries: '04.2.2.4',
+  dates: '04.1.1.2', table_olives: '04.2.2.3',
+  jam: '04.1.2.5', canned_vegetables: '04.2.2.4', pickles: '04.2.2.3',
+  chocolate: '05.1.4', candy: '05.2.2', jelly_mix: '05.2.2',
+  cocoa_powder: '05.1.1',
+  foul_medames: '04.2.2.4', pasta: '06.4.2', noodles: '06.4.3',
+  semolina: '06.2.1', flour: '06.2.1',
+  bakery: '07.2.2', biscuit: '07.2.1', bread: '07.1.1',
+  flat_bread: '07.1.2', pancake_mix: '07.2.2',
+  meat: '08.3.1.1', processed_meat: '08.3.1.1',
+  fish: '09.2.1', sardines: '09.4', tuna_bonito: '09.4',
+  frozen_fish: '09.2.1',
+  sugar: '11.1.1', date_syrup: '11.4', molasses: '11.4', honey: '11.5',
+  mayonnaise: '12.6.1', ketchup: '12.6.2', hot_sauce: '12.6.2',
+  chilli_sauce: '12.6.2', bbq_sauce: '12.6.2', tomato_sauce: '12.6.2',
+  mustard: '12.4', vinegar: '12.3', spices: '12.2.1',
+  seasoning_mix: '12.2.2', flower_water: '12.9',
+  salt: '12.1.1', tahini: '12.7', hummus: '12.7',
   infant_formula: '13.1.1', fsmp_infant_formula: '13.1.1',
   cereal_infant: '13.1.3', supplements: '13.6',
-  
-  // Beverages (Category 14)
-  beverages: '14.1', energy_drink: '14.1.4', juice: '14.1.2.1',
+  beverages: '14.1.4', energy_drink: '14.1.4', juice: '14.1.2.1',
   fruit_syrup: '14.1.4', flavored_drink: '14.1.4',
-  honey: '14.1.3.4',
-  
-  // Snacks (Category 15)
-  corn_chips: '15.1',
-  
-  // No category mapping (will use null - additive lookup without category)
+  malt_beverage: '14.2.1', coffee: '14.1.5', tea: '14.1.5',
+  water: '14.1.1.1', coffee_milk: '01.1.4',
+  corn_chips: '15.1', potato_chips: '15.1',
+  snacks: '15.1', roasted_nuts: '15.2',
+  cinnamon: '12.2.1', black_pepper: '12.2.1', paprika: '12.2.1',
+  cumin: '12.2.1', turmeric: '12.2.1',
   claims_product: null, general: null, auto: null,
 };
 
