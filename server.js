@@ -408,7 +408,7 @@ const PRODUCT_CAT_MAP = {
 
   // حليب مخمر
   yoghurt:                '01.2.1.2', // لبن / زبادي — plain, heat-treated after fermentation
-  labneh:                 '01.6.1',   // لبنة = unripened cheese
+  labneh:                 '01.2.1.2',   // لبنة = unripened cheese
 
   // حليب مركّز (01.3)
   evaporated_milk:        '01.3.1', // حليب مبخر (plain) — CXS 281-1971
@@ -505,7 +505,8 @@ const PRODUCT_CAT_MAP = {
   meat:                   '08.0',   // لحوم عامة
   processed_meat:         '08.3.2', // لانشون / سوسج / كورند بيف (heat-treated comminuted)
   salami:                 '08.3.1.2', // سلامي (fermented + dried, non-heat treated)
-  cured_meat:             '08.2.1.1', // لحم مملح/معالج
+  salami_cooked:          '08.3.2',   // سلامي مطبوخ
+  cured_meat:             '08.2',     // لحم مملح/معالج
 
   // ── 09: أسماك ────────────────────────────────────────────────
   fish:                   '09.0',   // أسماك عامة
@@ -530,6 +531,7 @@ const PRODUCT_CAT_MAP = {
   paprika:                '12.2.1',
   cumin:                  '12.2.1',
   turmeric:               '12.2.1',
+  flower_water:           '12.2.1',
   seasoning_blend:        '12.2.2', // خلطات تتبيل (زعتر بزيت...) — Annex B
   vinegar:                '12.3',   // خل — Annex B
   mustard:                '12.4',   // خردل — Annex B
