@@ -387,29 +387,189 @@ function checkAdditive(ins, catNo) {
 }
 
 // ================================================================
-// ===== PRODUCT → Codex Category Map =====
+// PRODUCT_CAT_MAP — النسخة المصححة والمكتملة
+// مراجعة: 18 مايو 2026
+// المصدر: CXS 192:2025 — Annex B + Annex C
 // ================================================================
+// هذا الـ map يُستخدم في:
+//   1. server.js (داخل verifyAdditives)
+//   2. data/rules-additives.js (داخل verifyExtractedAdditives)
+// كلا الملفين يحتاج نفس التعديلات بالضبط.
+// ================================================================
+
 const PRODUCT_CAT_MAP = {
-  dairy: '01.0', processed_cheese: '01.6.2', soft_cheese: '01.6.1',
-  flavored_milk: '01.1.4', dried_milk: '01.5.1', evaporated_milk: '01.3',
-  filled_evaporated_milk: '01.3', filled_condensed_milk: '01.4.2',
-  filled_dried_milk: '01.5.1', yoghurt: '01.2', uht_milk: '01.1.1',
-  infant_formula: '13.1.1', fsmp_infant_formula: '13.1.1', cereal_infant: '13.1.3',
-  meat: '08.0', fish: '09.0', sardines: '09.2.1', tuna_bonito: '09.2.1',
-  frozen_fish: '09.2', cream: '01.2.1', bakery: '07.1', biscuit: '07.1.2',
-  noodles: '06.4.3', corn_chips: '15.1', chocolate: '05.1', candy: '05.2',
-  beverages: '14.1', energy_drink: '14.1.4', juice: '14.1.2.1',
-  fruit_syrup: '14.1.4', flavored_drink: '14.1.4', supplements: '13.6',
-  tomato_concentrate: '04.2.2.3', ghee: '02.2.2',
-  unshelled_pistachio: '04.2.3', peanuts: '04.2.3', decorticated_pine_nuts: '04.2.3',
-  quick_frozen_fries: '04.2.2.4', dates: '04.1.1.2', ice_cream: '03.0',
-  foul_medames: '06.1', pasta: '06.4', mayonnaise: '12.6',
-  table_olives: '04.2.2.3', jam: '04.1.2.3', vegetable_oil: '02.1',
-  claims_product: null, honey: '14.1.3.4', sugar: '11.1',
-  cinnamon: '12.2.1', black_pepper: '12.2.1', paprika: '12.2.1',
-  cumin: '12.2.1', turmeric: '12.2.1', labneh: '01.6.1',
-  butter: '02.2.1', condensed_milk: '01.4.2', cocoa_powder: '05.1.1',
-  general: null, auto: null,
+
+  // ── 01: منتجات الألبان ──────────────────────────────────────
+  dairy:                  '01.0',   // عام لكل منتجات الألبان
+
+  // حليب سائل
+  uht_milk:               '01.1.1', // حليب UHT / مبستر / معقم — CXS 281
+  flavored_milk:          '01.1.4', // حليب منكّه (شوكولاتة، فراولة...)
+
+  // حليب مخمر
+  yoghurt:                '01.2.1.2', // لبن / زبادي — plain, heat-treated after fermentation
+  labneh:                 '01.6.1',   // لبنة = unripened cheese
+
+  // حليب مركّز (01.3)
+  evaporated_milk:        '01.3.1', // حليب مبخر (plain) — CXS 281-1971
+  condensed_milk:         '01.3.1', // حليب مكثف محلى (plain) — CXS 282-1971
+  filled_evaporated_milk: '01.3.2', // حليب مبخر + دهون نباتية — CXS 250-2006
+  filled_condensed_milk:  '01.3.2', // حليب مكثف + دهون نباتية — CXS 252-2006
+  beverage_whitener:      '01.3.2', // مبيّض مشروبات
+
+  // حليب مجفف (01.5)
+  dried_milk:             '01.5.1', // حليب بودرة / كريمة بودرة — CXS 207-1999
+  filled_dried_milk:      '01.5.2', // حليب بودرة + دهون نباتية — CXS 251-2006
+
+  // كريمة (01.4) — CXS 288-1976
+  cream:                  '01.4.2', // كريمة UHT / sterilized / whipping (الأكثر شيوعاً في السوق)
+  cream_pasteurized:      '01.4.1', // كريمة مبسترة طازجة
+  cream_fermented:        '01.4.3', // كريمة مخمرة / حامضية / sour cream
+  cream_analogue:         '01.4.4', // كريمة نباتية للتقديم (non-dairy topping/whipping)
+
+  // أجبان (01.6)
+  soft_cheese:            '01.6.1', // أجبان طرية / نيئة: نابلسية، عكاوي، فيتا، موزاريلا طرية — CXS 221-2001
+  ripened_cheese:         '01.6.2.1', // أجبان معتقة: Edam، Gouda، Brie، Cheddar — Annex B
+  processed_cheese:       '01.6.4', // أجبان مطبوخة / مجهزة — Annex B
+
+  // حلويات ألبان وآيس كريم
+  ice_cream:              '01.7',   // آيس كريم بمنتجات حليب — CXS 192 Descriptor 01.7
+  sorbet:                 '03.0',   // سوربيه / شربات / مثلجات مائية بدون حليب — 03.0
+
+  // ── 02: دهون وزيوت ──────────────────────────────────────────
+  ghee:                   '02.1.1', // سمن حيواني / butter oil — Annex B
+  vegetable_oil:          '02.1.2', // زيوت نباتية (زيتون، عباد، ذرة...) — CXS 33-1981
+  animal_fat:             '02.1.3', // دهون حيوانية (شحم، تالو، زيت سمك) — Annex B
+  butter:                 '02.2.1', // زبدة — Annex B
+  margarine:              '02.2.2', // مارجرين / سمن نباتي — Annex B
+  cooking_cream:          '02.3',   // كريمة طبخ نباتية (oil-in-water emulsion) — CXS 192 Descriptor 02.3
+
+  // ── 04: فواكه وخضار ─────────────────────────────────────────
+  // فواكه مجففة
+  dates:                  '04.1.2.2', // تمر مجفف — CXS 360-2020
+  dried_fruit:            '04.1.2.2', // فواكه مجففة عامة — CXS 360-2020
+  jam:                    '04.1.2.5', // مربيات / جيلي / مارملاد — Annex B
+
+  // خضار مجمدة
+  quick_frozen_fries:     '04.2.2.1', // بطاطا مجمدة — CXS 192 Descriptor 04.2.2.1
+  frozen_vegetables:      '04.2.2.1', // خضار مجمدة عامة
+
+  // خضار مجففة (شاملة المكسرات النيئة)
+  raw_nuts:               '04.2.2.2', // مكسرات نيئة/مجففة (فستق، لوز، كاجو نيء) — Annex B
+  unshelled_pistachio:    '04.2.2.2', // فستق غير محمص — Annex B
+  peanuts:                '04.2.2.2', // فول سوداني نيء — Annex B
+  decorticated_pine_nuts: '04.2.2.2', // صنوبر نيء — Annex B
+
+  // خضار مخللة وزيتون
+  table_olives:           '04.2.2.3', // زيتون مائدة — CXS 66-1981
+  pickled_vegetables:     '04.2.2.3', // مخللات خضار عامة — Annex B
+
+  // خضار معلبة (04.2.2.4)
+  tomato_concentrate:     '04.2.2.4', // رب بندورة معلب (canned tomato paste) — CXS 57-1981
+  preserved_tomatoes:     '04.2.2.4', // بندورة محفوظة معلبة — CXS 13-1981
+  canned_vegetables:      '04.2.2.4', // خضار معلبة عامة — CXS 297-2009
+  foul_medames:           '04.2.2.4', // فول مدمس معلب — CXS 258R-2007
+  hummus:                 '04.2.2.4', // حمص بالطحينية معلب — CXS 257R-2007
+
+  // هريس خضار (04.2.2.5)
+  tomato_puree:           '04.2.2.5', // هريس بندورة / لب بندورة (<24% مواد صلبة) — CXS 57-1981
+
+  // معجون/مستخلص خضار (04.2.2.6)
+  tahini:                 '04.2.2.6', // طحينية — CXS 259R-2007
+  tomato_paste:           '04.2.2.6', // معجون بندورة (paste غير معلب) — CXS 57-1981
+
+  // ── 05: حلويات ──────────────────────────────────────────────
+  chocolate:              '05.1.4', // شوكولاتة ومنتجاتها — Annex B
+  cocoa_powder:           '05.1.1', // مسحوق كاكاو وخلطاته — Annex B
+  cocoa_spread:           '05.1.3', // دهن كاكاو (نوتيلا وما شابه) — Annex B
+  hard_candy:             '05.2.1', // حلوى صلبة — Annex B
+  candy:                  '05.2.2', // حلوى طرية (default) — Annex B
+  soft_candy:             '05.2.2', // حلوى طرية — Annex B
+  nougat:                 '05.2.3', // نوجا ومرزبان — Annex B
+  chewing_gum:            '05.3',   // علكة — Annex B
+
+  // ── 06: حبوب ومنتجاتها ──────────────────────────────────────
+  rice:                   '06.1',   // أرز — Annex B
+  flour:                  '06.2.1', // طحين قمح — Annex B
+  breakfast_cereal:       '06.3',   // حبوب إفطار (كورن فليكس، شوفان) — Annex B
+  pasta:                  '06.4.2', // معكرونة/شعيرية جافة — Annex B
+  noodles:                '06.4.3', // نودلز سريعة التحضير — Annex B
+
+  // ── 07: مخبوزات ──────────────────────────────────────────────
+  bakery:                 '07.1',   // خبز عادي (default) — Annex B
+  bread:                  '07.1.1', // خبز وأرغفة — Annex B
+  biscuit:                '07.2.1', // بسكويت، كوكيز، كراكر — Annex B (تصحيح من 07.1.2)
+  fine_bakery:            '07.2.2', // كيك، مافن، دونات — Annex B
+
+  // ── 08: لحوم ─────────────────────────────────────────────────
+  meat:                   '08.0',   // لحوم عامة
+  processed_meat:         '08.3.2', // لانشون / سوسج / كورند بيف (heat-treated comminuted)
+  salami:                 '08.3.1.2', // سلامي (fermented + dried, non-heat treated)
+  cured_meat:             '08.2.1.1', // لحم مملح/معالج
+
+  // ── 09: أسماك ────────────────────────────────────────────────
+  fish:                   '09.0',   // أسماك عامة
+  frozen_fish:            '09.2.1', // أسماك مجمدة — Annex B (CXS 36-1981)
+  sardines:               '09.4',   // سردين معلب — CXS 94-1981
+  tuna_bonito:            '09.4',   // تونة/بونيتو معلب — CXS 70-1981
+  canned_fish:            '09.4',   // أسماك معلبة عامة
+
+  // ── 10: بيض ──────────────────────────────────────────────────
+  eggs:                   '10.1',   // بيض طازج — Annex B
+  liquid_eggs:            '10.2.1', // بيض سائل — Annex B
+
+  // ── 11: سكر وعسل ─────────────────────────────────────────────
+  sugar:                  '11.1.1', // سكر أبيض مكرر — Annex B
+  honey:                  '11.5',   // عسل — CXS 12-1981
+
+  // ── 12: توابل وصلصات ─────────────────────────────────────────
+  salt:                   '12.1.1', // ملح طعام — Annex B
+  spices:                 '12.2.1', // بهارات وأعشاب (كمون، كركم، فلفل...) — Annex B
+  cinnamon:               '12.2.1',
+  black_pepper:           '12.2.1',
+  paprika:                '12.2.1',
+  cumin:                  '12.2.1',
+  turmeric:               '12.2.1',
+  seasoning_blend:        '12.2.2', // خلطات تتبيل (زعتر بزيت...) — Annex B
+  vinegar:                '12.3',   // خل — Annex B
+  mustard:                '12.4',   // خردل — Annex B
+  mayonnaise:             '12.6.1', // مايونيز / صلصات مستحلبة — Annex B
+  ketchup:                '12.6.2', // كاتشب / صلصات غير مستحلبة — CXS 306-2011
+  fish_sauce:             '12.6.4', // صلصة سمك — CXS 302-2011
+  soy_sauce:              '12.9.2.1', // صلصة صويا مخمرة — Annex B
+
+  // ── 13: أغذية لأغراض خاصة ────────────────────────────────────
+  infant_formula:         '13.1.1', // تركيبة رضع — CXS 72-1981
+  fsmp_infant_formula:    '13.1.3', // تركيبة لأغراض طبية خاصة للرضع — CXS 72-1981
+  follow_up_formula:      '13.1.2', // تركيبة متابعة — Annex B
+  cereal_infant:          '13.2',   // غذاء تكميلي للرضع — Annex B
+  supplements:            '13.6',   // مكملات غذائية — Annex B
+
+  // ── 14: مشروبات ──────────────────────────────────────────────
+  beverages:              '14.1',   // مشروبات عامة
+  mineral_water:          '14.1.1.1', // مياه معدنية — Annex B
+  fruit_juice:            '14.1.2.1', // عصير فواكه — Annex B
+  juice:                  '14.1.2.1',
+  vegetable_juice:        '14.1.2.2', // عصير خضار — Annex B
+  fruit_nectar:           '14.1.3.1', // رحيق فواكه — Annex B
+  flavored_drink:         '14.1.4',   // مشروبات نكهات / غازية — Annex B
+  energy_drink:           '14.1.4',   // مشروبات طاقة — Annex B
+  fruit_syrup:            '14.1.4',   // شراب فواكه — Annex B
+  beer:                   '14.2.1', // بيرة وشراب شعير — Annex B
+  wine:                   '14.2.3', // نبيذ عنب — Annex B
+
+  // ── 15: وجبات خفيفة ──────────────────────────────────────────
+  corn_chips:             '15.1',   // شيبس، بوبكورن، بريتزل — Annex B
+  potato_chips:           '15.1',   // شيبس بطاطا — Annex B
+  roasted_nuts:           '15.2',   // مكسرات محمصة/مبهرة/مملحة — Annex B
+
+  // ── 16: أطعمة مركبة جاهزة ────────────────────────────────────
+  ready_meal:             '16.0',   // وجبات جاهزة مركبة — Annex B
+
+  // ── بدون تصنيف (يحتاج مراجعة يدوية) ─────────────────────────
+  claims_product:         null,
+  general:                null,
+  auto:                   null,
 };
 
 // ================================================================
