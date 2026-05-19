@@ -1208,7 +1208,8 @@ app.post('/api/analyze-v2', async (req, res) => {
     const additivesResult = rulesAdditivesModule.verifyExtractedAdditives(
       additivesDB,
       extracted.additives || [],
-      productType
+      productType,
+      resolvedCategory?.cat_no || null
     );
 
     // === Build the v2 response ===
