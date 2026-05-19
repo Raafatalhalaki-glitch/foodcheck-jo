@@ -601,7 +601,7 @@ function checkAdditive(db, ins, catNo) {
 // ================================================================
 // MAIN: Verify all additives extracted from a label
 // ================================================================
-function verifyExtractedAdditives(db, extractedAdditives, productType) {
+function verifyExtractedAdditives(db, extractedAdditives, productType, catNoOverride = null) {
   // Defensive checks
   if (!db) {
     return {
@@ -629,7 +629,7 @@ function verifyExtractedAdditives(db, extractedAdditives, productType) {
     };
   }
   
-  const catNo = PRODUCT_CAT_MAP[productType] || null;
+  const catNo = catNoOverride || PRODUCT_CAT_MAP[productType] || null;
   const verified = [];
   
   // Process each extracted additive
