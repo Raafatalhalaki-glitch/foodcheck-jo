@@ -1103,6 +1103,15 @@ try {
   console.warn('⚠️ Phase 3: rules-additives.js NOT loaded:', e.message);
 }
 
+// ─── Phase 3 Step 2 — Matching Layer (Annex C → Codex Category) ───
+let matchingLayerModule = null;
+try {
+  matchingLayerModule = require('./data/matching-layer.js');
+  console.log('✅ Phase 3 Step 2: matching-layer.js loaded');
+} catch(e) {
+  console.warn('⚠️ Phase 3 Step 2: matching-layer.js NOT loaded:', e.message);
+}
+
 // ================================================================
 // NEW ENDPOINT: /api/analyze-v2 (Phase 3 Architecture)
 // ================================================================
@@ -1245,9 +1254,11 @@ app.post('/api/analyze-v2', async (req, res) => {
 app.get('/api/analyze-v2/status', (req, res) => {
   res.json({
     phase3_ready: !!(extractionPromptModule && rulesAdditivesModule),
+    phase3_step2_ready: !!matchingLayerModule,
     modules: {
       extraction_prompt: !!extractionPromptModule,
       rules_additives: !!rulesAdditivesModule,
+      matching_layer: !!matchingLayerModule,
       additives_db: !!additivesDB
     },
     endpoints: [
