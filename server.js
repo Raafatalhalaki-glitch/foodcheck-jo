@@ -1190,6 +1190,20 @@ app.post('/api/analyze-v2', async (req, res) => {
 
     // === Run Phase 3 deterministic checks ===
 
+    // 0. Matching layer (Phase 3 Step 2 - diagnostic only, not yet wired into additives check)
+    let resolvedCategory = null;
+    if (matchingLayerModule) {
+      try {
+        resolvedCategory = matchingLayerModule.classifyProduct({
+          name_en: extracted.product_name?.en || '',
+          name_ar: extracted.product_name?.ar || '',
+          productType: productType
+        }, rulesAdditivesModule.PRODUCT_CAT_MAP);
+      } catch (e) {
+        console.warn('⚠️ matching layer error:', e.message);
+      }
+    }
+
     // 1. Additives verification (the main fix for the original problem)
     const additivesResult = rulesAdditivesModule.verifyExtractedAdditives(
       additivesDB,
@@ -1211,6 +1225,9 @@ app.post('/api/analyze-v2', async (req, res) => {
 
       // Raw extracted data (for inspection/debugging)
       extracted_data: extracted,
+
+      // Phase 3 Step 2 - matching layer result (diagnostic, not yet enforced)
+      classification: resolvedCategory,
 
       // Phase 3 verified additives (the main fix!)
       additives_verification: additivesResult,
