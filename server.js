@@ -1074,6 +1074,102 @@ app.post('/api/analyze', async (req, res) => {
     res.status(500).json({ error: 'خطأ في السيرفر: ' + err.message });
   }
 });
+
+// ================================================================
+// NEW ENDPOINT: /api/analyze-v2-legacy (Hybrid)
+// Behaves like /api/analyze, but uses Phase 3 matching layer +
+// verifyExtractedAdditives for accurate Codex category resolution.
+// ================================================================
+app.post('/api/analyze-v2-legacy', async (req, res) => {
+  try {
+    const apiKey = process.env.CLAUDE_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: 'مفتاح API غير مضبوط' });
+
+    const { _productType, ...claudeBody } = req.body;
+    const productType = _productType || 'general';
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify(claudeBody)
+    });
+
+    const data = await response.json();
+
+    if (response.ok && req._ip) {
+      const ip = req._ip;
+      const now = Date.now();
+      usageDB.byIP[ip].daily.push(now);
+      usageDB.byIP[ip].total = (usageDB.byIP[ip].total || 0) + 1;
+      usageDB.stats.total_checks++;
+      usageDB.stats.today_checks++;
+      const todayCount = usageDB.byIP[ip].daily.filter(t => now - t < 24 * 60 * 60 * 1000).length;
+      data._usage = {
+        today: todayCount,
+        limit: FREE_DAILY_LIMIT,
+        remaining: Math.max(0, FREE_DAILY_LIMIT - todayCount)
+      };
+    }
+
+    if (response.ok && data.content && data.content[0] && data.content[0].text) {
+      try {
+        const rawText = data.content[0].text;
+        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+
+          if (parsed.additives && parsed.additives.length > 0) {
+            let resolvedCatNo = null;
+            if (matchingLayerModule && rulesAdditivesModule) {
+              try {
+                const resolved = matchingLayerModule.classifyProduct({
+                  name_en: parsed.product_name || '',
+                  name_ar: parsed.product_name || '',
+                  productType: productType
+                }, rulesAdditivesModule.PRODUCT_CAT_MAP);
+                resolvedCatNo = resolved?.cat_no || null;
+                parsed._classification = {
+                  cat_no: resolvedCatNo,
+                  source: resolved?.source || 'fallback',
+                  confidence: resolved?.confidence || null,
+                  cxs: resolved?.cxs || null
+                };
+              } catch (e) {
+                console.warn('⚠️ v2-legacy matching layer error:', e.message);
+              }
+            }
+
+            if (rulesAdditivesModule && additivesDB) {
+              const result = rulesAdditivesModule.verifyExtractedAdditives(
+                additivesDB,
+                parsed.additives,
+                productType,
+                resolvedCatNo
+              );
+              parsed.additives_verified = result.verified_additives;
+              if (result.violations && result.violations.length > 0 && parsed.results) {
+                parsed.results.push(...result.violations);
+              }
+            }
+
+            data.content[0].text = rawText.replace(jsonMatch[0], JSON.stringify(parsed));
+          }
+        }
+      } catch (parseErr) {
+        console.warn('⚠️ v2-legacy verify failed:', parseErr.message);
+      }
+    }
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'خطأ في السيرفر: ' + err.message });
+  }
+});
+
 // ================================================================
 // ================================================================
 // ============= PHASE 3 ARCHITECTURE — START =====================
