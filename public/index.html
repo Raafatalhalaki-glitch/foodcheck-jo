@@ -2721,7 +2721,7 @@ ${allergensText}
       ]}],
       _productType: productType
     };
-    const response = await fetch('/api/analyze-v2-legacy', {
+    const response = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(claudePayload)
